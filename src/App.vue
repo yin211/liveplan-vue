@@ -192,25 +192,27 @@
 
 <script>
     export default {
-        data: () => ({
-            dialog: false,
-            drawer: null,
-            items: [
-                {icon: 'dashboard', text: 'Dashboard'},
-                {divider: false , inset: true },
-                {icon: 'list', text: 'Income'},
-                {icon: 'credit_card', text: 'Expenses'},
-                {icon: 'work', text: 'Assets'},
-                {icon: 'home', text: 'Debts'},
-                {divider: false , inset: true },
-                {icon: 'dashboard', text: 'Reports'},
-                {icon: 'timeline', text: 'Scenarios'},
-                {divider: false , inset: true },
-                {icon: 'settings', text: 'Settings' , style: 'border:1px solid black;'}
-            ]
-        }),
-        props: {
-            source: String
+      data: () => {
+        return {
+          dialog: false,
+          drawer: null,
+          items: [
+                  {icon: 'dashboard', text: 'Dashboard'},
+                  {divider: false, inset: true},
+                  {icon: 'list', text: 'Income'},
+                  {icon: 'credit_card', text: 'Expenses'},
+                  {icon: 'work', text: 'Assets'},
+                  {icon: 'home', text: 'Debts'},
+                  {divider: false, inset: true},
+                  {icon: 'dashboard', text: 'Reports'},
+                  {icon: 'timeline', text: 'Scenarios'},
+                  {divider: false, inset: true},
+                  {icon: 'settings', text: 'Settings', style: 'border:1px solid black;'}
+          ]
         }
+  },
+      props: {
+        source: String
+      }
     }
 </script>

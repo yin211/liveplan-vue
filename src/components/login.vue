@@ -21,6 +21,16 @@
             </v-card>
           </v-flex>
         </v-layout>
+        <v-snackbar
+            :timeout="5000"
+            top
+            right
+            :color="'error'"
+            v-model="snackbar"
+        >
+            {{errorMsg}}
+            <v-btn dark flat @click.native="snackbar = false">Close</v-btn>
+        </v-snackbar>
       </v-container>
     </v-content>
   </v-app>
@@ -41,7 +51,9 @@
       ],
       passwordRules: [
         v => !!v || 'Password is required'
-      ]
+      ],
+      snackbar: false,
+      errorMsg: ''
     }),
 
     props: {
@@ -49,19 +61,21 @@
     },
 
     methods: {
-      async submit () {
+      submit () {
         if (this.$refs.form.validate()) {
-          try {
-            const response = await axios.post('https://api.livsplan.se/api/v1/login', {
-              email: this.email,
-              password: this.password
-            })
+          axios.post('https://api.livsplan.se/api/v1/login', {
+            email: this.email,
+            password: this.password
+          })
+          .then(response => {
             console.log(response)
-            this.$router.replace('/dashboard')
-          } catch (error) {
-            this.$router.replace('/dashboard')
-            console.error(error)
-          }
+            this.$router.replace('dashboard')
+          })
+          .catch(error => {
+            this.errorMsg = 'Invalid login, please try again.'
+            this.snackbar = true
+            console.log(error)
+          })
         }
       }
     }

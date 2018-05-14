@@ -1,12 +1,39 @@
 <template>
   <v-app id="login">
+    <v-toolbar dense height="58px" color="blue lighten-5">
+        <v-avatar size="40px" class="mr-3">
+            <v-avatar size="32px" tile>
+                <img
+                    src="https://vuetifyjs.com/static/doc-images/logo.svg"
+                    alt="Vuetify"
+                >
+            </v-avatar>
+        </v-avatar>
+        <v-toolbar-title>Livsplan</v-toolbar-title>
+        <v-spacer></v-spacer>
+        <v-toolbar-items class="hidden-sm-and-down">
+            <v-menu offset-y>
+                <v-btn slot="activator" flat>
+                  <img :src="`https://countryflags.io/${currentLanguage.country}/flat/32.png`" width="32px"/>
+                </v-btn>
+                <v-list>
+                    <v-list-tile v-for="lang in languages" :key="lang.locale" @click="setLang(lang.locale)">
+                        <v-list-tile-avatar size="24px">
+                          <img :src="`https://countryflags.io/${lang.country}/flat/24.png`"  width="24px"/>
+                        </v-list-tile-avatar>
+                        <v-list-tile-title>{{lang.title}}</v-list-tile-title>
+                    </v-list-tile>
+                </v-list>
+            </v-menu>
+        </v-toolbar-items>
+    </v-toolbar>
     <v-content>
       <v-container fluid fill-height>
         <v-layout align-center justify-center>
           <v-flex xs12 sm8 md4>
             <v-card class="elevation-12">
               <v-toolbar dark color="primary">
-                <v-toolbar-title>Login Livsplan</v-toolbar-title>
+                <v-toolbar-title>{{ $t("login") }}</v-toolbar-title>
               </v-toolbar>
               <v-form ref="form" v-model="valid" lazy-validation>
                 <v-card-text>
@@ -15,7 +42,7 @@
                 </v-card-text>
                 <v-card-actions>
                   <v-spacer></v-spacer>
-                  <v-btn color="primary" :disabled="!valid" @click="submit">Login</v-btn>
+                  <v-btn color="primary" :disabled="!valid" @click="submit">{{ $t("login") }}</v-btn>
                 </v-card-actions>
               </v-form>
             </v-card>
@@ -38,6 +65,8 @@
 
 <script>
   import axios from 'axios'
+  import languages from '@/lang/languages'
+
   export default {
     name: 'Login',
     data: () => ({
@@ -53,11 +82,18 @@
         v => !!v || 'Password is required'
       ],
       snackbar: false,
-      errorMsg: ''
+      errorMsg: '',
+      languages: languages
     }),
 
     props: {
       source: String
+    },
+
+    computed: {
+      currentLanguage () {
+        return this.languages.find(l => l.locale === this.$i18n.locale)
+      }
     },
 
     methods: {
@@ -77,6 +113,9 @@
             console.log(error)
           })
         }
+      },
+      setLang: function (lang) {
+        this.$store.dispatch('setLang', lang)
       }
     }
   }

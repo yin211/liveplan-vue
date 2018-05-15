@@ -64,8 +64,9 @@
 </template>
 
 <script>
-  import axios from 'axios'
   import languages from '@/lang/languages'
+  import {AUTH_REQUEST} from '@/store/actions/auth'
+  import {SET_LANG} from '@/store/actions/lang'
 
   export default {
     name: 'Login',
@@ -99,23 +100,17 @@
     methods: {
       submit () {
         if (this.$refs.form.validate()) {
-          axios.post('https://api.livsplan.se/api/v1/login', {
-            email: this.email,
-            password: this.password
-          })
-          .then(response => {
-            console.log(response)
-            this.$router.replace('dashboard')
-          })
-          .catch(error => {
+          const { email, password } = this
+          this.$store.dispatch(AUTH_REQUEST, { email, password }).then(() => {
+            this.$router.push('dashboard')
+          }, () => {
             this.errorMsg = 'Invalid login, please try again.'
             this.snackbar = true
-            console.log(error)
           })
         }
       },
       setLang: function (lang) {
-        this.$store.dispatch('setLang', lang)
+        this.$store.dispatch(SET_LANG, lang)
       }
     }
   }

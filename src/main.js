@@ -6,11 +6,17 @@ import i18n from './lang/lang'
 import store from './store'
 import router from './router'
 import Vuetify from 'vuetify'
+import axios from 'axios'
 import 'vuetify/dist/vuetify.min.css'
 
 Vue.use(Vuetify)
 
 Vue.config.productionTip = false
+
+const token = localStorage.getItem('user-token')
+if (token) {
+  axios.defaults.headers.common['Authorization'] = 'Bearer' + token
+}
 
 /* eslint-disable no-new */
 export const app = new Vue({

@@ -79,6 +79,21 @@
 
             <v-spacer></v-spacer>
 
+            <v-menu offset-y>
+                <v-btn slot="activator" flat>
+                    <img :src="`https://countryflags.io/${currentLanguage.country}/flat/32.png`" width="32px"/>
+                </v-btn>
+                <v-list>
+                    <v-list-tile v-for="lang in languages" :key="lang.locale" @click="setLang(lang.locale)">
+                        <v-list-tile-avatar size="24px">
+                            <img :src="`https://countryflags.io/${lang.country}/flat/24.png`"  width="24px"/>
+                        </v-list-tile-avatar>
+                        <v-list-tile-title>{{lang.title}}</v-list-tile-title>
+                    </v-list-tile>
+                </v-list>
+            </v-menu>
+                    
+
             <v-btn icon large>
                 <v-avatar size="32px" tile>
                     <img
@@ -171,6 +186,9 @@
     </v-app>
 </template>
 <script>
+    import languages from '@/lang/languages'
+    import {SET_LANG} from '@/store/actions/lang'
+
     export default {
       name: 'Dashboard',
       data: () => {
@@ -189,11 +207,22 @@
             {icon: 'timeline', text: 'Scenarios'},
             {divider: false, inset: true},
             {icon: 'settings', text: 'Settings', style: 'border:1px solid black;'}
-          ]
+          ],
+          languages: languages
         }
       },
       props: {
         source: String
+      },
+      computed: {
+        currentLanguage () {
+          return this.languages.find(l => l.locale === this.$i18n.locale)
+        }
+      },
+      methods: {
+        setLang: function (lang) {
+          this.$store.dispatch(SET_LANG, lang)
+        }
       }
     }
 </script>

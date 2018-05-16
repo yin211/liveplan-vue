@@ -21,7 +21,7 @@ const actions = {
       .then(resp => {
         localStorage.setItem('user-token', resp.data.access_token)
         // Here set the header of your ajax library to the token value.
-        axios.defaults.headers.common['Authorization'] = 'Bearer' + resp.data.access_token
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + resp.data.access_token
         commit(AUTH_SUCCESS, resp)
         resolve(resp)
       })

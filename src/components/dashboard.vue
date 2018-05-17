@@ -8,23 +8,8 @@
         >
             <v-list dense>
                 <template v-for="item in items">
-                    <v-layout
-                        v-if="item.heading"
-                        :key="item.heading"
-                        row
-                        align-center
-                    >
-                        <v-flex xs6>
-                            <v-subheader v-if="item.heading">
-                                {{ item.heading }}
-                            </v-subheader>
-                        </v-flex>
-                        <v-flex xs6 class="text-xs-center">
-                            <a href="#!" class="body-2 black--text">EDIT</a>
-                        </v-flex>
-                    </v-layout>
                     <v-list-group
-                        v-else-if="item.children"
+                        v-if="item.children"
                         v-model="item.model"
                         :key="item.text"
                         :prepend-icon="item.model ? item.icon : item['icon-alt']"
@@ -52,7 +37,7 @@
                             </v-list-tile-content>
                         </v-list-tile>
                     </v-list-group>
-                    <v-list-tile v-else :key="item.text" @click="">
+                    <v-list-tile v-else :key="item.text" :to="item.link">
                         <v-list-tile-action>
                             <v-icon>{{ item.icon }}</v-icon>
                         </v-list-tile-action>
@@ -80,7 +65,7 @@
             <v-spacer></v-spacer>
 
             <v-menu offset-y>
-                <v-btn slot="activator" flat>
+                <v-btn slot="activator" flat icon>
                     <img :src="`https://countryflags.io/${currentLanguage.country}/flat/32.png`" width="32px"/>
                 </v-btn>
                 <v-list>
@@ -102,11 +87,15 @@
                     >
                 </v-avatar>
             </v-btn>
+
+            <router-link to="/login" v-if="!isLoggedIn">Login</router-link>
+            <v-btn v-if="isLoggedIn" @click="logout" flat icon color="red">
+                <v-icon>fas fa-sign-out-alt</v-icon>
+            </v-btn> 
         </v-toolbar>
         <v-content>
             <v-container fluid fill-height>
-                <v-layout justify-center align-center>
-                </v-layout>
+                <router-view></router-view>
             </v-container>
         </v-content>
         <v-btn
@@ -188,6 +177,7 @@
 <script>
     import languages from '@/lang/languages'
     import {SET_LANG} from '@/store/actions/lang'
+    import {AUTH_LOGOUT} from '@/store/actions/auth'
 
     export default {
       name: 'Dashboard',
@@ -199,7 +189,7 @@
             {icon: 'dashboard', text: 'Dashboard'},
             {divider: false, inset: true},
             {icon: 'list', text: 'Income'},
-            {icon: 'credit_card', text: 'Expenses'},
+            {icon: 'credit_card', text: 'Expenses', link: '/dashboard/expense'},
             {icon: 'work', text: 'Assets'},
             {icon: 'home', text: 'Debts'},
             {divider: false, inset: true},
@@ -217,11 +207,19 @@
       computed: {
         currentLanguage () {
           return this.languages.find(l => l.locale === this.$i18n.locale)
+        },
+        isLoggedIn () {
+          return this.$store.getters.isAuthenticated
         }
       },
       methods: {
         setLang: function (lang) {
           this.$store.dispatch(SET_LANG, lang)
+        },
+        logout: function () {
+          this.$store.dispatch(AUTH_LOGOUT).then(() => {
+            this.$router.push('/login')
+          })
         }
       }
     }

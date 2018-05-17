@@ -11,7 +11,7 @@
         </v-avatar>
         <v-toolbar-title>Livsplan</v-toolbar-title>
         <v-spacer></v-spacer>
-        <v-toolbar-items class="hidden-sm-and-down">
+        <v-toolbar-items>
             <v-menu offset-y>
                 <v-btn slot="activator" flat>
                   <img :src="`https://countryflags.io/${currentLanguage.country}/flat/32.png`" width="32px"/>
@@ -102,7 +102,7 @@
         if (this.$refs.form.validate()) {
           const { email, password } = this
           this.$store.dispatch(AUTH_REQUEST, { email, password }).then(() => {
-            this.$router.push('dashboard')
+            this.$router.push('/dashboard')
           }, () => {
             this.errorMsg = 'Invalid login, please try again.'
             this.snackbar = true

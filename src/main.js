@@ -4,16 +4,26 @@ import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
 import App from './App'
 import router from './router'
+import i18n from './lang/lang'
+import store from './store'
+import axios from 'axios'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 
+const token = localStorage.getItem('user-token')
+if (token) {
+  axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+}
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
+  store,
+  i18n,
   template: '<App/>',
   components: { App }
 })

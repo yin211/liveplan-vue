@@ -1,23 +1,35 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <router-view></router-view>
+    <v-header></v-header>
+    <div class="w-75 mx-auto">
+      <router-view></router-view>
+      <v-footer></v-footer>
+    </div>
   </div>
 </template>
 
 <script>
+import vheader from '@/components/header'
+import vfooter from '@/components/footer'
+
 export default {
-  name: 'app'
+  name: 'app',
+  components: {
+    'v-header': vheader,
+    'v-footer': vfooter
+  }
 }
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style lang="scss">
+  @import './style/index.scss';
+  #app {
+    font-family: Roboto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    height: 100vh;
+    padding-top: 27px;
 }
+
 </style>

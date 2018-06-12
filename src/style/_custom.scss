@@ -1,0 +1,16 @@
+@import './_colors.scss';
+$body-bg: $bg-color;
+// Bootstrap and its default variables
+@import "node_modules/bootstrap/scss/bootstrap";
+
+.facebook {
+  color: $facebook-color;
+}
+
+.twitter {
+  color: $twitter-color;
+}
+
+.vfooter, .vheader {
+  background-color: $header-color;
+}

@@ -1,5 +1,8 @@
 @import './_colors.scss';
-$body-bg: $bg-color;
+$body-bg: $primary-bg-color;
+$theme-colors: (
+  "primary": $primary-color
+);
 // Bootstrap and its default variables
 @import "node_modules/bootstrap/scss/bootstrap";
 
@@ -13,4 +16,22 @@ $body-bg: $bg-color;
 
 .vfooter, .vheader {
   background-color: $header-color;
+}
+
+.depth-2 {
+  box-shadow: 10px 12px 44px 0 rgba(0,0,0,0.25);
+}
+
+.secondary-bg-color {
+  background-color: $secondary-bg-color
+}
+
+.text-gray {
+  color: $text-gray;
+}
+
+.elem-active {
+  opacity: 1 !important;
+  border-bottom: 4px solid #36B37E;
+  padding-left: 15px;
 }

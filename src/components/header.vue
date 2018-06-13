@@ -7,7 +7,7 @@
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
-      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <div v-if="isAuthenticated" class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
           <li class="nav-item">
             <a class="nav-link" href="#">OVERVIEW</a>
@@ -32,7 +32,12 @@
 
 <script>
 export default {
-  name: 'vheader'
+  name: 'vheader',
+  computed: {
+    isAuthenticated () {
+      return this.$store.getters.isAuthenticated
+    }
+  }
 }
 </script>
 

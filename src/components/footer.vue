@@ -3,7 +3,7 @@
 
       <div class="d-flex flex-column align-items-start">
         <span class="text-white logo-text">LIVSPLAN</span>
-        <span class="copyright-text">Livsplan.se 2018 All Right Reserved</span>
+        <span class="copyright-text text-gray">Livsplan.se 2018 All Right Reserved</span>
       </div>
 
       <ul class="d-flex text-white">
@@ -38,11 +38,8 @@ export default {
 
     .copyright-text {
       font-size: 14px;
-      color: #84888F;
       line-height: 20px;
     }
-
-
 
     ul {
       list-style: none;
@@ -51,7 +48,6 @@ export default {
       padding: 0;
       margin-right: 100px;
     }
-
 
     .social-btn {
       width: 30px;

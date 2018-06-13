@@ -3,7 +3,7 @@
     <v-header></v-header>
     <div class="w-75 mx-auto">
       <router-view></router-view>
-      <v-footer></v-footer>
+      <v-footer v-if="isAuthenticated"></v-footer>
     </div>
   </div>
 </template>
@@ -17,6 +17,11 @@ export default {
   components: {
     'v-header': vheader,
     'v-footer': vfooter
+  },
+  computed: {
+    isAuthenticated () {
+      return this.$store.getters.isAuthenticated
+    }
   }
 }
 </script>

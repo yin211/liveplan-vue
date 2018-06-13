@@ -1,15 +1,29 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Hello from '@/components/Hello'
+import store from '@/store'
+import login from '@/components/auth/login'
 
 Vue.use(Router)
+
+const ifAuthenticated = (to, from, next) => {
+  if (store.getters.isAuthenticated) {
+    next()
+    return
+  }
+  next('/login')
+}
 
 export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Hello',
-      component: Hello
+      redirect: '/login'
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: login
     }
-  ]
+  ],
+  beforeEnter: ifAuthenticated
 })

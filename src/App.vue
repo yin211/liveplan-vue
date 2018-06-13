@@ -35,7 +35,6 @@ export default {
     text-align: center;
     height: 100vh;
     padding-top: 27px;
-    background-color: #d9dae7;
-}
+  }
 
 </style>

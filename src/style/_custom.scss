@@ -1,21 +1,18 @@
-@import './_colors.scss';
-$body-bg: $primary-bg-color;
+$body-bg: #d9dae7;
 $theme-colors: (
-  "primary": $primary-color
+  "primary": #0065FF
 );
-// Bootstrap and its default variables
-@import "node_modules/bootstrap/scss/bootstrap";
 
 .facebook {
-  color: $facebook-color;
+  color: #3C5193;
 }
 
 .twitter {
-  color: $twitter-color;
+  color: #3CA9FF;
 }
 
 .vfooter, .vheader {
-  background-color: $header-color;
+  background-color: #525670;
 }
 
 .depth-2 {
@@ -23,11 +20,11 @@ $theme-colors: (
 }
 
 .secondary-bg-color {
-  background-color: $secondary-bg-color
+  background-color: #EDEEF6;
 }
 
 .text-gray {
-  color: $text-gray;
+  color: #84888F;
 }
 
 .elem-active {
@@ -35,3 +32,6 @@ $theme-colors: (
   border-bottom: 4px solid #36B37E;
   padding-left: 15px;
 }
+
+// Bootstrap and its default variables
+@import "node_modules/bootstrap/scss/bootstrap";

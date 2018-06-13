@@ -1,7 +1,5 @@
-$body-bg: #d9dae7;
-$theme-colors: (
-  "primary": #0065FF
-);
+@import "bootstrap-variable-override";
+@import "~bootstrap/scss/bootstrap.scss";
 
 .facebook {
   color: #3C5193;
@@ -32,6 +30,3 @@ $theme-colors: (
   border-bottom: 4px solid #36B37E;
   padding-left: 15px;
 }
-
-// Bootstrap and its default variables
-@import "node_modules/bootstrap/scss/bootstrap";

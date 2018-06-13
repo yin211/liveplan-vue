@@ -9,6 +9,8 @@ import store from './store'
 import axios from 'axios'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'font-awesome/css/font-awesome.css'
+import Notifications from 'vue-notification'
+Vue.use(Notifications)
 Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 

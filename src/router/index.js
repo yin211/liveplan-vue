@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from '@/store'
 import login from '@/components/auth/login'
+import expense from '@/components/expense'
 
 Vue.use(Router)
 
@@ -23,6 +24,11 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: login
+    },
+    {
+      path: '/expense',
+      name: 'expense',
+      component: expense
     }
   ],
   beforeEnter: ifAuthenticated

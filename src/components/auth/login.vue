@@ -6,13 +6,13 @@
           <li>LOGIN WITH MOBILE BANKID</li>
           <li>SIGNUP FOR LIVSPLAN</li>
         </ul>
-        <b-form @submit="onSubmit" class="bg-white depth-2 text-left">
-          <b-form-group id="emailInputGroup" label="Email" label-for="emailInput" class="mb-4">
+        <b-form @submit="onSubmit" novalidate class="bg-white depth-2 text-left" :validated="validated">
+          <b-form-group id="emailInputGroup" label="Email" label-for="emailInput" class="mb-4" :invalid-feedback="invalidEmailFeedback" :state="emailState">
             <b-form-input id="emailInput" type="email" v-model="form.email" required placeholder="Type here">
             </b-form-input>
           </b-form-group>
-          <b-form-group id="passwordInputGroup" label="Password" label-for="passwordInput" class="mb-4">
-            <b-form-input id="passwordInput" type="text" v-model="form.password" required placeholder="Type here">
+          <b-form-group id="passwordInputGroup" label="Password" label-for="passwordInput" class="mb-4" :invalid-feedback="invalidPwdFeedback" :state="pwdState">
+            <b-form-input id="passwordInput" type="password" v-model="form.password" required placeholder="Type here">
             </b-form-input>
           </b-form-group>
 
@@ -36,19 +36,77 @@
 </template>
 
 <script>
+import {AUTH_REQUEST} from '@/store/actions/auth'
 export default {
   name: 'login',
+  mounted () {
+    if (this.$store.getters.isAuthenticated) {
+      this.$router.push('/expense')
+    }
+  },
   data () {
     return {
       form: {
         email: '',
-        name: ''
-      }
+        password: ''
+      },
+      validated: false
     }
   },
+  computed: {
+    invalidPwdFeedback () {
+      if (this.form.password.length > 4) {
+        return ''
+      } else if (this.form.password.length > 0) {
+        return 'Enter at least 4 characters'
+      } else {
+        return 'Please enter password'
+      }
+    },
+    pwdState () {
+      return !this.validated || this.form.password.length >= 4
+    },
+
+    invalidEmailFeedback () {
+      if (this.form.email.length < 1) {
+        return 'Please enter an email'
+      } else if (!this.validEmail(this.form.email)) {
+        return 'Please enter valid email'
+      } else {
+        return ''
+      }
+    },
+    emailState () {
+      return !this.validated || this.validEmail(this.form.email)
+    }
+
+  },
   methods: {
+    /* eslint-disable */
+    validEmail(email) {
+      let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      return re.test(email)
+    },
+    /* eslint-enable */
     onSubmit (evt) {
       evt.preventDefault()
+      this.validated = true
+      if (this.validEmail(this.form.email) && this.form.password.length >= 4) {
+        const { email, password } = this.form
+        this.$store.dispatch(AUTH_REQUEST, { email, password }).then(() => {
+          this.$router.push('/expense')
+        }, () => {
+          this.$notify({
+            group: 'notify',
+            type: 'error',
+            title: 'Error',
+            duration: 3000,
+            text: 'Authentication Failed!'
+          })
+        })
+      } else {
+        return
+      }
     }
   }
 }
@@ -58,6 +116,8 @@ export default {
 <style lang="scss" scoped>
   .login {
     height: calc(100vh - 102px);
+    min-height: 800px;
+    overflow: auto;
 
     .main {
       height: 446px;

@@ -29,6 +29,7 @@ export default {
 <style lang="scss" scoped>
   .vfooter {
     height: 150px;
+    margin-bottom: 23px;
     padding: 0 2.25rem;
 
     .logo-text {

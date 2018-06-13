@@ -5,6 +5,7 @@
       <router-view></router-view>
       <v-footer v-if="isAuthenticated"></v-footer>
     </div>
+    <notifications group="notify"/>
   </div>
 </template>
 

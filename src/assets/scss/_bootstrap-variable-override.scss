@@ -1,4 +1,20 @@
+$blue: #0065FF;
+$green: #36b37E;
+$cyan: #FF7043;
+$yellow: #FFCA28;
+$red: #EF5350;
 $body-bg: #d9dae7;
+$dark: #525670;
+$light:#EDEEF6;
+$secondary: #7A869A;
+
 $theme-colors: (
-  "primary": #0065FF
+  "primary": $blue,
+  "success": $green,
+  "danger": $red,
+  "warning": $yellow,
+  "info": $cyan,
+  "dark": $dark,
+  "light": $light,
+  "secondary": $secondary
 );

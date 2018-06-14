@@ -1,28 +1,61 @@
 <template>
   <div class="login d-flex justify-content-between flex-column">
-    <div class="main d-flex justify-content-center secondary-bg-color">
+    <div class="main d-flex justify-content-center bg-light">
         <ul class="d-flex flex-column justify-content-end align-items-end mb-5">
-          <li class="elem-active">LOGIN WITH EMAIL</li>
-          <li>LOGIN WITH MOBILE BANKID</li>
-          <li>SIGNUP FOR LIVSPLAN</li>
+          <li @click="loginWithEmail" :class="{'elem-active': isLoginWithEmail}">LOGIN WITH EMAIL</li>
+          <li @click="loginWithBankID" :class="{'elem-active': isLoginWithBankID}">LOGIN WITH MOBILE BANKID</li>
+          <li @click="signup" :class="{'elem-active': isSignup}">SIGNUP FOR LIVSPLAN</li>
         </ul>
-        <b-form @submit="onSubmit" novalidate class="bg-white depth-2 text-left" :validated="validated">
-          <b-form-group id="emailInputGroup" label="Email" label-for="emailInput" class="mb-4" :invalid-feedback="invalidEmailFeedback" :state="emailState">
-            <b-form-input id="emailInput" type="email" v-model="form.email" required placeholder="Type here">
+        <b-form @submit="onSubmitByEmail" novalidate class="bg-white depth-2 text-left" :validated="validated" v-if="isLoginWithEmail" style="height: 434px">
+          <b-form-group class="emailInputGroup mb-4" label="Email" label-for="emailInput" :invalid-feedback="invalidEmailFeedback" :state="emailState">
+            <b-form-input class="emailInput" type="email" v-model="form.login.email" required placeholder="Type here">
             </b-form-input>
           </b-form-group>
-          <b-form-group id="passwordInputGroup" label="Password" label-for="passwordInput" class="mb-4" :invalid-feedback="invalidPwdFeedback" :state="pwdState">
-            <b-form-input id="passwordInput" type="password" v-model="form.password" required placeholder="Type here">
+          <b-form-group class="passwordInputGroup mb-4" label="Password" label-for="passwordInput" :invalid-feedback="invalidPwdFeedback" :state="pwdState">
+            <b-form-input class="passwordInput" type="password" v-model="form.login.password" required placeholder="Type here">
             </b-form-input>
           </b-form-group>
 
-          <b-form-group id="rememberGroup" class="mt-2 mb-4">
-            <b-form-checkbox-group v-model="form.checked" id="rememberCheck">
+          <b-form-group class="rememberGroup mt-2 mb-4">
+            <b-form-checkbox-group v-model="form.checked" class="rememberCheck">
               <b-form-checkbox value="me" class="text-gray">Remember me in the next 30 days</b-form-checkbox>
             </b-form-checkbox-group>
           </b-form-group>
           <b-button type="submit" variant="primary" class="w-100">Login</b-button>
         </b-form>
+
+        <b-form @submit="onSubmitByID" novalidate class="bg-white depth-2 text-left " :validated="validated" v-if="isLoginWithBankID" style="height: 337px">
+          <b-form-group class="idInputGroup mb-4" label="Social Security Number" label-for="idInput" :invalid-feedback="invalidIDFeedback" :state="idState">
+            <b-form-input class="idInput" type="text" v-model="form.login.id" required placeholder="Type here">
+            </b-form-input>
+          </b-form-group>
+
+          <b-form-group class="rememberGroup mt-2 mb-4">
+            <b-form-checkbox-group v-model="form.checked" class="rememberCheck">
+              <b-form-checkbox value="me" class="text-gray">Remember me in the next 30 days</b-form-checkbox>
+            </b-form-checkbox-group>
+          </b-form-group>
+          <b-button type="submit" variant="primary" class="w-100">Login</b-button>
+        </b-form>
+
+        <b-form @submit="onSignup" novalidate class="bg-white depth-2 text-left" :validated="validated" v-if="isSignup" style="height: 490px">
+          <b-form-group class="userNameInputGroup mb-4" label="User Name" label-for="userNameInput" :invalid-feedback="invalidUserNameFeedback" :state="userNameState">
+            <b-form-input class="userNameInput" type="text" v-model="form.signup.username" required placeholder="Type here">
+            </b-form-input>
+          </b-form-group>
+          <b-form-group class="emailInputGroup mb-4" label="Email" label-for="emailInput" :invalid-feedback="invalidEmailFeedback" :state="emailState">
+            <b-form-input class="emailInput" type="email" v-model="form.signup.email" required placeholder="Type here">
+            </b-form-input>
+          </b-form-group>
+          <b-form-group class="passwordInputGroup mb-4" label="Password" label-for="passwordInput" :invalid-feedback="invalidPwdFeedback" :state="pwdState">
+            <b-form-input class="passwordInput" type="password" v-model="form.signup.password" required placeholder="Type here">
+            </b-form-input>
+          </b-form-group>
+
+          <b-button type="submit" variant="primary" class="w-100">Signup</b-button>
+        </b-form>
+
+
     </div>
     <div class="bottom mb-4">
       <ul class="d-flex justify-content-center">
@@ -47,52 +80,107 @@ export default {
   data () {
     return {
       form: {
-        email: '',
-        password: ''
+        login: {
+          email: '',
+          password: '',
+          id: ''
+        },
+        signup: {
+          username: '',
+          email: '',
+          password: ''
+        }
       },
-      validated: false
+      validated: false,
+      isLoginWithEmail: true,
+      isLoginWithBankID: false,
+      isSignup: false
     }
   },
   computed: {
     invalidPwdFeedback () {
-      if (this.form.password.length > 4) {
+      let pwd = this.isLoginWithEmail ? this.form.login.password : this.form.signup.password
+      if (pwd.length > 4) {
         return ''
-      } else if (this.form.password.length > 0) {
+      } else if (pwd.length > 0) {
         return 'Enter at least 4 characters'
       } else {
         return 'Please enter password'
       }
     },
     pwdState () {
-      return !this.validated || this.form.password.length >= 4
+      let pwd = this.isLoginWithEmail ? this.form.login.password : this.form.signup.password
+      return !this.validated || pwd.length >= 4
     },
 
     invalidEmailFeedback () {
-      if (this.form.email.length < 1) {
+      let email = this.isLoginWithEmail ? this.form.login.email : this.form.signup.email
+      if (email.length < 1) {
         return 'Please enter an email'
-      } else if (!this.validEmail(this.form.email)) {
+      } else if (!this.validEmail(email)) {
         return 'Please enter valid email'
       } else {
         return ''
       }
     },
     emailState () {
-      return !this.validated || this.validEmail(this.form.email)
+      let email = this.isLoginWithEmail ? this.form.login.email : this.form.signup.email
+      return !this.validated || this.validEmail(email)
+    },
+
+    invalidIDFeedback () {
+      if (this.form.login.id.length > 0) {
+        return ''
+      } else {
+        return 'Please enter bank id'
+      }
+    },
+    idState () {
+      return !this.validated || this.form.login.id.length > 0
+    },
+
+    invalidUserNameFeedback () {
+      if (this.form.signup.username.length > 0) {
+        return ''
+      } else {
+        return 'Please enter username'
+      }
+    },
+    userNameState () {
+      return !this.validated || this.form.signup.username.length > 0
     }
 
   },
   methods: {
+    format () {
+      this.isLoginWithEmail = false
+      this.isLoginWithBankID = false
+      this.isSignup = false
+      this.validated = false
+    },
+    loginWithEmail () {
+      this.format()
+      this.isLoginWithEmail = true
+    },
+    loginWithBankID () {
+      this.format()
+      this.isLoginWithBankID = true
+    },
+    signup () {
+      this.format()
+      this.isSignup = true
+    },
     /* eslint-disable */
     validEmail(email) {
       let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       return re.test(email)
     },
     /* eslint-enable */
-    onSubmit (evt) {
+    onSubmitByEmail (evt) {
       evt.preventDefault()
       this.validated = true
-      if (this.validEmail(this.form.email) && this.form.password.length >= 4) {
-        const { email, password } = this.form
+      if (this.validEmail(this.form.login.email) && this.form.login.password.length >= 4) {
+        const { email, password } = this.form.login
         this.$store.dispatch(AUTH_REQUEST, { email, password }).then(() => {
           this.$router.push('/expense')
         }, () => {
@@ -104,9 +192,17 @@ export default {
             text: 'Authentication Failed!'
           })
         })
-      } else {
-        return
       }
+    },
+
+    onSubmitByID (evt) {
+      evt.preventDefault()
+      this.validated = true
+    },
+
+    onSignup (evt) {
+      evt.preventDefault()
+      this.validated = true
     }
   }
 }
@@ -124,17 +220,19 @@ export default {
 
       form {
         width: 381px;
-        height: 434px;
         padding: 58px 30px 65px;
         margin-top: 146px;
+        font-size: 14px;
 
         input {
           height: 46px;
+          font-size: 14px;
         }
 
         button[type="submit"] {
           font-weight: 600;
           height: 3rem;
+          font-size: 14px;
         }
       }
 
@@ -152,6 +250,21 @@ export default {
           color: #383838;
           display: table;
           cursor: pointer;
+
+          &:after {
+            border-bottom: 4px solid #36B37E;
+            padding-left: 15px;
+            display:block;
+            content: '';
+            transform: scaleX(0);
+            transition: transform 250ms ease-in-out;
+          }
+          &[class="elem-active"] {
+            opacity: 1;
+          }
+          &[class="elem-active"]:after {
+            transform: scaleX(1);
+          }
         }
       }
     }

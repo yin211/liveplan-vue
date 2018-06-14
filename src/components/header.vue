@@ -50,7 +50,7 @@ export default {
 
       .navbar-brand {
         width: 170px;
-        height: 126px;
+        height: 134px;
         background-color: white;
 
         .logo{

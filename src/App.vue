@@ -1,11 +1,11 @@
 <template>
   <div id="app">
-    <v-header></v-header>
+    <v-header class="bg-dark"></v-header>
     <div class="w-75 mx-auto">
       <router-view></router-view>
-      <v-footer v-if="isAuthenticated"></v-footer>
+      <v-footer class="bg-dark" v-if="isAuthenticated"></v-footer>
     </div>
-    <notifications group="notify"/>
+    <notifications group="notify" classes="notify-style"/>
   </div>
 </template>
 
@@ -30,7 +30,7 @@ export default {
 <style lang="scss">
   @import './assets/scss/app.scss';
   #app {
-    font-family: Roboto;
+    font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;

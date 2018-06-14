@@ -1,5 +1,5 @@
 <template>
-  <div class="expense secondary-bg-color">
+  <div class="expense bg-light">
 
   </div>
 </template>

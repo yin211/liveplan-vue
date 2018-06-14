@@ -9,51 +9,37 @@
   color: #3CA9FF;
 }
 
-.vfooter, .vheader {
-  background-color: #525670;
-}
-
 .depth-2 {
   box-shadow: 10px 12px 44px 0 rgba(0,0,0,0.25);
-}
-
-.secondary-bg-color {
-  background-color: #EDEEF6;
 }
 
 .text-gray {
   color: #84888F;
 }
 
-.elem-active {
-  opacity: 1 !important;
-  border-bottom: 4px solid #36B37E;
-  padding-left: 15px;
-}
+.notify-style {
+  padding: 10px !important;
+  margin: 15px !important;
 
-.vue-notification {
-  padding: 10px;
-  margin: 15px;
-
-  font-size: 16px;
-  font-weight: 700;
+  font-size: 14px !important;
+  font-weight: 700 !important;
 
   color: #ffffff;
-  background: #44A4FC;
+  background: $blue !important;
   border-left: 5px solid #187FE7;
 
   &.warn {
-    background: #ffb648;
+    background: $yellow !important;
     border-left-color: #f48a06;
   }
 
   &.error {
-    background: #E54D42;
+    background: $red !important;
     border-left-color: #B82E24;
   }
 
   &.success {
-    background: #68CD86;
+    background: $green !important;
     border-left-color: #42A85F;
   }
 }

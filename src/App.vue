@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <v-header class="bg-dark"></v-header>
-    <div class="w-75 mx-auto">
+    <div class="main-box mx-auto">
       <router-view></router-view>
       <v-footer class="bg-dark" v-if="isAuthenticated"></v-footer>
     </div>
@@ -60,6 +60,10 @@ export default {
     text-align: center;
     height: 100vh;
     padding-top: 27px;
+
+    .main-box {
+      width: 80%;
+    }
   }
 
 </style>

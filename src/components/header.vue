@@ -16,7 +16,7 @@
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
-        <b-navbar-nav class="ml-auto mr-4">
+        <b-navbar-nav class="ml-auto">
           <b-dropdown id="ddown1" right size="sm" :text="selectedPlanText">
             <b-dropdown-item-button v-for="plan in plans" :key="plan.id" @click="selectPlan(plan)">{{plan.description}}</b-dropdown-item-button>
           </b-dropdown>
@@ -84,7 +84,8 @@ export default {
     height: 75px;
     nav {
       height: 100%;
-      margin-left: 14vw;
+      margin-left: 12vw;
+      margin-right: 12vw;
 
       .navbar-brand {
         width: 170px;

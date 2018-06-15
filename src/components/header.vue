@@ -1,41 +1,53 @@
 <template>
   <div class="vheader">
-    <nav class="navbar navbar-expand-lg navbar-light">
-      <a class="navbar-brand" href="#">
-        <span class="logo">LIVSPLAN</span>
-      </a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div v-if="isAuthenticated" class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="#">OVERVIEW</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">ASSUMPTION</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">TIMELINE</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">WHAT IF?</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">TOOLS / INSIGHTS</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
+    <b-navbar toggleable="md" type="dark" variant="dark">
+      <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+
+      <b-navbar-brand href="#">LIVSPLAN</b-navbar-brand>
+
+      <b-collapse is-nav id="nav_collapse" v-if="isAuthenticated">
+
+        <b-navbar-nav>
+          <b-nav-item href="#">OVERVIEW</b-nav-item>
+          <b-nav-item href="#">ASSUMPTION</b-nav-item>
+          <b-nav-item href="#">TIMELINE</b-nav-item>
+          <b-nav-item href="#">WHAT IF?</b-nav-item>
+          <b-nav-item href="#">TOOLS / INSIGHTS</b-nav-item>
+        </b-navbar-nav>
+
+        <!-- Right aligned nav items -->
+        <b-navbar-nav class="ml-auto mr-4">
+          <b-dropdown id="ddown1" right size="sm" text="Plan: Until we are 80">
+          </b-dropdown>
+          <div class="mx-4 spacing-divider"></div>
+          <b-nav-item-dropdown right no-caret>
+            <template slot="button-content">
+              <i class="fa fa-user pr-2"></i> Jan Bolmeson <i class="fa fa-ellipsis-v ml-4"></i>
+            </template>
+            <b-dropdown-item @click="logout">Logout</b-dropdown-item>
+          </b-nav-item-dropdown>
+        </b-navbar-nav>
+
+      </b-collapse>
+    </b-navbar>
   </div>
 </template>
 
 <script>
+import {AUTH_LOGOUT} from '@/store/actions/auth'
+
 export default {
   name: 'vheader',
   computed: {
     isAuthenticated () {
       return this.$store.getters.isAuthenticated
+    }
+  },
+  methods: {
+    logout () {
+      this.$store.dispatch(AUTH_LOGOUT).then(() => {
+        this.$router.push('/login')
+      })
     }
   }
 }
@@ -45,23 +57,18 @@ export default {
   .vheader {
     height: 75px;
     nav {
-      height: 75px;
+      height: 100%;
       margin-left: 14vw;
 
       .navbar-brand {
         width: 170px;
         height: 134px;
         background-color: white;
-
-        .logo{
-          height: 29px;
-          width: 89px;
-          color: #2D2D2D;
-          font-size: 24px;
-          font-weight: bold;
-          letter-spacing: 1.2px;
-          line-height: 126px;
-        }
+        font-size: 24px;
+        font-weight: bold;
+        letter-spacing: 1.2px;
+        line-height: 126px;
+        color: #2d2d2d;
       }
 
       .nav-link {
@@ -71,6 +78,11 @@ export default {
         letter-spacing: 0.5px;
         line-height: 24px;
         padding: 0 24px;
+      }
+
+      .spacing-divider {
+        opacity: .13;
+        border: 1px solid #FFFFFF;
       }
     }
   }

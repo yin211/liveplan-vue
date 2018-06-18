@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <v-header class="bg-dark"></v-header>
-    <div class="main-box mx-auto">
+    <div class="container main-box">
       <router-view></router-view>
       <v-footer class="bg-dark" v-if="isAuthenticated"></v-footer>
     </div>
@@ -21,7 +21,7 @@ export default {
     'v-header': vheader,
     'v-footer': vfooter
   },
-  created: function () {
+  created () {
     axios.interceptors.response.use(function (response) {
       return response
     }, function (error) {
@@ -62,7 +62,7 @@ export default {
     padding-top: 27px;
 
     .main-box {
-      width: 80%;
+      max-width: 1440px;
     }
   }
 

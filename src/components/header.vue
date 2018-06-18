@@ -1,6 +1,6 @@
 <template>
-  <div class="vheader">
-    <b-navbar toggleable="md" type="dark" variant="dark">
+  <div class="container-fluid vheader">
+    <b-navbar class="container px-5" toggleable="md" type="dark" variant="dark">
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
       <b-navbar-brand href="#">LIVSPLAN</b-navbar-brand>
@@ -84,8 +84,7 @@ export default {
     height: 75px;
     nav {
       height: 100%;
-      margin-left: 12vw;
-      margin-right: 12vw;
+      max-width: 1440px;
 
       .navbar-brand {
         width: 170px;

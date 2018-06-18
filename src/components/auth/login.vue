@@ -6,13 +6,15 @@
           <li @click="loginWithBankID" :class="{'elem-active': isLoginWithBankID}">{{ $t('LOGIN WITH MOBILE BANKID') }}</li>
           <li @click="signup" :class="{'elem-active': isSignup}">{{ $t('SIGNUP FOR LIVSPLAN') }}</li>
         </ul>
+
+        <!-- LOGIN FORM -->
         <b-form @submit="onSubmitByEmail" novalidate class="bg-white depth-2 text-left" :validated="validated" v-if="isLoginWithEmail" style="height: 434px">
           <b-form-group class="emailInputGroup mb-4" v-bind:label="$t('Email')" label-for="emailInput" :invalid-feedback="$t(invalidEmailFeedback)" :state="emailState">
-            <b-form-input class="emailInput" type="email" v-model="form.login.email" required v-bind:placeholder="$t('Type here')">
+            <b-form-input class="emailInput" type="email" v-model="form.login.email" required v-bind:placeholder="$t('Please enter your email address')">
             </b-form-input>
           </b-form-group>
           <b-form-group class="passwordInputGroup mb-4" v-bind:label="$t('Password')" label-for="passwordInput" :invalid-feedback="$t(invalidPwdFeedback)" :state="pwdState">
-            <b-form-input class="passwordInput" type="password" v-model="form.login.password" required v-bind:placeholder="$t('Type here')">
+            <b-form-input class="passwordInput" type="password" v-model="form.login.password" required v-bind:placeholder="$t('Please enter your password')">
             </b-form-input>
           </b-form-group>
 
@@ -24,6 +26,8 @@
           <b-button type="submit" variant="primary" class="w-100 text-capitalize">{{ $t('login') }}</b-button>
         </b-form>
 
+
+        <!-- BANK-ID FORM -->
         <b-form @submit="onSubmitByID" novalidate class="bg-white depth-2 text-left " :validated="validated" v-if="isLoginWithBankID" style="height: 337px">
           <b-form-group class="idInputGroup mb-4" v-bind:label="$t('Social Security Number')" label-for="idInput" :invalid-feedback="$t(invalidIDFeedback)" :state="idState">
             <b-form-input class="idInput" type="text" v-model="form.login.id" required v-bind:placeholder="$t('Type here')">
@@ -38,18 +42,28 @@
           <b-button type="submit" variant="primary" class="w-100 text-capitalize">{{ $t("login") }}</b-button>
         </b-form>
 
+
+        <!-- SIGNUP FORM -->
         <b-form @submit="onSignup" novalidate class="bg-white depth-2 text-left" :validated="validated" v-if="isSignup" style="height: 490px">
-          <b-form-group class="userNameInputGroup mb-4" v-bind:label="$t('User Name')" label-for="userNameInput" :invalid-feedback="$t(invalidUserNameFeedback)" :state="userNameState">
-            <b-form-input class="userNameInput" type="text" v-model="form.signup.username" required v-bind:placeholder="$t('Type here')">
+          <b-form-group class="userNameInputGroup mb-4" v-bind:label="$t('First- and lastname')" label-for="userNameInput" :invalid-feedback="$t(invalidUserNameFeedback)" :state="userNameState">
+            <b-form-input class="userNameInput" type="text" v-model="form.signup.username" required v-bind:placeholder="$t('Luke Skywalker')">
             </b-form-input>
           </b-form-group>
           <b-form-group class="emailInputGroup mb-4" v-bind:label="$t('Email')" label-for="emailInput" :invalid-feedback="$t(invalidEmailFeedback)" :state="emailState">
-            <b-form-input class="emailInput" type="email" v-model="form.signup.email" required v-bind:placeholder="$t('Type here')">
+            <b-form-input class="emailInput" type="email" v-model="form.signup.email" required v-bind:placeholder="$t('luke@skywalker.com')">
             </b-form-input>
           </b-form-group>
           <b-form-group class="passwordInputGroup mb-4" v-bind:label="$t('Password')" label-for="passwordInput" :invalid-feedback="$t(invalidPwdFeedback)" :state="pwdState">
-            <b-form-input class="passwordInput" type="password" v-model="form.signup.password" required v-bind:placeholder="$t('Type here')">
+            <b-form-input class="passwordInput" type="password" v-model="form.signup.password" required v-bind:placeholder="$t('The password is strong with this one...')">
             </b-form-input>
+          </b-form-group>
+          <b-form-group class="tocGroup mt-2 mb-4">
+            <b-form-checkbox-group v-model="form.checked" class="tocCheckbox">
+              <b-form-checkbox value="me" class="text-gray">{{ $t('Accept terms & conditions') }}</b-form-checkbox>
+            </b-form-checkbox-group>
+            <b-form-checkbox-group v-model="form.checked" class="newsletterCheckbox">
+              <b-form-checkbox value="me" class="text-gray">{{ $t('It\'s ok to send me newsletters') }}</b-form-checkbox>
+            </b-form-checkbox-group>
           </b-form-group>
 
           <b-button type="submit" variant="primary" class="w-100">{{ $t('Signup') }}</b-button>
@@ -132,7 +146,7 @@ export default {
       if (this.form.login.id.length > 0) {
         return ''
       } else {
-        return 'Please enter bank id'
+        return 'Please enter a Swedish social security number'
       }
     },
     idState () {
@@ -143,7 +157,7 @@ export default {
       if (this.form.signup.username.length > 0) {
         return ''
       } else {
-        return 'Please enter username'
+        return 'Please enter your first and lastname'
       }
     },
     userNameState () {

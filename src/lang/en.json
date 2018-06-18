@@ -1,3 +1,24 @@
 {
-    "login" : "login"
+    "login" : "login",
+    "LOGIN WITH EMAIL": "LOGIN WITH EMAIL",
+    "LOGIN WITH MOBILE BANKID": "LOGIN WITH MOBILE BANKID",
+    "SIGNUP FOR LIVSPLAN": "SIGNUP FOR LIVSPLAN",
+    "Email": "Email",
+    "Password": "Password",
+    "Remember me in the next 30 days": "Remember me in the next 30 days",
+    "Type here": "Type here",
+    "Please enter valid email": "Please enter valid email",
+    "Please enter an email": "Please enter an email",
+    "Please enter password": "Please enter password",
+    "Enter at least 4 characters": "Enter at least 4 characters",
+    "Social Security Number": "Social Security Number",
+    "Please enter bank id": "Please enter bank id",
+    "User Name": "User Name",
+    "Please enter username": "Please enter username",
+    "Signup": "Signup",
+    "Authentication Failed!": "Authentication Failed!",
+    "About Us": "About Us",
+    "Terms of Service": "Terms of Service",
+    "Privacy Policy": "Privacy Policy",
+    "Get in Touch": "Get in Touch"
 }

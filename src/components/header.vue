@@ -84,7 +84,7 @@ export default {
     height: 75px;
     nav {
       height: 100%;
-      max-width: 1440px;
+      max-width: 1400px;
 
       .navbar-brand {
         width: 170px;

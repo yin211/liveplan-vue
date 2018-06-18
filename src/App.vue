@@ -62,7 +62,7 @@ export default {
     padding-top: 27px;
 
     .main-box {
-      max-width: 1440px;
+      max-width: 1400px;
     }
   }
 

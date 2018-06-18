@@ -6,7 +6,7 @@ import en from './en.json'
 
 Vue.use(VueI18n)
 
-const locale = 'en'
+const locale = 'se'
 
 const messages = {
   se,
@@ -15,5 +15,6 @@ const messages = {
 
 export default new VueI18n({
   locale,
+  fallbackLocale: 'en',
   messages
 })

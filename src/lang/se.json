@@ -1,3 +1,25 @@
 {
-    "login": "logga in"
+    "login": "logga in",
+    "LOGIN WITH EMAIL": "LOGGA IN MED E-POST",
+    "LOGIN WITH MOBILE BANKID": "LOGGA IN MED MOBIL BANKID",
+    "SIGNUP FOR LIVSPLAN": "REGISTRERING FÖR LIVSPLAN",
+    "Email": "E-post",
+    "Password": "Lösenord",
+    "Remember me in the next 30 days": "Kom ihåg mig de närmaste 30 dagarna",
+    "Type here": "Skriv här",
+    "Please enter valid email": "Ange giltigt e-postmeddelande",
+    "Please enter an email": "Vänligen skriv ett mail",
+    "Please enter password": "Ange lösenord Tack",
+    "Enter at least 4 characters": "Ange minst 4 tecken",
+    "Social Security Number": "Personnummer",
+    "Please enter bank id": "Vänligen ange bank-id",
+    "User Name": "Användarnamn",
+    "Please enter username": "Vänligen ange användarnamn",
+    "Signup": "Bli Medlem",
+    "Authentication Failed!": "Autentisering misslyckades!",
+    "About Us": "Om oss",
+    "Terms of Service": "Användarvillkor",
+    "Privacy Policy": "Integritetspolicy",
+    "Get in Touch": "Komma i kontakt"
+
 }

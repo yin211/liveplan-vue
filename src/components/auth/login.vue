@@ -2,67 +2,67 @@
   <div class="login d-flex justify-content-between flex-column">
     <div class="main d-flex justify-content-center bg-light">
         <ul class="d-flex flex-column justify-content-end align-items-end mb-5">
-          <li @click="loginWithEmail" :class="{'elem-active': isLoginWithEmail}">LOGIN WITH EMAIL</li>
-          <li @click="loginWithBankID" :class="{'elem-active': isLoginWithBankID}">LOGIN WITH MOBILE BANKID</li>
-          <li @click="signup" :class="{'elem-active': isSignup}">SIGNUP FOR LIVSPLAN</li>
+          <li @click="loginWithEmail" :class="{'elem-active': isLoginWithEmail}">{{ $t('LOGIN WITH EMAIL') }}</li>
+          <li @click="loginWithBankID" :class="{'elem-active': isLoginWithBankID}">{{ $t('LOGIN WITH MOBILE BANKID') }}</li>
+          <li @click="signup" :class="{'elem-active': isSignup}">{{ $t('SIGNUP FOR LIVSPLAN') }}</li>
         </ul>
         <b-form @submit="onSubmitByEmail" novalidate class="bg-white depth-2 text-left" :validated="validated" v-if="isLoginWithEmail" style="height: 434px">
-          <b-form-group class="emailInputGroup mb-4" label="Email" label-for="emailInput" :invalid-feedback="invalidEmailFeedback" :state="emailState">
-            <b-form-input class="emailInput" type="email" v-model="form.login.email" required placeholder="Type here">
+          <b-form-group class="emailInputGroup mb-4" v-bind:label="$t('Email')" label-for="emailInput" :invalid-feedback="$t(invalidEmailFeedback)" :state="emailState">
+            <b-form-input class="emailInput" type="email" v-model="form.login.email" required v-bind:placeholder="$t('Type here')">
             </b-form-input>
           </b-form-group>
-          <b-form-group class="passwordInputGroup mb-4" label="Password" label-for="passwordInput" :invalid-feedback="invalidPwdFeedback" :state="pwdState">
-            <b-form-input class="passwordInput" type="password" v-model="form.login.password" required placeholder="Type here">
+          <b-form-group class="passwordInputGroup mb-4" v-bind:label="$t('Password')" label-for="passwordInput" :invalid-feedback="$t(invalidPwdFeedback)" :state="pwdState">
+            <b-form-input class="passwordInput" type="password" v-model="form.login.password" required v-bind:placeholder="$t('Type here')">
             </b-form-input>
           </b-form-group>
 
           <b-form-group class="rememberGroup mt-2 mb-4">
             <b-form-checkbox-group v-model="form.checked" class="rememberCheck">
-              <b-form-checkbox value="me" class="text-gray">Remember me in the next 30 days</b-form-checkbox>
+              <b-form-checkbox value="me" class="text-gray">{{ $t('Remember me in the next 30 days') }}</b-form-checkbox>
             </b-form-checkbox-group>
           </b-form-group>
-          <b-button type="submit" variant="primary" class="w-100">Login</b-button>
+          <b-button type="submit" variant="primary" class="w-100 text-capitalize">{{ $t('login') }}</b-button>
         </b-form>
 
         <b-form @submit="onSubmitByID" novalidate class="bg-white depth-2 text-left " :validated="validated" v-if="isLoginWithBankID" style="height: 337px">
-          <b-form-group class="idInputGroup mb-4" label="Social Security Number" label-for="idInput" :invalid-feedback="invalidIDFeedback" :state="idState">
-            <b-form-input class="idInput" type="text" v-model="form.login.id" required placeholder="Type here">
+          <b-form-group class="idInputGroup mb-4" v-bind:label="$t('Social Security Number')" label-for="idInput" :invalid-feedback="$t(invalidIDFeedback)" :state="idState">
+            <b-form-input class="idInput" type="text" v-model="form.login.id" required v-bind:placeholder="$t('Type here')">
             </b-form-input>
           </b-form-group>
 
           <b-form-group class="rememberGroup mt-2 mb-4">
             <b-form-checkbox-group v-model="form.checked" class="rememberCheck">
-              <b-form-checkbox value="me" class="text-gray">Remember me in the next 30 days</b-form-checkbox>
+              <b-form-checkbox value="me" class="text-gray">{{ $t('Remember me in the next 30 days') }}</b-form-checkbox>
             </b-form-checkbox-group>
           </b-form-group>
-          <b-button type="submit" variant="primary" class="w-100">Login</b-button>
+          <b-button type="submit" variant="primary" class="w-100 text-capitalize">{{ $t("login") }}</b-button>
         </b-form>
 
         <b-form @submit="onSignup" novalidate class="bg-white depth-2 text-left" :validated="validated" v-if="isSignup" style="height: 490px">
-          <b-form-group class="userNameInputGroup mb-4" label="User Name" label-for="userNameInput" :invalid-feedback="invalidUserNameFeedback" :state="userNameState">
-            <b-form-input class="userNameInput" type="text" v-model="form.signup.username" required placeholder="Type here">
+          <b-form-group class="userNameInputGroup mb-4" v-bind:label="$t('User Name')" label-for="userNameInput" :invalid-feedback="$t(invalidUserNameFeedback)" :state="userNameState">
+            <b-form-input class="userNameInput" type="text" v-model="form.signup.username" required v-bind:placeholder="$t('Type here')">
             </b-form-input>
           </b-form-group>
-          <b-form-group class="emailInputGroup mb-4" label="Email" label-for="emailInput" :invalid-feedback="invalidEmailFeedback" :state="emailState">
-            <b-form-input class="emailInput" type="email" v-model="form.signup.email" required placeholder="Type here">
+          <b-form-group class="emailInputGroup mb-4" v-bind:label="$t('Email')" label-for="emailInput" :invalid-feedback="$t(invalidEmailFeedback)" :state="emailState">
+            <b-form-input class="emailInput" type="email" v-model="form.signup.email" required v-bind:placeholder="$t('Type here')">
             </b-form-input>
           </b-form-group>
-          <b-form-group class="passwordInputGroup mb-4" label="Password" label-for="passwordInput" :invalid-feedback="invalidPwdFeedback" :state="pwdState">
-            <b-form-input class="passwordInput" type="password" v-model="form.signup.password" required placeholder="Type here">
+          <b-form-group class="passwordInputGroup mb-4" v-bind:label="$t('Password')" label-for="passwordInput" :invalid-feedback="$t(invalidPwdFeedback)" :state="pwdState">
+            <b-form-input class="passwordInput" type="password" v-model="form.signup.password" required v-bind:placeholder="$t('Type here')">
             </b-form-input>
           </b-form-group>
 
-          <b-button type="submit" variant="primary" class="w-100">Signup</b-button>
+          <b-button type="submit" variant="primary" class="w-100">{{ $t('Signup') }}</b-button>
         </b-form>
 
 
     </div>
     <div class="bottom mb-4">
       <ul class="d-flex justify-content-center">
-        <li class="mx-2 text-gray">About Us</li>
-        <li class="mx-2 text-gray">Terms of Service</li>
-        <li class="mx-2 text-gray">Privacy Policy</li>
-        <li class="mx-2 text-gray">Get in Touch</li>
+        <li class="mx-2 text-gray">{{ $t('About Us') }}</li>
+        <li class="mx-2 text-gray">{{ $t('Terms of Service') }}</li>
+        <li class="mx-2 text-gray">{{ $t('Privacy Policy') }}</li>
+        <li class="mx-2 text-gray">{{ $t('Get in Touch') }}</li>
       </ul>
     </div>
   </div>

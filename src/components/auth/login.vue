@@ -10,11 +10,11 @@
         <!-- LOGIN FORM -->
         <b-form @submit="onSubmitByEmail" novalidate class="bg-white depth-2 text-left" :validated="validated" v-if="isLoginWithEmail" style="height: 434px">
           <b-form-group class="emailInputGroup mb-4" v-bind:label="$t('Email')" label-for="emailInput" :invalid-feedback="$t(invalidEmailFeedback)" :state="emailState">
-            <b-form-input class="emailInput" type="email" v-model="form.login.email" required v-bind:placeholder="$t('Please enter your email address')">
+            <b-form-input class="emailInput" type="email" v-model="form.login.email" required v-bind:placeholder="$t('luke@skywalker.com')">
             </b-form-input>
           </b-form-group>
           <b-form-group class="passwordInputGroup mb-4" v-bind:label="$t('Password')" label-for="passwordInput" :invalid-feedback="$t(invalidPwdFeedback)" :state="pwdState">
-            <b-form-input class="passwordInput" type="password" v-model="form.login.password" required v-bind:placeholder="$t('Please enter your password')">
+            <b-form-input class="passwordInput" type="password" v-model="form.login.password" required v-bind:placeholder="$t('May the force *********')">
             </b-form-input>
           </b-form-group>
 

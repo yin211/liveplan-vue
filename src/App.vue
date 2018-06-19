@@ -59,7 +59,7 @@ export default {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     height: 100vh;
-    padding-top: 27px;
+    padding-top: 24px;
 
     .main-box {
       max-width: 1400px;

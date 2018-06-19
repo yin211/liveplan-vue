@@ -1,4 +1,12 @@
 {
+    "footer": {
+        "footer_menu": {
+            "about_us" : "About us",
+            "toc" : "Terms and conditions",
+            "privacy_policy" : "Privacy policy",
+            "get_in_touch" : "Get in touch"
+        }
+    },
     "login" : "login",
     "LOGIN WITH EMAIL": "LOGIN WITH EMAIL",
     "LOGIN WITH MOBILE BANKID": "LOGIN WITH MOBILE BANKID",

@@ -77,10 +77,10 @@
     </div>
     <div class="bottom mb-4">
       <ul class="d-flex justify-content-center">
-        <li class="mx-2 text-gray">{{ $t('About Us') }}</li>
-        <li class="mx-2 text-gray">{{ $t('Terms of Service') }}</li>
-        <li class="mx-2 text-gray">{{ $t('Privacy Policy') }}</li>
-        <li class="mx-2 text-gray">{{ $t('Get in Touch') }}</li>
+        <li class="mx-2 text-gray">{{ $t('footer.footer_menu.about_us') }}</li>
+        <li class="mx-2 text-gray">{{ $t('footer.footer_menu.toc') }}</li>
+        <li class="mx-2 text-gray">{{ $t('footer.footer_menu.privacy_policy') }}</li>
+        <li class="mx-2 text-gray">{{ $t('footer.footer_menu.get_in_touch') }}</li>
       </ul>
     </div>
   </div>

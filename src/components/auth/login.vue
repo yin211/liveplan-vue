@@ -8,7 +8,7 @@
         </ul>
 
         <!-- LOGIN FORM -->
-        <b-form @submit="onSubmitByEmail" novalidate class="bg-white depth-2 text-left" :validated="validated" v-if="isLoginWithEmail" style="height: 434px">
+        <b-form @submit="onSubmitByEmail" novalidate class="bg-white depth-2 text-left" :validated="validated" v-if="isLoginWithEmail" style="height: 414px">
           <b-form-group class="emailInputGroup mb-4" v-bind:label="$t('Email')" label-for="emailInput" :invalid-feedback="$t(invalidEmailFeedback)" :state="emailState">
             <b-form-input class="emailInput" type="email" v-model="form.login.email" required v-bind:placeholder="$t('luke@skywalker.com')">
             </b-form-input>
@@ -19,8 +19,8 @@
           </b-form-group>
 
           <b-form-group class="rememberGroup mt-2 mb-4">
-            <b-form-checkbox-group v-model="form.checked" class="rememberCheck">
-              <b-form-checkbox value="me" class="text-gray">{{ $t('Remember me in the next 30 days') }}</b-form-checkbox>
+            <b-form-checkbox-group v-model="form.login.checked" class="rememberCheck">
+              <b-form-checkbox class="text-gray">{{ $t('Remember me in the next 30 days') }}</b-form-checkbox>
             </b-form-checkbox-group>
           </b-form-group>
           <b-button type="submit" variant="primary" class="w-100 text-capitalize">{{ $t('login') }}</b-button>
@@ -28,15 +28,15 @@
 
 
         <!-- BANK-ID FORM -->
-        <b-form @submit="onSubmitByID" novalidate class="bg-white depth-2 text-left " :validated="validated" v-if="isLoginWithBankID" style="height: 337px">
+        <b-form @submit="onSubmitByID" novalidate class="bg-white depth-2 text-left " :validated="validated" v-if="isLoginWithBankID" style="height: 318px">
           <b-form-group class="idInputGroup mb-4" v-bind:label="$t('Social Security Number')" label-for="idInput" :invalid-feedback="$t(invalidIDFeedback)" :state="idState">
             <b-form-input class="idInput" type="text" v-model="form.login.id" required v-bind:placeholder="$t('Type here')">
             </b-form-input>
           </b-form-group>
 
           <b-form-group class="rememberGroup mt-2 mb-4">
-            <b-form-checkbox-group v-model="form.checked" class="rememberCheck">
-              <b-form-checkbox value="me" class="text-gray">{{ $t('Remember me in the next 30 days') }}</b-form-checkbox>
+            <b-form-checkbox-group v-model="form.login.checked" class="rememberCheck">
+              <b-form-checkbox class="text-gray">{{ $t('Remember me in the next 30 days') }}</b-form-checkbox>
             </b-form-checkbox-group>
           </b-form-group>
           <b-button type="submit" variant="primary" class="w-100 text-capitalize">{{ $t("login") }}</b-button>
@@ -44,9 +44,13 @@
 
 
         <!-- SIGNUP FORM -->
-        <b-form @submit="onSignup" novalidate class="bg-white depth-2 text-left" :validated="validated" v-if="isSignup" style="height: 490px">
-          <b-form-group class="userNameInputGroup mb-4" v-bind:label="$t('First- and lastname')" label-for="userNameInput" :invalid-feedback="$t(invalidUserNameFeedback)" :state="userNameState">
-            <b-form-input class="userNameInput" type="text" v-model="form.signup.username" required v-bind:placeholder="$t('Luke Skywalker')">
+        <b-form @submit="onSignup" novalidate class="bg-white depth-2 text-left" :validated="validated" v-if="isSignup" style="height: 636px">
+          <b-form-group class="firstNameInputGroup mb-4" v-bind:label="$t('Fist Name')" label-for="firstNameInput" :invalid-feedback="$t(invalidFirstNameFeedback)" :state="firstNameState">
+            <b-form-input class="firstNameInput" type="text" v-model="form.signup.firstname" required v-bind:placeholder="$t('Luke')">
+            </b-form-input>
+          </b-form-group>
+          <b-form-group class="lastNameInputGroup mb-4" v-bind:label="$t('Last Name')" label-for="lastNameInput" :invalid-feedback="$t(invalidLastNameFeedback)" :state="lastNameState">
+            <b-form-input class="lastNameInput" type="text" v-model="form.signup.lastname" required v-bind:placeholder="$t('Skywalker')">
             </b-form-input>
           </b-form-group>
           <b-form-group class="emailInputGroup mb-4" v-bind:label="$t('Email')" label-for="emailInput" :invalid-feedback="$t(invalidEmailFeedback)" :state="emailState">
@@ -58,11 +62,11 @@
             </b-form-input>
           </b-form-group>
           <b-form-group class="tocGroup mt-2 mb-4">
-            <b-form-checkbox-group v-model="form.checked" class="tocCheckbox">
-              <b-form-checkbox value="me" class="text-gray">{{ $t('Accept terms & conditions') }}</b-form-checkbox>
+            <b-form-checkbox-group v-model="form.signup.checkTos" class="tocCheckbox">
+              <b-form-checkbox class="text-gray">{{ $t('Accept terms & conditions') }}</b-form-checkbox>
             </b-form-checkbox-group>
-            <b-form-checkbox-group v-model="form.checked" class="newsletterCheckbox">
-              <b-form-checkbox value="me" class="text-gray">{{ $t('It\'s ok to send me newsletters') }}</b-form-checkbox>
+            <b-form-checkbox-group v-model="form.signup.checked" class="newsletterCheckbox">
+              <b-form-checkbox class="text-gray">{{ $t('It\'s ok to send me newsletters') }}</b-form-checkbox>
             </b-form-checkbox-group>
           </b-form-group>
 
@@ -97,12 +101,16 @@ export default {
         login: {
           email: '',
           password: '',
-          id: ''
+          id: '',
+          checked: false
         },
         signup: {
-          username: '',
+          firstname: '',
+          lastname: '',
           email: '',
-          password: ''
+          password: '',
+          checked: false,
+          checkTos: false
         }
       },
       validated: false,
@@ -153,15 +161,27 @@ export default {
       return !this.validated || this.form.login.id.length > 0
     },
 
-    invalidUserNameFeedback () {
-      if (this.form.signup.username.length > 0) {
+    invalidFirstNameFeedback () {
+      if (this.form.signup.firstname.length > 0) {
         return ''
       } else {
-        return 'Please enter your first and lastname'
+        return 'Please enter your first name'
       }
     },
-    userNameState () {
-      return !this.validated || this.form.signup.username.length > 0
+
+    firstNameState () {
+      return !this.validated || this.form.signup.firstname.length > 0
+    },
+
+    invalidLastNameFeedback () {
+      if (this.form.signup.lastname.length > 0) {
+        return ''
+      } else {
+        return 'Please enter your last name'
+      }
+    },
+    lastNameState () {
+      return !this.validated || this.form.signup.lastname.length > 0
     }
 
   },
@@ -222,11 +242,10 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped>
+<style lang="scss" >
   .login {
     height: calc(100vh - 102px);
-    min-height: 800px;
+    min-height: 900px;
     overflow: auto;
 
     .main {
@@ -248,6 +267,12 @@ export default {
           height: 3rem;
           font-size: 14px;
         }
+
+        .invalid-feedback {
+          position: absolute;
+        }
+
+
       }
 
       ul {

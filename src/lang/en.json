@@ -1,32 +1,49 @@
 {
-    "footer": {
-        "footer_menu": {
-            "about_us" : "About us",
-            "toc" : "Terms and conditions",
-            "privacy_policy" : "Privacy policy",
-            "get_in_touch" : "Get in touch"
-        }
+  "login": {
+    "label": {
+      "login_with_email": "LOGIN WITH EMAIL",
+      "login_width_mobile_bankid": "LOGIN WITH MOBILE BANKID",
+      "signup_for_livsplan": "SIGNUP FOR LIVSPLAN",
+      "email": "Email",
+      "login": "Login",
+      "signup": "Signup",
+      "password": "Password",
+      "remember_me": "Remember me in the next 30 days",
+      "type_here": "Type here",
+      "social_number": "Social Security Number",
+      "accept_toc": "Accept terms & Conditions",
+      "send_me_newsletter": "It's ok to send me newsletters",
+      "firstname": "First Name",
+      "lastname": "Last Name",
+      "password_strong": "The password is strong with this one..."
     },
-    "login" : "login",
-    "LOGIN WITH EMAIL": "LOGIN WITH EMAIL",
-    "LOGIN WITH MOBILE BANKID": "LOGIN WITH MOBILE BANKID",
-    "SIGNUP FOR LIVSPLAN": "SIGNUP FOR LIVSPLAN",
-    "Email": "Email",
-    "Password": "Password",
-    "Remember me in the next 30 days": "Remember me in the next 30 days",
-    "Type here": "Type here",
-    "Please enter valid email": "Please enter valid email",
-    "Please enter an email": "Please enter an email",
-    "Please enter password": "Please enter password",
-    "Enter at least 4 characters": "Enter at least 4 characters",
-    "Social Security Number": "Social Security Number",
-    "Please enter bank id": "Please enter bank id",
-    "User Name": "User Name",
-    "Please enter username": "Please enter username",
-    "Signup": "Signup",
-    "Authentication Failed!": "Authentication Failed!",
-    "About Us": "About Us",
-    "Terms of Service": "Terms of Service",
-    "Privacy Policy": "Privacy Policy",
-    "Get in Touch": "Get in Touch"
+    "errors": {
+      "require_password": "Please enter your password",
+      "require_email": "Please enter your email address",
+      "valid_4_chars": "Enter at least 4 characters",
+      "valid_email": "Please enter an valid email",
+      "require_swedish_social_num": "Please enter a Swedish social security number",
+      "require_firstname": "Please enter your first name",
+      "require_lastname": "Please enter your last name"
+    }
+  },
+  "footer": {
+    "footer_menu": {
+      "about_us" : "About us",
+      "toc" : "Terms and conditions",
+      "privacy_policy" : "Privacy policy",
+      "get_in_touch" : "Get in touch"
+    },
+    "logo": "LIVSPLAN",
+    "copyright": "Livsplan.se 2018 All Right Reserved"
+  },
+  "header": {
+    "header_menu": {
+      "overview": "OVERVIEW",
+      "assumptions": "ASSUMPTIONS",
+      "timeline": "TIMELINE",
+      "whatif": "WHAT IF?",
+      "tools_and_insights": "TOOLS / INSIGHTS"
+    }
+  }
 }

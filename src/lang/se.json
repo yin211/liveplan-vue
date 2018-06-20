@@ -1,29 +1,49 @@
 {
-    "login": "logga in",
-    "LOGIN WITH EMAIL": "LOGGA IN MED E-POST",
-    "LOGIN WITH MOBILE BANKID": "LOGGA IN MED MOBILT BANKID",
-    "SIGNUP FOR LIVSPLAN": "SKAPA ETT EGET KONTO",
-    "Email": "E-post",
-    "Please enter your password" : "Ange ditt lösenord",
-    "Please enter your email address" : "Ange din e-postadress",
-    "Password": "Lösenord",
-    "Remember me in the next 30 days": "Kom ihåg mig de närmaste 30 dagarna",
-    "Type here": "Skriv här",
-    "Please enter valid email": "Ange en giltig e-postadress",
-    "Please enter an email": "Var god och ange en e-postadress",
-    "Please enter password": "Var god och ange ett lösenord",
-    "Enter at least 4 characters": "Ange minst 4 tecken",
-    "Social Security Number": "Personnummer",
-    "Please enter a Swedish social security number": "Vänligen ange ett giltigt personnummer",
-    "First- and lastname": "För- och efternamn",
-    "Please enter your first and lastname": "Vänligen ange för och efternamn",
-    "Signup": "Skapa konto",
-    "Authentication Failed!": "Inloggningen misslyckades!",
-    "About Us": "Om oss",
-    "Terms of Service": "Användarvillkor",
-    "Privacy Policy": "Integritetspolicy",
-    "Get in Touch": "Kom i kontakt",
-    "Accept terms & conditions" : "Jag accepterar användarvillkoren",
-    "It's ok to send me newsletters" : "Det är OK att skicka mig relevanta nyhetsbrev"
-
+  "login": {
+    "label": {
+      "login_with_email": "LOGGA IN MED E-POST",
+      "login_width_mobile_bankid": "LOGGA IN MED MOBILT BANKID",
+      "signup_for_livsplan": "SKAPA ETT EGET KONTO",
+      "email": "E-post",
+      "login": "logga in",
+      "signup": "Skapa konto",
+      "password": "Lösenord",
+      "remember_me": "Kom ihåg mig de närmaste 30 dagarna",
+      "type_here": "Skriv här",
+      "social_number": "Personnummer",
+      "accept_toc": "Jag accepterar användarvillkoren",
+      "send_me_newsletter": "Det är OK att skicka mig relevanta nyhetsbrev",
+      "firstname": "Förnamn",
+      "lastname": "Efternamn",
+      "password_strong": "Lösenordet är starkt med den här ..."
+    },
+    "errors": {
+      "require_password": "Ange ditt lösenord",
+      "require_email": "Ange din e-postadress",
+      "valid_4_chars": "Ange minst 4 tecken",
+      "valid_email": "Ange en giltig e-postadress",
+      "require_swedish_social_num": "Vänligen ange ett giltigt personnummer",
+      "require_firstname": "Vänligen ange ditt förnamn",
+      "require_lastname": "Vänligen ange ditt efternamn"
+    }
+  },
+  "footer": {
+    "footer_menu": {
+      "about_us" : "Om oss",
+      "toc" : "Villkor",
+      "privacy_policy" : "Integritetspolicy",
+      "get_in_touch" : "Kom i kontakt"
+    },
+    "logo": "LIVSPLAN",
+    "copyright": "Livsplan.se 2018 All Right Reserved"
+  },
+  "header": {
+    "header_menu": {
+      "overview": "ÖVERSIKT",
+      "assumptions": "ANTAGANDEN",
+      "timeline": "TIDSLINJE",
+      "whatif": "TÄNK OM?",
+      "tools_and_insights": "VERKTYG / INSIGHTS"
+    }
+  }
 }

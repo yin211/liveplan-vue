@@ -1,56 +1,55 @@
 {
-  "login": {
-    "label": {
-      "login_with_email": "LOGGA IN MED E-POST",
-      "login_width_mobile_bankid": "LOGGA IN MED MOBILT BANKID",
-      "signup_for_livsplan": "SKAPA ETT EGET KONTO",
-      "email": "Din epost",
-      "login": "LOGGA IN",
-      "signup": "Skapa konto",
-      "password": "Ditt lösenord",
-      "remember_me": "Håll mig inloggad i två veckor",
-      "type_here": "Skriv här",
-      "social_number": "Ditt personnummer",
-      "accept_toc": "Jag accepterar användarvillkoren",
-      "send_me_newsletter": "Det är OK att skicka mig relevanta nyhetsbrev",
-      "firstname": "Förnamn",
-      "lastname": "Efternamn"
-    },
-    "placeholder" :
-    {
-      "email" : "luke@skywalker.com",
-      "password" : "Kraften är stark hos ****",
-      "firstname" : "Luke",
-      "lastname" : "Skywalker",
-      "social_number" : "197705250000"
-    },
-    "errors": {
-      "require_password": "Ange ditt lösenord",
-      "require_email": "Ange din e-postadress",
-      "valid_4_chars": "Ange minst 4 tecken",
-      "valid_email": "Ange en giltig e-postadress",
-      "require_swedish_social_num": "Vänligen ange ett giltigt personnummer",
-      "require_firstname": "Vänligen ange ditt förnamn",
-      "require_lastname": "Vänligen ange ditt efternamn"
-    }
-  },
   "footer": {
+    "copyright": "Livsplan AB",
     "footer_menu": {
-      "about_us" : "Om oss",
-      "toc" : "Villkor",
-      "privacy_policy" : "Integritetspolicy",
-      "get_in_touch" : "Kom i kontakt"
+      "about_us": "Om oss",
+      "get_in_touch": "Kom i kontakt",
+      "privacy_policy": "Integritetspolicy",
+      "toc": "Villkor"
     },
-    "logo": "LIVSPLAN",
-    "copyright": "Livsplan AB"
+    "logo": "LIVSPLAN"
   },
   "header": {
     "header_menu": {
-      "overview": "ÖVERSIKT",
       "assumptions": "ANTAGANDEN",
+      "overview": "ÖVERSIKT",
       "timeline": "TIDSLINJE",
-      "whatif": "TÄNK OM?",
-      "tools_and_insights": "VERKTYG"
+      "tools_and_insights": "VERKTYG",
+      "whatif": "TÄNK OM?"
+    }
+  },
+  "login": {
+    "errors": {
+      "require_email": "Ange din e-postadress",
+      "require_firstname": "Vänligen ange ditt förnamn",
+      "require_lastname": "Vänligen ange ditt efternamn",
+      "require_password": "Ange ditt lösenord",
+      "require_swedish_social_num": "Vänligen ange ett giltigt personnummer",
+      "valid_4_chars": "Ange minst 4 tecken",
+      "valid_email": "Ange en giltig e-postadress"
+    },
+    "label": {
+      "accept_toc": "Jag accepterar användarvillkoren",
+      "email": "Din epost",
+      "firstname": "Förnamn",
+      "lastname": "Efternamn",
+      "login": "LOGGA IN",
+      "login_width_mobile_bankid": "LOGGA IN MED MOBILT BANKID",
+      "login_with_email": "LOGGA IN MED E-POST",
+      "password": "Ditt lösenord",
+      "remember_me": "Håll mig inloggad i två veckor",
+      "send_me_newsletter": "Det är OK att skicka mig relevanta nyhetsbrev",
+      "signup": "Skapa konto",
+      "signup_for_livsplan": "SKAPA ETT EGET KONTO",
+      "social_number": "Ditt personnummer",
+      "type_here": "Skriv här"
+    },
+    "placeholder": {
+      "email": "luke@skywalker.com",
+      "firstname": "Luke",
+      "lastname": "Skywalker",
+      "password": "Kraften är stark hos ****",
+      "social_number": "197705250000"
     }
   }
 }

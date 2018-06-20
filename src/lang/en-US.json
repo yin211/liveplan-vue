@@ -1,55 +1,54 @@
 {
-  "login": {
-    "label": {
-      "login_with_email": "LOGIN WITH EMAIL",
-      "login_width_mobile_bankid": "LOGIN WITH MOBILE BANKID",
-      "signup_for_livsplan": "SIGNUP FOR LIVSPLAN",
-      "email": "Your email",
-      "login": "Login",
-      "signup": "Signup",
-      "password": "Your password",
-      "remember_me": "Remember me in the next 30 days",
-      "social_number": "Social Security Number",
-      "accept_toc": "Accept terms & conditions",
-      "send_me_newsletter": "It's ok to send me newsletters",
-      "firstname": "First name",
-      "lastname": "Last name"
-    },
-    "placeholder" :
-    {
-      "email" : "luke@skywalker.com",
-      "password" : "May the force be with ***",
-      "firstname" : "Luke",
-      "lastname" : "Skywalker",
-      "social_number" : "197705250000"
-    },
-    "errors": {
-      "require_password": "Please enter your password",
-      "require_email": "Please enter your email address",
-      "valid_4_chars": "Enter at least 4 characters",
-      "valid_email": "Please enter an valid email",
-      "require_swedish_social_num": "Please enter a Swedish social security number",
-      "require_firstname": "Please enter your first name",
-      "require_lastname": "Please enter your last name"
-    }
-  },
   "footer": {
+    "copyright": "Livsplan.se 2018 All Right Reserved",
     "footer_menu": {
-      "about_us" : "About us",
-      "toc" : "Terms and conditions",
-      "privacy_policy" : "Privacy policy",
-      "get_in_touch" : "Get in touch"
+      "about_us": "About us",
+      "get_in_touch": "Get in touch",
+      "privacy_policy": "Privacy policy",
+      "toc": "Terms and conditions"
     },
-    "logo": "LIVSPLAN",
-    "copyright": "Livsplan.se 2018 All Right Reserved"
+    "logo": "LIVSPLAN"
   },
   "header": {
     "header_menu": {
-      "overview": "OVERVIEW",
       "assumptions": "ASSUMPTIONS",
+      "overview": "OVERVIEW",
       "timeline": "TIMELINE",
-      "whatif": "WHAT IF?",
-      "tools_and_insights": "TOOLS / INSIGHTS"
+      "tools_and_insights": "TOOLS / INSIGHTS",
+      "whatif": "WHAT IF?"
+    }
+  },
+  "login": {
+    "errors": {
+      "require_email": "Please enter your email address",
+      "require_firstname": "Please enter your first name",
+      "require_lastname": "Please enter your last name",
+      "require_password": "Please enter your password",
+      "require_swedish_social_num": "Please enter a Swedish social security number",
+      "valid_4_chars": "Enter at least 4 characters",
+      "valid_email": "Please enter an valid email"
+    },
+    "label": {
+      "accept_toc": "Accept terms & conditions",
+      "email": "Your email",
+      "firstname": "First name",
+      "lastname": "Last name",
+      "login": "Login",
+      "login_width_mobile_bankid": "LOGIN WITH MOBILE BANKID",
+      "login_with_email": "LOGIN WITH EMAIL",
+      "password": "Your password",
+      "remember_me": "Remember me in the next 30 days",
+      "send_me_newsletter": "It's ok to send me newsletters",
+      "signup": "Signup",
+      "signup_for_livsplan": "SIGNUP FOR LIVSPLAN",
+      "social_number": "Social Security Number"
+    },
+    "placeholder": {
+      "email": "luke@skywalker.com",
+      "firstname": "Luke",
+      "lastname": "Skywalker",
+      "password": "May the force be with ***",
+      "social_number": "197705250000"
     }
   }
 }

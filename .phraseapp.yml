@@ -3,11 +3,11 @@ phraseapp:
   file_format: "json"
   pull:
     targets:
-    - file: "./src/lang/<locale_code>.js"
+    - file: "./src/lang/<locale_code>.json"
       params:
         file_format: "nested_json"
   push:
     sources:
-    - file: "./src/lang/<locale_code>.js"
+    - file: "./src/lang/<locale_code>.json"
       params:
         file_format: "nested_json"

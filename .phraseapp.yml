@@ -1,13 +1,13 @@
-:phraseapp:
+phraseapp:
   project_id: "cdd3a87fd7a3dab18427849dcc8bd2aa"
   file_format: "json"
   pull:
     targets:
     - file: "./src/lang/<locale_name>.js"
       params:
-        file_format: js
+        file_format: "json"
   push:
     sources:
     - file: "./src/lang/<locale_name>.js"
       params:
-        file_format: js
+        file_format: "json"

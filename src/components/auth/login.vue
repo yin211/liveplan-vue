@@ -255,12 +255,6 @@ export default {
         width: 381px;
         padding: 58px 30px 65px;
         margin-top: 146px;
-        font-size: 14px;
-
-        input {
-          height: 46px;
-          font-size: 14px;
-        }
 
         button[type="submit"] {
           font-weight: 600;

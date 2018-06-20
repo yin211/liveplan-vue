@@ -1,15 +1,15 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 
-import se from './se.json'
-import en from './en.json'
+import sv from './sv-SE.json'
+import en from './en-US.json'
 
 Vue.use(VueI18n)
 
-const locale = 'en'
+const locale = 'sv'
 
 const messages = {
-  se,
+  sv,
   en
 }
 

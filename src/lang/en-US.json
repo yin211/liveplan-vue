@@ -4,18 +4,24 @@
       "login_with_email": "LOGIN WITH EMAIL",
       "login_width_mobile_bankid": "LOGIN WITH MOBILE BANKID",
       "signup_for_livsplan": "SIGNUP FOR LIVSPLAN",
-      "email": "Email",
+      "email": "Your email",
       "login": "Login",
       "signup": "Signup",
-      "password": "Password",
+      "password": "Your password",
       "remember_me": "Remember me in the next 30 days",
-      "type_here": "Type here",
       "social_number": "Social Security Number",
-      "accept_toc": "Accept terms & Conditions",
+      "accept_toc": "Accept terms & conditions",
       "send_me_newsletter": "It's ok to send me newsletters",
-      "firstname": "First Name",
-      "lastname": "Last Name",
-      "password_strong": "The password is strong with this one..."
+      "firstname": "First name",
+      "lastname": "Last name"
+    },
+    "placeholder" :
+    {
+      "email" : "luke@skywalker.com",
+      "password" : "May the force be with ***",
+      "firstname" : "Luke",
+      "lastname" : "Skywalker",
+      "social_number" : "197705250000"
     },
     "errors": {
       "require_password": "Please enter your password",

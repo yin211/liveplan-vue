@@ -4,18 +4,25 @@
       "login_with_email": "LOGGA IN MED E-POST",
       "login_width_mobile_bankid": "LOGGA IN MED MOBILT BANKID",
       "signup_for_livsplan": "SKAPA ETT EGET KONTO",
-      "email": "E-post",
-      "login": "logga in",
+      "email": "Din epost",
+      "login": "LOGGA IN",
       "signup": "Skapa konto",
-      "password": "Lösenord",
-      "remember_me": "Kom ihåg mig de närmaste 30 dagarna",
+      "password": "Ditt lösenord",
+      "remember_me": "Håll mig inloggad i två veckor",
       "type_here": "Skriv här",
-      "social_number": "Personnummer",
+      "social_number": "Ditt personnummer",
       "accept_toc": "Jag accepterar användarvillkoren",
       "send_me_newsletter": "Det är OK att skicka mig relevanta nyhetsbrev",
       "firstname": "Förnamn",
-      "lastname": "Efternamn",
-      "password_strong": "Lösenordet är starkt med den här ..."
+      "lastname": "Efternamn"
+    },
+    "placeholder" :
+    {
+      "email" : "luke@skywalker.com",
+      "password" : "Kraften är stark hos ****",
+      "firstname" : "Luke",
+      "lastname" : "Skywalker",
+      "social_number" : "197705250000"
     },
     "errors": {
       "require_password": "Ange ditt lösenord",
@@ -35,7 +42,7 @@
       "get_in_touch" : "Kom i kontakt"
     },
     "logo": "LIVSPLAN",
-    "copyright": "Livsplan.se 2018 All Right Reserved"
+    "copyright": "Livsplan AB"
   },
   "header": {
     "header_menu": {
@@ -43,7 +50,7 @@
       "assumptions": "ANTAGANDEN",
       "timeline": "TIDSLINJE",
       "whatif": "TÄNK OM?",
-      "tools_and_insights": "VERKTYG / INSIGHTS"
+      "tools_and_insights": "VERKTYG"
     }
   }
 }

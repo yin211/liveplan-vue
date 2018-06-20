@@ -2,11 +2,11 @@ module.exports = [
   {
     title: 'English',
     locale: 'en',
-    country: 'us'
+    country: 'US'
   },
   {
     title: 'Sweden',
-    locale: 'se',
-    country: 'se'
+    locale: 'sv',
+    country: 'SE'
   }
 ]

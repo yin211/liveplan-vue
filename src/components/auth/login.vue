@@ -10,11 +10,11 @@
         <!-- LOGIN FORM -->
         <b-form @submit="onSubmitByEmail" novalidate class="bg-white depth-2 text-left" :validated="validated" v-if="isLoginWithEmail" style="height: 414px">
           <b-form-group class="emailInputGroup mb-4" v-bind:label="$t('login.label.email')" label-for="emailInput" :invalid-feedback="$t(invalidEmailFeedback)" :state="emailState">
-            <b-form-input class="emailInput" type="email" v-model="form.login.email" required v-bind:placeholder="$t('luke@skywalker.com')">
+            <b-form-input class="emailInput" type="email" v-model="form.login.email" required v-bind:placeholder="$t('login.placeholder.email')">
             </b-form-input>
           </b-form-group>
           <b-form-group class="passwordInputGroup mb-4" v-bind:label="$t('login.label.password')" label-for="passwordInput" :invalid-feedback="$t(invalidPwdFeedback)" :state="pwdState">
-            <b-form-input class="passwordInput" type="password" v-model="form.login.password" required v-bind:placeholder="$t('May the force *********')">
+            <b-form-input class="passwordInput" type="password" v-model="form.login.password" required v-bind:placeholder="$t('login.placeholder.password')">
             </b-form-input>
           </b-form-group>
 
@@ -23,14 +23,14 @@
               <b-form-checkbox class="text-gray">{{ $t('login.label.remember_me') }}</b-form-checkbox>
             </b-form-checkbox-group>
           </b-form-group>
-          <b-button type="submit" variant="primary" class="w-100 text-capitalize">{{ $t('login.label.login') }}</b-button>
+          <b-button type="submit" variant="primary" class="w-100 text-uppercase">{{ $t('login.label.login') }}</b-button>
         </b-form>
 
 
         <!-- BANK-ID FORM -->
         <b-form @submit="onSubmitByID" novalidate class="bg-white depth-2 text-left " :validated="validated" v-if="isLoginWithBankID" style="height: 318px">
           <b-form-group class="idInputGroup mb-4" v-bind:label="$t('login.label.social_number')" label-for="idInput" :invalid-feedback="$t(invalidIDFeedback)" :state="idState">
-            <b-form-input class="idInput" type="text" v-model="form.login.id" required v-bind:placeholder="$t('login.label.type_here')">
+            <b-form-input class="idInput" type="text" v-model="form.login.id" required v-bind:placeholder="$t('login.placeholder.social_number')">
             </b-form-input>
           </b-form-group>
 
@@ -39,26 +39,26 @@
               <b-form-checkbox class="text-gray">{{ $t('login.label.remember_me') }}</b-form-checkbox>
             </b-form-checkbox-group>
           </b-form-group>
-          <b-button type="submit" variant="primary" class="w-100 text-capitalize">{{ $t("login.label.login") }}</b-button>
+          <b-button type="submit" variant="primary" class="w-100 text-uppercase">{{ $t("login.label.login") }}</b-button>
         </b-form>
 
 
         <!-- SIGNUP FORM -->
         <b-form @submit="onSignup" novalidate class="bg-white depth-2 text-left" :validated="validated" v-if="isSignup" style="height: 636px">
           <b-form-group class="firstNameInputGroup mb-4" v-bind:label="$t('login.label.firstname')" label-for="firstNameInput" :invalid-feedback="$t(invalidFirstNameFeedback)" :state="firstNameState">
-            <b-form-input class="firstNameInput" type="text" v-model="form.signup.firstname" required v-bind:placeholder="$t('Luke')">
+            <b-form-input class="firstNameInput" type="text" v-model="form.signup.firstname" required v-bind:placeholder="$t('login.placeholder.firstname')">
             </b-form-input>
           </b-form-group>
           <b-form-group class="lastNameInputGroup mb-4" v-bind:label="$t('login.label.lastname')" label-for="lastNameInput" :invalid-feedback="$t(invalidLastNameFeedback)" :state="lastNameState">
-            <b-form-input class="lastNameInput" type="text" v-model="form.signup.lastname" required v-bind:placeholder="$t('Skywalker')">
+            <b-form-input class="lastNameInput" type="text" v-model="form.signup.lastname" required v-bind:placeholder="$t('login.placeholder.lastname')">
             </b-form-input>
           </b-form-group>
           <b-form-group class="emailInputGroup mb-4" v-bind:label="$t('login.label.email')" label-for="emailInput" :invalid-feedback="$t(invalidEmailFeedback)" :state="emailState">
-            <b-form-input class="emailInput" type="email" v-model="form.signup.email" required v-bind:placeholder="$t('luke@skywalker.com')">
+            <b-form-input class="emailInput" type="email" v-model="form.signup.email" required v-bind:placeholder="$t('login.placeholder.email')">
             </b-form-input>
           </b-form-group>
           <b-form-group class="passwordInputGroup mb-4" v-bind:label="$t('login.label.password')" label-for="passwordInput" :invalid-feedback="$t(invalidPwdFeedback)" :state="pwdState">
-            <b-form-input class="passwordInput" type="password" v-model="form.signup.password" required v-bind:placeholder="$t('login.label.password_strong')">
+            <b-form-input class="passwordInput" type="password" v-model="form.signup.password" required v-bind:placeholder="$t('login.placeholder.password')">
             </b-form-input>
           </b-form-group>
           <b-form-group class="tocGroup mt-2 mb-4">
@@ -70,7 +70,7 @@
             </b-form-checkbox-group>
           </b-form-group>
 
-          <b-button type="submit" variant="primary" class="w-100">{{ $t('login.label.signup') }}</b-button>
+          <b-button type="submit" variant="primary" class="w-100 text-uppercase">{{ $t('login.label.signup') }}</b-button>
         </b-form>
 
 

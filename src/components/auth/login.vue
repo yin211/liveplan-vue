@@ -92,7 +92,7 @@ export default {
   name: 'login',
   mounted () {
     if (this.$store.getters.isAuthenticated) {
-      this.$router.push('/expense')
+      this.$router.push('/assumptions/expense')
     }
   },
   data () {
@@ -216,7 +216,7 @@ export default {
       if (this.validEmail(this.form.login.email) && this.form.login.password.length >= 4) {
         const { email, password } = this.form.login
         this.$store.dispatch(AUTH_REQUEST, { email, password }).then(() => {
-          this.$router.push('/expense')
+          this.$router.push('/assumptions/expense')
         }, () => {
           this.$notify({
             group: 'notify',

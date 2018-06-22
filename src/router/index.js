@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import store from '@/store'
 import login from '@/components/auth/login'
-import expense from '@/components/expense'
+import assumptions from '@/components/assumptions'
+import expense from '@/components/assumptions/expense'
 
 Vue.use(Router)
 
@@ -26,9 +27,16 @@ export default new Router({
       component: login
     },
     {
-      path: '/expense',
-      name: 'expense',
-      component: expense
+      path: '/assumptions',
+      name: 'assumptions',
+      component: assumptions,
+      children: [
+        {
+          path: 'expense',
+          name: 'expense',
+          component: expense
+        }
+      ]
     }
   ],
   beforeEnter: ifAuthenticated

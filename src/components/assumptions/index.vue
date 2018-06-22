@@ -1,18 +1,15 @@
 <template>
-  <div class="expense bg-light">
-
+  <div class="assumptions bg-light">
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'expense'
+  name: 'assumptions'
 }
 </script>
 
 <style lang="scss">
-  .expense {
-    height: 100vh;
 
-  }
 </style>

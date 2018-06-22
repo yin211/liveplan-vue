@@ -1,6 +1,7 @@
 @import "bootstrap-variable-override";
 @import "~bootstrap/scss/bootstrap.scss";
 
+// color
 .facebook {
   color: #3C5193;
 }
@@ -19,6 +20,10 @@
 
 .depth-3 {
   box-shadow: 20px 22px 124px 0 rgba(0,0,0,0.5);
+}
+
+.text-regular {
+  color: #232B36;
 }
 
 .text-gray {
@@ -61,11 +66,31 @@ form {
     box-shadow: none !important;
   }
 
-  input {
+  select {
     &.form-control {
       font-size: 14px;
+      height: 46px !important;
+
+      &.form-control-sm {
+        height: 40px !important;
+      }
+
+      &:focus {
+        border: 1px solid #C1C7D0;
+        color: #232B36;
+      }
+    }
+  }
+
+  input {
+    &.form-control {
       background: #FAFBFC;
+      font-size: 14px;
       height: 46px;
+
+      &.form-control-sm {
+        height: 40px;
+      }
 
       &:focus {
         border: 1px solid #C1C7D0;
@@ -93,4 +118,33 @@ form {
   }
 }
 
+.breadcrumb-item {
+  font-size: 14px;
+  line-height: 20px;
+}
 
+.breadcrumb-item.active {
+  color: #84888F !important;
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+  padding-left: 12px;
+  padding-right: 20px;
+  color: #7A869A;
+  content: ">";
+  font-weight: 600;
+}
+
+// typography
+h1 {
+  line-height: 48px;
+}
+
+h2 {
+  line-height: 32px;
+}
+
+p {
+  font-size: 14px;
+  line-height: 20px;
+}

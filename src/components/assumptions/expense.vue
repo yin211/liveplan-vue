@@ -116,7 +116,11 @@
                 :sort-desc.sync="sortDesc"
                 :sort-direction="sortDirection"
                 @filtered="onFiltered"
+                hover
         >
+          <template slot="amount" slot-scope="data">
+            {{data.item.amount}} SEK
+          </template>
           <template slot="actions" slot-scope="row">
             <button class='btn plain-btn text-regular'>
               <i class="fa fa-pencil"></i> Edit
@@ -209,7 +213,7 @@ export default {
       margin-bottom: 120px;
     }
 
-    span {
+    .card span {
       font-size: 14px;
       line-height: 20px;
     }
@@ -252,17 +256,51 @@ export default {
       margin-top: 20px;
       font-size: 14px;
 
-      th {
-        padding-top: 18px;
-        padding-bottom: 18px;
-        background: white;
-        box-shadow: 9px 8px 16px 0 rgba(0,0,0,0.07);
+      table {
+        th {
+          padding-top: 18px;
+          padding-bottom: 18px;
+          background: white;
+          box-shadow: 9px 8px 16px 0 rgba(0,0,0,0.07);
+          outline: none;
+        }
+
+        tbody {
+          tr {
+            border-bottom-style: dotted;
+            border-bottom-width: 2px;
+            border-bottom-color: #CACACA;
+
+            &:hover {
+              background: rgba(255,255,255,0.25);
+            }
+
+            td {
+              vertical-align: middle;
+              padding-top: 6px;
+              padding-bottom: 6px;
+            }
+          }
+        }
       }
 
-      td {
-        vertical-align: middle;
-        padding-top: 6px;
-        padding-bottom: 6px;
+      ul[aria-label="Pagination"] {
+        .page-link {
+          background: transparent;
+          width: 30px;
+          height: 30px;
+          font-size: 13px;
+          line-height: 13px;
+          border: none;
+          color: #4A4A4A;
+
+        }
+
+        .page-item.active .page-link {
+          border-radius: 50%;
+          background: #525670;
+          color: white;
+        }
       }
     }
 

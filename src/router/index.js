@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import login from '@/components/auth/login'
 import notFound from '@/components/errors/404'
+import comingSoon from '@/components/errors/coming-soon'
 import assumptions from '@/components/assumptions'
 import expense from '@/components/assumptions/expense'
 
@@ -23,6 +24,11 @@ export default new Router({
       path: '/error-404',
       name: 'notFound',
       component: notFound
+    },
+    {
+      path: '/coming-soon',
+      name: 'comingSoon',
+      component: comingSoon
     },
     {
       path: '/assumptions',

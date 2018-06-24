@@ -31,8 +31,8 @@
     "label": {
       "accept_toc": "Jag accepterar användarvillkoren",
       "email": "Din epost",
-      "firstname": "Förnamn",
-      "lastname": "Efternamn",
+      "firstname": "Ditt förnamn",
+      "lastname": "Ditt efternamn",
       "login": "LOGGA IN",
       "login_width_mobile_bankid": "LOGGA IN MED MOBILT BANKID",
       "login_with_email": "LOGGA IN MED E-POST",
@@ -41,15 +41,14 @@
       "send_me_newsletter": "Det är OK att skicka mig relevanta nyhetsbrev",
       "signup": "Skapa konto",
       "signup_for_livsplan": "SKAPA ETT EGET KONTO",
-      "social_number": "Ditt personnummer",
-      "type_here": "Skriv här"
+      "social_number": "Ditt personnummer"
     },
     "placeholder": {
       "email": "luke@skywalker.com",
       "firstname": "Luke",
       "lastname": "Skywalker",
       "password": "Kraften är stark hos ****",
-      "social_number": "197705250000"
+      "social_number": "19770525-0000"
     }
   }
 }

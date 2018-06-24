@@ -14,6 +14,18 @@ Vue.use(Notifications)
 Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 
+router.beforeEach((to, from, next) => {
+  if (to.path !== '/login') {
+    if (store.getters.isAuthenticated) {
+      next()
+      return
+    }
+    next('/login')
+  } else {
+    next()
+  }
+})
+
 const token = localStorage.getItem('user-token')
 if (token) {
   axios.defaults.headers.common['Authorization'] = 'Bearer ' + token

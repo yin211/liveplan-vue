@@ -16,7 +16,7 @@ Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
   if (!to.matched.length) {
-    next('/error-404')
+    next('/coming-soon')
   } else {
     if (to.path !== '/login') {
       if (store.getters.isAuthenticated) {

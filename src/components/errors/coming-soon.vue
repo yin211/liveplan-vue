@@ -1,9 +1,9 @@
 <template>
   <div class="comingSoon bg-light">
-    <h1 class="display-3">Comming Soon</h1>
-    <h2>
+    <h1 class="display-3 mb-4">Coming Soon</h1>
+    <h4>
       Our website is currently undergoing scheduled maintance.<br>we should be back shortly. Thanks for your patience.
-    </h2>
+    </h4>
     <router-link :to="{name: 'login'}">Go to Login</router-link>
   </div>
 </template>

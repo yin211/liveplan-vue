@@ -22,11 +22,11 @@
       <b-collapse is-nav id="nav_collapse" v-if="isAuthenticated">
 
         <b-navbar-nav class="left-nav">
-          <b-nav-item href="#">{{ $t('header.header_menu.overview') }}</b-nav-item>
-          <b-nav-item href="#">{{ $t('header.header_menu.assumptions') }}</b-nav-item>
-          <b-nav-item href="#">{{ $t('header.header_menu.timeline') }}</b-nav-item>
-          <b-nav-item href="#">{{ $t('header.header_menu.whatif') }}</b-nav-item>
-          <b-nav-item href="#">{{ $t('header.header_menu.tools_and_insights') }}</b-nav-item>
+          <b-nav-item to="/overview">{{ $t('header.header_menu.overview') }}</b-nav-item>
+          <b-nav-item to="/assumptions/expense">{{ $t('header.header_menu.assumptions') }}</b-nav-item>
+          <b-nav-item to="/timeline">{{ $t('header.header_menu.timeline') }}</b-nav-item>
+          <b-nav-item to="/whatif">{{ $t('header.header_menu.whatif') }}</b-nav-item>
+          <b-nav-item to="/tools-and-insights">{{ $t('header.header_menu.tools_and_insights') }}</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->
@@ -117,14 +117,24 @@ export default {
       }
 
       .left-nav {
-        .nav-link {
-          opacity: 0.59;
+        .nav-item {
           font-size: 13px;
           font-weight: 500;
           color: #FFFFFF;
           letter-spacing: 0.5px;
           line-height: 24px;
-          padding: 8px 1.5rem !important;
+          padding: 0px 16px !important;
+
+          .nav-link {
+            border-bottom: 4px solid transparent;
+            opacity: 0.59;
+            padding-bottom: 2px;
+
+            &.active {
+              border-bottom: 4px solid #36B37E;
+              opacity: 1;
+            }
+          }
         }
       }
 

@@ -90,11 +90,6 @@
 import {AUTH_REQUEST} from '@/store/actions/auth'
 export default {
   name: 'login',
-  mounted () {
-    if (this.$store.getters.isAuthenticated) {
-      this.$router.push('/assumptions/expense')
-    }
-  },
   data () {
     return {
       form: {

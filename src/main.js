@@ -15,14 +15,18 @@ Vue.use(BootstrapVue)
 Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
-  if (to.path !== '/login') {
-    if (store.getters.isAuthenticated) {
-      next()
-      return
-    }
-    next('/login')
+  if (!to.matched.length) {
+    next('/error-404')
   } else {
-    next()
+    if (to.path !== '/login') {
+      if (store.getters.isAuthenticated) {
+        next()
+        return
+      }
+      next('/login')
+    } else {
+      next()
+    }
   }
 })
 

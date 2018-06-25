@@ -10,8 +10,10 @@ import axios from 'axios'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'font-awesome/css/font-awesome.css'
 import Notifications from 'vue-notification'
+import VueD3 from 'vue-d3'
 Vue.use(Notifications)
 Vue.use(BootstrapVue)
+Vue.use(VueD3)
 Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {

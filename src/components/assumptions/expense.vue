@@ -84,6 +84,9 @@
           </b-container>
         </b-form>
       </b-card>
+      <barchart v-if="cashflow.length"
+                  :dataArray="cashflow"
+        ></barchart>
     </section>
     <section class="text-left">
       <b-container fluid class="px-0">
@@ -146,6 +149,7 @@
 
 <script>
 import axios from 'axios'
+import barchart from '../charts/barchart'
 
 export default {
   name: 'expense',
@@ -157,6 +161,8 @@ export default {
         let response = await axios.get(`https://api.livsplan.se/api/v1/expenses/${item.id}`)
         this.expenses_amounts = [...this.expenses_amounts, ...response.data.data.expense_amounts]
       }
+      let cashflow = await axios.get('/static/tempdata/data.json')
+      this.cashflow = this.processCashflow(cashflow.data)
     } catch (err) {
       console.log(err)
     }
@@ -172,6 +178,7 @@ export default {
       }],
       expenses: [],
       expenses_amounts: [],
+      cashflow: [],
       start_year: null,
       end_year: null,
       amount_per_month: 0,
@@ -211,7 +218,24 @@ export default {
       // Trigger pagination to update the number of buttons/pages due to filtering
       this.totalRows = filteredItems.length
       this.currentPage = 1
+    },
+    processCashflow (data) {
+      let d = []
+      for (const key in data) {
+        if (data.hasOwnProperty(key)) {
+          if (+data[key] >= 0) {
+            d.push({
+              year: +key,
+              value: +data[key]
+            })
+          }
+        }
+      }
+      return d
     }
+  },
+  components: {
+    barchart
   }
 
 }

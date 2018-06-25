@@ -25,22 +25,22 @@
             <b-row>
               <b-col lg="5">
                 <b-row>
-                  <b-col cols="4" class="d-flex flex-row align-items-center">
+                  <b-col sm="4" class="d-flex flex-row align-items-center">
                     <i class="fa fa-car car-icon"></i>
                     <div class="d-flex flex-column ml-3">
                       <span class="text-gray">Category</span>
                       <span class="text-regular">Car</span>
                     </div>
                   </b-col>
-                  <b-col cols="4">
+                  <b-col sm="4">
                     <span class="text-regular">Start - End Year</span>
                     <div class="d-flex">
                       <b-form-input v-model="start_year" type="number" size="sm"></b-form-input>
-                      <span style="min-width: 20px; align-self: center; text-align: center">-</span>
+                      <span class="date-spacer">-</span>
                       <b-form-input v-model="end_year" type="number" size="sm"></b-form-input>
                     </div>
                   </b-col>
-                  <b-col cols="4">
+                  <b-col sm="4">
                     <span class="text-regular">Amount Per Month</span>
                     <b-input-group size="sm" append="SEK">
                       <b-form-input v-model="amount_per_month" type="number"></b-form-input>
@@ -50,19 +50,19 @@
               </b-col>
               <b-col lg="7">
                 <b-row>
-                  <b-col cols="8">
+                  <b-col cols="12" md="8">
                     <b-row>
-                      <b-col cols="4">
+                      <b-col sm="4">
                         <span class="text-regular">Period</span>
                         <b-form-select v-model="period" :options="periodOptions" size="sm"/>
                       </b-col>
-                      <b-col cols="4">
+                      <b-col sm="4">
                         <span class="text-regular">Annual Growth Rate</span>
                         <b-input-group size="sm" append="%" class="w-75">
                           <b-form-input v-model="annual_growth_rate" type="number"></b-form-input>
                         </b-input-group>
                       </b-col>
-                      <b-col cols="3">
+                      <b-col sm="3">
                         <span class="text-regular">Inflation</span>
                         <b-input-group size="sm" append="%">
                           <b-form-input v-model="inflation" type="number"></b-form-input>
@@ -70,12 +70,12 @@
                       </b-col>
                     </b-row>
                   </b-col>
-                  <b-col cols="4" class="d-flex">
+                  <b-col cols="12" md="4" class="d-flex align-items-center">
                     <button class='btn plain-btn text-regular'>
-                      <i class="fa fa-pencil"></i> Edit Expense
+                      <i class="fa fa-pencil mr-2 text-primary" style="font-size: 14px"></i> Edit Expense
                     </button>
                     <button class='btn plain-btn text-regular'>
-                      <i class="fa fa-trash"></i> Delete
+                      <i class="fa fa-trash mr-2 text-danger" style="font-size: 14px"></i> Delete
                     </button>
                   </b-col>
                 </b-row>
@@ -86,53 +86,59 @@
       </b-card>
     </section>
     <section class="text-left">
-      <h2>Data Table</h2>
-      <b-row class="justify-content-end filter-row">
-        <b-col md="3" class="my-1">
-          <b-form-group horizontal label="Filter" class="mb-0">
-            <b-input-group>
-              <b-form-input v-model="filter" placeholder="Type to Search" />
-              <b-input-group-append>
-                <b-btn :disabled="!filter" @click="filter = ''">Clear</b-btn>
-              </b-input-group-append>
-            </b-input-group>
-          </b-form-group>
-        </b-col>
-        <b-col md="3" class="my-1">
-          <b-form-group horizontal label="Per page" class="mb-0">
-            <b-form-select :options="pageOptions" v-model="perPage" />
-          </b-form-group>
-        </b-col>
-      </b-row>
-      <div class="table-container text-regular">
-        <b-table show-empty
-                stacked="md"
-                :items="expenses_amounts"
-                :fields="fields"
-                :current-page="currentPage"
-                :per-page="perPage"
-                :filter="filter"
-                :sort-by.sync="sortBy"
-                :sort-desc.sync="sortDesc"
-                :sort-direction="sortDirection"
-                @filtered="onFiltered"
-                hover
-        >
-          <template slot="amount" slot-scope="data">
-            {{data.item.amount}} SEK
-          </template>
-          <template slot="actions" slot-scope="row">
-            <button class='btn plain-btn text-regular'>
-              <i class="fa fa-pencil"></i> Edit
-            </button>
-          </template>
-        </b-table>
-        <b-row>
-          <b-col md="6" class="my-1 mx-auto">
-            <b-pagination :total-rows="totalRows" :per-page="perPage" v-model="currentPage" class="my-0 justify-content-center"/>
+      <b-container fluid class="px-0">
+        <h2>Data Table</h2>
+        <b-row class="justify-content-end">
+          <b-col md="4">
+            <b-form-group horizontal label="Filter:" :label-cols="2" label-size="sm">
+              <b-form-input v-model="filter" size="sm" placeholder="Type to Search" />
+            </b-form-group>
           </b-col>
         </b-row>
-      </div>
+        <div class="table-container text-regular">
+          <b-table show-empty
+                  stacked="md"
+                  :items="expenses_amounts"
+                  :fields="fields"
+                  :current-page="currentPage"
+                  :per-page="perPage"
+                  :filter="filter"
+                  :sort-by.sync="sortBy"
+                  :sort-desc.sync="sortDesc"
+                  :sort-direction="sortDirection"
+                  @filtered="onFiltered"
+                  hover
+                  striped
+          >
+            <template slot="amount" slot-scope="data">
+              {{data.item.amount}} SEK
+            </template>
+            <template slot="actions" slot-scope="row">
+              <button class='btn plain-btn text-regular'>
+                <i class="fa fa-pencil mr-2 text-primary"></i> Edit
+              </button>
+              <button class='btn plain-btn text-regular'>
+                <i class="fa fa-times mr-2 text-danger"></i> Delete
+              </button>
+            </template>
+          </b-table>
+          <div class="d-flex  flex-column flex-md-row justify-content-between">
+            <div class="d-flex">
+              <div v-if="totalRows > 0" class="d-flex align-items-center">
+                <span class="text-gray">Showing {{(currentPage - 1) * perPage + 1}} to {{endRecord}} of {{totalRows}}</span>
+              </div>
+              <div v-if="totalRows > 0" class="space-divider"></div>
+              <div class="d-flex align-items-center">
+                <span> show per page: </span>
+                <b-form-select :options="pageOptions" v-model="perPage" class="selectPerPage" />
+              </div>
+            </div>
+            <div class="d-flex align-items-center">
+              <b-pagination :total-rows="totalRows" :per-page="perPage" v-model="currentPage" class="my-0"/>
+            </div>
+          </div>
+        </div>
+      </b-container>
     </section>
 
   </div>
@@ -179,7 +185,7 @@ export default {
       fields: [
         { key: 'year', label: 'Year', sortable: true, sortDirection: 'desc' },
         { key: 'amount', label: 'Amount', sortable: true },
-        { key: 'actions', label: 'Actions', 'class': 'text-right' }
+        { key: 'actions', 'class': 'text-right' }
       ],
       currentPage: 1,
       perPage: 10,
@@ -187,12 +193,18 @@ export default {
       sortBy: null,
       sortDesc: false,
       sortDirection: 'asc',
-      pageOptions: [ 5, 10, 15 ],
+      pageOptions: [ 5, 10, 15, 25 ],
       totalRows: 0
     }
   },
   computed: {
-
+    endRecord () {
+      if (this.perPage * this.currentPage < this.totalRows) {
+        return this.perPage * this.currentPage
+      } else {
+        return this.totalRows
+      }
+    }
   },
   methods: {
     onFiltered (filteredItems) {
@@ -235,21 +247,17 @@ export default {
       line-height: 24px;
     }
 
-    .filter-row {
-      font-size: 14px !important;
-      line-height: 21px !important;
+    .date-spacer {
+      min-width: 20px;
+      align-self: center;
+      text-align: center;
+    }
 
-      *:focus {
-        outline: none;
-        -webkit-box-shadow: none !important;
-        -moz-box-shadow: none !important;
-        box-shadow: none !important;
-      }
-
-      .form-control, button {
-        font-size: 14px !important;
-        line-height: 21px !important;
-      }
+    .space-divider {
+      background-color: #C8C8C8;
+      height: 60%;
+      width: 1px;
+      margin: auto 24px;
     }
 
     .table-container {
@@ -271,8 +279,12 @@ export default {
             border-bottom-width: 2px;
             border-bottom-color: #CACACA;
 
+            &:nth-of-type(odd) {
+              background-color: #F1F2F8 !important;
+            }
+
             &:hover {
-              background: rgba(255,255,255,0.25);
+              background: #FAFBFC !important;
             }
 
             td {
@@ -281,6 +293,7 @@ export default {
               padding-bottom: 6px;
             }
           }
+
         }
       }
 
@@ -301,6 +314,12 @@ export default {
           background: #525670;
           color: white;
         }
+      }
+
+      .selectPerPage {
+        width: 60px;
+        background-color: transparent;
+        border: none;
       }
     }
 

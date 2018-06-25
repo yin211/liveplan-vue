@@ -52,7 +52,6 @@ export default {
 
       .copyright-text {
         height: 20px;
-        color: #84888F;
         font-size: 14px;
         line-height: 20px;
       }

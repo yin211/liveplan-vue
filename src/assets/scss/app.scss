@@ -56,79 +56,83 @@
     border-left-color: #42A85F;
   }
 }
+// customize input form control
+input {
+  &.form-control {
+    background-color: #FAFBFC;
+    font-size: 14px;
+    height: 46px;
+
+    &.form-control-sm {
+      height: 40px;
+    }
+
+    &:focus {
+      border: 1px solid #C1C7D0;
+      color: #232B36;
+      outline: none;
+      -webkit-box-shadow: none !important;
+      -moz-box-shadow: none !important;
+      box-shadow: none !important;
+    }
+  }
+
+  &::-webkit-input-placeholder {
+    font-style: italic;
+    color: #999999;
+    line-height: 24px;
+  }
+
+  &:-moz-placeholder { /* Firefox 18- */
+    font-style: italic;
+    color: #999999;
+    line-height: 24px;
+  }
+  &::-moz-placeholder {  /* Firefox 19+ */
+    font-style: italic;
+    color: #999999;
+    line-height: 24px;
+  }
+}
+
+// customize select form control
+select {
+  &.form-control {
+    background-color: #FAFBFC;
+    font-size: 14px;
+    height: 46px !important;
+
+    &.form-control-sm {
+      height: 40px !important;
+    }
+
+    &:focus {
+      border: 1px solid #C1C7D0;
+      color: #232B36;
+      outline: none;
+      -webkit-box-shadow: none !important;
+      -moz-box-shadow: none !important;
+      box-shadow: none !important;
+    }
+  }
+}
+
+
+.input-group {
+  .form-control {
+    border-right: none;
+  }
+
+  .input-group-text {
+    background-color: #FAFBFC;
+  }
+}
 
 form {
   font-size: 14px;
-  *:focus {
-    outline: none;
-    -webkit-box-shadow: none !important;
-    -moz-box-shadow: none !important;
-    box-shadow: none !important;
-  }
-
-  select {
-    &.form-control {
-      background-color: #FAFBFC;
-      font-size: 14px;
-      height: 46px !important;
-
-      &.form-control-sm {
-        height: 40px !important;
-      }
-
-      &:focus {
-        border: 1px solid #C1C7D0;
-        color: #232B36;
-      }
-    }
-  }
-
-  input {
-    &.form-control {
-      background-color: #FAFBFC;
-      font-size: 14px;
-      height: 46px;
-
-      &.form-control-sm {
-        height: 40px;
-      }
-
-      &:focus {
-        border: 1px solid #C1C7D0;
-        color: #232B36;
-      }
-    }
-
-    &::-webkit-input-placeholder {
-      font-style: italic;
-      color: #999999;
-      line-height: 24px;
-    }
-
-    &:-moz-placeholder { /* Firefox 18- */
-      font-style: italic;
-      color: #999999;
-      line-height: 24px;
-    }
-    &::-moz-placeholder {  /* Firefox 19+ */
-      font-style: italic;
-      color: #999999;
-      line-height: 24px;
-    }
-
-  }
-
-  .input-group {
-    .form-control {
-      border-right: none;
-    }
-
-    .input-group-text {
-      background-color: #FAFBFC;
-    }
-  }
-
 }
+
+
 
 .breadcrumb-item {
   font-size: 14px;

@@ -2,7 +2,7 @@
   <div class="expense bg-light">
     <b-breadcrumb :items="items" class="p-0"/>
     <b-container fluid class="px-0 text-left">
-      <h1 class="text-regular">Car Rental</h1>
+      <h1 class="text-regular">{{expense.name}}</h1>
       <b-row class="pt-2">
           <b-col md="6">
             <p class="text-regular" style="margin-bottom: 10px">Explanation</p>
@@ -101,7 +101,7 @@
         <div class="table-container text-regular">
           <b-table show-empty
                   stacked="md"
-                  :items="expenses_amounts"
+                  :items="expense.expense_amounts"
                   :fields="fields"
                   :current-page="currentPage"
                   :per-page="perPage"
@@ -155,12 +155,8 @@ export default {
   name: 'expense',
   async mounted () {
     try {
-      let response = await axios.get('https://api.livsplan.se/api/v1/expenses')
-      this.expenses = response.data.data
-      for (let item of this.expenses) {
-        let response = await axios.get(`https://api.livsplan.se/api/v1/expenses/${item.id}`)
-        this.expenses_amounts = [...this.expenses_amounts, ...response.data.data.expense_amounts]
-      }
+      let response = await axios.get(`https://api.livsplan.se/api/v1/expenses/${this.$route.params.id}`)
+      this.expense = response.data.data
       let cashflow = await axios.get('/static/tempdata/data.json')
       this.cashflow = this.processCashflow(cashflow.data)
     } catch (err) {
@@ -176,8 +172,7 @@ export default {
         text: 'Expense',
         active: true
       }],
-      expenses: [],
-      expenses_amounts: [],
+      expense: {},
       cashflow: [],
       start_year: null,
       end_year: null,
@@ -247,6 +242,10 @@ export default {
 
     section {
       margin-bottom: 120px;
+    }
+
+    .breadcrumb {
+      background: transparent;
     }
 
     .card span {

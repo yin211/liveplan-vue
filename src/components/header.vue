@@ -23,7 +23,7 @@
 
         <b-navbar-nav class="left-nav">
           <b-nav-item to="/overview">{{ $t('header.header_menu.overview') }}</b-nav-item>
-          <b-nav-item to="/assumptions/expense">{{ $t('header.header_menu.assumptions') }}</b-nav-item>
+          <b-nav-item to="/assumptions/expense/1">{{ $t('header.header_menu.assumptions') }}</b-nav-item>
           <b-nav-item to="/timeline">{{ $t('header.header_menu.timeline') }}</b-nav-item>
           <b-nav-item to="/whatif">{{ $t('header.header_menu.whatif') }}</b-nav-item>
           <b-nav-item to="/tools-and-insights">{{ $t('header.header_menu.tools_and_insights') }}</b-nav-item>

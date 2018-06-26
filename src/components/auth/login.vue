@@ -30,8 +30,11 @@
         <!-- BANK-ID FORM -->
         <b-form @submit="onSubmitByID" novalidate class="bg-white depth-2 text-left " :validated="validated" v-if="isLoginWithBankID" style="height: 318px">
           <b-form-group class="idInputGroup mb-4" v-bind:label="$t('login.label.social_number')" label-for="idInput" :invalid-feedback="$t(invalidIDFeedback)" :state="idState">
-            <b-form-input class="idInput" type="text" v-model="form.login.id" required v-bind:placeholder="$t('login.placeholder.social_number')">
-            </b-form-input>
+              <div class="idInputContainer">
+                <b-form-input class="idInput" type="text" v-model="form.login.id" required v-bind:placeholder="$t('login.placeholder.social_number')">
+                </b-form-input>
+                <b-img :src="require('../../assets/img/bank-id.png')" width="24" height="24"/>
+              </div>
           </b-form-group>
 
           <b-form-group class="rememberGroup mt-2 mb-4">
@@ -92,7 +95,7 @@ export default {
   name: 'login',
   mounted () {
     if (this.$store.getters.isAuthenticated) {
-      this.$router.push('/assumptions/expense')
+      this.$router.push('/assumptions/expense/1')
     }
   },
   data () {
@@ -216,7 +219,7 @@ export default {
       if (this.validEmail(this.form.login.email) && this.form.login.password.length >= 4) {
         const { email, password } = this.form.login
         this.$store.dispatch(AUTH_REQUEST, { email, password }).then(() => {
-          this.$router.push('/assumptions/expense')
+          this.$router.push('/assumptions/expense/1')
         }, () => {
           this.$notify({
             group: 'notify',
@@ -266,7 +269,14 @@ export default {
           position: absolute;
         }
 
-
+        .idInputContainer {
+          position: relative;
+          img {
+            position: absolute;
+            right: 12px;
+            top: 12px;
+          }
+        }
       }
 
       ul {

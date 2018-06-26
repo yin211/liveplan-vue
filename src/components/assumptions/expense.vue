@@ -91,7 +91,7 @@
         </b-form>
       </b-card>
     </section>
-    <section class="chart-container">
+    <section class="chart-container depth-3">
       <barchart v-if="cashflow.length"
                   :dataArray="cashflow"
       ></barchart>

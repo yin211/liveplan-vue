@@ -24,25 +24,28 @@
           <b-container fluid class="px-0">
             <b-row>
               <b-col lg="5">
-                <b-row>
-                  <b-col sm="4" class="d-flex flex-row align-items-center">
-                    <i class="fa fa-car car-icon"></i>
-                    <div class="d-flex flex-column ml-3">
-                      <span class="text-gray">Category</span>
-                      <span class="text-regular">Car</span>
+                <b-row class="no-gutters">
+                  <b-col sm="4" class="d-flex">
+                    <div class="d-flex align-items-center">
+                      <i class="fa fa-car car-icon"></i>
+                      <div class="d-flex flex-column ml-3">
+                        <span class="text-gray">Category</span>
+                        <span class="text-regular">Car</span>
+                      </div>
                     </div>
+                    <div class="rect-spacer d-none d-lg-block" style="margin: -24px 0 -20px 30px;"></div>
                   </b-col>
                   <b-col sm="4">
                     <span class="text-regular">Start - End Year</span>
-                    <div class="d-flex">
+                    <div class="d-flex element-spacer">
                       <b-form-input v-model="expense.start_year" type="number" size="sm"></b-form-input>
                       <span class="date-spacer">-</span>
                       <b-form-input v-model="expense.end_year" type="number" size="sm"></b-form-input>
                     </div>
                   </b-col>
-                  <b-col sm="4">
+                  <b-col sm="4" class="pl-sm-4">
                     <span class="text-regular">Amount Per Month</span>
-                    <b-input-group size="sm" append="SEK">
+                    <b-input-group size="sm" append="SEK" class="element-spacer">
                       <b-form-input v-model="expense.initial_amount" type="number"></b-form-input>
                     </b-input-group>
                   </b-col>
@@ -52,34 +55,32 @@
                 <b-row>
                   <b-col cols="12" md="8">
                     <b-row>
-                      <b-col sm="4">
-                        <span class="text-regular">Period</span>
-                        <b-form-select v-model="expense.initial_amount_period" :options="periodOptions" size="sm"/>
+                      <b-col sm="5" class="d-flex">
+                        <div class="rect-spacer d-none d-lg-block" style="margin: -24px 0px -20px 0px;"></div>
+                        <div class="d-flex flex-column">
+                          <span class="text-regular">Period</span>
+                          <b-form-select v-model="expense.initial_amount_period" :options="periodOptions" size="sm" class="element-spacer"/>
+                        </div>
                       </b-col>
                       <b-col sm="4">
                         <span class="text-regular">Annual Growth Rate</span>
-                        <b-input-group size="sm" append="%" class="w-75">
+                        <b-input-group size="sm" append="%" class="w-75 element-spacer">
                           <b-form-input v-model="expense.annual_increase_percentage" type="number"></b-form-input>
                         </b-input-group>
                       </b-col>
                       <b-col sm="3">
                         <span class="text-regular">Inflation</span>
-                        <b-input-group size="sm" append="%">
+                        <b-input-group size="sm" append="%" class="element-spacer">
                           <b-form-input v-model="expense.inflation_rate" type="number"></b-form-input>
                         </b-input-group>
                       </b-col>
                     </b-row>
                   </b-col>
-                  <b-col cols="12" md="4" class="d-flex align-items-center">
+                  <b-col cols="12" md="4" class="d-flex">
+                    <div class="rect-spacer d-none d-lg-block" style="margin: -24px 0px -20px 0px;"></div>
                     <button class='btn plain-btn text-regular'>
-                      <i class="fa fa-pencil mr-2 text-primary" style="font-size: 14px"></i> Edit Expense
+                      <i class="fa fa-pencil mr-2 text-primary" style="font-size: 14px"></i> Edit
                     </button>
-                    <!-- <button class='btn plain-btn text-regular'>
-                      <i class="fa fa-check mr-2 text-primary" style="font-size: 14px"></i> Save Expense
-                    </button>
-                    <button class='btn plain-btn text-regular'>
-                      <i class="fa fa-times mr-2 text-primary" style="font-size: 14px"></i> Cancel
-                    </button> -->
                     <button class='btn plain-btn text-regular'>
                       <i class="fa fa-trash mr-2 text-danger" style="font-size: 14px"></i> Delete
                     </button>
@@ -99,13 +100,6 @@
     <section class="text-left">
       <b-container fluid class="px-0">
         <h2>Data Table</h2>
-        <b-row class="justify-content-end">
-          <b-col md="4">
-            <b-form-group horizontal label="Filter:" :label-cols="2" label-size="sm">
-              <b-form-input v-model="filter" size="sm" placeholder="Type to Search" />
-            </b-form-group>
-          </b-col>
-        </b-row>
         <div class="table-container text-regular">
           <b-table show-empty
                   stacked="md"
@@ -121,6 +115,9 @@
                   hover
                   striped
           >
+            <template slot="top-row" slot-scope="data">
+              <td colspan="3"><b-form-input v-model="filter" size="sm" placeholder="Type to Search" /></td>
+            </template>
             <template slot="amount" slot-scope="data">
               {{data.item.amount}} SEK
             </template>
@@ -198,7 +195,8 @@ export default {
       sortDesc: false,
       sortDirection: 'asc',
       pageOptions: [ 5, 10, 15, 25 ],
-      totalRows: 0
+      totalRows: 0,
+      isEdit: false
     }
   },
   computed: {
@@ -246,8 +244,34 @@ export default {
       margin-bottom: 120px;
     }
 
+    .element-spacer {
+      margin-top: 8px;
+    }
+
+    .rect-spacer {
+      width: 50px;
+      background: linear-gradient(270deg, #FFFFFF 0%, #F8F8F8 100%);
+    }
+
+    .date-spacer {
+      min-width: 20px;
+      align-self: center;
+      text-align: center;
+    }
+
+    .space-divider {
+      background-color: #C8C8C8;
+      height: 60%;
+      width: 1px;
+      margin: auto 24px;
+    }
+
     .breadcrumb {
       background: transparent;
+    }
+
+    .card-body {
+      padding: 24px 20px 20px;
     }
 
     .card span {
@@ -272,18 +296,13 @@ export default {
       line-height: 24px;
     }
 
-    .date-spacer {
-      min-width: 20px;
-      align-self: center;
-      text-align: center;
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        /* display: none; <- Crashes Chrome on hover */
+        -webkit-appearance: none;
+        margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
     }
 
-    .space-divider {
-      background-color: #C8C8C8;
-      height: 60%;
-      width: 1px;
-      margin: auto 24px;
-    }
 
     .chart-container {
       margin-left: calc(50% - 50vw);
@@ -316,6 +335,17 @@ export default {
 
             &:hover {
               background: #FAFBFC !important;
+            }
+
+            &.b-table-top-row {
+              border: none;
+              td {
+                width: 100%;
+                padding: 0;
+                input {
+                  border: none;
+                }
+              }
             }
 
             td {

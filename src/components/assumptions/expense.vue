@@ -35,15 +35,15 @@
                   <b-col sm="4">
                     <span class="text-regular">Start - End Year</span>
                     <div class="d-flex">
-                      <b-form-input v-model="start_year" type="number" size="sm"></b-form-input>
+                      <b-form-input v-model="expense.start_year" type="number" size="sm"></b-form-input>
                       <span class="date-spacer">-</span>
-                      <b-form-input v-model="end_year" type="number" size="sm"></b-form-input>
+                      <b-form-input v-model="expense.end_year" type="number" size="sm"></b-form-input>
                     </div>
                   </b-col>
                   <b-col sm="4">
                     <span class="text-regular">Amount Per Month</span>
                     <b-input-group size="sm" append="SEK">
-                      <b-form-input v-model="amount_per_month" type="number"></b-form-input>
+                      <b-form-input v-model="expense.initial_amount" type="number"></b-form-input>
                     </b-input-group>
                   </b-col>
                 </b-row>
@@ -54,18 +54,18 @@
                     <b-row>
                       <b-col sm="4">
                         <span class="text-regular">Period</span>
-                        <b-form-select v-model="period" :options="periodOptions" size="sm"/>
+                        <b-form-select v-model="expense.initial_amount_period" :options="periodOptions" size="sm"/>
                       </b-col>
                       <b-col sm="4">
                         <span class="text-regular">Annual Growth Rate</span>
                         <b-input-group size="sm" append="%" class="w-75">
-                          <b-form-input v-model="annual_growth_rate" type="number"></b-form-input>
+                          <b-form-input v-model="expense.annual_increase_percentage" type="number"></b-form-input>
                         </b-input-group>
                       </b-col>
                       <b-col sm="3">
                         <span class="text-regular">Inflation</span>
                         <b-input-group size="sm" append="%">
-                          <b-form-input v-model="inflation" type="number"></b-form-input>
+                          <b-form-input v-model="expense.inflation_rate" type="number"></b-form-input>
                         </b-input-group>
                       </b-col>
                     </b-row>
@@ -74,6 +74,12 @@
                     <button class='btn plain-btn text-regular'>
                       <i class="fa fa-pencil mr-2 text-primary" style="font-size: 14px"></i> Edit Expense
                     </button>
+                    <!-- <button class='btn plain-btn text-regular'>
+                      <i class="fa fa-check mr-2 text-primary" style="font-size: 14px"></i> Save Expense
+                    </button>
+                    <button class='btn plain-btn text-regular'>
+                      <i class="fa fa-times mr-2 text-primary" style="font-size: 14px"></i> Cancel
+                    </button> -->
                     <button class='btn plain-btn text-regular'>
                       <i class="fa fa-trash mr-2 text-danger" style="font-size: 14px"></i> Delete
                     </button>
@@ -84,9 +90,11 @@
           </b-container>
         </b-form>
       </b-card>
+    </section>
+    <section class="chart-container">
       <barchart v-if="cashflow.length"
                   :dataArray="cashflow"
-        ></barchart>
+      ></barchart>
     </section>
     <section class="text-left">
       <b-container fluid class="px-0">
@@ -174,15 +182,9 @@ export default {
       }],
       expense: {},
       cashflow: [],
-      start_year: null,
-      end_year: null,
-      amount_per_month: 0,
-      period: 'perMonth',
-      annual_growth_rate: null,
-      inflation: null,
       periodOptions: [
         { value: null, text: 'Please select an option', disabled: true },
-        { value: 'perMonth', text: 'Per Month' }
+        { value: 'month', text: 'Per Month' }
       ],
       fields: [
         { key: 'year', label: 'Year', sortable: true, sortDirection: 'desc' },
@@ -281,6 +283,12 @@ export default {
       height: 60%;
       width: 1px;
       margin: auto 24px;
+    }
+
+    .chart-container {
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 50vw);
+      margin-top: -180px;
     }
 
     .table-container {

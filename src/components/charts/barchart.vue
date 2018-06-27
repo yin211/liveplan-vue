@@ -10,8 +10,24 @@
                       :y="yScale(d.value) + margin.top"
                       :width="xScale.bandwidth()"
                       :height="height - margin.top - margin.bottom - yScale(d.value)"
-                      fill="#F4D03F">
+                      fill="#F4D03F"
+                      @mouseover="rectmouseover(d, i)"
+                      @mouseout="rectmouseout()">
                 </rect>
+                <foreignObject
+                        id="tooltipForeignObj"
+                        height="140"
+                        width="300"
+                        :visibility="this.tooltipVisible ? 'visible' : 'hidden'">
+                    <div class="toolTip">
+                      <div>
+                        <strong><span id="tooltipyear"></span></strong> ( age of <strong><span id="tooltipage"></span></strong> )
+                      </div>
+                      <div>
+                        <span id="incomespan"></span> Income <strong><span id="tooltipincome"></span></strong>
+                      </div>
+                    </div>
+                </foreignObject>
             </g>
         </svg>
     </div>
@@ -24,11 +40,12 @@ export default {
   data () {
     return {
       width: 0,
-      height: 300,
+      height: 400,
+      tooltipVisible: false,
       margin: {
-        top: 15,
+        top: 100,
         right: 15,
-        bottom: 25,
+        bottom: 55,
         left: 55
       },
       chart: ''
@@ -51,22 +68,51 @@ export default {
     }
   },
   methods: {
+    rectmouseover (d, i) {
+      this.tooltipVisible = true
+      let tf = this.chart.select('#tooltipForeignObj')
+      let x = this.xScale(d.year) + this.margin.left + this.xScale.bandwidth() / 2
+
+      tf.select('#tooltipyear').html(d.year)
+      tf.select('#tooltipage').html(41 + i)
+      tf.transition()
+        .duration(500)
+        .attr('transform', `translate(${x + 10}, ${this.margin.top * 1.5})`)
+    },
+    rectmouseout () {
+      console.log('mouse overed')
+      this.tooltipVisible = false
+    },
     drawAxis () {
-      let xAxis = this.$d3.axisBottom(this.xScale)
+      let xAxis = this.$d3.axisBottom(this.xScale).tickSize(-(this.height - this.margin.top - this.margin.bottom))
       let yAxis = this.$d3.axisLeft(this.yScale)
 
       this.chart.append('g')
-                .attr('class', 'axis')
+                .attr('class', 'axis xAxis')
                 .attr('transform', `translate(${this.margin.left}, ${this.height - this.margin.bottom})`)
                 .call(xAxis)
 
       this.chart.append('g')
-                .attr('class', 'axis')
+                .attr('class', 'axis yAxis')
                 .attr('transform', `translate(${this.margin.left}, ${this.margin.top})`)
                 .call(yAxis)
+
+      let ticks = this.chart.select('.xAxis')
+                      .selectAll('.tick')
+
+      ticks.append('circle')
+          .attr('r', 5)
+          .attr('fill', '#1971ff')
+          .attr('stroke', '#fff')
+          .attr('stroke-width', 1.5)
+      ticks.selectAll('text')
+           .attr('dy', '4em')
+      ticks.append('text')
+          .attr('dy', '2.5em')
+          .text((d, i) => 41 + i)
     },
     setWidth () {
-      this.width = this.$el.offsetWidth
+      this.width = this.$el.offsetWidth - 10
     }
   },
   mounted () {
@@ -85,8 +131,27 @@ export default {
             .axis text {
                 fill: #fff;
             }
-            .axis .domain, .axis line {
+            .axis  {
+              pointer-events: none;
+              line {
                 stroke: #fff;
+                stroke-dasharray: 4px;
+              }
+              .domain {
+                display: none;
+              }
+            }
+            #tooltipForeignObj {
+              pointer-events: none;
+            }
+            .toolTip {
+              background-color: #fff;
+              #incomespan {
+                width: 25px;
+                height: 15px;
+                background-color: #F4D03F;
+                border-radius: 4px;
+              }
             }
         }
     }

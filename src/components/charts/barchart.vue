@@ -10,25 +10,26 @@
                       :y="yScale(d.value) + margin.top"
                       :width="xScale.bandwidth()"
                       :height="height - margin.top - margin.bottom - yScale(d.value)"
+                      :data-year="d.year"
                       fill="#F4D03F"
                       @mouseover="rectmouseover(d, i)"
                       @mouseout="rectmouseout()">
                 </rect>
-                <foreignObject
-                        id="tooltipForeignObj"
-                        height="140"
-                        width="300"
-                        :visibility="this.tooltipVisible ? 'visible' : 'hidden'">
-                    <div class="toolTip">
-                      <div>
-                        <strong><span id="tooltipyear"></span></strong> ( age of <strong><span id="tooltipage"></span></strong> )
-                      </div>
-                      <div>
-                        <span id="incomespan"></span> Income <strong><span id="tooltipincome"></span></strong>
-                      </div>
-                    </div>
-                </foreignObject>
             </g>
+            <foreignObject
+                    id="tooltipForeignObj"
+                    height="100"
+                    width="250"
+                    :visibility="this.tooltipVisible ? 'visible' : 'hidden'">
+                <div class="toolTip">
+                  <div>
+                    <strong><span id="tooltipyear"></span></strong> ( age of <strong><span id="tooltipage"></span></strong> )
+                  </div>
+                  <div>
+                    <span id="incomespan"></span>   Income <strong><span id="tooltipincome"></span> SEK</strong>
+                  </div>
+                </div>
+            </foreignObject>
         </svg>
     </div>
 </template>
@@ -48,15 +49,17 @@ export default {
         bottom: 55,
         left: 55
       },
+      startYear: 2018,
+      endYear: 2036,
       chart: ''
     }
   },
   computed: {
     xScale () {
-      let min = this.$d3.min(this.dataArray, d => d.year) - 5
+      let min = this.$d3.min(this.dataArray, d => d.year)
       let max = this.$d3.max(this.dataArray, d => d.year)
       return this.$d3.scaleBand()
-                   .domain(this.$d3.range(min, max))
+                   .domain(this.$d3.range(min - 5, max + 1))
                    .range([0, this.width - this.margin.left - this.margin.right])
                    .paddingInner([0.05])
                    .paddingOuter([0.05])
@@ -69,23 +72,24 @@ export default {
   },
   methods: {
     rectmouseover (d, i) {
-      this.tooltipVisible = true
-      let tf = this.chart.select('#tooltipForeignObj')
+      let tf = this.$d3.select('#tooltipForeignObj')
       let x = this.xScale(d.year) + this.margin.left + this.xScale.bandwidth() / 2
 
       tf.select('#tooltipyear').html(d.year)
       tf.select('#tooltipage').html(41 + i)
+      tf.select('#tooltipincome').html(d.value)
       tf.transition()
         .duration(500)
         .attr('transform', `translate(${x + 10}, ${this.margin.top * 1.5})`)
+      this.tooltipVisible = true
     },
     rectmouseout () {
-      console.log('mouse overed')
       this.tooltipVisible = false
     },
     drawAxis () {
-      let xAxis = this.$d3.axisBottom(this.xScale).tickSize(-(this.height - this.margin.top - this.margin.bottom))
-      let yAxis = this.$d3.axisLeft(this.yScale)
+      let tickSize = this.height - this.margin.top - this.margin.bottom
+      let xAxis = this.$d3.axisBottom(this.xScale).tickSize(-(tickSize))
+      let yAxis = this.$d3.axisLeft(this.yScale).ticks(5)
 
       this.chart.append('g')
                 .attr('class', 'axis xAxis')
@@ -99,7 +103,10 @@ export default {
 
       let ticks = this.chart.select('.xAxis')
                       .selectAll('.tick')
-
+                      .attr('id', (d, i) => {
+                        let year = this.xScale.domain()[0] + i
+                        return `xTick-${year}`
+                      })
       ticks.append('circle')
           .attr('r', 5)
           .attr('fill', '#1971ff')
@@ -110,6 +117,43 @@ export default {
       ticks.append('text')
           .attr('dy', '2.5em')
           .text((d, i) => 41 + i)
+      let startYearTick = this.chart.select(`#xTick-${this.startYear}`)
+      let endYeartTick = this.chart.select(`#xTick-${this.endYear}`)
+      let startEndTickSize = -(tickSize + 40)
+      startYearTick.select('line').attr('y2', startEndTickSize)
+      endYeartTick.select('line').attr('y2', startEndTickSize)
+      startYearTick.append('circle')
+          .attr('r', 5)
+          .attr('fill', '#1971ff')
+          .attr('stroke', '#fff')
+          .attr('stroke-width', 1.5)
+          .attr('transform', `translate(0, ${startEndTickSize})`)
+      endYeartTick.append('circle')
+          .attr('r', 5)
+          .attr('fill', '#1971ff')
+          .attr('stroke', '#fff')
+          .attr('stroke-width', 1.5)
+          .attr('transform', `translate(0, ${startEndTickSize})`)
+      startYearTick.append('text')
+          .text('Start Year  ')
+          .attr('transform', `translate(0, ${startEndTickSize})`)
+          .attr('stroke', '#fff')
+          .attr('dx', 35)
+      startYearTick.append('text')
+          .text(this.startYear)
+          .attr('transform', `translate(0, ${startEndTickSize + 20})`)
+          .attr('stroke', '#fff')
+          .attr('dx', 25)
+      endYeartTick.append('text')
+          .text('End Year  ')
+          .attr('transform', `translate(0, ${startEndTickSize})`)
+          .attr('stroke', '#fff')
+          .attr('dx', 35)
+      endYeartTick.append('text')
+          .text(this.endYear)
+          .attr('transform', `translate(0, ${startEndTickSize + 20})`)
+          .attr('stroke', '#fff')
+          .attr('dx', 25)
     },
     setWidth () {
       this.width = this.$el.offsetWidth - 10
@@ -146,11 +190,21 @@ export default {
             }
             .toolTip {
               background-color: #fff;
+              padding: 15px;
+              text-align: left;
+              div:first-child {
+                margin-bottom: 20px;
+              }
               #incomespan {
-                width: 25px;
-                height: 15px;
+                width: 35px;
+                height: 13px;
+                display: inline-block;
                 background-color: #F4D03F;
                 border-radius: 4px;
+              }
+              #tooltipincome {
+                position: relative;
+                right: 0px;
               }
             }
         }

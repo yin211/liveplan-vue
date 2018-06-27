@@ -102,7 +102,7 @@
         </b-tab>
       </b-tabs>
     </b-card>
-    <b-card style="margin-top: 34px; margin-bottom: 240px;">
+    <b-card style="margin-top: 34px; margin-bottom: 120px;">
       <b-container fluid>
         <b-row class="text-left">
           <b-col md="9" xl="7">

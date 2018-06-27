@@ -1,7 +1,12 @@
 <template>
   <div class="expense bg-light">
     <b-breadcrumb :items="items" class="p-0"/>
-    <h1 class="text-regular text-left">{{expense.name}}</h1>
+    <div class="d-flex justify-content-between align-items-center">
+      <h1 class="text-regular text-left">{{expense.name}}</h1>
+      <button class='btn btn-sm text-regular' style="border-radius: 30px">
+        <i class="fa fa-trash mr-2 text-danger"></i> Delete Expense
+      </button>
+    </div>
     <section class="chart-container depth-2">
       <barchart v-if="cashflow.length" :dataArray="cashflow"></barchart>
     </section>
@@ -65,6 +70,11 @@
                     @filtered="onFiltered"
                     hover
             >
+              <template slot="HEAD_actions" slot-scope="data">
+                <button class='btn btn-sm text-regular upload-btn'>
+                  <i class="fa fa-trash mr-2 text-danger"></i> Upload File
+                </button>
+              </template>
               <template slot="top-row" slot-scope="data">
                 <td colspan="3"><b-form-input v-model="filter" size="sm" placeholder="Type to Search" /></td>
               </template>
@@ -75,12 +85,12 @@
                 <button class='btn plain-btn text-regular'>
                   <i class="fa fa-pencil mr-2 text-primary"></i> Edit
                 </button>
-                <button class='btn plain-btn text-regular'>
+                <!-- <button class='btn plain-btn text-regular'>
                   <i class="fa fa-check mr-2 text-success"></i> Save
                 </button>
                 <button class='btn plain-btn text-regular'>
                   <i class="fa fa-times mr-2 text-danger"></i> Cancel
-                </button>
+                </button> -->
               </template>
             </b-table>
             <div class="d-flex  flex-column flex-md-row justify-content-between">
@@ -196,7 +206,7 @@
           </b-col>
         </b-row>
         <b-row class="my-3">
-          <b-col sm="3" class="d-flex align-items-center justify-content-end"><label :for="'timeline-icon-select'">Timeline Icon</label></b-col>
+          <b-col sm="3" class="d-flex align-items-center justify-content-end" style="white-space: nowrap;"><label :for="'timeline-icon-select'">Timeline Icon</label></b-col>
           <b-col sm="9"><b-form-select :id="'timeline-icon-select'" /></b-col>
         </b-row>
         <b-row class="my-3">
@@ -258,7 +268,7 @@ export default {
 
       ],
       currencyOptions: [
-        { value: 'dollar', text: 'Doolar' },
+        { value: 'dollar', text: 'Dollar' },
         { value: 'sek', text: 'SEK' }
       ],
       fields: [
@@ -423,7 +433,7 @@ export default {
       font-size: 12px;
       line-height: 24px;
       border-radius: 30px;
-      border: 1px solid #C1C7D0;
+      border: 1px solid #eaecef;
       i {
         font-size: 14px;
       }
@@ -454,6 +464,10 @@ export default {
           box-shadow: 9px 8px 16px 0 rgba(0,0,0,0.07);
           outline: none;
           border: none;
+          .upload-btn {
+            border-radius: 30px;
+            border: 1px solid #eaecef;
+          }
         }
 
         tbody {
@@ -524,7 +538,13 @@ export default {
           padding: 0;
           position: absolute;
           top: 24px;
-          right: 24px;
+          right: 32px;
+          outline: none;
+
+          span {
+            color: #A5ADBA;
+            font-weight: 300;
+          }
         }
       }
 
@@ -566,17 +586,21 @@ export default {
 
     .slider::-webkit-slider-thumb {
       -webkit-appearance: none;
-      width: 24px;
-      height: 24px;
       background: url('../../assets/img/slider.png');
       cursor: pointer;
+      background-color: #FFFFFF;
+      height: 16px;
+      width: 16px;
+      background-size: 16px;
     }
 
     .slider::-moz-range-thumb {
-      width: 24px;
-      height: 24px;
       background: url('../../assets/img/slider.png');
       cursor: pointer;
+      background-color: #FFFFFF;
+      height: 16px;
+      width: 16px;
+      background-size: 16px;
     }
 
   }

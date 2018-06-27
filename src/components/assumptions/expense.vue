@@ -27,7 +27,7 @@
                       <b-form-input v-model="expense.initial_amount" type="number"></b-form-input>
                     </b-input-group>
                     <b-input-group size="sm" class="element-spacer">
-                      <b-form-input v-model="expense.initial_amount" min="1" max="10000" type="range"></b-form-input>
+                      <b-form-input v-model="expense.initial_amount" min="1" max="10000" class="slider" type="range"></b-form-input>
                     </b-input-group>
                   </div>
                 </b-col>
@@ -38,12 +38,15 @@
                       <b-form-input v-model="expense.annual_increase_percentage" type="number"></b-form-input>
                     </b-input-group>
                     <b-input-group size="sm" class="element-spacer">
-                      <b-form-input v-model="expense.annual_increase_percentage" min="1" max="100" type="range"></b-form-input>
+                      <b-form-input v-model="expense.annual_increase_percentage" min="1" max="100" class="slider" type="range"></b-form-input>
                     </b-input-group>
                   </div>
                 </b-col>
               </b-row>
             </b-container>
+            <b-button :size="'sm'" variant="primary" class="save-calc-btn">
+              <i class="fa fa-check mr-2"></i>Save New Values
+            </b-button>
           </b-form>
         </b-tab>
         <b-tab title="Custom Values" :title-link-class="'expense-tab'">
@@ -73,7 +76,10 @@
                   <i class="fa fa-pencil mr-2 text-primary"></i> Edit
                 </button>
                 <button class='btn plain-btn text-regular'>
-                  <i class="fa fa-times mr-2 text-danger"></i> Delete
+                  <i class="fa fa-check mr-2 text-success"></i> Save
+                </button>
+                <button class='btn plain-btn text-regular'>
+                  <i class="fa fa-times mr-2 text-danger"></i> Cancel
                 </button>
               </template>
             </b-table>
@@ -143,14 +149,74 @@
               </b-col>
             </b-row>
           </b-col>
-          <b-col md="3" xl="5" class="text-center text-md-right">
-              <button class='btn plain-btn text-regular'>
-                <i class="fa fa-pencil mr-2 text-primary" style="font-size: 14px"></i> Edit
+          <b-col md="3" xl="5" class="d-flex justify-content-center  justify-content-md-end align-items-center">
+              <button class='btn btn-sm edit-info-btn text-regular' @click="modalShow = !modalShow">
+                <i class="fa fa-pencil mr-2 text-primary"></i> Edit Info
               </button>
           </b-col>
         </b-row>
       </b-container>
     </b-card>
+    <b-modal id="edit-info-modal" size="lg" v-model="modalShow">
+      <b-container style="width: 60%">
+        <b-row class="my-3">
+          <b-col sm="3" class="d-flex align-items-center justify-content-end"><label :for="'name-input'">Name</label></b-col>
+          <b-col sm="9"><b-form-input type="text" :id="'name-input'" v-model="expense.name"></b-form-input></b-col>
+        </b-row>
+        <b-row class="my-3">
+          <b-col sm="3" class="d-flex align-items-center justify-content-end"><label :for="'subtype-select'">Subtype</label></b-col>
+          <b-col sm="9"><b-form-select v-model="expense.expense_subtype_id" :id="'subtype-select'" /></b-col>
+        </b-row>
+        <b-row class="my-3">
+          <b-col sm="3" class="d-flex align-items-center justify-content-end"><label :for="'period-select'">Period</label></b-col>
+          <b-col sm="9"><b-form-select :options="periodOptions" v-model="expense.initial_amount_period" :id="'period-select'" /></b-col>
+        </b-row>
+        <b-row class="my-3">
+          <b-col sm="3" class="d-flex align-items-center justify-content-end"><label :for="'category-select'">Category</label></b-col>
+          <b-col sm="9"><b-form-select :options="categoryOptions" v-model="expense.category_id" :id="'category-select'" /></b-col>
+        </b-row>
+        <b-row class="my-3">
+          <b-col sm="3" class="d-flex align-items-center justify-content-end"><label :for="'person-select'">Person</label></b-col>
+          <b-col sm="9"><b-form-select :options="personOptions" v-model="expense.person_id" :id="'person-select'" /></b-col>
+        </b-row>
+        <b-row class="my-3">
+          <b-col sm="3" class="d-flex align-items-center justify-content-end"><label :for="'inflation-input'">Inflation</label></b-col>
+          <b-col sm="9">
+            <b-input-group size="sm" append="%">
+              <b-form-input v-model="expense.annual_increase_percentage" type="number"></b-form-input>
+            </b-input-group>
+          </b-col>
+        </b-row>
+        <b-row class="my-3">
+          <b-col sm="3" class="d-flex align-items-center justify-content-end"><label :for="'tax-input'">Tax</label></b-col>
+          <b-col sm="9">
+            <b-input-group size="sm" append="%">
+              <b-form-input v-model="expense.tax" type="number"></b-form-input>
+            </b-input-group>
+          </b-col>
+        </b-row>
+        <b-row class="my-3">
+          <b-col sm="3" class="d-flex align-items-center justify-content-end"><label :for="'timeline-icon-select'">Timeline Icon</label></b-col>
+          <b-col sm="9"><b-form-select :id="'timeline-icon-select'" /></b-col>
+        </b-row>
+        <b-row class="my-3">
+          <b-col sm="3" class="d-flex align-items-center justify-content-end"><label :for="'currency-select'">Currency</label></b-col>
+          <b-col sm="9"><b-form-select :options="currencyOptions" v-model="expense.currency_id" :id="'currency-select'" /></b-col>
+        </b-row>
+
+      </b-container>
+      <div slot="modal-header" class="w-100 mx-auto">
+        <h1>Edit</h1>
+        <button type="button" class="close" aria-label="Close" @click="modalShow=false">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div slot="modal-footer" class="w-100 mx-auto">
+        <b-btn size="lg" variant="primary" @click="modalShow=false">
+          Save
+        </b-btn>
+      </div>
+    </b-modal>
   </div>
 </template>
 
@@ -185,6 +251,16 @@ export default {
         { value: null, text: 'Please select an option', disabled: true },
         { value: 'month', text: 'Per Month' }
       ],
+      categoryOptions: [
+
+      ],
+      personOptions: [
+
+      ],
+      currencyOptions: [
+        { value: 'dollar', text: 'Doolar' },
+        { value: 'sek', text: 'SEK' }
+      ],
       fields: [
         { key: 'year', label: 'Year', sortable: true, sortDirection: 'desc' },
         { key: 'amount', label: 'Amount', sortable: true },
@@ -198,7 +274,7 @@ export default {
       sortDirection: 'asc',
       pageOptions: [ 5, 10, 15, 25 ],
       totalRows: 0,
-      isEdit: false
+      modalShow: false
     }
   },
   computed: {
@@ -251,26 +327,30 @@ export default {
       margin-bottom: 24px;
     }
 
+    // chart wrapper
     .chart-container {
       margin-left: calc(50% - 50vw);
       margin-right: calc(50% - 50vw);
       margin-top: 38px;
     }
 
+    // customize tabs
     .expense-tabs-card {
       .card-header {
         padding: 34px 30px;
         background: white;
         border-bottom: none;
 
-        .expense-tab {
-          font-size: 24px;
-          line-height: 32px;
-          color: #84888F;
-          &.active {
-            color: #434343;
-            font-weight: 600;
-            background-color: transparent;
+        .card-header-pills {
+          .expense-tab {
+            font-size: 24px;
+            line-height: 32px;
+            color: #84888F;
+            &.active {
+              color: #434343;
+              font-weight: 600;
+              background-color: transparent;
+            }
           }
         }
       }
@@ -291,6 +371,14 @@ export default {
           .annaul-growth-rate {
             width: 120px;
             margin-right: 20px;
+          }
+
+          .save-calc-btn {
+            position: absolute;
+            right: 30px;
+            top: 42px;
+            border-radius: 40px;
+            font-weight: 500;
           }
         }
       }
@@ -331,6 +419,21 @@ export default {
       line-height: 24px;
     }
 
+    .edit-info-btn {
+      font-size: 12px;
+      line-height: 24px;
+      border-radius: 30px;
+      border: 1px solid #C1C7D0;
+      i {
+        font-size: 14px;
+      }
+    }
+
+    select {
+      background-image: url('../../assets/img/down-arrow.svg');
+      background-size: 12px;
+    }
+
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
         /* display: none; <- Crashes Chrome on hover */
@@ -338,6 +441,7 @@ export default {
         margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
     }
 
+    // customize table
     .table-container {
       padding: 0 20px;
       font-size: 14px;
@@ -409,6 +513,70 @@ export default {
         background-color: transparent;
         border: none;
       }
+    }
+
+    // customize modal
+    #edit-info-modal {
+      .modal-header {
+        padding: 48px;
+        .close {
+          font-size: 48px;
+          padding: 0;
+          position: absolute;
+          top: 24px;
+          right: 24px;
+        }
+      }
+
+      .modal-body {
+        label {
+          color: #232B36;
+          font-size: 14px;
+          line-height: 20px;
+        }
+      }
+
+      .modal-footer {
+        padding-top: 48px;
+        padding-bottom: 80px;
+        border-top: none;
+
+        .btn {
+          width: 204px;
+          border-radius: 40px;
+          font-size: 14px;
+          font-weight: 600;
+          padding: 0.75rem 1rem;
+        }
+      }
+    }
+
+    // customize slider
+
+    .slider {
+      -webkit-appearance: none;
+      width: 100%;
+      background: #979797;
+      outline: none;
+      height: 2px !important;
+      padding: 0;
+      border: 1px solid #979797;
+      margin-top: 23px;
+    }
+
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 24px;
+      height: 24px;
+      background: url('../../assets/img/slider.png');
+      cursor: pointer;
+    }
+
+    .slider::-moz-range-thumb {
+      width: 24px;
+      height: 24px;
+      background: url('../../assets/img/slider.png');
+      cursor: pointer;
     }
 
   }

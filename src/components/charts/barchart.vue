@@ -58,7 +58,7 @@ export default {
   data () {
     return {
       width: 0,
-      height: 600,
+      height: 550,
       sliderHeight: 180,
       tooltipVisible: false,
       hoverrectMehrYTop: 25,

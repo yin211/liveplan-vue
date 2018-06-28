@@ -19,9 +19,9 @@
                 <b-col lg="2">
                   <span class="text-regular">Start - End Year</span>
                   <div class="d-flex element-spacer">
-                    <b-form-input v-model="expense.start_year" type="number" size="sm"></b-form-input>
+                    <b-form-input v-model="expense.start_year" type="number" size="sm" style="width: 70px"></b-form-input>
                     <span class="date-spacer">-</span>
-                    <b-form-input v-model="expense.end_year" type="number" size="sm"></b-form-input>
+                    <b-form-input v-model="expense.end_year" type="number" size="sm" style="width: 70px"></b-form-input>
                   </div>
                 </b-col>
                 <b-col lg="5">
@@ -77,7 +77,7 @@
                 <td colspan="3"><b-form-input v-model="filter" size="sm" placeholder="Type to Search" /></td>
               </template>
               <template slot="amount" slot-scope="data">
-                {{data.item.amount}} SEK
+                {{data.item.amount.toLocaleString('sv-SE')}} SEK
               </template>
               <template slot="actions" slot-scope="row">
                 <button class='btn plain-btn text-regular'>
@@ -551,17 +551,17 @@ export default {
     .slider {
       -webkit-appearance: none;
       width: 100%;
-      background: #979797;
+      background: #C1C7D0;
       outline: none;
-      height: 2px !important;
+      height: 1px !important;
       padding: 0;
-      border: 1px solid #979797;
       margin-top: 23px;
     }
 
     .slider::-webkit-slider-thumb {
       -webkit-appearance: none;
       background: url('../../assets/img/slider.png');
+      border-radius: 50%;
       cursor: pointer;
       background-color: #FFFFFF;
       height: 16px;
@@ -571,11 +571,29 @@ export default {
 
     .slider::-moz-range-thumb {
       background: url('../../assets/img/slider.png');
+      border-radius: 50%;
       cursor: pointer;
       background-color: #FFFFFF;
       height: 16px;
       width: 16px;
       background-size: 16px;
+    }
+
+    .slider::-ms-thumb {
+      background: url('../../assets/img/slider.png');
+      border-radius: 50%;
+      cursor: pointer;
+      background-color: #FFFFFF;
+      height: 16px;
+      width: 16px;
+      background-size: 16px;
+    }
+
+    .slider:focus::-ms-fill-lower {
+      background: #888;
+    }
+    .slider:focus::-ms-fill-upper {
+      background: #ccc;
     }
 
   }

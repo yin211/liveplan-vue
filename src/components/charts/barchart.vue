@@ -9,20 +9,29 @@
                       :x="xScale(d.year) + margin.left"
                       :y="yScale(d.value) + margin.top"
                       :width="xScale.bandwidth()"
-                      :height="height - margin.top - margin.bottom - yScale(d.value)"
+                      :height="chartHeight - yScale(d.value)"
                       :data-year="d.year"
                       fill="#F4D03F"
                       @mouseover="rectmouseover(d, i + 5)"
                       @mouseout="rectmouseout(d, i + 5)">
                 </rect>
                 <rect :x="xScale(startYear) + margin.left"
-                      :y="margin.top - 25"
+                      :y="margin.top - hoverrectMehrYTop"
                       :width="xScale.bandwidth()"
-                      :height="height - margin.top + 25"
+                      :height="chartHeight + hoverrectMehrYTop + hoverrectMehrYBottom"
                       fill="black"
                       opacity="0.35"
                       id="hoverrect">
                 </rect>
+            </g>
+            <g>
+              <line x1="0"
+                    :x2="width"
+                    :y1="margin.top + chartHeight + hoverrectMehrYBottom"
+                    :y2="margin.top + chartHeight + hoverrectMehrYBottom"
+                    stroke="#2c3468"
+                    stroke-width="1">
+              </line>
             </g>
             <foreignObject
                     id="tooltipForeignObj"
@@ -49,12 +58,15 @@ export default {
   data () {
     return {
       width: 0,
-      height: 500,
+      height: 600,
+      sliderHeight: 180,
       tooltipVisible: false,
+      hoverrectMehrYTop: 25,
+      hoverrectMehrYBottom: 60,
       margin: {
         top: 100,
         right: 15,
-        bottom: 105,
+        bottom: 15,
         left: 65
       },
       startYear: 2018,
@@ -68,14 +80,20 @@ export default {
       let max = this.$d3.max(this.dataArray, d => d.year)
       return this.$d3.scaleBand()
                    .domain(this.$d3.range(min - 5, max + 1))
-                   .range([0, this.width - this.margin.left - this.margin.right])
+                   .range([0, this.chartWidth])
                    .paddingInner([0.05])
                    .paddingOuter([0.05])
     },
     yScale () {
       return this.$d3.scaleLinear()
               .domain([this.$d3.min(this.dataArray, d => d.value), this.$d3.max(this.dataArray, d => d.value)])
-              .range([this.height - this.margin.top - this.margin.bottom, 0])
+              .range([this.chartHeight, 0])
+    },
+    chartHeight () {
+      return this.height - this.margin.top - this.margin.bottom - this.sliderHeight
+    },
+    chartWidth () {
+      return this.width - this.margin.left - this.margin.right
     }
   },
   methods: {
@@ -105,13 +123,13 @@ export default {
       this.tooltipVisible = false
     },
     drawAxis () {
-      let tickSize = this.height - this.margin.top - this.margin.bottom
+      let tickSize = this.chartHeight
       let xAxis = this.$d3.axisBottom(this.xScale).tickSize(-(tickSize))
       let yAxis = this.$d3.axisLeft(this.yScale).ticks(5)
 
       this.chart.append('g')
                 .attr('class', 'axis xAxis')
-                .attr('transform', `translate(${this.margin.left}, ${this.height - this.margin.bottom})`)
+                .attr('transform', `translate(${this.margin.left}, ${this.chartHeight + this.margin.top})`)
                 .call(xAxis)
 
       this.chart.append('g')
@@ -187,6 +205,9 @@ export default {
 <style lang="scss">
 
     .chart-wrapper {
+        width: 100%;
+        margin: 0px;
+        padding: 0px;
         svg {
             background-color: #525670;
             #hoverrect {

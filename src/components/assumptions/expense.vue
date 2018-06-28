@@ -339,8 +339,8 @@ export default {
 
     // chart wrapper
     .chart-container {
-      margin-left: calc(50% - 50vw);
-      margin-right: calc(50% - 50vw);
+      margin-left: calc(50% - 50vw + 0.5rem);
+      margin-right: calc(50% - 50vw + 0.5rem);
       margin-top: 38px;
     }
 

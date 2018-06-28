@@ -49,13 +49,13 @@ export default {
   data () {
     return {
       width: 0,
-      height: 400,
+      height: 500,
       tooltipVisible: false,
       margin: {
         top: 100,
         right: 15,
-        bottom: 55,
-        left: 55
+        bottom: 105,
+        left: 65
       },
       startYear: 2018,
       endYear: 2036,
@@ -173,7 +173,7 @@ export default {
           .attr('dy', 20)
     },
     setWidth () {
-      this.width = this.$el.offsetWidth - 10
+      this.width = this.$el.offsetWidth
     }
   },
   mounted () {

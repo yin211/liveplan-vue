@@ -12,8 +12,16 @@
                       :height="height - margin.top - margin.bottom - yScale(d.value)"
                       :data-year="d.year"
                       fill="#F4D03F"
-                      @mouseover="rectmouseover(d, i)"
-                      @mouseout="rectmouseout()">
+                      @mouseover="rectmouseover(d, i + 5)"
+                      @mouseout="rectmouseout(d, i + 5)">
+                </rect>
+                <rect :x="xScale(startYear) + margin.left"
+                      :y="margin.top - 25"
+                      :width="xScale.bandwidth()"
+                      :height="height - margin.top + 25"
+                      fill="black"
+                      opacity="0.35"
+                      id="hoverrect">
                 </rect>
             </g>
             <foreignObject
@@ -74,16 +82,26 @@ export default {
     rectmouseover (d, i) {
       let tf = this.$d3.select('#tooltipForeignObj')
       let x = this.xScale(d.year) + this.margin.left + this.xScale.bandwidth() / 2
-
+      let xTickCircle = this.chart.select(`#xTick-${d.year} circle`)
+      xTickCircle.attr('fill', '#fff')
+                  .attr('stroke', '#1971ff')
       tf.select('#tooltipyear').html(d.year)
       tf.select('#tooltipage').html(41 + i)
       tf.select('#tooltipincome').html(d.value)
       tf.transition()
         .duration(500)
         .attr('transform', `translate(${x + 10}, ${this.margin.top * 1.5})`)
+      let hoverrect = this.$d3.select('#hoverrect')
+      hoverrect.attr('x', this.xScale(d.year) + this.margin.left)
+               .style('display', 'block')
       this.tooltipVisible = true
     },
-    rectmouseout () {
+    rectmouseout (d, i) {
+      let xTickCircle = this.chart.select(`#xTick-${d.year} circle`)
+      xTickCircle.attr('fill', '#1971ff')
+                  .attr('stroke', '#fff')
+      let hoverrect = this.$d3.select('#hoverrect')
+      hoverrect.style('display', 'none')
       this.tooltipVisible = false
     },
     drawAxis () {
@@ -119,7 +137,8 @@ export default {
           .text((d, i) => 41 + i)
       let startYearTick = this.chart.select(`#xTick-${this.startYear}`)
       let endYeartTick = this.chart.select(`#xTick-${this.endYear}`)
-      let startEndTickSize = -(tickSize + 40)
+      let mehrHeight = 60
+      let startEndTickSize = -(tickSize + mehrHeight)
       startYearTick.select('line').attr('y2', startEndTickSize)
       endYeartTick.select('line').attr('y2', startEndTickSize)
       startYearTick.append('circle')
@@ -134,26 +153,24 @@ export default {
           .attr('stroke', '#fff')
           .attr('stroke-width', 1.5)
           .attr('transform', `translate(0, ${startEndTickSize})`)
-      startYearTick.append('text')
+      let startYearGroup = this.chart.append('g')
+                                     .attr('transform', `translate(${this.xScale(this.startYear) + this.margin.left + this.xScale.bandwidth() / 2 + 10}, ${this.margin.top - mehrHeight + 5})`)
+      let endYearGroup = this.chart.append('g')
+                                     .attr('transform', `translate(${this.xScale(this.endYear) + this.margin.left + this.xScale.bandwidth() / 2 + 10}, ${this.margin.top - mehrHeight + 5})`)
+      startYearGroup.append('text')
           .text('Start Year  ')
-          .attr('transform', `translate(0, ${startEndTickSize})`)
           .attr('stroke', '#fff')
-          .attr('dx', 35)
-      startYearTick.append('text')
+      startYearGroup.append('text')
           .text(this.startYear)
-          .attr('transform', `translate(0, ${startEndTickSize + 20})`)
           .attr('stroke', '#fff')
-          .attr('dx', 25)
-      endYeartTick.append('text')
+          .attr('dy', 20)
+      endYearGroup.append('text')
           .text('End Year  ')
-          .attr('transform', `translate(0, ${startEndTickSize})`)
           .attr('stroke', '#fff')
-          .attr('dx', 35)
-      endYeartTick.append('text')
+      endYearGroup.append('text')
           .text(this.endYear)
-          .attr('transform', `translate(0, ${startEndTickSize + 20})`)
           .attr('stroke', '#fff')
-          .attr('dx', 25)
+          .attr('dy', 20)
     },
     setWidth () {
       this.width = this.$el.offsetWidth - 10
@@ -172,6 +189,10 @@ export default {
     .chart-wrapper {
         svg {
             background-color: #525670;
+            #hoverrect {
+              display: none;
+              pointer-events: none;
+            }
             .axis text {
                 fill: #fff;
             }

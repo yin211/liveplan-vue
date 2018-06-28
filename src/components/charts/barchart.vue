@@ -198,6 +198,7 @@ export default {
     this.chart = this.$d3.select('#barChartRent g')
     this.setWidth()
     this.drawAxis()
+    this.$d3.select(window).on('resize', this.setWidth)
   }
 }
 </script>

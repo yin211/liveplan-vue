@@ -13,8 +13,7 @@
     <b-card no-body class="expense-tabs-card depth-1" style="margin-top: -170px">
       <b-tabs pills card>
         <b-tab title="Auto Calculation" :title-link-class="'expense-tab'" active>
-          <div class="tab-padding-top"></div>
-          <b-form>
+          <b-form @change="autoCalcformChanged">
             <b-container fluid>
               <b-row class="text-left mx-auto">
                 <b-col lg="2">
@@ -43,19 +42,18 @@
                       <b-form-input v-model="expense.annual_increase_percentage" type="number"></b-form-input>
                     </b-input-group>
                     <b-input-group size="sm" class="element-spacer">
-                      <b-form-input v-model="expense.annual_increase_percentage" min="1" max="100" class="slider" type="range"></b-form-input>
+                      <b-form-input v-model="expense.annual_increase_percentage" min="0" max="20" class="slider" type="range"></b-form-input>
                     </b-input-group>
                   </div>
                 </b-col>
               </b-row>
             </b-container>
-            <b-button :size="'sm'" variant="primary" class="save-calc-btn">
+            <b-button :size="'sm'" variant="primary" class="save-calc-btn" :disabled="isCalcSaveDisabled">
               <i class="fa fa-check mr-2"></i>Save New Values
             </b-button>
           </b-form>
         </b-tab>
         <b-tab title="Custom Values" :title-link-class="'expense-tab'">
-          <div class="tab-padding-top"></div>
           <div class="table-container text-regular text-left">
             <b-table show-empty
                     stacked="md"
@@ -122,34 +120,34 @@
                   <i class="fa fa-car car-icon"></i>
                   <div class="d-flex flex-column ml-3">
                     <span class="text-gray">Name</span>
-                    <span class="text-regular">Car Rental</span>
+                    <span class="text-regular font-weigth-medium">Car Rental</span>
                   </div>
                 </div>
 
                 <div class="d-flex flex-column">
                   <span class="text-gray">Category</span>
-                  <span class="text-regular">Assets</span>
+                  <span class="text-regular font-weigth-medium">Assets</span>
                 </div>
 
                 <div class="d-flex flex-column">
                   <span class="text-gray">Sub-category</span>
-                  <span class="text-regular">Assets</span>
+                  <span class="text-regular font-weigth-medium">Assets</span>
                 </div>
               </b-col>
               <b-col lg="6" class="d-flex align-items-center justify-content-between">
                 <div class="d-flex flex-column ml-lg-3">
                   <span class="text-gray">Inflation</span>
-                  <span class="text-regular">{{expense.inflation_rate}} %</span>
+                  <span class="text-regular font-weigth-medium">{{expense.inflation_rate}} %</span>
                 </div>
 
                 <div class="d-flex flex-column">
                   <span class="text-gray">Period</span>
-                  <span class="text-regular">{{expense.initial_amount_period}}</span>
+                  <span class="text-regular font-weigth-medium">{{expense.initial_amount_period}}</span>
                 </div>
 
                 <div class="d-flex flex-column">
                   <span class="text-gray">Person</span>
-                  <span class="text-regular">Job Bolmeson (me)</span>
+                  <span class="text-regular font-weigth-medium">Job Bolmeson (me)</span>
                 </div>
 
                 <div class="d-flex flex-column">
@@ -192,7 +190,7 @@
         <b-row class="my-3">
           <b-col sm="3" class="d-flex align-items-center justify-content-end"><label :for="'inflation-input'">Inflation</label></b-col>
           <b-col sm="9">
-            <b-input-group size="sm" append="%">
+            <b-input-group append="%">
               <b-form-input v-model="expense.annual_increase_percentage" type="number"></b-form-input>
             </b-input-group>
           </b-col>
@@ -200,7 +198,7 @@
         <b-row class="my-3">
           <b-col sm="3" class="d-flex align-items-center justify-content-end"><label :for="'tax-input'">Tax</label></b-col>
           <b-col sm="9">
-            <b-input-group size="sm" append="%">
+            <b-input-group append="%">
               <b-form-input v-model="expense.tax" type="number"></b-form-input>
             </b-input-group>
           </b-col>
@@ -284,7 +282,8 @@ export default {
       sortDirection: 'asc',
       pageOptions: [ 5, 10, 15, 25 ],
       totalRows: 0,
-      modalShow: false
+      modalShow: false,
+      isCalcSaveDisabled: true
     }
   },
   computed: {
@@ -315,6 +314,9 @@ export default {
         }
       }
       return d
+    },
+    autoCalcformChanged  (ev) {
+      this.isCalcSaveDisabled = false
     }
   },
   components: {
@@ -330,69 +332,6 @@ export default {
 
     section {
       margin-bottom: 120px;
-    }
-
-    .breadcrumb {
-      background: transparent;
-      margin-bottom: 24px;
-    }
-
-    // chart wrapper
-    .chart-container {
-      margin-left: calc(50% - 50vw);
-      margin-right: calc(50% - 49.5vw);
-      margin-top: 38px;
-    }
-
-    // customize tabs
-    .expense-tabs-card {
-      .card-header {
-        padding: 34px 30px;
-        background: white;
-        border-bottom: none;
-
-        .card-header-pills {
-          .expense-tab {
-            font-size: 24px;
-            line-height: 32px;
-            color: #84888F;
-            &.active {
-              color: #434343;
-              font-weight: 600;
-              background-color: transparent;
-            }
-          }
-        }
-      }
-
-      .card-body {
-        padding: 0px 0px 28px 0px;
-
-        .tab-padding-top {
-          height: 28px;
-          background: linear-gradient(270deg, #FFFFFF 0%, #F8F8F8 100%);
-        }
-
-        form {
-          .amount-per-month {
-            width: 250px;
-            margin-right: 20px;
-          }
-          .annaul-growth-rate {
-            width: 120px;
-            margin-right: 20px;
-          }
-
-          .save-calc-btn {
-            position: absolute;
-            right: 30px;
-            top: 42px;
-            border-radius: 40px;
-            font-weight: 500;
-          }
-        }
-      }
-
     }
 
     .element-spacer {
@@ -412,11 +351,6 @@ export default {
       margin: auto 24px;
     }
 
-    .card span {
-      font-size: 14px;
-      line-height: 20px;
-    }
-
     .car-icon {
       color: #A5ADBA;
       width: 23px;
@@ -427,6 +361,71 @@ export default {
       background-color:transparent;
       font-size: 12px;
       line-height: 24px;
+    }
+
+    // chart wrapper
+    .chart-container {
+      margin-left: calc(50% - 50vw);
+      margin-right: calc(50% - 49.5vw);
+      margin-top: 38px;
+    }
+
+    // customize card
+    .card {
+      border-radius: 0;
+      span {
+        font-size: 14px;
+        line-height: 20px;
+      }
+      &.expense-tabs-card {
+        .card-header {
+          padding: 34px 30px;
+          background: white;
+          border-bottom: none;
+
+          .card-header-pills {
+            .expense-tab {
+              font-size: 24px;
+              line-height: 32px;
+              color: #84888F;
+              &.active {
+                color: #434343;
+                font-weight: 600;
+                background-color: transparent;
+              }
+            }
+          }
+        }
+
+        .tab-content {
+          padding-top: 28px;
+          background: linear-gradient(270deg, #FFFFFF 0%, #F8F8F8 100%);
+
+          .card-body {
+            padding: 0px 0px 28px 0px;
+
+            form {
+              .amount-per-month {
+                width: 250px;
+                margin-right: 20px;
+              }
+              .annaul-growth-rate {
+                width: 120px;
+                margin-right: 20px;
+              }
+
+              .save-calc-btn {
+                position: absolute;
+                right: 30px;
+                top: 42px;
+                border-radius: 40px;
+                font-weight: 500;
+              }
+            }
+          }
+
+        }
+      }
     }
 
     // customize table
@@ -507,6 +506,8 @@ export default {
     #edit-info-modal {
       .modal-header {
         padding: 48px;
+        border-bottom: none;
+        box-shadow: 0px 24px 1px -24px #232B36;
         .close {
           font-size: 48px;
           padding: 0;

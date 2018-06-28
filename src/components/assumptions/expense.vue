@@ -3,14 +3,14 @@
     <b-breadcrumb :items="items" class="p-0"/>
     <div class="d-flex justify-content-between align-items-center">
       <h1 class="text-regular text-left">{{expense.name}}</h1>
-      <button class='btn btn-sm text-regular' style="border-radius: 30px">
+      <button class='btn btn-sm icon-btn text-regular'>
         <i class="fa fa-trash mr-2 text-danger"></i> Delete Expense
       </button>
     </div>
     <section class="chart-container depth-2">
       <barchart v-if="cashflow.length" :dataArray="cashflow"></barchart>
     </section>
-    <b-card no-body class="expense-tabs-card" style="margin-top: -170px">
+    <b-card no-body class="expense-tabs-card depth-1" style="margin-top: -170px">
       <b-tabs pills card>
         <b-tab title="Auto Calculation" :title-link-class="'expense-tab'" active>
           <div class="tab-padding-top"></div>
@@ -112,7 +112,7 @@
         </b-tab>
       </b-tabs>
     </b-card>
-    <b-card style="margin-top: 34px; margin-bottom: 120px;">
+    <b-card class="depth-1" style="margin-top: 34px; margin-bottom: 120px;">
       <b-container fluid>
         <b-row class="text-left">
           <b-col md="9" xl="7">
@@ -160,7 +160,7 @@
             </b-row>
           </b-col>
           <b-col md="3" xl="5" class="d-flex justify-content-center  justify-content-md-end align-items-center">
-              <button class='btn btn-sm edit-info-btn text-regular' @click="modalShow = !modalShow">
+              <button class='btn btn-sm icon-btn text-regular' style="border-color: #eaecef;" @click="modalShow = !modalShow">
                 <i class="fa fa-pencil mr-2 text-primary"></i> Edit Info
               </button>
           </b-col>
@@ -427,28 +427,6 @@ export default {
       background-color:transparent;
       font-size: 12px;
       line-height: 24px;
-    }
-
-    .edit-info-btn {
-      font-size: 12px;
-      line-height: 24px;
-      border-radius: 30px;
-      border: 1px solid #eaecef;
-      i {
-        font-size: 14px;
-      }
-    }
-
-    select {
-      background-image: url('../../assets/img/down-arrow.svg');
-      background-size: 12px;
-    }
-
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-        /* display: none; <- Crashes Chrome on hover */
-        -webkit-appearance: none;
-        margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
     }
 
     // customize table

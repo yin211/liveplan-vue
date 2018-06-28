@@ -93,12 +93,20 @@ input {
     color: #999999;
     line-height: 24px;
   }
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+  }
 }
 
 // customize select form control
 select {
   &.form-control {
     background-color: #FAFBFC;
+    background-image: url('assets/img/down-arrow.svg');
+    background-size: 12px;
     font-size: 14px;
     height: 46px !important;
 
@@ -150,6 +158,18 @@ form {
   font-family: "FontAwesome";
   content: "\f054";
   font-size: 12px;
+}
+
+.icon-btn {
+  font-size: 12px;
+  line-height: 24px;
+  border-radius: 30px;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  i {
+    font-size: 16px;
+  }
 }
 
 // typography

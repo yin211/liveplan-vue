@@ -71,7 +71,7 @@
                     hover
             >
               <template slot="HEAD_actions" slot-scope="data">
-                <button class='btn btn-sm text-regular upload-btn'>
+                <button class='btn btn-sm icon-btn text-regular' style="border-color: #eaecef;">
                   <i class="fa fa-trash mr-2 text-danger"></i> Upload File
                 </button>
               </template>
@@ -274,7 +274,7 @@ export default {
       fields: [
         { key: 'year', label: 'Year', sortable: true, sortDirection: 'desc' },
         { key: 'amount', label: 'Amount', sortable: true },
-        { key: 'actions', 'class': 'text-right' }
+        { key: 'actions', 'class': 'd-flex justify-content-end' }
       ],
       currentPage: 1,
       perPage: 10,
@@ -339,7 +339,7 @@ export default {
 
     // chart wrapper
     .chart-container {
-      margin-left: calc(50% - 49.5vw);
+      margin-left: calc(50% - 50vw);
       margin-right: calc(50% - 49.5vw);
       margin-top: 38px;
     }
@@ -442,10 +442,6 @@ export default {
           box-shadow: 9px 8px 16px 0 rgba(0,0,0,0.07);
           outline: none;
           border: none;
-          .upload-btn {
-            border-radius: 30px;
-            border: 1px solid #eaecef;
-          }
         }
 
         tbody {

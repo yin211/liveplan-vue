@@ -29,15 +29,15 @@
                 <b-col lg="2">
                   <span class="text-regular">Period (start - end year) (?)</span>
                   <div class="d-flex element-spacer">
-                    <b-form-input v-model="expense.start_year" type="number" size="sm" class="text-regular start_end_year start_year" style="width: 70px" placeholder="Start year" min="2000" max="2140"></b-form-input>
+                    <b-form-input v-model="expense.start_year" type="number" size="sm" v-b-tooltip.hover.bottom title="The year when this expense first occurs." class="text-regular start_end_year start_year" style="width: 70px" placeholder="Start year" min="2000" max="2140"></b-form-input>
                     <span class="date-spacer">-</span>
-                    <b-form-input v-model="expense.end_year" type="number" size="sm" class="text-regular start_end_year end_year" style="width: 70px" placeholder="End year" min="2000" max="2140"></b-form-input>
+                    <b-form-input v-model="expense.end_year" type="number" size="sm" v-b-tooltip.hover.bottom title="The year when this expense stops occuring." class="text-regular start_end_year end_year" style="width: 70px" placeholder="End year" min="2000" max="2140"></b-form-input>
                   </div>
                 </b-col>
                 <b-col lg="5">
                   <span class="text-regular">Amount Per Month (?)</span>
                   <div class="d-flex">
-                    <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-model="expense.initial_amount" class="form-control form-control-sm element-spacer text-regular amount-per-month" :min="0"></vue-numeric>
+                    <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-b-tooltip.hover.bottom title="The amount per period." v-model="expense.initial_amount" class="form-control form-control-sm element-spacer text-regular amount-per-month" :min="0"></vue-numeric>
                     <b-input-group size="sm" class="element-spacer">
                       <b-form-input v-model="expense.initial_amount" min="0" max="10000" class="slider" type="range"></b-form-input>
                     </b-input-group>
@@ -46,7 +46,7 @@
                 <b-col lg="5">
                   <span class="text-regular">Annual Growth Rate (?)</span>
                   <div class="d-flex">
-                    <vue-numeric currency="%" currency-symbol-position="suffix" v-model="expense.annual_increase_percentage" class="form-control form-control-sm element-spacer text-regular annual-growth-rate"></vue-numeric>
+                    <vue-numeric currency="%" currency-symbol-position="suffix" v-model="expense.annual_increase_percentage" v-b-tooltip.hover.bottom title="The expense grows with this percentage per year." class="form-control form-control-sm element-spacer text-regular annual-growth-rate"></vue-numeric>
                     <b-input-group size="sm" class="element-spacer">
                       <b-form-input v-model="expense.annual_increase_percentage" min="0" max="20" class="slider" type="range"></b-form-input>
                     </b-input-group>
@@ -54,7 +54,7 @@
                 </b-col>
               </b-row>
             </b-container>
-            <b-button :size="'sm'" variant="primary" class="save-calc-btn" :disabled="isCalcSaveDisabled">
+            <b-button :size="'sm'" variant="primary" class="save-calc-btn" :disabled="isCalcSaveDisabled"  v-b-tooltip.hover.bottom title="You can save any changes for this expense by clicking here.">
               <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="11px" height="8px" viewBox="0 0 11 8" style="enable-background:new 0 0 11 8; margin-right: 8px;" xml:space="preserve">
                   <g id="Checkmark_1">
                       <path style="fill:#FFF;" d="M3.646,7.858l-3.5-3.417c-0.195-0.188-0.195-0.494,0-0.684l0.707-0.684c0.195-0.188,0.512-0.188,0.707,0L4,5.467

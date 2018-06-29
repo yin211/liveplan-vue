@@ -151,13 +151,16 @@ form {
     line-height: 20px;
     color: #84888F;
 
-    + .breadcrumb-item::before {
-      padding-left: 12px;
-      padding-right: 20px;
+    &::after {
+      padding-left: 20px;
       color: #7A869A;
       font-family: "FontAwesome";
       content: "\f054";
       font-size: 12px;
+    }
+
+    &::before {
+      content: "";
     }
 
     a {
@@ -170,14 +173,12 @@ form {
 
 .icon-btn {
   font-size: 12px;
+  font-weight: 500;
   line-height: 24px;
   border-radius: 30px;
   background-color: white;
   display: flex;
   align-items: center;
-  i {
-    font-size: 16px;
-  }
 }
 
 // typography

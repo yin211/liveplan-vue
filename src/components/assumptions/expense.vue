@@ -266,7 +266,7 @@ export default {
   async mounted () {
     try {
       console.log(process.env.ROOT_API)
-      let response = await axios.get(`http://api.livsplan.test/api/v1/expenses/${this.$route.params.id}`)
+      let response = await axios.get(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`)
       this.expense = response.data.data
       let cashflow = await axios.get('/static/tempdata/data.json')
       this.cashflow = this.processCashflow(cashflow.data)

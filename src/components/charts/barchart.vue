@@ -209,8 +209,8 @@ export default {
         width: 100%;
         margin: 0px;
         padding: 0px;
+        background-color: #525670;
         svg {
-            background-color: #525670;
             #hoverrect {
               display: none;
               pointer-events: none;

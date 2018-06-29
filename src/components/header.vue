@@ -37,7 +37,9 @@
           <div class="mx-4 spacing-divider"></div>
           <b-nav-item-dropdown right no-caret>
             <template slot="button-content">
-              <i class="fa fa-user pr-2"></i> Jan Bolmeson <i class="fa fa-ellipsis-v ml-4"></i>
+              <div class="d-flex align-items-center">
+                <i class="fa fa-user pr-2 text-secondary" style="font-size: 20px"></i> Jan Bolmeson <i class="fa fa-ellipsis-v ml-4" style="font-size: 20px;"></i>
+              </div>
             </template>
             <b-dropdown-item @click="logout">Logout</b-dropdown-item>
           </b-nav-item-dropdown>
@@ -60,12 +62,16 @@ export default {
       selectedPlan: null
     }
   },
-  created () {
-    axios.get('https://api.livsplan.se/api/v1/plans')
-      .then(resp => (
-        this.plans = resp.data.data
-      ))
-      .catch(error => console.log(error))
+  async mounted () {
+    try {
+      let response = await axios.get('https://api.livsplan.se/api/v1/plans')
+      this.plans = response.data.data
+      response = await axios.get(`https://api.livsplan.se/api/v1/expenses/${this.$route.params.id}`)
+      response = this.plans.filter(plan => plan.id === response.data.data.plan_id)
+      this.selectedPlan = response[0]
+    } catch (err) {
+      console.log(err)
+    }
   },
   computed: {
     isAuthenticated () {
@@ -73,7 +79,7 @@ export default {
     },
     selectedPlanText () {
       if (this.selectedPlan) {
-        return this.selectedPlan.description
+        return 'Plan : ' + this.selectedPlan.description
       } else {
         return 'Select Plan'
       }
@@ -139,6 +145,17 @@ export default {
       }
 
       .right-nav {
+        .dropdown-toggle {
+          padding: 8px 8px 8px 16px;
+          line-height: 24px;
+
+          &::after {
+            margin-left: 1em;
+            margin-right: 0.5rem;
+            vertical-align: 0.055em;
+            font-size: 20px;
+          }
+        }
         .spacing-divider {
           opacity: .13;
           border: 1px solid #FFFFFF;

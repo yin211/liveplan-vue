@@ -2,7 +2,7 @@
   <div class="expense bg-light">
     <b-breadcrumb :items="items" class="p-0"/>
     <div class="d-flex justify-content-between align-items-center">
-      <h1 class="text-regular text-left">{{expense.name}}</h1>
+      <h1 class="text-regular text-left">{{expense.name}} </h1>
       <button class='btn btn-sm icon-btn text-regular'>
         <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
             width="14px" height="16px" viewBox="0 0 14 16" style="enable-background:new 0 0 14 16; margin-right: 8px;" xml:space="preserve">
@@ -27,26 +27,26 @@
             <b-container fluid>
               <b-row class="text-left mx-auto">
                 <b-col lg="2">
-                  <span class="text-regular">Start - End Year</span>
+                  <span class="text-regular">Period (start - end year) (?)</span>
                   <div class="d-flex element-spacer">
-                    <b-form-input v-model="expense.start_year" type="number" size="sm" class="text-regular" style="width: 70px"></b-form-input>
+                    <b-form-input v-model="expense.start_year" type="number" size="sm" class="text-regular start_end_year start_year" style="width: 70px" placeholder="Start year" min="2000" max="2140"></b-form-input>
                     <span class="date-spacer">-</span>
-                    <b-form-input v-model="expense.end_year" type="number" size="sm" class="text-regular" style="width: 70px"></b-form-input>
+                    <b-form-input v-model="expense.end_year" type="number" size="sm" class="text-regular start_end_year end_year" style="width: 70px" placeholder="End year" min="2000" max="2140"></b-form-input>
                   </div>
                 </b-col>
                 <b-col lg="5">
-                  <span class="text-regular">Amount Per Month</span>
+                  <span class="text-regular">Amount Per Month (?)</span>
                   <div class="d-flex">
-                    <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-model="expense.initial_amount" class="form-control form-control-sm element-spacer text-regular amount-per-month" :max="10000"></vue-numeric>
+                    <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-model="expense.initial_amount" class="form-control form-control-sm element-spacer text-regular amount-per-month" :min="0"></vue-numeric>
                     <b-input-group size="sm" class="element-spacer">
-                      <b-form-input v-model="expense.initial_amount" min="1" max="10000" class="slider" type="range"></b-form-input>
+                      <b-form-input v-model="expense.initial_amount" min="0" max="10000" class="slider" type="range"></b-form-input>
                     </b-input-group>
                   </div>
                 </b-col>
                 <b-col lg="5">
-                  <span class="text-regular">Annual Growth Rate</span>
+                  <span class="text-regular">Annual Growth Rate (?)</span>
                   <div class="d-flex">
-                    <vue-numeric currency="%" currency-symbol-position="suffix" v-model="expense.annual_increase_percentage" class="form-control form-control-sm element-spacer text-regular annual-growth-rate" :max="20"></vue-numeric>
+                    <vue-numeric currency="%" currency-symbol-position="suffix" v-model="expense.annual_increase_percentage" class="form-control form-control-sm element-spacer text-regular annual-growth-rate"></vue-numeric>
                     <b-input-group size="sm" class="element-spacer">
                       <b-form-input v-model="expense.annual_increase_percentage" min="0" max="20" class="slider" type="range"></b-form-input>
                     </b-input-group>
@@ -142,18 +142,18 @@
                   <i class="fa fa-car car-icon"></i>
                   <div class="d-flex flex-column ml-3">
                     <span class="text-gray">Name</span>
-                    <span class="text-regular font-weigth-medium">Car Rental</span>
+                    <span class="text-regular font-weigth-medium">{{expense.name}}</span>
                   </div>
                 </div>
 
                 <div class="d-flex flex-column">
                   <span class="text-gray">Category</span>
-                  <span class="text-regular font-weigth-medium">Assets</span>
+                  <span class="text-regular font-weigth-medium">{{expense.category.name}}</span>
                 </div>
 
                 <div class="d-flex flex-column">
-                  <span class="text-gray">Sub-category</span>
-                  <span class="text-regular font-weigth-medium">Assets</span>
+                  <span class="text-gray">Typ / Subtype</span>
+                  <span class="text-regular font-weigth-medium">{{expense.expense_type.name}} :: {{expense.expense_subtype.name}}</span>
                 </div>
               </b-col>
               <b-col lg="6" class="d-flex align-items-center justify-content-between">
@@ -243,7 +243,7 @@
 
       </b-container>
       <div slot="modal-header" class="w-100 mx-auto">
-        <h1>Edit</h1>
+        <h1>Edit: "Food Expenses"</h1>
         <button type="button" class="close" aria-label="Close" @click="modalShow=false">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -265,7 +265,8 @@ export default {
   name: 'expense',
   async mounted () {
     try {
-      let response = await axios.get(`https://api.livsplan.se/api/v1/expenses/${this.$route.params.id}`)
+      console.log(process.env.ROOT_API)
+      let response = await axios.get(`http://api.livsplan.test/api/v1/expenses/${this.$route.params.id}`)
       this.expense = response.data.data
       let cashflow = await axios.get('/static/tempdata/data.json')
       this.cashflow = this.processCashflow(cashflow.data)
@@ -279,7 +280,7 @@ export default {
         text: 'Assumptions',
         to: { name: 'assumptions' }
       }, {
-        text: 'Expense',
+        text: 'Expenses',
         active: true
       }],
       expense: {},
@@ -351,7 +352,6 @@ export default {
   components: {
     barchart
   }
-
 }
 </script>
 
@@ -436,13 +436,20 @@ export default {
             padding: 0px 0px 28px 0px;
 
             form {
+
+              .start_end_year
+              {
+                text-align:center;
+              }
               .amount-per-month {
                 width: 130px;
                 margin-right: 20px;
+                text-align:right;
               }
               .annual-growth-rate {
                 width: 54px;
                 margin-right: 20px;
+                text-align:right;
               }
 
               .save-calc-btn {

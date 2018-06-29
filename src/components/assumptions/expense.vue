@@ -10,7 +10,7 @@
     <section class="chart-container depth-2">
       <barchart v-if="cashflow.length" :dataArray="cashflow"></barchart>
     </section>
-    <b-card no-body class="expense-tabs-card depth-1" style="margin-top: -170px">
+    <b-card no-body class="expense-tabs-card depth-1">
       <b-tabs pills card>
         <b-tab title="Auto Calculation" :title-link-class="'expense-tab'" active>
           <b-form @change="autoCalcformChanged">
@@ -27,9 +27,7 @@
                 <b-col lg="5">
                   <span class="text-regular">Amount Per Month</span>
                   <div class="d-flex">
-                    <b-input-group size="sm" append="SEK" class="element-spacer amount-per-month">
-                      <b-form-input v-model="expense.initial_amount" type="number"></b-form-input>
-                    </b-input-group>
+                    <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-model="expense.initial_amount" class="form-control form-control-sm element-spacer amount-per-month" :max="10000"></vue-numeric>
                     <b-input-group size="sm" class="element-spacer">
                       <b-form-input v-model="expense.initial_amount" min="1" max="10000" class="slider" type="range"></b-form-input>
                     </b-input-group>
@@ -38,9 +36,7 @@
                 <b-col lg="5">
                   <span class="text-regular">Annual Growth Rate</span>
                   <div class="d-flex">
-                    <b-input-group size="sm" append="%" class="element-spacer annaul-growth-rate">
-                      <b-form-input v-model="expense.annual_increase_percentage" type="number"></b-form-input>
-                    </b-input-group>
+                    <vue-numeric currency="%" currency-symbol-position="suffix" v-model="expense.annual_increase_percentage" class="form-control form-control-sm element-spacer annual-growth-rate" :max="20"></vue-numeric>
                     <b-input-group size="sm" class="element-spacer">
                       <b-form-input v-model="expense.annual_increase_percentage" min="0" max="20" class="slider" type="range"></b-form-input>
                     </b-input-group>
@@ -110,7 +106,7 @@
         </b-tab>
       </b-tabs>
     </b-card>
-    <b-card class="depth-1" style="margin-top: 34px; margin-bottom: 120px;">
+    <b-card class="depth-1 edit-info-card">
       <b-container fluid>
         <b-row class="text-left">
           <b-col md="9" xl="7">
@@ -378,6 +374,8 @@ export default {
         line-height: 20px;
       }
       &.expense-tabs-card {
+        margin-top: -170px;
+
         .card-header {
           padding: 34px 30px;
           background: white;
@@ -399,18 +397,18 @@ export default {
 
         .tab-content {
           padding-top: 28px;
-          background: linear-gradient(270deg, #FFFFFF 0%, #F8F8F8 100%);
+          background: linear-gradient(0deg, #FFFFFF 0%, #F8F8F8 100%);
 
           .card-body {
             padding: 0px 0px 28px 0px;
 
             form {
               .amount-per-month {
-                width: 250px;
+                width: 130px;
                 margin-right: 20px;
               }
-              .annaul-growth-rate {
-                width: 120px;
+              .annual-growth-rate {
+                width: 54px;
                 margin-right: 20px;
               }
 
@@ -424,6 +422,15 @@ export default {
             }
           }
 
+        }
+      }
+
+      &.edit-info-card {
+        margin-top: 34px;
+        margin-bottom: 120px;
+
+        .card-body {
+          padding: 30px 15px 33px;
         }
       }
     }

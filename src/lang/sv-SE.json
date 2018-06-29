@@ -41,14 +41,14 @@
       "send_me_newsletter": "Det är OK att skicka mig relevanta nyhetsbrev",
       "signup": "Skapa konto",
       "signup_for_livsplan": "SKAPA ETT EGET KONTO",
-      "social_number": "Ditt personnummer"
+      "social_number": "Ditt personnummer (12 siffror)"
     },
     "placeholder": {
       "email": "luke@skywalker.com",
       "firstname": "Luke",
       "lastname": "Skywalker",
       "password": "Kraften är stark hos ****",
-      "social_number": "19770525-0000"
+      "social_number": "ÅÅÅÅMMDD-NNNN"
     }
   }
 }

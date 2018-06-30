@@ -6,6 +6,11 @@
   color: #3C5193;
 }
 
+.tooltip-inner{ background:#525670;}
+.tooltip.bs-tooltip-bottom .arrow:before {
+  border-bottom-color: #525670 !important;
+}
+
 .twitter {
   color: #3CA9FF;
 }

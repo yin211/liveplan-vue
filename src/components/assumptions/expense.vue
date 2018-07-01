@@ -124,12 +124,12 @@
 
                 <div class="d-flex flex-column">
                   <span class="text-gray">Category</span>
-                  <span class="text-regular font-weigth-medium">{{expense.category.name}}</span>
+                  <span class="text-regular font-weigth-medium" v-if="expense.category">{{expense.category.name}}</span>
                 </div>
 
                 <div class="d-flex flex-column">
                   <span class="text-gray">Typ / Subtype</span>
-                  <span class="text-regular font-weigth-medium">{{expense.expense_type.name}} :: {{expense.expense_subtype.name}}</span>
+                  <span class="text-regular font-weigth-medium" v-if="expense.expense_type">{{expense.expense_type.name}} :: {{expense.expense_subtype.name}}</span>
                 </div>
               </b-col>
               <b-col lg="6" class="d-flex align-items-center justify-content-between">

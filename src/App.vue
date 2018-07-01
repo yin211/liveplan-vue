@@ -54,6 +54,7 @@ export default {
 <style lang="scss">
   @import './assets/scss/app.scss';
   @import './assets/fonts/solid.scss';
+  @import './assets/fonts/stroke.scss';
   #app {
     font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
     -webkit-font-smoothing: antialiased;

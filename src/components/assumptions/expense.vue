@@ -4,7 +4,7 @@
     <div class="d-flex justify-content-between align-items-center">
       <h1 class="text-regular text-left">{{expense.name}} </h1>
       <button class='btn btn-sm icon-btn text-regular'>
-        <i class="flaticon solid trash-3 text-danger"></i>
+        <i class="flaticon stroke trash-2 text-danger"></i>
         Delete Expense
       </button>
     </div>
@@ -46,7 +46,7 @@
               </b-row>
             </b-container>
             <b-button :size="'sm'" variant="primary" class="save-calc-btn" :disabled="isCalcSaveDisabled"  v-b-tooltip.hover.bottom title="You can save any changes for this expense by clicking here.">
-              <i class="flaticon solid checkmark"></i>Save New Values
+              <i class="flaticon stroke checkmark"></i>Save New Values
             </b-button>
           </b-form>
         </b-tab>
@@ -67,7 +67,7 @@
             >
               <template slot="HEAD_actions" slot-scope="data">
                 <button class='btn btn-sm icon-btn text-regular' style="border-color: #eaecef;">
-                  <i class="flaticon solid trash-3 text-danger"></i>
+                  <i class="flaticon stroke trash-2 text-danger"></i>
                   Upload Files
                 </button>
               </template>

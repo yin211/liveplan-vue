@@ -4,16 +4,7 @@
     <div class="d-flex justify-content-between align-items-center">
       <h1 class="text-regular text-left">{{expense.name}} </h1>
       <button class='btn btn-sm icon-btn text-regular'>
-        <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-            width="14px" height="16px" viewBox="0 0 14 16" style="enable-background:new 0 0 14 16; margin-right: 8px;" xml:space="preserve">
-          <g id="Trash_2_x2C__Delete_2">
-            <path style="fill:#EF5350;" d="M5.5,6h-1C4.224,6,4,6.224,4,6.5v6C4,12.776,4.224,13,4.5,13h1C5.776,13,6,12.776,6,12.5v-6C6,6.224,5.776,6,5.5,6z"/>
-            <path style="fill:#EF5350;" d="M9.5,6h-1C8.224,6,8,6.224,8,6.5v6C8,12.776,8.224,13,8.5,13h1c0.276,0,0.5-0.224,0.5-0.5v-6C10,6.224,9.776,6,9.5,6z"/>
-            <path style="fill:#EF5350;" d="M11,1c0-0.553-0.447-1-1-1H4C3.447,0,3,0.447,3,1v2H1C0.447,3,0,3.447,0,4l0,0c0,0.553,0.447,1,1,1l0,0v9v1
-              c0,0.553,0.447,1,1,1h10c0.553,0,1-0.447,1-1V5l0,0c0.553,0,1-0.447,1-1l0,0c0-0.553-0.447-1-1-1h-2V1z M5,2h4v1H5V2z M11,14H3V5h8
-              V14z"/>
-          </g>
-        </svg>
+        <i class="flaticon solid trash-3 text-danger"></i>
         Delete Expense
       </button>
     </div>
@@ -55,13 +46,7 @@
               </b-row>
             </b-container>
             <b-button :size="'sm'" variant="primary" class="save-calc-btn" :disabled="isCalcSaveDisabled"  v-b-tooltip.hover.bottom title="You can save any changes for this expense by clicking here.">
-              <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="11px" height="8px" viewBox="0 0 11 8" style="enable-background:new 0 0 11 8; margin-right: 8px;" xml:space="preserve">
-                  <g id="Checkmark_1">
-                      <path style="fill:#FFF;" d="M3.646,7.858l-3.5-3.417c-0.195-0.188-0.195-0.494,0-0.684l0.707-0.684c0.195-0.188,0.512-0.188,0.707,0L4,5.467
-                  l5.439-5.325c0.195-0.188,0.512-0.188,0.707,0l0.707,0.684c0.195,0.188,0.195,0.495,0,0.683l-6.5,6.351
-                  C4.158,8.047,3.842,8.047,3.646,7.858z" />
-                  </g>
-              </svg>Save New Values
+              <i class="flaticon solid checkmark"></i>Save New Values
             </b-button>
           </b-form>
         </b-tab>
@@ -82,16 +67,7 @@
             >
               <template slot="HEAD_actions" slot-scope="data">
                 <button class='btn btn-sm icon-btn text-regular' style="border-color: #eaecef;">
-                  <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                      width="14px" height="16px" viewBox="0 0 14 16" style="enable-background:new 0 0 14 16; margin-right: 8px;" xml:space="preserve">
-                    <g id="Trash_2_x2C__Delete_2">
-                      <path style="fill:#EF5350;" d="M5.5,6h-1C4.224,6,4,6.224,4,6.5v6C4,12.776,4.224,13,4.5,13h1C5.776,13,6,12.776,6,12.5v-6C6,6.224,5.776,6,5.5,6z"/>
-                      <path style="fill:#EF5350;" d="M9.5,6h-1C8.224,6,8,6.224,8,6.5v6C8,12.776,8.224,13,8.5,13h1c0.276,0,0.5-0.224,0.5-0.5v-6C10,6.224,9.776,6,9.5,6z"/>
-                      <path style="fill:#EF5350;" d="M11,1c0-0.553-0.447-1-1-1H4C3.447,0,3,0.447,3,1v2H1C0.447,3,0,3.447,0,4l0,0c0,0.553,0.447,1,1,1l0,0v9v1
-                        c0,0.553,0.447,1,1,1h10c0.553,0,1-0.447,1-1V5l0,0c0.553,0,1-0.447,1-1l0,0c0-0.553-0.447-1-1-1h-2V1z M5,2h4v1H5V2z M11,14H3V5h8
-                        V14z"/>
-                    </g>
-                  </svg>
+                  <i class="flaticon solid trash-3 text-danger"></i>
                   Upload Files
                 </button>
               </template>
@@ -103,7 +79,7 @@
               </template>
               <template slot="actions" slot-scope="row">
                 <button class='btn plain-btn text-regular'>
-                  <i class="fa fa-pencil mr-2 text-primary"></i> Edit
+                  <i class="flaticon solid edit-3 text-primary"></i> Edit
                 </button>
                 <!-- <button class='btn plain-btn text-regular'>
                   <i class="fa fa-check mr-2 text-success"></i> Save
@@ -139,7 +115,7 @@
             <b-row>
               <b-col lg="6" class="d-flex align-items-center justify-content-between">
                 <div class="d-flex align-items-center">
-                  <i class="fa fa-car car-icon"></i>
+                  <i class="flaticon solid car-1 car-icon"></i>
                   <div class="d-flex flex-column ml-3">
                     <span class="text-gray">Name</span>
                     <span class="text-regular font-weigth-medium">{{expense.name}}</span>
@@ -181,13 +157,7 @@
           </b-col>
           <b-col md="3" xl="5" class="d-flex justify-content-center  justify-content-md-end align-items-center">
               <button class='btn btn-sm icon-btn text-regular' style="border-color: #eaecef;" @click="modalShow = !modalShow">
-                <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-                  width="15.586px" height="15.586px" viewBox="0 0 15.586 15.586" style="enable-background:new 0 0 15.586 15.586; margin-right: 8px;"
-                  xml:space="preserve">
-                <path style="fill:#0065FF;" id="Pencil_1_x2C__Edit_1" d="M15.293,2.879l-2.586-2.586c-0.391-0.391-1.023-0.391-1.414,0L0,11.586v4h4L15.293,4.293
-                  C15.684,3.902,15.684,3.27,15.293,2.879z M3.171,13.586H2v-1.172l7.707-7.707l1.172,1.172L3.171,13.586z M12.293,4.465l-1.172-1.172
-                  L12,2.414l1.171,1.172L12.293,4.465z"/>
-                </svg>
+                <i class="flaticon solid edit-3 text-primary"></i>
                 Edit Info
               </button>
           </b-col>
@@ -458,6 +428,11 @@ export default {
                 top: 42px;
                 border-radius: 40px;
                 font-weight: 500;
+                display: flex;
+                i {
+                  font-size: 1rem;
+                  margin-right: 0.5rem;
+                }
               }
             }
           }

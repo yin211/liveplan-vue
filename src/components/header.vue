@@ -64,9 +64,9 @@ export default {
   },
   async mounted () {
     try {
-      let response = await axios.get('https://api.livsplan.se/api/v1/plans')
+      let response = await axios.get(`${process.env.ROOT_API}/plans`)
       this.plans = response.data.data
-      response = await axios.get(`https://api.livsplan.se/api/v1/expenses/${this.$route.params.id}`)
+      response = await axios.get(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`)
       response = this.plans.filter(plan => plan.id === response.data.data.plan_id)
       this.selectedPlan = response[0]
     } catch (err) {

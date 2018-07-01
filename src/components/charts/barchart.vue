@@ -3,11 +3,11 @@
         <svg id="barChartRent"
              :width="width"
              :height="height">
-            <g :tranform="`translate(${margin.left}, ${margin.top})`">
+            <g :transform="`translate(${margin.left}, ${margin.top})`" class="chart">
                 <rect v-for="(d,i) in dataArray"
                       :key="i"
-                      :x="xScale(d.year) + margin.left"
-                      :y="yScale(d.value) + margin.top"
+                      :x="xScale(d.year)"
+                      :y="yScale(d.value)"
                       :width="xScale.bandwidth()"
                       :height="chartHeight - yScale(d.value)"
                       :data-year="d.year"
@@ -15,8 +15,8 @@
                       @mouseover="rectmouseover(d, i + 5)"
                       @mouseout="rectmouseout(d, i + 5)">
                 </rect>
-                <rect :x="xScale(startYear) + margin.left"
-                      :y="margin.top - hoverrectMehrYTop"
+                <rect :x="xScale(startYear)"
+                      :y="-hoverrectMehrYTop"
                       :width="xScale.bandwidth()"
                       :height="chartHeight + hoverrectMehrYTop + hoverrectMehrYBottom"
                       fill="black"
@@ -24,14 +24,14 @@
                       id="hoverrect">
                 </rect>
             </g>
-            <g>
-              <line x1="0"
+            <line :x1="0"
                     :x2="width"
                     :y1="margin.top + chartHeight + hoverrectMehrYBottom"
                     :y2="margin.top + chartHeight + hoverrectMehrYBottom"
                     stroke="#2c3468"
                     stroke-width="1">
-              </line>
+            </line>
+            <g :transform="`translate(${sliderMarginLeft}, ${margin.top + chartHeight + hoverrectMehrYBottom + 35})`" class="slider-wrapper">
             </g>
             <foreignObject
                     id="tooltipForeignObj"
@@ -54,7 +54,7 @@
 <script>
 export default {
   name: 'barchart',
-  props: ['dataArray'],
+  props: ['dataArray', 'startYear', 'endYear'],
   data () {
     return {
       width: 0,
@@ -63,14 +63,17 @@ export default {
       tooltipVisible: false,
       hoverrectMehrYTop: 25,
       hoverrectMehrYBottom: 60,
+      sliderMarginLeft: 100,
+      mehrHeight: 60,
+      sliderHandlerColor: '#1971ff',
+      sliderBackColor: '#636e7f',
+      sliderHandlerRadius: 8,
       margin: {
         top: 100,
         right: 15,
         bottom: 15,
         left: 65
       },
-      startYear: 2018,
-      endYear: 2036,
       chart: ''
     }
   },
@@ -99,7 +102,7 @@ export default {
   methods: {
     rectmouseover (d, i) {
       let tf = this.$d3.select('#tooltipForeignObj')
-      let x = this.xScale(d.year) + this.margin.left + this.xScale.bandwidth() / 2
+      let x = this.xScale(d.year) + this.xScale.bandwidth() / 2 + this.margin.left
       let xTickCircle = this.chart.select(`#xTick-${d.year} circle`)
       xTickCircle.attr('fill', '#fff')
                   .attr('stroke', '#1971ff')
@@ -110,7 +113,7 @@ export default {
         .duration(500)
         .attr('transform', `translate(${x + 10}, ${this.margin.top * 1.5})`)
       let hoverrect = this.$d3.select('#hoverrect')
-      hoverrect.attr('x', this.xScale(d.year) + this.margin.left)
+      hoverrect.attr('x', this.xScale(d.year))
                .style('display', 'block')
       this.tooltipVisible = true
     },
@@ -127,36 +130,59 @@ export default {
       let xAxis = this.$d3.axisBottom(this.xScale).tickSize(-(tickSize))
       let yAxis = this.$d3.axisLeft(this.yScale).ticks(5)
 
-      this.chart.append('g')
+      let xAxisGroup = this.chart.selectAll('g.xAxis')
+                            .data(['xAxis'])
+
+      let yAxisGroup = this.chart.selectAll('g.yAxis')
+                            .data(['yAxis'])
+
+      xAxisGroup = xAxisGroup.enter().append('g')
                 .attr('class', 'axis xAxis')
-                .attr('transform', `translate(${this.margin.left}, ${this.chartHeight + this.margin.top})`)
-                .call(xAxis)
+                .attr('transform', `translate(${0}, ${this.chartHeight})`)
+                .merge(xAxisGroup)
 
-      this.chart.append('g')
+      yAxisGroup = yAxisGroup.enter().append('g')
                 .attr('class', 'axis yAxis')
-                .attr('transform', `translate(${this.margin.left}, ${this.margin.top})`)
-                .call(yAxis)
+                .merge(yAxisGroup)
 
-      let ticks = this.chart.select('.xAxis')
-                      .selectAll('.tick')
-                      .attr('id', (d, i) => {
-                        let year = this.xScale.domain()[0] + i
-                        return `xTick-${year}`
-                      })
-      ticks.append('circle')
+      xAxisGroup.call(xAxis)
+
+      yAxisGroup.call(yAxis)
+    },
+    adjustAxis () {
+      let ticks = this.chart.select('g.xAxis')
+                .selectAll('.tick')
+                .attr('id', (d, i) => {
+                  let year = this.xScale.domain()[0] + i
+                  return `xTick-${year}`
+                })
+
+      let circles = ticks.selectAll('circle')
+                         .data(['circle'])
+
+      circles.enter().append('circle')
           .attr('r', 5)
           .attr('fill', '#1971ff')
           .attr('stroke', '#fff')
           .attr('stroke-width', 1.5)
-      ticks.selectAll('text')
+
+      ticks.select('text')
            .attr('dy', '4em')
-      ticks.append('text')
+
+      let secondaryText = ticks.selectAll('text.secondaryAxisText')
+                             .data(['secondaryAxisText'])
+
+      secondaryText.enter()
+          .append('text')
+          .merge(secondaryText)
+          .attr('class', 'secondaryAxisText')
           .attr('dy', '2.5em')
           .text((d, i) => 41 + i)
+
+      let startEndTickSize = -(this.chartHeight + this.mehrHeight)
+
       let startYearTick = this.chart.select(`#xTick-${this.startYear}`)
       let endYeartTick = this.chart.select(`#xTick-${this.endYear}`)
-      let mehrHeight = 60
-      let startEndTickSize = -(tickSize + mehrHeight)
       startYearTick.select('line').attr('y2', startEndTickSize)
       endYeartTick.select('line').attr('y2', startEndTickSize)
       startYearTick.append('circle')
@@ -165,40 +191,162 @@ export default {
           .attr('stroke', '#fff')
           .attr('stroke-width', 1.5)
           .attr('transform', `translate(0, ${startEndTickSize})`)
+
       endYeartTick.append('circle')
           .attr('r', 5)
           .attr('fill', '#1971ff')
           .attr('stroke', '#fff')
           .attr('stroke-width', 1.5)
           .attr('transform', `translate(0, ${startEndTickSize})`)
-      let startYearGroup = this.chart.append('g')
-                                     .attr('transform', `translate(${this.xScale(this.startYear) + this.margin.left + this.xScale.bandwidth() / 2 + 10}, ${this.margin.top - mehrHeight + 5})`)
-      let endYearGroup = this.chart.append('g')
-                                     .attr('transform', `translate(${this.xScale(this.endYear) + this.margin.left + this.xScale.bandwidth() / 2 + 10}, ${this.margin.top - mehrHeight + 5})`)
-      startYearGroup.append('text')
-          .text('Start Year  ')
+
+      let startYearGroup = this.chart.selectAll('g.startYear')
+                               .data(['startYear'])
+
+      let endYearGroup = this.chart.selectAll('g.endYear')
+                              .data(['endYear'])
+
+      startYearGroup = startYearGroup.enter()
+                                     .append('g')
+                                     .attr('class', 'startYear')
+                                     .merge(startYearGroup)
+
+      endYearGroup = endYearGroup.enter()
+                                     .append('g')
+                                     .attr('class', 'endYear')
+                                     .merge(endYearGroup)
+
+      startYearGroup.attr('transform', `translate(${this.xScale(this.startYear) + this.xScale.bandwidth() / 2 + 10}, ${this.mehrHeight - this.margin.top - 15})`)
+      endYearGroup.attr('transform', `translate(${this.xScale(this.endYear) + this.xScale.bandwidth() / 2 + 10}, ${this.mehrHeight - this.margin.top - 15})`)
+
+      startYearGroup.selectAll('text.startYearTxt')
+          .data(['startYearTxt'])
+          .enter()
+          .append('text')
+          .attr('class', 'startYearTxt')
+          .text('Start Year')
           .attr('stroke', '#fff')
-      startYearGroup.append('text')
+
+      startYearGroup.selectAll('text.endYearTxt')
+          .data(['endYearTxt'])
+          .enter()
+          .append('text')
+          .attr('class', 'endYearTxt')
           .text(this.startYear)
           .attr('stroke', '#fff')
           .attr('dy', 20)
-      endYearGroup.append('text')
-          .text('End Year  ')
+
+      endYearGroup.selectAll('text.startYearY')
+          .data(['startYearY'])
+          .enter()
+          .append('text')
+          .attr('class', 'startYearY')
+          .text('End Year')
           .attr('stroke', '#fff')
-      endYearGroup.append('text')
+
+      endYearGroup.selectAll('text.endYearY')
+          .data(['endYearY'])
+          .enter()
+          .append('text')
+          .attr('class', 'endYearY')
           .text(this.endYear)
           .attr('stroke', '#fff')
           .attr('dy', 20)
     },
+    drawSlider (selection, start, end, width) {
+      var padding = 50
+      var self = this
+      var xRange = [padding, width - padding]
+      // var scale = this.$d3.scaleLinear().domain([start, end]).range(xRange)
+
+      // append texts
+      let startText = selection.selectAll('text.sliderStartTxt').data(['sliderStartTxt'])
+      let endText = selection.selectAll('text.sliderEndTxt').data(['sliderEndTxt'])
+      startText.enter().append('text').attr('class', 'sliderStartTxt').text(start).attr('fill', '#fff')
+      endText = endText.enter().append('text').attr('class', 'sliderEndTxt').text(end).attr('fill', '#fff').merge(endText)
+
+      endText.attr('x', width - 35)
+
+      // slider group
+      var slider = selection.selectAll('g.slider')
+                            .data(['slider'])
+
+      slider = slider.enter()
+               .append('g')
+               .merge(slider)
+               .attr('class', 'slider')
+               .attr('transform', `translate(${xRange[0]}, ${-6})`)
+
+      var firstLine = slider.selectAll('line.firstSliderLine')
+                            .data(['firstSliderLine'])
+
+      firstLine = firstLine.enter()
+        .append('line')
+        .attr('class', 'firstSliderLine')
+        .attr('stroke-width', 6)
+        .attr('stroke', this.sliderBackColor)
+        .attr('stroke-linecap', 'round')
+        .merge(firstLine)
+
+      firstLine.attr('x2', width - padding * 2)
+
+      var secondLine = slider.selectAll('line.secondSliderLine')
+                            .data(['secondSliderLine'])
+
+      secondLine = secondLine.enter()
+        .append('line')
+        .attr('class', 'secondSliderLine')
+        .attr('stroke-width', 2)
+        .attr('stroke', '#fff')
+        .attr('stroke-linecap', 'round')
+        .merge(secondLine)
+
+      var firstCircle = slider.selectAll('circle.firstCircle')
+                          .data(['firstCircle'])
+
+      firstCircle.enter().append('circle')
+                         .attr('class', 'firstCircle')
+                         .attr('r', this.sliderHandlerRadius)
+                         .attr('fill', this.sliderHandlerColor)
+
+      var handler = slider.selectAll('circle.handler')
+                          .data(['handler'])
+
+      handler = handler.enter()
+                       .append('circle')
+                       .attr('class', 'handler')
+                       .attr('cursor', 'pointer')
+                       .attr('data-curentPercentCx', 0)
+                       .attr('r', this.sliderHandlerRadius).attr('fill', this.sliderHandlerColor)
+                       .call(this.$d3.drag()
+                                 .on('drag', dragged))
+                       .merge(handler)
+
+      handler.attr('cx', +handler.attr('data-curentPercentCx') * (width - padding * 2))
+      secondLine.attr('x2', +handler.attr('data-curentPercentCx') * (width - padding * 2))
+
+      function dragged (d) {
+        var cx = self.$d3.event.x
+        if (cx < 0) cx = 0
+        else if (cx > width - padding * 2) cx = width - padding * 2
+        handler.attr('cx', cx)
+        secondLine.attr('x2', cx)
+        handler.attr('data-curentPercentCx', cx / (width - padding * 2))
+      }
+    },
     setWidth () {
       this.width = this.$el.offsetWidth
+    },
+    onResize () {
+      this.setWidth()
+      this.drawAxis()
+      this.adjustAxis()
+      this.drawSlider(this.$d3.select('g.slider-wrapper'), 2017, 2049, this.chartWidth - 2 * this.sliderMarginLeft)
     }
   },
   mounted () {
     this.chart = this.$d3.select('#barChartRent g')
-    this.setWidth()
-    this.drawAxis()
-    this.$d3.select(window).on('resize', this.setWidth)
+    this.onResize()
+    this.$d3.select(window).on('resize', this.onResize)
   }
 }
 </script>

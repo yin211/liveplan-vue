@@ -17,7 +17,7 @@ const actions = {
   [AUTH_REQUEST]: ({commit}, user) => {
     return new Promise((resolve, reject) => {
       commit(AUTH_REQUEST)
-      axios({url: 'https://api.livsplan.se/api/v1/login', data: user, method: 'POST'})
+      axios({url: `${process.env.ROOT_API}/login`, data: user, method: 'POST'})
       .then(resp => {
         localStorage.setItem('user-token', resp.data.access_token)
         // Here set the header of your ajax library to the token value.

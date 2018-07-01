@@ -30,7 +30,7 @@ export default {
         originalRequest._retry = true
         const refreshToken = localStorage.getItem('user-token')
         if (refreshToken) {
-          return axios.post('https://api.livsplan.se/api/v1/refresh', { refreshToken })
+          return axios.post(`${process.env.ROOT_API}/refresh`, { refreshToken })
             .then(({data}) => {
               window.localStorage.setItem('user-token', data.token)
               axios.defaults.headers.common['Authorization'] = 'Bearer ' + data.token

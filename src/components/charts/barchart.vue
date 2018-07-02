@@ -78,14 +78,23 @@ export default {
     }
   },
   computed: {
-    xScale () {
-      let min = this.$d3.min(this.dataArray, d => d.year)
-      let max = this.$d3.max(this.dataArray, d => d.year)
-      return this.$d3.scaleBand()
-                   .domain(this.$d3.range(min, max + 1))
-                   .range([0, this.chartWidth])
-                   .paddingInner([0.05])
-                   .paddingOuter([0.05])
+    xScale: {
+      get () {
+        let min = this.$d3.min(this.dataArray, d => d.year)
+        let max = this.$d3.max(this.dataArray, d => d.year)
+        return this.$d3.scaleBand()
+                    .domain(this.$d3.range(min, max + 1))
+                    .range([0, this.chartWidth])
+                    .paddingInner([0.05])
+                    .paddingOuter([0.05])
+      },
+      set (domain) {
+        return this.$d3.scaleBand()
+                    .domain(domain)
+                    .range([0, this.chartWidth])
+                    .paddingInner([0.05])
+                    .paddingOuter([0.05])
+      }
     },
     yScale () {
       return this.$d3.scaleLinear()
@@ -260,16 +269,16 @@ export default {
           .attr('dy', 20)
     },
     drawSlider (selection, width) {
-      console.log(width)
       var padding = 50
       var self = this
       var xRange = [padding, width - padding]
       var xScaleDomain = this.xScale.domain()
+      console.log(xScaleDomain)
       var scale = this.$d3
                       .scaleBand()
                       .domain(xScaleDomain)
-                      .range(xRange)
-      var currentSelectedArea = [scale(this.startYear), scale(this.endYear)]
+                      .range([0, width - padding * 2])
+      var currentSelectedArea = [scale(xScaleDomain[0]), width - padding * 2]
       // append texts
       let startText = selection.selectAll('text.sliderStartTxt')
                                .data(['sliderStartTxt'])
@@ -321,9 +330,10 @@ export default {
         .attr('stroke-width', 2)
         .attr('stroke', '#fff')
         .attr('stroke-linecap', 'round')
-        .attr('x1', currentSelectedArea[0])
-        .attr('x2', currentSelectedArea[1])
         .merge(secondLine)
+
+      secondLine.attr('x1', currentSelectedArea[0])
+                .attr('x2', currentSelectedArea[1])
 
       var firstCircle = slider.selectAll('circle.firstCircle')
                           .data(['firstCircle'])
@@ -333,13 +343,13 @@ export default {
                          .attr('cursor', 'pointer')
                          .attr('r', this.sliderHandlerRadius)
                          .attr('fill', this.sliderHandlerColor)
-                         .attr('cx', currentSelectedArea[0])
                          .call(this.$d3.drag()
                                  .on('drag', d => {
                                    return dragged(d, 'first')
                                  }))
                          .merge(firstCircle)
 
+      firstCircle.attr('cx', currentSelectedArea[0])
       var handler = slider.selectAll('circle.handler')
                           .data(['handler'])
 
@@ -349,7 +359,6 @@ export default {
                        .attr('cursor', 'pointer')
                        .attr('data-curentPercentCx', 0)
                        .attr('r', this.sliderHandlerRadius)
-                       .attr('cx', currentSelectedArea[1])
                        .attr('fill', this.sliderHandlerColor)
                        .call(this.$d3.drag()
                                  .on('drag', d => {
@@ -357,8 +366,7 @@ export default {
                                  }))
                        .merge(handler)
 
-      // handler.attr('cx', +handler.attr('data-curentPercentCx') * (width - padding * 2))
-      // secondLine.attr('x2', +handler.attr('data-curentPercentCx') * (width - padding * 2))
+      handler.attr('cx', currentSelectedArea[1])
 
       function dragged (d, flag) {
         var cx = getDragCoord()
@@ -373,10 +381,15 @@ export default {
           handler.attr('cx', cx)
           secondLine.attr('x2', cx)
         }
+        let newDomain = getNewDomain()
+        console.log(newDomain)
+      }
 
+      function getNewDomain () {
         let sliderBandWidth = scale.bandwidth()
-        let index = Math.round(cx / sliderBandWidth)
-        console.log(xScaleDomain[index])
+        let f = Math.round(currentSelectedArea[0] / sliderBandWidth)
+        let s = Math.round(currentSelectedArea[1] / sliderBandWidth)
+        return self.$d3.range(xScaleDomain[f], xScaleDomain[s - 1] + 1)
       }
 
       function getDragCoord () {

@@ -1,5 +1,16 @@
 <template>
   <div class="expense bg-light">
+    <notify-me
+      close="bootstrap"
+      :event-bus="bus"
+    >
+      <template slot="content" slot-scope="{data}">
+          <div>
+              <h4><b>{{data.title}}</b></h4>
+              <p style="margin: 0">{{data.text}}</p>
+          </div>
+      </template>
+    </notify-me>
     <b-breadcrumb :items="items" class="p-0"/>
     <div class="d-flex justify-content-between align-items-center">
       <h1 class="text-regular text-left">{{expense.name}} </h1>
@@ -14,28 +25,21 @@
     <b-card no-body class="expense-tabs-card depth-1">
       <b-tabs pills card>
         <b-tab title="Auto Calculation" :title-link-class="'expense-tab'" active>
-           <b-alert :show="dismissCountDown"
-                  dismissible
-                  variant="success"
-                  @dismissed="dismissCountDown=0"
-                  @dismiss-count-down="countDownChanged">
-            New values have been saved successfully!
-          </b-alert>
-          <b-form id="autoCalcForm" ref="autoCalcForm" @change="autoCalcformChanged" novalidate :validated="validated" @submit="onAutoCalcSumbit">
+          <b-form id="autoCalcForm" ref="autoCalcForm" @change="autoCalcformChanged" novalidate :validated="validated" @submit.prevent="onAutoCalcSumbit">
             <b-container fluid>
               <b-row class="text-left mx-auto">
                 <b-col lg="2">
                   <span class="text-regular">Period (start - end year) (?)</span>
                   <div class="d-flex element-spacer">
                     <b-form-group label-for="startYearInput" aria-describedby="invalidStartYearFeedback" :state="startYearState">
-                      <b-form-input id="startYearInput" required v-model="expense.start_year" type="number" size="sm" v-b-tooltip.hover.bottom title="The year when this expense first occurs." class="text-regular start_end_year start_year" style="width: 70px" placeholder="Start year" min="2000" max="2140"></b-form-input>
+                      <b-form-input id="startYearInput" required v-model="expense.start_year" type="number" size="sm" v-b-tooltip.hover.bottom title="The year when this expense first occurs." class="text-regular start_end_year start_year" style="width: 86px" placeholder="Start year" min="2000" max="2140"></b-form-input>
                       <b-form-invalid-feedback id="invalidStartYearFeedback">
                         This is a required field and must be between 2000 and 2140
                       </b-form-invalid-feedback>
                     </b-form-group>
                     <span class="date-spacer">-</span>
                     <b-form-group label-for="endYearInput" aria-describedby="invalidEndYearFeedback" :state="endYearState">
-                      <b-form-input id="endYearInput" required v-model="expense.end_year" type="number" size="sm" v-b-tooltip.hover.bottom title="The year when this expense stops occuring." class="text-regular start_end_year end_year" style="width: 70px" placeholder="End year" min="2000" max="2140"></b-form-input>
+                      <b-form-input id="endYearInput" required v-model="expense.end_year" type="number" size="sm" v-b-tooltip.hover.bottom title="The year when this expense stops occuring." class="text-regular start_end_year end_year" style="width: 86px" placeholder="End year" min="2000" max="2140"></b-form-input>
                       <b-form-invalid-feedback id="invalidEndYearFeedback">
                         This is a required field and must be between 2000 and 2140
                       </b-form-invalid-feedback>
@@ -247,6 +251,9 @@
 <script>
 import axios from 'axios'
 import barchart from '../charts/barchart'
+import Notify from 'vue-notify-me'
+import Vue from 'vue'
+const bus = new Vue()
 
 export default {
   name: 'expense',
@@ -262,6 +269,7 @@ export default {
   },
   data () {
     return {
+      bus,
       items: [{
         text: 'Assumptions',
         to: { name: 'assumptions' }
@@ -300,8 +308,7 @@ export default {
       totalRows: 0,
       modalShow: false,
       isCalcSaveDisabled: true,
-      validated: false,
-      dismissCountDown: 0
+      validated: false
     }
   },
   computed: {
@@ -343,7 +350,6 @@ export default {
       this.isCalcSaveDisabled = false
     },
     async onAutoCalcSumbit (ev) {
-      ev.preventDefault()
       this.validated = true
       if (this.$refs.autoCalcForm.checkValidity() === true) {
         try {
@@ -355,19 +361,29 @@ export default {
           }
           await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`, data)
           this.validated = false
-          this.dismissCountDown = 5
+          this.bus.$emit('notify-me', {
+            data: {
+              title: 'Success!',
+              text: 'New vaules have been saved successfully!'
+            }
+          })
         } catch (err) {
           console.log(err)
           this.validated = false
+          this.bus.$emit('notify-me', {
+            data: {
+              title: 'Failed!',
+              text: 'Something went wrong!'
+            },
+            status: 'is-danger'
+          })
         }
       }
-    },
-    countDownChanged (dismissCountDown) {
-      this.dismissCountDown = dismissCountDown
     }
   },
   components: {
-    barchart
+    barchart,
+    'notify-me': Notify
   }
 }
 </script>
@@ -663,6 +679,26 @@ export default {
     }
     .slider:focus::-ms-fill-upper {
       background: #ccc;
+    }
+
+    // customize notification
+    .notification {
+      padding: 1.25rem 1.5rem;
+      color: #fff;
+
+      &.is-success {
+        background-color: #23d160;
+      }
+
+      &.is-danger {
+        background-color: #ff3860;
+      }
+
+      .close {
+        position: absolute;
+        right: .5em;
+        top: .5em;
+      }
     }
 
   }

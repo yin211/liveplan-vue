@@ -14,15 +14,32 @@
     <b-card no-body class="expense-tabs-card depth-1">
       <b-tabs pills card>
         <b-tab title="Auto Calculation" :title-link-class="'expense-tab'" active>
-          <b-form @change="autoCalcformChanged">
+           <b-alert :show="dismissCountDown"
+                  dismissible
+                  variant="success"
+                  @dismissed="dismissCountDown=0"
+                  @dismiss-count-down="countDownChanged">
+            New values have been saved successfully!
+          </b-alert>
+          <b-form id="autoCalcForm" ref="autoCalcForm" @change="autoCalcformChanged" novalidate :validated="validated" @submit="onAutoCalcSumbit">
             <b-container fluid>
               <b-row class="text-left mx-auto">
                 <b-col lg="2">
                   <span class="text-regular">Period (start - end year) (?)</span>
                   <div class="d-flex element-spacer">
-                    <b-form-input v-model="expense.start_year" type="number" size="sm" v-b-tooltip.hover.bottom title="The year when this expense first occurs." class="text-regular start_end_year start_year" style="width: 70px" placeholder="Start year" min="2000" max="2140"></b-form-input>
+                    <b-form-group label-for="startYearInput" aria-describedby="invalidStartYearFeedback" :state="startYearState">
+                      <b-form-input id="startYearInput" required v-model="expense.start_year" type="number" size="sm" v-b-tooltip.hover.bottom title="The year when this expense first occurs." class="text-regular start_end_year start_year" style="width: 70px" placeholder="Start year" min="2000" max="2140"></b-form-input>
+                      <b-form-invalid-feedback id="invalidStartYearFeedback">
+                        This is a required field and must be between 2000 and 2140
+                      </b-form-invalid-feedback>
+                    </b-form-group>
                     <span class="date-spacer">-</span>
-                    <b-form-input v-model="expense.end_year" type="number" size="sm" v-b-tooltip.hover.bottom title="The year when this expense stops occuring." class="text-regular start_end_year end_year" style="width: 70px" placeholder="End year" min="2000" max="2140"></b-form-input>
+                    <b-form-group label-for="endYearInput" aria-describedby="invalidEndYearFeedback" :state="endYearState">
+                      <b-form-input id="endYearInput" required v-model="expense.end_year" type="number" size="sm" v-b-tooltip.hover.bottom title="The year when this expense stops occuring." class="text-regular start_end_year end_year" style="width: 70px" placeholder="End year" min="2000" max="2140"></b-form-input>
+                      <b-form-invalid-feedback id="invalidEndYearFeedback">
+                        This is a required field and must be between 2000 and 2140
+                      </b-form-invalid-feedback>
+                    </b-form-group>
                   </div>
                 </b-col>
                 <b-col lg="5">
@@ -37,7 +54,7 @@
                 <b-col lg="5">
                   <span class="text-regular">Annual Growth Rate (?)</span>
                   <div class="d-flex">
-                    <vue-numeric currency="%" currency-symbol-position="suffix" v-model="expense.annual_increase_percentage" v-b-tooltip.hover.bottom title="The expense grows with this percentage per year." class="form-control form-control-sm element-spacer text-regular annual-growth-rate"></vue-numeric>
+                    <vue-numeric currency="%" currency-symbol-position="suffix" v-model="expense.annual_increase_percentage" v-b-tooltip.hover.bottom title="The expense grows with this percentage per year." class="form-control form-control-sm element-spacer text-regular annual-growth-rate" :min="0" :max="20"></vue-numeric>
                     <b-input-group size="sm" class="element-spacer">
                       <b-form-input v-model="expense.annual_increase_percentage" min="0" max="20" class="slider" type="range"></b-form-input>
                     </b-input-group>
@@ -45,7 +62,7 @@
                 </b-col>
               </b-row>
             </b-container>
-            <b-button :size="'sm'" variant="primary" class="save-calc-btn" :disabled="isCalcSaveDisabled"  v-b-tooltip.hover.bottom title="You can save any changes for this expense by clicking here.">
+            <b-button type="submit" :size="'sm'" variant="primary" class="save-calc-btn" :disabled="isCalcSaveDisabled"  v-b-tooltip.hover.bottom title="You can save any changes for this expense by clicking here.">
               <i class="flaticon stroke checkmark"></i>Save New Values
             </b-button>
           </b-form>
@@ -235,7 +252,6 @@ export default {
   name: 'expense',
   async mounted () {
     try {
-      console.log(process.env.ROOT_API)
       let response = await axios.get(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`)
       this.expense = response.data.data
       let cashflow = await axios.get('/static/tempdata/data.json')
@@ -283,7 +299,9 @@ export default {
       pageOptions: [ 5, 10, 15, 25 ],
       totalRows: 0,
       modalShow: false,
-      isCalcSaveDisabled: true
+      isCalcSaveDisabled: true,
+      validated: false,
+      dismissCountDown: 0
     }
   },
   computed: {
@@ -293,6 +311,12 @@ export default {
       } else {
         return this.totalRows
       }
+    },
+    startYearState () {
+      return !this.validated || (parseInt(this.expense.start_year) > 1999 && parseInt(this.expense.start_year) < 2141)
+    },
+    endYearState () {
+      return !this.validated || (parseInt(this.expense.start_year) > 1999 && parseInt(this.expense.start_year) < 2141)
     }
   },
   methods: {
@@ -317,6 +341,29 @@ export default {
     },
     autoCalcformChanged  (ev) {
       this.isCalcSaveDisabled = false
+    },
+    async onAutoCalcSumbit (ev) {
+      ev.preventDefault()
+      this.validated = true
+      if (this.$refs.autoCalcForm.checkValidity() === true) {
+        try {
+          let data = {
+            start_year: this.expense.start_year,
+            end_year: this.expense.end_year,
+            initial_amount: this.expense.initial_amount,
+            annual_increase_percentage: this.expense.annual_increase_percentage
+          }
+          await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`, data)
+          this.validated = false
+          this.dismissCountDown = 5
+        } catch (err) {
+          console.log(err)
+          this.validated = false
+        }
+      }
+    },
+    countDownChanged (dismissCountDown) {
+      this.dismissCountDown = dismissCountDown
     }
   },
   components: {
@@ -339,7 +386,7 @@ export default {
 
     .date-spacer {
       min-width: 20px;
-      align-self: center;
+      margin-top: 10px;
       text-align: center;
     }
 

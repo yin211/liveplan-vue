@@ -38,7 +38,7 @@
           <b-nav-item-dropdown right no-caret>
             <template slot="button-content">
               <div class="d-flex align-items-center">
-                <i class="fa fa-user pr-2 text-secondary" style="font-size: 20px"></i> Jan Bolmeson <i class="fa fa-ellipsis-v ml-4" style="font-size: 20px;"></i>
+                <i class="fa fa-user pr-2 text-secondary" style="font-size: 20px"></i> Jan Bolmeson <i class="fa fa-ellipsis-v ml-4" style="font-size: 24px;"></i>
               </div>
             </template>
             <b-dropdown-item @click="logout">Logout</b-dropdown-item>

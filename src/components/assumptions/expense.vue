@@ -25,7 +25,7 @@
     <b-card no-body class="expense-tabs-card depth-1">
       <b-tabs pills card>
         <b-tab title="Auto Calculation" :title-link-class="'expense-tab'" active>
-          <b-form id="autoCalcForm" ref="autoCalcForm" @change="autoCalcformChanged" novalidate :validated="validated" @submit.prevent="onAutoCalcSumbit">
+          <b-form id="autoCalcForm" ref="autoCalcForm" @change="autoCalcformChanged" novalidate :validated="autoCalcValidated" @submit.prevent="onAutoCalcSumbit">
             <b-container fluid>
               <b-row class="text-left mx-auto">
                 <b-col lg="2">
@@ -177,7 +177,7 @@
             </b-row>
           </b-col>
           <b-col md="3" xl="5" class="d-flex justify-content-center  justify-content-md-end align-items-center">
-              <button class='btn btn-sm icon-btn text-regular' style="border-color: #eaecef;" @click="modalShow = !modalShow">
+              <button class='btn btn-sm icon-btn text-regular' style="border-color: #eaecef;" @click="openEditModal">
                 <i class="flaticon solid edit-3 text-primary"></i>
                 Edit Info
               </button>
@@ -185,65 +185,102 @@
         </b-row>
       </b-container>
     </b-card>
-    <b-modal id="edit-info-modal" size="lg" v-model="modalShow">
-      <b-container style="width: 60%">
-        <b-row class="my-3">
-          <b-col sm="3" class="d-flex align-items-center justify-content-end"><label :for="'name-input'">Name</label></b-col>
-          <b-col sm="9"><b-form-input type="text" :id="'name-input'" v-model="expense.name"></b-form-input></b-col>
-        </b-row>
-        <b-row class="my-3">
-          <b-col sm="3" class="d-flex align-items-center justify-content-end"><label :for="'subtype-select'">Subtype</label></b-col>
-          <b-col sm="9"><b-form-select v-model="expense.expense_subtype_id" :id="'subtype-select'" /></b-col>
-        </b-row>
-        <b-row class="my-3">
-          <b-col sm="3" class="d-flex align-items-center justify-content-end"><label :for="'period-select'">Period</label></b-col>
-          <b-col sm="9"><b-form-select :options="periodOptions" v-model="expense.initial_amount_period" :id="'period-select'" /></b-col>
-        </b-row>
-        <b-row class="my-3">
-          <b-col sm="3" class="d-flex align-items-center justify-content-end"><label :for="'category-select'">Category</label></b-col>
-          <b-col sm="9"><b-form-select :options="categoryOptions" v-model="expense.category_id" :id="'category-select'" /></b-col>
-        </b-row>
-        <b-row class="my-3">
-          <b-col sm="3" class="d-flex align-items-center justify-content-end"><label :for="'person-select'">Person</label></b-col>
-          <b-col sm="9"><b-form-select :options="personOptions" v-model="expense.person_id" :id="'person-select'" /></b-col>
-        </b-row>
-        <b-row class="my-3">
-          <b-col sm="3" class="d-flex align-items-center justify-content-end"><label :for="'inflation-input'">Inflation</label></b-col>
-          <b-col sm="9">
-            <b-input-group append="%">
-              <b-form-input v-model="expense.annual_increase_percentage" type="number"></b-form-input>
-            </b-input-group>
-          </b-col>
-        </b-row>
-        <b-row class="my-3">
-          <b-col sm="3" class="d-flex align-items-center justify-content-end"><label :for="'tax-input'">Tax</label></b-col>
-          <b-col sm="9">
-            <b-input-group append="%">
-              <b-form-input v-model="expense.tax" type="number"></b-form-input>
-            </b-input-group>
-          </b-col>
-        </b-row>
-        <b-row class="my-3">
-          <b-col sm="3" class="d-flex align-items-center justify-content-end" style="white-space: nowrap;"><label :for="'timeline-icon-select'">Timeline Icon</label></b-col>
-          <b-col sm="9"><b-form-select :id="'timeline-icon-select'" /></b-col>
-        </b-row>
-        <b-row class="my-3">
-          <b-col sm="3" class="d-flex align-items-center justify-content-end"><label :for="'currency-select'">Currency</label></b-col>
-          <b-col sm="9"><b-form-select :options="currencyOptions" v-model="expense.currency_id" :id="'currency-select'" /></b-col>
-        </b-row>
-
-      </b-container>
+    <b-modal id="edit-info-modal" size="lg" v-model="modalShow" hide-footer>
       <div slot="modal-header" class="w-100 mx-auto">
         <h1>Edit: "Food Expenses"</h1>
-        <button type="button" class="close" aria-label="Close" @click="modalShow=false">
+        <button type="button" class="close" aria-label="Close" @click="closeEditModal">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div slot="modal-footer" class="w-100 mx-auto">
-        <b-btn size="lg" variant="primary" @click="modalShow=false">
-          Save
-        </b-btn>
-      </div>
+      <b-form id="editInfoForm" ref="editInfoForm" novalidate :validated="editInfoValidated" @submit.prevent="onEditInfoSumbit">
+        <b-container style="width: 60%">
+          <b-row>
+            <b-col sm="3" class="d-flex justify-content-end mt-3"><label :for="'nameInput'">Name</label></b-col>
+            <b-col sm="9">
+              <b-form-group label-for="nameInput" :state="nameState" class="text-left">
+                <b-form-input id="nameInput"  v-model="editExpense.name" :state="nameState" aria-describedby="nameInputFeedback" required></b-form-input>
+                <b-form-invalid-feedback id="nameInputFeedback">
+                    Name is required and minium length is 2
+                </b-form-invalid-feedback>
+              </b-form-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col sm="3" class="d-flex mt-3 justify-content-end"><label :for="'subtype-select'">Subtype</label></b-col>
+            <b-col sm="9">
+              <b-form-group label-for="subtype-select" class="text-left">
+                <b-form-select v-model="editExpense.expense_subtype_id" :id="'subtype-select'" />
+              </b-form-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col sm="3" class="d-flex mt-3 justify-content-end"><label :for="'period-select'">Period</label></b-col>
+            <b-col sm="9">
+              <b-form-group label-for="period-select" :state="periodState" class="text-left">
+                <b-form-select :options="periodOptions" v-model="editExpense.initial_amount_period" :id="'period-select'" :state="periodState" aria-describedby="periodSelectFeedback" required/>
+                <b-form-invalid-feedback id="periodSelectFeedback">
+                    This field is required
+                </b-form-invalid-feedback>
+              </b-form-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col sm="3" class="d-flex mt-3 justify-content-end"><label :for="'category-select'">Category</label></b-col>
+            <b-col sm="9">
+              <b-form-group label-for="category-select" :state="categoryState" class="text-left">
+                <b-form-select :options="categoryOptions" v-model="editExpense.category_id" :id="'category-select'" :state="categoryState" aria-describedby="categorySelectFeedback" required/>
+                <b-form-invalid-feedback id="categorySelectFeedback">
+                    This field is required
+                </b-form-invalid-feedback>
+              </b-form-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col sm="3" class="d-flex mt-3 justify-content-end"><label :for="'person-select'">Person</label></b-col>
+            <b-col sm="9">
+              <b-form-group label-for="person-select" :state="personState" class="text-left">
+                <b-form-select :options="personOptions" v-model="editExpense.person_id" :id="'person-select'" :state="personState" aria-describedby="personSelectFeedback" required/>
+                <b-form-invalid-feedback id="personSelectFeedback">
+                    This field is required
+                </b-form-invalid-feedback>
+              </b-form-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col sm="3" class="d-flex mt-3 justify-content-end"><label :for="'inflation-input'">Inflation</label></b-col>
+            <b-col sm="9">
+              <vue-numeric currency="%" currency-symbol-position="suffix" v-model="editExpense.inflation_rate" class="form-control text-regular mb-3" :min="0" :max="10"></vue-numeric>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col sm="3" class="d-flex mt-3 justify-content-end"><label :for="'tax-input'">Tax</label></b-col>
+            <b-col sm="9">
+              <vue-numeric currency="%" currency-symbol-position="suffix" v-model="editExpense.tax" class="form-control text-regular mb-3" :min="0" :max="30"></vue-numeric>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col sm="3" class="d-flex mt-3 justify-content-end" style="white-space: nowrap;"><label :for="'timeline-icon-select'">Timeline Icon</label></b-col>
+            <b-col sm="9">
+              <b-form-group label-for="timeline-icon-select" class="text-left">
+                <b-form-select :id="'timeline-icon-select'" />
+              </b-form-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col sm="3" class="d-flex mt-3 justify-content-end"><label :for="'currency-select'">Currency</label></b-col>
+            <b-col sm="9">
+              <b-form-group label-for="currency-select" class="text-left">
+                <b-form-select :options="currencyOptions" v-model="editExpense.currency_id" :id="'currency-select'" />
+              </b-form-group>
+            </b-col>
+          </b-row>
+          <div class="w-100 mx-auto">
+            <b-btn type="submit" size="lg" variant="primary">
+              Save
+            </b-btn>
+          </div>
+        </b-container>
+      </b-form>
     </b-modal>
   </div>
 </template>
@@ -263,6 +300,10 @@ export default {
       this.expense = response.data.data
       let cashflow = await axios.get('/static/tempdata/data.json')
       this.cashflow = this.processCashflow(cashflow.data)
+      response = await axios.get(`${process.env.ROOT_API}/categories`)
+      for (let item of response.data.data) {
+        this.categoryOptions.push({value: item.id, text: item.name})
+      }
     } catch (err) {
       console.log(err)
     }
@@ -278,16 +319,25 @@ export default {
         active: true
       }],
       expense: {},
+      editExpense: {},
       cashflow: [],
       periodOptions: [
         { value: null, text: 'Please select an option', disabled: true },
-        { value: 'month', text: 'Per Month' }
+        { value: 'month', text: 'Monthly' },
+        { value: 'daily', text: 'Daily' },
+        { value: 'weekly', text: 'Weekly' },
+        { value: 'quarterly', text: 'Quarterly' },
+        { value: 'semiannually', text: 'Semiannually' },
+        { value: 'annually', text: 'Annually' },
+        { value: 'onetime', text: 'One time' }
       ],
       categoryOptions: [
-
+        { value: null, text: 'Please select an option', disabled: true }
       ],
       personOptions: [
-
+        { value: null, text: 'Please select an option', disabled: true },
+        { value: '1', text: 'Jan Bolmeson' },
+        { value: '2', text: 'Caroline Bolmeson' }
       ],
       currencyOptions: [
         { value: 'dollar', text: 'Dollar' },
@@ -308,7 +358,8 @@ export default {
       totalRows: 0,
       modalShow: false,
       isCalcSaveDisabled: true,
-      validated: false
+      autoCalcValidated: false,
+      editInfoValidated: false
     }
   },
   computed: {
@@ -320,10 +371,38 @@ export default {
       }
     },
     startYearState () {
-      return !this.validated || (parseInt(this.expense.start_year) > 1999 && parseInt(this.expense.start_year) < 2141)
+      return !this.autoCalcValidated || (parseInt(this.expense.start_year) > 1999 && parseInt(this.expense.start_year) < 2141)
     },
     endYearState () {
-      return !this.validated || (parseInt(this.expense.start_year) > 1999 && parseInt(this.expense.start_year) < 2141)
+      return !this.autoCalcValidated || (parseInt(this.expense.start_year) > 1999 && parseInt(this.expense.start_year) < 2141)
+    },
+    nameState () {
+      if (!this.editInfoValidated) {
+        return null
+      } else {
+        return this.editExpense.name && this.editExpense.name.length > 1
+      }
+    },
+    periodState () {
+      if (!this.editInfoValidated) {
+        return null
+      } else {
+        return this.editExpense.initial_amount_period != null
+      }
+    },
+    categoryState () {
+      if (!this.editInfoValidated) {
+        return null
+      } else {
+        return this.editExpense.category_id != null
+      }
+    },
+    personState () {
+      if (!this.editInfoValidated) {
+        return null
+      } else {
+        return this.editExpense.person_id != null
+      }
     }
   },
   methods: {
@@ -350,7 +429,7 @@ export default {
       this.isCalcSaveDisabled = false
     },
     async onAutoCalcSumbit (ev) {
-      this.validated = true
+      this.autoCalcValidated = true
       if (this.$refs.autoCalcForm.checkValidity() === true) {
         try {
           let data = {
@@ -360,7 +439,7 @@ export default {
             annual_increase_percentage: this.expense.annual_increase_percentage
           }
           await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`, data)
-          this.validated = false
+          this.autoCalcValidated = false
           this.bus.$emit('notify-me', {
             data: {
               title: 'Success!',
@@ -369,7 +448,51 @@ export default {
           })
         } catch (err) {
           console.log(err)
-          this.validated = false
+          this.autoCalcValidated = false
+          this.bus.$emit('notify-me', {
+            data: {
+              title: 'Failed!',
+              text: 'Something went wrong!'
+            },
+            status: 'is-danger'
+          })
+        }
+      }
+    },
+    openEditModal () {
+      this.autoCalcValidated = false
+      this.editInfoValidated = false
+      this.modalShow = true
+      this.editExpense = JSON.parse(JSON.stringify(this.expense))
+    },
+    closeEditModal () {
+      this.modalShow = false
+      this.editExpense = {}
+    },
+    async onEditInfoSumbit (ev) {
+      this.editInfoValidated = true
+      if (this.$refs.editInfoForm.checkValidity() === true) {
+        try {
+          let data = {
+            name: this.editExpense.name,
+            initial_amount_period: this.editExpense.initial_amount_period,
+            category_id: this.editExpense.category_id,
+            person_id: this.editExpense.person_id,
+            expense_subtype_id: this.editExpense.expense_subtype_id,
+            inflation_rate: this.editExpense.inflation_rate
+          }
+          await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`, data)
+          this.bus.$emit('notify-me', {
+            data: {
+              title: 'Success!',
+              text: 'New vaules have been saved successfully!'
+            }
+          })
+          this.modalShow = false
+          let response = await axios.get(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`)
+          this.expense = response.data.data
+        } catch (err) {
+          console.log(err)
           this.bus.$emit('notify-me', {
             data: {
               title: 'Failed!',
@@ -614,19 +737,22 @@ export default {
           font-size: 14px;
           line-height: 20px;
         }
-      }
+        form {
+          .btn {
+            width: 204px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 600;
+            padding: .75rem 1rem;
+            margin: 64px auto;
+          }
+          .invalid-feedback {
+            position: absolute;
+          }
 
-      .modal-footer {
-        padding-top: 48px;
-        padding-bottom: 80px;
-        border-top: none;
-
-        .btn {
-          width: 204px;
-          border-radius: 40px;
-          font-size: 14px;
-          font-weight: 600;
-          padding: 0.75rem 1rem;
+          .row {
+            margin-top: 0.5rem;
+          }
         }
       }
     }

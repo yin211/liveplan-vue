@@ -67,7 +67,9 @@
               </b-row>
             </b-container>
             <b-button type="submit" :size="'sm'" variant="primary" class="save-calc-btn" :disabled="isCalcSaveDisabled"  v-b-tooltip.hover.bottom title="You can save any changes for this expense by clicking here.">
-              <i class="flaticon stroke checkmark"></i>Save New Values
+              <i class="fa fa-spinner fa-spin" v-if="isSaving" style="margin-top: 2px" ></i>
+              <i class="flaticon stroke checkmark" v-else></i>
+              Save New Values
             </b-button>
           </b-form>
         </b-tab>
@@ -187,7 +189,7 @@
     </b-card>
     <b-modal id="edit-info-modal" size="lg" v-model="modalShow" hide-footer>
       <div slot="modal-header" class="w-100 mx-auto">
-        <h1>Edit: "Food Expenses"</h1>
+        <h1>Edit: {{expense.name}}</h1>
         <button type="button" class="close" aria-label="Close" @click="closeEditModal">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -359,7 +361,8 @@ export default {
       modalShow: false,
       isCalcSaveDisabled: true,
       autoCalcValidated: false,
-      editInfoValidated: false
+      editInfoValidated: false,
+      isSaving: false
     }
   },
   computed: {
@@ -431,6 +434,10 @@ export default {
     async onAutoCalcSumbit (ev) {
       this.autoCalcValidated = true
       if (this.$refs.autoCalcForm.checkValidity() === true) {
+        this.isCalcSaveDisabled = true
+        this.autoCalcValidated = false
+        this.isSaving = true
+        this.$root.$emit('bv::hide::tooltip')
         try {
           let data = {
             start_year: this.expense.start_year,
@@ -439,7 +446,7 @@ export default {
             annual_increase_percentage: this.expense.annual_increase_percentage
           }
           await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`, data)
-          this.autoCalcValidated = false
+          this.isSaving = false
           this.bus.$emit('notify-me', {
             data: {
               title: 'Success!',
@@ -448,7 +455,7 @@ export default {
           })
         } catch (err) {
           console.log(err)
-          this.autoCalcValidated = false
+          this.isSaving = false
           this.bus.$emit('notify-me', {
             data: {
               title: 'Failed!',

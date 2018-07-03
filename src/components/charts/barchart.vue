@@ -107,6 +107,9 @@ export default {
     rectmouseover (d, i) {
       let tf = this.$d3.select('#tooltipForeignObj')
       let x = this.xScale(d.year) + this.xScale.bandwidth() / 2 + this.margin.left
+      if (d.year >= this.domain[this.domain.length - 3]) {
+        x -= 270
+      }
       let xTickCircle = this.chart.select(`#xTick-${d.year} circle`)
       xTickCircle.attr('fill', '#fff')
                   .attr('stroke', '#1971ff')
@@ -177,6 +180,7 @@ export default {
 
       ticks.select('text')
            .attr('dy', '4em')
+
       let self = this
       let secondaryText = ticks.selectAll('text.secondaryAxisText')
                                .data(['secondaryAxisText'])
@@ -271,12 +275,11 @@ export default {
     drawSlider (selection, width) {
       var padding = 50
       var self = this
-      var xRange = [padding, width - padding]
       var scale = this.$d3
                       .scaleBand()
                       .domain(this.staticDomain)
                       .range([0, width - padding * 2])
-      var currentSelectedArea = [scale(this.staticDomain[0]), width - padding * 2]
+      var currentSelectedArea = [scale(this.domain[0]), scale(this.domain[this.domain.length - 1]) + scale.bandwidth()]
       // append texts
       let startText = selection.selectAll('text.sliderStartTxt')
                                .data(['sliderStartTxt'])
@@ -304,7 +307,7 @@ export default {
                .append('g')
                .merge(slider)
                .attr('class', 'slider')
-               .attr('transform', `translate(${xRange[0]}, ${-6})`)
+               .attr('transform', `translate(${padding}, ${-6})`)
 
       var firstLine = slider.selectAll('line.firstSliderLine')
                             .data(['firstSliderLine'])
@@ -373,14 +376,19 @@ export default {
       handler.attr('cx', currentSelectedArea[1])
 
       function dragged (d, flag) {
+        debugger
         var cx = getDragCoord()
         if (flag === 'first') {
-          if (cx > currentSelectedArea[1] - scale.bandwidth() * self.maximumSliderRange) cx = currentSelectedArea[1] - scale.bandwidth() * self.maximumSliderRange
+          if (cx > currentSelectedArea[1] - scale.bandwidth() * self.maximumSliderRange) {
+            cx = currentSelectedArea[1] - scale.bandwidth() * self.maximumSliderRange
+          }
           currentSelectedArea[0] = cx
           firstCircle.attr('cx', cx)
           secondLine.attr('x1', cx)
         } else {
-          if (cx < currentSelectedArea[0] + scale.bandwidth() * self.maximumSliderRange) cx = currentSelectedArea[0] + scale.bandwidth() * self.maximumSliderRange
+          if (cx < currentSelectedArea[0] + scale.bandwidth() * self.maximumSliderRange) {
+            cx = currentSelectedArea[0] + scale.bandwidth() * self.maximumSliderRange
+          }
           currentSelectedArea[1] = cx
           handler.attr('cx', cx)
           secondLine.attr('x2', cx)

@@ -376,7 +376,6 @@ export default {
       handler.attr('cx', currentSelectedArea[1])
 
       function dragged (d, flag) {
-        debugger
         var cx = getDragCoord()
         if (flag === 'first') {
           if (cx > currentSelectedArea[1] - scale.bandwidth() * self.maximumSliderRange) {

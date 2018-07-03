@@ -20,7 +20,7 @@
       </button>
     </div>
     <section class="chart-container depth-2">
-      <barchart v-if="cashflow.length" :dataArray="cashflow" :startYear="2018" :endYear="2036"></barchart>
+      <barchart v-if="cashflow.length" :dataArray="cashflow" :startYear="2018" :endYear="2036" :birthYear="1981"></barchart>
     </section>
     <b-card no-body class="expense-tabs-card depth-1">
       <b-tabs pills card>

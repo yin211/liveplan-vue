@@ -12,8 +12,8 @@
                       :height="chartHeight - yScale(d.value)"
                       :data-year="d.year"
                       fill="#F4D03F"
-                      @mouseover="rectmouseover(d, i + 5)"
-                      @mouseout="rectmouseout(d, i + 5)">
+                      @mouseover="rectmouseover(d, i)"
+                      @mouseout="rectmouseout(d, i)">
                 </rect>
                 <rect :x="xScale(startYear)"
                       :y="-hoverrectMehrYTop"
@@ -54,7 +54,7 @@
 <script>
 export default {
   name: 'barchart',
-  props: ['dataArray', 'startYear', 'endYear'],
+  props: ['dataArray', 'startYear', 'endYear', 'birthYear'],
   data () {
     return {
       width: 0,
@@ -78,14 +78,23 @@ export default {
     }
   },
   computed: {
-    xScale () {
-      let min = this.$d3.min(this.dataArray, d => d.year)
-      let max = this.$d3.max(this.dataArray, d => d.year)
-      return this.$d3.scaleBand()
-                   .domain(this.$d3.range(min - 5, max + 1))
-                   .range([0, this.chartWidth])
-                   .paddingInner([0.05])
-                   .paddingOuter([0.05])
+    xScale: {
+      get () {
+        let min = this.$d3.min(this.dataArray, d => d.year)
+        let max = this.$d3.max(this.dataArray, d => d.year)
+        return this.$d3.scaleBand()
+                    .domain(this.$d3.range(min, max + 1))
+                    .range([0, this.chartWidth])
+                    .paddingInner([0.05])
+                    .paddingOuter([0.05])
+      },
+      set (domain) {
+        return this.$d3.scaleBand()
+                    .domain(domain)
+                    .range([0, this.chartWidth])
+                    .paddingInner([0.05])
+                    .paddingOuter([0.05])
+      }
     },
     yScale () {
       return this.$d3.scaleLinear()
@@ -107,7 +116,7 @@ export default {
       xTickCircle.attr('fill', '#fff')
                   .attr('stroke', '#1971ff')
       tf.select('#tooltipyear').html(d.year)
-      tf.select('#tooltipage').html(41 + i)
+      tf.select('#tooltipage').html(d.year - this.birthYear)
       tf.select('#tooltipincome').html(d.value)
       tf.transition()
         .duration(500)
@@ -152,6 +161,10 @@ export default {
     adjustAxis () {
       let ticks = this.chart.select('g.xAxis')
                 .selectAll('.tick')
+                .attr('data-age', (d, i) => {
+                  let year = this.xScale.domain()[0] + i
+                  return year - this.birthYear
+                })
                 .attr('id', (d, i) => {
                   let year = this.xScale.domain()[0] + i
                   return `xTick-${year}`
@@ -168,16 +181,19 @@ export default {
 
       ticks.select('text')
            .attr('dy', '4em')
-
+      let self = this
       let secondaryText = ticks.selectAll('text.secondaryAxisText')
-                             .data(['secondaryAxisText'])
+                               .data(['secondaryAxisText'])
 
       secondaryText.enter()
           .append('text')
           .merge(secondaryText)
           .attr('class', 'secondaryAxisText')
           .attr('dy', '2.5em')
-          .text((d, i) => 41 + i)
+          .text(function (d, i) {
+            let tick = self.$d3.select(this.parentElement)
+            return tick.attr('data-age')
+          })
 
       let startEndTickSize = -(this.chartHeight + this.mehrHeight)
 
@@ -252,17 +268,33 @@ export default {
           .attr('stroke', '#fff')
           .attr('dy', 20)
     },
-    drawSlider (selection, start, end, width) {
+    drawSlider (selection, width) {
       var padding = 50
       var self = this
       var xRange = [padding, width - padding]
-      // var scale = this.$d3.scaleLinear().domain([start, end]).range(xRange)
-
+      var xScaleDomain = this.xScale.domain()
+      console.log(xScaleDomain)
+      var scale = this.$d3
+                      .scaleBand()
+                      .domain(xScaleDomain)
+                      .range([0, width - padding * 2])
+      var currentSelectedArea = [scale(xScaleDomain[0]), width - padding * 2]
       // append texts
-      let startText = selection.selectAll('text.sliderStartTxt').data(['sliderStartTxt'])
-      let endText = selection.selectAll('text.sliderEndTxt').data(['sliderEndTxt'])
-      startText.enter().append('text').attr('class', 'sliderStartTxt').text(start).attr('fill', '#fff')
-      endText = endText.enter().append('text').attr('class', 'sliderEndTxt').text(end).attr('fill', '#fff').merge(endText)
+      let startText = selection.selectAll('text.sliderStartTxt')
+                               .data(['sliderStartTxt'])
+      let endText = selection.selectAll('text.sliderEndTxt')
+                             .data(['sliderEndTxt'])
+      startText.enter()
+               .append('text')
+               .attr('class', 'sliderStartTxt')
+               .text(xScaleDomain[0])
+               .attr('fill', '#fff')
+      endText = endText.enter()
+                .append('text')
+                .attr('class', 'sliderEndTxt')
+                .text(xScaleDomain[xScaleDomain.length - 1])
+                .attr('fill', '#fff')
+                .merge(endText)
 
       endText.attr('x', width - 35)
 
@@ -300,14 +332,24 @@ export default {
         .attr('stroke-linecap', 'round')
         .merge(secondLine)
 
+      secondLine.attr('x1', currentSelectedArea[0])
+                .attr('x2', currentSelectedArea[1])
+
       var firstCircle = slider.selectAll('circle.firstCircle')
                           .data(['firstCircle'])
 
-      firstCircle.enter().append('circle')
+      firstCircle = firstCircle.enter().append('circle')
                          .attr('class', 'firstCircle')
+                         .attr('cursor', 'pointer')
                          .attr('r', this.sliderHandlerRadius)
                          .attr('fill', this.sliderHandlerColor)
+                         .call(this.$d3.drag()
+                                 .on('drag', d => {
+                                   return dragged(d, 'first')
+                                 }))
+                         .merge(firstCircle)
 
+      firstCircle.attr('cx', currentSelectedArea[0])
       var handler = slider.selectAll('circle.handler')
                           .data(['handler'])
 
@@ -316,21 +358,45 @@ export default {
                        .attr('class', 'handler')
                        .attr('cursor', 'pointer')
                        .attr('data-curentPercentCx', 0)
-                       .attr('r', this.sliderHandlerRadius).attr('fill', this.sliderHandlerColor)
+                       .attr('r', this.sliderHandlerRadius)
+                       .attr('fill', this.sliderHandlerColor)
                        .call(this.$d3.drag()
-                                 .on('drag', dragged))
+                                 .on('drag', d => {
+                                   return dragged(d, 'second')
+                                 }))
                        .merge(handler)
 
-      handler.attr('cx', +handler.attr('data-curentPercentCx') * (width - padding * 2))
-      secondLine.attr('x2', +handler.attr('data-curentPercentCx') * (width - padding * 2))
+      handler.attr('cx', currentSelectedArea[1])
 
-      function dragged (d) {
+      function dragged (d, flag) {
+        var cx = getDragCoord()
+        if (flag === 'first') {
+          if (cx > currentSelectedArea[1]) cx = currentSelectedArea[1]
+          currentSelectedArea[0] = cx
+          firstCircle.attr('cx', cx)
+          secondLine.attr('x1', cx)
+        } else {
+          if (cx < currentSelectedArea[0]) cx = currentSelectedArea[0]
+          currentSelectedArea[1] = cx
+          handler.attr('cx', cx)
+          secondLine.attr('x2', cx)
+        }
+        let newDomain = getNewDomain()
+        console.log(newDomain)
+      }
+
+      function getNewDomain () {
+        let sliderBandWidth = scale.bandwidth()
+        let f = Math.round(currentSelectedArea[0] / sliderBandWidth)
+        let s = Math.round(currentSelectedArea[1] / sliderBandWidth)
+        return self.$d3.range(xScaleDomain[f], xScaleDomain[s - 1] + 1)
+      }
+
+      function getDragCoord () {
         var cx = self.$d3.event.x
         if (cx < 0) cx = 0
         else if (cx > width - padding * 2) cx = width - padding * 2
-        handler.attr('cx', cx)
-        secondLine.attr('x2', cx)
-        handler.attr('data-curentPercentCx', cx / (width - padding * 2))
+        return cx
       }
     },
     setWidth () {
@@ -340,7 +406,7 @@ export default {
       this.setWidth()
       this.drawAxis()
       this.adjustAxis()
-      this.drawSlider(this.$d3.select('g.slider-wrapper'), 2017, 2049, this.chartWidth - 2 * this.sliderMarginLeft)
+      this.drawSlider(this.$d3.select('g.slider-wrapper'), this.chartWidth - 2 * this.sliderMarginLeft)
     }
   },
   mounted () {

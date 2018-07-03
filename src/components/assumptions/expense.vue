@@ -437,6 +437,7 @@ export default {
         this.isCalcSaveDisabled = true
         this.autoCalcValidated = false
         this.isSaving = true
+        this.$root.$emit('bv::hide::tooltip')
         try {
           let data = {
             start_year: this.expense.start_year,

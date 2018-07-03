@@ -49,9 +49,9 @@
                 <b-col lg="5">
                   <span class="text-regular">Amount Per Month (?)</span>
                   <div class="d-flex">
-                    <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-b-tooltip.hover.bottom title="The amount per period." v-model="expense.initial_amount" class="form-control form-control-sm element-spacer text-regular amount-per-month" :min="0"></vue-numeric>
+                    <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-b-tooltip.hover.bottom title="The amount per period." v-model="expense.amount" class="form-control form-control-sm element-spacer text-regular amount-per-month" :min="0"></vue-numeric>
                     <b-input-group size="sm" class="element-spacer">
-                      <b-form-input v-model="expense.initial_amount" min="0" max="10000" class="slider" type="range"></b-form-input>
+                      <b-form-input v-model="expense.amount" min="0" max="10000" class="slider" type="range"></b-form-input>
                     </b-input-group>
                   </div>
                 </b-col>
@@ -163,7 +163,7 @@
 
                 <div class="d-flex flex-column">
                   <span class="text-gray">Period</span>
-                  <span class="text-regular font-weigth-medium">{{expense.initial_amount_period}}</span>
+                  <span class="text-regular font-weigth-medium">{{expense.amount_recurrence}}</span>
                 </div>
 
                 <div class="d-flex flex-column">
@@ -219,7 +219,7 @@
             <b-col sm="3" class="d-flex mt-3 justify-content-end"><label :for="'period-select'">Period</label></b-col>
             <b-col sm="9">
               <b-form-group label-for="period-select" :state="periodState" class="text-left">
-                <b-form-select :options="periodOptions" v-model="editExpense.initial_amount_period" :id="'period-select'" :state="periodState" aria-describedby="periodSelectFeedback" required/>
+                <b-form-select :options="periodOptions" v-model="editExpense.amount_recurrence" :id="'period-select'" :state="periodState" aria-describedby="periodSelectFeedback" required/>
                 <b-form-invalid-feedback id="periodSelectFeedback">
                     This field is required
                 </b-form-invalid-feedback>
@@ -390,7 +390,7 @@ export default {
       if (!this.editInfoValidated) {
         return null
       } else {
-        return this.editExpense.initial_amount_period != null
+        return this.editExpense.amount_recurrence != null
       }
     },
     categoryState () {
@@ -442,7 +442,7 @@ export default {
           let data = {
             start_year: this.expense.start_year,
             end_year: this.expense.end_year,
-            initial_amount: this.expense.initial_amount,
+            amount: this.expense.amount,
             annual_increase_percentage: this.expense.annual_increase_percentage
           }
           await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`, data)
@@ -482,7 +482,7 @@ export default {
         try {
           let data = {
             name: this.editExpense.name,
-            initial_amount_period: this.editExpense.initial_amount_period,
+            amount_recurrence: this.editExpense.amount_recurrence,
             category_id: this.editExpense.category_id,
             person_id: this.editExpense.person_id,
             expense_subtype_id: this.editExpense.expense_subtype_id,

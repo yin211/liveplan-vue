@@ -4,7 +4,7 @@
              :width="width"
              :height="height">
             <g :transform="`translate(${margin.left}, ${margin.top})`" class="chart">
-                <rect v-for="(d,i) in dataArray"
+                <rect v-for="(d,i) in bars"
                       :key="i"
                       :x="xScale(d.year)"
                       :y="yScale(d.value)"
@@ -15,7 +15,7 @@
                       @mouseover="rectmouseover(d, i)"
                       @mouseout="rectmouseout(d, i)">
                 </rect>
-                <rect :x="xScale(startYear)"
+                <rect :x="0"
                       :y="-hoverrectMehrYTop"
                       :width="xScale.bandwidth()"
                       :height="chartHeight + hoverrectMehrYTop + hoverrectMehrYBottom"
@@ -68,6 +68,9 @@ export default {
       sliderHandlerColor: '#1971ff',
       sliderBackColor: '#636e7f',
       sliderHandlerRadius: 8,
+      domain: [],
+      staticDomain: [],
+      maximumSliderRange: 20, // maximum 20 years
       margin: {
         top: 100,
         right: 15,
@@ -78,23 +81,12 @@ export default {
     }
   },
   computed: {
-    xScale: {
-      get () {
-        let min = this.$d3.min(this.dataArray, d => d.year)
-        let max = this.$d3.max(this.dataArray, d => d.year)
-        return this.$d3.scaleBand()
-                    .domain(this.$d3.range(min, max + 1))
-                    .range([0, this.chartWidth])
-                    .paddingInner([0.05])
-                    .paddingOuter([0.05])
-      },
-      set (domain) {
-        return this.$d3.scaleBand()
-                    .domain(domain)
-                    .range([0, this.chartWidth])
-                    .paddingInner([0.05])
-                    .paddingOuter([0.05])
-      }
+    xScale () {
+      return this.$d3.scaleBand()
+                  .domain(this.domain)
+                  .range([0, this.chartWidth])
+                  .paddingInner([0.05])
+                  .paddingOuter([0.05])
     },
     yScale () {
       return this.$d3.scaleLinear()
@@ -106,6 +98,9 @@ export default {
     },
     chartWidth () {
       return this.width - this.margin.left - this.margin.right
+    },
+    bars () {
+      return this.dataArray.filter(x => this.domain.indexOf(x.year) > -1)
     }
   },
   methods: {
@@ -122,6 +117,7 @@ export default {
         .duration(500)
         .attr('transform', `translate(${x + 10}, ${this.margin.top * 1.5})`)
       let hoverrect = this.$d3.select('#hoverrect')
+      console.log(`xScale: ${this.xScale(d.year)}`)
       hoverrect.attr('x', this.xScale(d.year))
                .style('display', 'block')
       this.tooltipVisible = true
@@ -215,26 +211,15 @@ export default {
           .attr('stroke-width', 1.5)
           .attr('transform', `translate(0, ${startEndTickSize})`)
 
-      let startYearGroup = this.chart.selectAll('g.startYear')
+      if (this.startYear >= this.domain[0]) {
+        let startYearGroup = this.chart.selectAll('g.startYear')
                                .data(['startYear'])
-
-      let endYearGroup = this.chart.selectAll('g.endYear')
-                              .data(['endYear'])
-
-      startYearGroup = startYearGroup.enter()
+        startYearGroup = startYearGroup.enter()
                                      .append('g')
                                      .attr('class', 'startYear')
                                      .merge(startYearGroup)
-
-      endYearGroup = endYearGroup.enter()
-                                     .append('g')
-                                     .attr('class', 'endYear')
-                                     .merge(endYearGroup)
-
-      startYearGroup.attr('transform', `translate(${this.xScale(this.startYear) + this.xScale.bandwidth() / 2 + 10}, ${this.mehrHeight - this.margin.top - 15})`)
-      endYearGroup.attr('transform', `translate(${this.xScale(this.endYear) + this.xScale.bandwidth() / 2 + 10}, ${this.mehrHeight - this.margin.top - 15})`)
-
-      startYearGroup.selectAll('text.startYearTxt')
+        startYearGroup.attr('transform', `translate(${this.xScale(this.startYear) + this.xScale.bandwidth() / 2 + 10}, ${this.mehrHeight - this.margin.top - 15})`)
+        startYearGroup.selectAll('text.startYearTxt')
           .data(['startYearTxt'])
           .enter()
           .append('text')
@@ -242,16 +227,28 @@ export default {
           .text('Start Year')
           .attr('stroke', '#fff')
 
-      startYearGroup.selectAll('text.endYearTxt')
-          .data(['endYearTxt'])
-          .enter()
-          .append('text')
-          .attr('class', 'endYearTxt')
-          .text(this.startYear)
-          .attr('stroke', '#fff')
-          .attr('dy', 20)
+        startYearGroup.selectAll('text.endYearTxt')
+            .data(['endYearTxt'])
+            .enter()
+            .append('text')
+            .attr('class', 'endYearTxt')
+            .text(this.startYear)
+            .attr('stroke', '#fff')
+            .attr('dy', 20)
+      } else {
+        this.chart.selectAll('g.startYear').remove()
+      }
 
-      endYearGroup.selectAll('text.startYearY')
+      if (this.endYear <= this.domain[this.domain.length - 1]) {
+        let endYearGroup = this.chart.selectAll('g.endYear')
+                              .data(['endYear'])
+
+        endYearGroup = endYearGroup.enter()
+                                     .append('g')
+                                     .attr('class', 'endYear')
+                                     .merge(endYearGroup)
+        endYearGroup.attr('transform', `translate(${this.xScale(this.endYear) + this.xScale.bandwidth() / 2 + 10}, ${this.mehrHeight - this.margin.top - 15})`)
+        endYearGroup.selectAll('text.startYearY')
           .data(['startYearY'])
           .enter()
           .append('text')
@@ -259,7 +256,7 @@ export default {
           .text('End Year')
           .attr('stroke', '#fff')
 
-      endYearGroup.selectAll('text.endYearY')
+        endYearGroup.selectAll('text.endYearY')
           .data(['endYearY'])
           .enter()
           .append('text')
@@ -267,18 +264,19 @@ export default {
           .text(this.endYear)
           .attr('stroke', '#fff')
           .attr('dy', 20)
+      } else {
+        this.chart.selectAll('g.endYear').remove()
+      }
     },
     drawSlider (selection, width) {
       var padding = 50
       var self = this
       var xRange = [padding, width - padding]
-      var xScaleDomain = this.xScale.domain()
-      console.log(xScaleDomain)
       var scale = this.$d3
                       .scaleBand()
-                      .domain(xScaleDomain)
+                      .domain(this.staticDomain)
                       .range([0, width - padding * 2])
-      var currentSelectedArea = [scale(xScaleDomain[0]), width - padding * 2]
+      var currentSelectedArea = [scale(this.staticDomain[0]), width - padding * 2]
       // append texts
       let startText = selection.selectAll('text.sliderStartTxt')
                                .data(['sliderStartTxt'])
@@ -287,12 +285,12 @@ export default {
       startText.enter()
                .append('text')
                .attr('class', 'sliderStartTxt')
-               .text(xScaleDomain[0])
+               .text(this.staticDomain[0])
                .attr('fill', '#fff')
       endText = endText.enter()
                 .append('text')
                 .attr('class', 'sliderEndTxt')
-                .text(xScaleDomain[xScaleDomain.length - 1])
+                .text(this.staticDomain[this.staticDomain.length - 1])
                 .attr('fill', '#fff')
                 .merge(endText)
 
@@ -346,6 +344,9 @@ export default {
                          .call(this.$d3.drag()
                                  .on('drag', d => {
                                    return dragged(d, 'first')
+                                 })
+                                 .on('end', d => {
+                                   return dragEnd(d)
                                  }))
                          .merge(firstCircle)
 
@@ -363,6 +364,9 @@ export default {
                        .call(this.$d3.drag()
                                  .on('drag', d => {
                                    return dragged(d, 'second')
+                                 })
+                                 .on('end', d => {
+                                   return dragEnd(d)
                                  }))
                        .merge(handler)
 
@@ -371,25 +375,30 @@ export default {
       function dragged (d, flag) {
         var cx = getDragCoord()
         if (flag === 'first') {
-          if (cx > currentSelectedArea[1]) cx = currentSelectedArea[1]
+          if (cx > currentSelectedArea[1] - scale.bandwidth() * self.maximumSliderRange) cx = currentSelectedArea[1] - scale.bandwidth() * self.maximumSliderRange
           currentSelectedArea[0] = cx
           firstCircle.attr('cx', cx)
           secondLine.attr('x1', cx)
         } else {
-          if (cx < currentSelectedArea[0]) cx = currentSelectedArea[0]
+          if (cx < currentSelectedArea[0] + scale.bandwidth() * self.maximumSliderRange) cx = currentSelectedArea[0] + scale.bandwidth() * self.maximumSliderRange
           currentSelectedArea[1] = cx
           handler.attr('cx', cx)
           secondLine.attr('x2', cx)
         }
+      }
+
+      function dragEnd () {
         let newDomain = getNewDomain()
-        console.log(newDomain)
+        self.domain = newDomain
+        self.drawAxis()
+        self.adjustAxis()
       }
 
       function getNewDomain () {
         let sliderBandWidth = scale.bandwidth()
         let f = Math.round(currentSelectedArea[0] / sliderBandWidth)
         let s = Math.round(currentSelectedArea[1] / sliderBandWidth)
-        return self.$d3.range(xScaleDomain[f], xScaleDomain[s - 1] + 1)
+        return self.$d3.range(self.staticDomain[f], self.staticDomain[s - 1] + 1)
       }
 
       function getDragCoord () {
@@ -402,6 +411,12 @@ export default {
     setWidth () {
       this.width = this.$el.offsetWidth
     },
+    setDomain () {
+      let min = this.$d3.min(this.dataArray, d => d.year)
+      let max = this.$d3.max(this.dataArray, d => d.year)
+      this.domain = this.$d3.range(min, max + 1)
+      this.staticDomain = this.domain
+    },
     onResize () {
       this.setWidth()
       this.drawAxis()
@@ -411,6 +426,7 @@ export default {
   },
   mounted () {
     this.chart = this.$d3.select('#barChartRent g')
+    this.setDomain()
     this.onResize()
     this.$d3.select(window).on('resize', this.onResize)
   }

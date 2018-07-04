@@ -548,6 +548,7 @@ export default {
           calculation_mode: val ? 'auto' : 'custom'
         }
         await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`, data)
+        this.expense.calculation_mode = val ? 'auto' : 'custom'
         this.bus.$emit('notify-me', {
           data: {
             title: 'Success!',
@@ -651,7 +652,7 @@ export default {
               &.custom-is-enabled {
                 margin-top: 24px;
               }
-              
+
               .start_end_year
               {
                 text-align:center;

@@ -28,6 +28,7 @@
     "vue-notify-me": "^1.1.0",
     "vue-numeric": "^2.3.0",
     "vue-router": "^3.0.1",
+    "vue-switches": "^2.0.1",
     "vuex": "^3.0.1"
   },
   "devDependencies": {

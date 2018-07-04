@@ -74,6 +74,25 @@
           </b-form>
         </b-tab>
         <b-tab title="Custom Values" :title-link-class="'expense-tab'">
+          <button class='btn btn-sm icon-btn text-regular upload-file-btn' :disabled="customDisabled">
+            <i class="flaticon stroke upload text-primary"></i>
+            Upload Files
+          </button>
+          <div class="custom-values-bar">
+            <div class="d-flex justify-content-between align-items-center" :class="[customDisabled ? 'bar-disable-color' :'bar-enable-color']">
+              <div class="d-flex align-items-center">
+                <span class="mr-3" :class="{ 'font-weight-bold': !customDisabled }">Enable</span>
+                <switches v-model="customDisabled" theme="bootstrap" type-bold="true" color="success"></switches>
+                <span class="ml-3" :class="{ 'font-weight-bold': customDisabled }">Disable</span>
+              </div>
+              <span v-if="customDisabled" class="text-gray">
+                Enabling "Custom Values" will disable "Auto Calculation". You can choose one of the two.
+              </span>
+              <span v-else class="text-gray">
+                Enabling "Auto Calculation" will disable "Custom Values". You need to choose one of the two.
+              </span>
+            </div>
+          </div>
           <div class="table-container text-regular text-left">
             <b-table show-empty
                     stacked="md"
@@ -88,12 +107,6 @@
                     @filtered="onFiltered"
                     hover
             >
-              <template slot="HEAD_actions" slot-scope="data">
-                <button class='btn btn-sm icon-btn text-regular' style="border-color: #eaecef;">
-                  <i class="flaticon stroke trash-2 text-danger"></i>
-                  Upload Files
-                </button>
-              </template>
               <template slot="top-row" slot-scope="data">
                 <td colspan="3"><b-form-input v-model="filter" size="sm" placeholder="Type to Search" /></td>
               </template>
@@ -101,7 +114,7 @@
                 {{data.item.amount.toLocaleString('sv-SE')}} SEK
               </template>
               <template slot="actions" slot-scope="row">
-                <button class='btn plain-btn text-regular'>
+                <button class='btn plain-btn text-regular' :disabled="customDisabled">
                   <i class="flaticon solid edit-3 text-primary"></i> Edit
                 </button>
                 <!-- <button class='btn plain-btn text-regular'>
@@ -291,6 +304,7 @@
 import axios from 'axios'
 import barchart from '../charts/barchart'
 import Notify from 'vue-notify-me'
+import Switches from 'vue-switches'
 import Vue from 'vue'
 const bus = new Vue()
 
@@ -300,6 +314,11 @@ export default {
     try {
       let response = await axios.get(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`)
       this.expense = response.data.data
+      if (this.expense.calculation_mode === 'auto') {
+        this.customDisabled = true
+      } else {
+        this.customDisabled = false
+      }
       let cashflow = await axios.get('/static/tempdata/data.json')
       this.cashflow = this.processCashflow(cashflow.data)
       response = await axios.get(`${process.env.ROOT_API}/categories`)
@@ -362,7 +381,8 @@ export default {
       isCalcSaveDisabled: true,
       autoCalcValidated: false,
       editInfoValidated: false,
-      isSaving: false
+      isSaving: false,
+      customDisabled: false
     }
   },
   computed: {
@@ -511,9 +531,33 @@ export default {
       }
     }
   },
+  watch: {
+    customDisabled: async function (val) {
+      let modeChanged = false
+      if (val && this.expense.calculation_mode === 'custom') {
+        modeChanged = true
+      } else if (!val && this.expense.calculation_mode === 'auto') {
+        modeChanged = true
+      }
+
+      if (modeChanged) {
+        let data = {
+          calculation_mode: val ? 'auto' : 'custom'
+        }
+        await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`, data)
+        this.bus.$emit('notify-me', {
+          data: {
+            title: 'Success!',
+            text: 'Calculation mode has been updated successfully!'
+          }
+        })
+      }
+    }
+  },
   components: {
     barchart,
-    'notify-me': Notify
+    'notify-me': Notify,
+    Switches
   }
 }
 </script>
@@ -578,6 +622,8 @@ export default {
           border-bottom: none;
 
           .card-header-pills {
+            outline: none;
+
             .expense-tab {
               font-size: 24px;
               line-height: 32px;
@@ -628,6 +674,34 @@ export default {
                 }
               }
             }
+
+            .upload-file-btn {
+              position: absolute;
+              right: 30px;
+              top: 42px;
+              border-color: #eaecef;
+            }
+
+            .custom-values-bar {
+              position: absolute;
+              top: 80px;
+              width: 100%;
+              background-color: white;
+              padding: 10px 0;
+              & > div {
+                padding: 0px 20px;
+                margin: 0px 10px;
+                padding: 0 20px;
+                &.bar-disable-color {
+                  background-color: #F8F8F8;
+                  border: 1px dashed #D8D8D8;
+                }
+                &.bar-enable-color {
+                  background-color: rgba(54,179,126,0.1);
+                  border: 1px dashed #36B37E;
+                }
+              }
+            }
           }
 
         }
@@ -645,7 +719,7 @@ export default {
 
     // customize table
     .table-container {
-      padding: 0 20px;
+      padding: 30px 20px;
       font-size: 14px;
 
       table {
@@ -765,7 +839,6 @@ export default {
     }
 
     // customize slider
-
     .slider {
       -webkit-appearance: none;
       width: 100%;
@@ -831,6 +904,40 @@ export default {
         position: absolute;
         right: .5em;
         top: .5em;
+      }
+    }
+
+    // customize switch toggle button
+    .vue-switcher-theme--bootstrap {
+      input {
+        position: relative;
+      }
+      &.vue-switcher-color--success {
+        div {
+            background-color: #EF5350;
+            width: 40px;
+            height: 22px;
+
+            &:after {
+                // for the circle on the switch
+                background-color: white;
+                height: 16px;
+                width: 16px;
+                top: 3px;
+                margin-left: -20px;
+            }
+        }
+
+        &.vue-switcher--unchecked {
+            div {
+                background-color: #36b37E;
+
+                &:after {
+                  background-color: white;
+                  margin-left: -25px;
+                }
+            }
+        }
       }
     }
 

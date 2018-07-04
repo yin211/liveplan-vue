@@ -25,21 +25,24 @@
     <b-card no-body class="expense-tabs-card depth-1">
       <b-tabs pills card>
         <b-tab title="Auto Calculation" :title-link-class="'expense-tab'" active>
-          <b-form id="autoCalcForm" ref="autoCalcForm" @change="autoCalcformChanged" novalidate :validated="autoCalcValidated" @submit.prevent="onAutoCalcSumbit">
+          <div class="custom-values-bar" v-if="!customDisabled">
+            <b-alert show variant="warning" class="py-3">Values are disabled since expense is in custom mode</b-alert>
+          </div>
+          <b-form id="autoCalcForm" ref="autoCalcForm" @change="autoCalcformChanged" novalidate :validated="autoCalcValidated" @submit.prevent="onAutoCalcSumbit" v-bind:class="{ 'custom-is-enabled': !customDisabled }">
             <b-container fluid>
               <b-row class="text-left mx-auto">
                 <b-col lg="2">
                   <span class="text-regular">Period (start - end year) (?)</span>
                   <div class="d-flex element-spacer">
                     <b-form-group label-for="startYearInput" aria-describedby="invalidStartYearFeedback" :state="startYearState">
-                      <b-form-input id="startYearInput" required v-model="expense.start_year" type="number" size="sm" v-b-tooltip.hover.bottom title="The year when this expense first occurs." class="text-regular start_end_year start_year" style="width: 86px" placeholder="Start year" min="2000" max="2140"></b-form-input>
+                      <b-form-input id="startYearInput" required v-model="expense.start_year" type="number" size="sm" v-b-tooltip.hover.bottom title="The year when this expense first occurs." class="text-regular start_end_year start_year" style="width: 86px" placeholder="Start year" min="2000" max="2140" :disabled="!customDisabled"></b-form-input>
                       <b-form-invalid-feedback id="invalidStartYearFeedback">
                         This is a required field and must be between 2000 and 2140
                       </b-form-invalid-feedback>
                     </b-form-group>
                     <span class="date-spacer">-</span>
                     <b-form-group label-for="endYearInput" aria-describedby="invalidEndYearFeedback" :state="endYearState">
-                      <b-form-input id="endYearInput" required v-model="expense.end_year" type="number" size="sm" v-b-tooltip.hover.bottom title="The year when this expense stops occuring." class="text-regular start_end_year end_year" style="width: 86px" placeholder="End year" min="2000" max="2140"></b-form-input>
+                      <b-form-input id="endYearInput" required v-model="expense.end_year" type="number" size="sm" v-b-tooltip.hover.bottom title="The year when this expense stops occuring." class="text-regular start_end_year end_year" style="width: 86px" placeholder="End year" min="2000" max="2140" :disabled="!customDisabled"></b-form-input>
                       <b-form-invalid-feedback id="invalidEndYearFeedback">
                         This is a required field and must be between 2000 and 2140
                       </b-form-invalid-feedback>
@@ -49,18 +52,18 @@
                 <b-col lg="5">
                   <span class="text-regular">Amount Per Month (?)</span>
                   <div class="d-flex">
-                    <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-b-tooltip.hover.bottom title="The amount per period." v-model="expense.amount" class="form-control form-control-sm element-spacer text-regular amount-per-month" :min="0"></vue-numeric>
+                    <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-b-tooltip.hover.bottom title="The amount per period." v-model="expense.amount" class="form-control form-control-sm element-spacer text-regular amount-per-month" :min="0" :disabled="!customDisabled"></vue-numeric>
                     <b-input-group size="sm" class="element-spacer">
-                      <b-form-input v-model="expense.amount" min="0" max="10000" class="slider" type="range"></b-form-input>
+                      <b-form-input v-model="expense.amount" min="0" max="10000" class="slider" type="range" :disabled="!customDisabled"></b-form-input>
                     </b-input-group>
                   </div>
                 </b-col>
                 <b-col lg="5">
                   <span class="text-regular">Annual Growth Rate (?)</span>
                   <div class="d-flex">
-                    <vue-numeric currency="%" currency-symbol-position="suffix" v-model="expense.annual_increase_percentage" v-b-tooltip.hover.bottom title="The expense grows with this percentage per year." class="form-control form-control-sm element-spacer text-regular annual-growth-rate" :min="0" :max="20"></vue-numeric>
+                    <vue-numeric currency="%" currency-symbol-position="suffix" v-model="expense.annual_increase_percentage" v-b-tooltip.hover.bottom title="The expense grows with this percentage per year." class="form-control form-control-sm element-spacer text-regular annual-growth-rate" :min="0" :max="20" :disabled="!customDisabled"></vue-numeric>
                     <b-input-group size="sm" class="element-spacer">
-                      <b-form-input v-model="expense.annual_increase_percentage" min="0" max="20" class="slider" type="range"></b-form-input>
+                      <b-form-input v-model="expense.annual_increase_percentage" min="0" max="20" class="slider" type="range" :disabled="!customDisabled"></b-form-input>
                     </b-input-group>
                   </div>
                 </b-col>
@@ -382,7 +385,7 @@ export default {
       autoCalcValidated: false,
       editInfoValidated: false,
       isSaving: false,
-      customDisabled: false
+      customDisabled: true
     }
   },
   computed: {
@@ -644,8 +647,11 @@ export default {
           .card-body {
             padding: 0px 0px 28px 0px;
 
-            form {
-
+            #autoCalcForm {
+              &.custom-is-enabled {
+                margin-top: 24px;
+              }
+              
               .start_end_year
               {
                 text-align:center;
@@ -700,6 +706,13 @@ export default {
                   background-color: rgba(54,179,126,0.1);
                   border: 1px dashed #36B37E;
                 }
+              }
+
+              .alert {
+                border: 1px dashed;
+                border-radius: unset;
+                font-size: 14px;
+                line-height: 20px;
               }
             }
           }

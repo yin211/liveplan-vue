@@ -99,7 +99,7 @@
           <div class="table-container text-regular text-left">
             <b-table show-empty
                     stacked="md"
-                    :items="getExpenseAmounts"
+                    :items="expense.expense_amounts"
                     :fields="fields"
                     :current-page="currentPage"
                     :per-page="perPage"
@@ -329,6 +329,9 @@ export default {
       for (let item of response.data.data) {
         this.categoryOptions.push({value: item.id, text: item.name})
       }
+      setTimeout(() => {
+        this.perPage = 10
+      }, 1000)
     } catch (err) {
       console.log(err)
     }
@@ -374,7 +377,7 @@ export default {
         { key: 'actions', 'class': 'd-flex justify-content-end' }
       ],
       currentPage: 1,
-      perPage: 10,
+      perPage: 0,
       filter: null,
       sortBy: null,
       sortDesc: false,
@@ -550,16 +553,6 @@ export default {
       item.amount = item.edit_amount
       item.edit_amount = 0
       item.is_edit = false
-    },
-    getExpenseAmounts (ctx) {
-      let promise = axios.get(`${process.env.ROOT_API}/expenses/${this.$route.params.id}/amounts?page=${ctx.currentPage}&size=${ctx.perPage}&filter=${ctx.filter}&sortBy=${ctx.sortBy}&sortDesc=${ctx.sortDesc}`)
-
-      return promise.then((response) => {
-        return response.data.data
-      }).catch(error => {
-        console.log(error)
-        return []
-      })
     }
   },
   watch: {

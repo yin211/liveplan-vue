@@ -91,6 +91,7 @@
 
 <script>
 import {AUTH_REQUEST} from '@/store/actions/auth'
+import EventBus from '../../../event-bus.js'
 export default {
   name: 'login',
   mounted () {
@@ -221,12 +222,10 @@ export default {
         this.$store.dispatch(AUTH_REQUEST, { email, password }).then(() => {
           this.$router.push('/assumptions/expense/1')
         }, () => {
-          this.$notify({
-            group: 'notify',
-            type: 'error',
-            title: 'Error',
-            duration: 3000,
-            text: 'Authentication Failed!'
+          EventBus.$emit('notify-me', {
+            title: 'Authentication Failed!',
+            text: 'Something went wrong!',
+            status: 'is-danger'
           })
         })
       }

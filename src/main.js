@@ -9,10 +9,8 @@ import store from './store'
 import axios from 'axios'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'font-awesome/css/font-awesome.css'
-import Notifications from 'vue-notification'
 import VueD3 from 'vue-d3'
 import VueNumeric from 'vue-numeric'
-Vue.use(Notifications)
 Vue.use(BootstrapVue)
 Vue.use(VueD3)
 Vue.use(VueNumeric)

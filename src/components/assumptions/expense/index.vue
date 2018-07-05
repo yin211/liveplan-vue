@@ -1,16 +1,5 @@
 <template>
   <div class="expense bg-light">
-    <notify-me
-      close="bootstrap"
-      :event-bus="bus"
-    >
-      <template slot="content" slot-scope="{data}">
-          <div>
-              <h4><b>{{data.title}}</b></h4>
-              <p style="margin: 0">{{data.text}}</p>
-          </div>
-      </template>
-    </notify-me>
     <b-breadcrumb :items="items" class="p-0"/>
     <div class="d-flex justify-content-between align-items-center">
       <h1 class="text-regular text-left">{{expense.name}} </h1>
@@ -313,10 +302,8 @@
 <script>
 import axios from 'axios'
 import barchart from '../../charts/barchart'
-import Notify from 'vue-notify-me'
 import Switches from 'vue-switches'
-import Vue from 'vue'
-const bus = new Vue()
+import EventBus from '../../../event-bus.js'
 
 export default {
   name: 'expense',
@@ -344,7 +331,6 @@ export default {
   },
   data () {
     return {
-      bus,
       items: [{
         text: 'Assumptions',
         to: { name: 'assumptions' }
@@ -480,20 +466,17 @@ export default {
           }
           await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`, data)
           this.isSaving = false
-          this.bus.$emit('notify-me', {
-            data: {
-              title: 'Success!',
-              text: 'New vaules have been saved successfully!'
-            }
+          EventBus.$emit('notify-me', {
+            title: 'Success!',
+            text: 'New vaules have been saved successfully!',
+            status: 'is-success'
           })
         } catch (err) {
           console.log(err)
           this.isSaving = false
-          this.bus.$emit('notify-me', {
-            data: {
-              title: 'Failed!',
-              text: 'Something went wrong!'
-            },
+          EventBus.$emit('notify-me', {
+            title: 'Failed!',
+            text: 'Something went wrong!',
             status: 'is-danger'
           })
         }
@@ -522,22 +505,19 @@ export default {
             inflation_rate: this.editExpense.inflation_rate
           }
           await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`, data)
-          this.bus.$emit('notify-me', {
-            data: {
-              title: 'Success!',
-              text: 'New vaules have been saved successfully!'
-            }
+          EventBus.$emit('notify-me', {
+            title: 'Success!',
+            text: 'New vaules have been saved successfully!',
+            status: 'is-success'
           })
           this.editInfoModalShow = false
           let response = await axios.get(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`)
           this.expense = response.data.data
         } catch (err) {
           console.log(err)
-          this.bus.$emit('notify-me', {
-            data: {
-              title: 'Failed!',
-              text: 'Something went wrong!'
-            },
+          EventBus.$emit('notify-me', {
+            title: 'Failed!',
+            text: 'Something went wrong!',
             status: 'is-danger'
           })
         }
@@ -576,18 +556,16 @@ export default {
         }
         await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`, data)
         this.expense.calculation_mode = val ? 'auto' : 'custom'
-        this.bus.$emit('notify-me', {
-          data: {
-            title: 'Success!',
-            text: 'Calculation mode has been updated successfully!'
-          }
+        EventBus.$emit('notify-me', {
+          title: 'Success!',
+          text: 'Calculation mode has been updated successfully!',
+          status: 'is-success'
         })
       }
     }
   },
   components: {
     barchart,
-    'notify-me': Notify,
     Switches
   }
 }

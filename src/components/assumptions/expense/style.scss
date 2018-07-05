@@ -346,26 +346,6 @@
     background: #ccc;
   }
 
-  // customize notification
-  .notification {
-    padding: 1.25rem 1.5rem;
-    color: #fff;
-
-    &.is-success {
-      background-color: #23d160;
-    }
-
-    &.is-danger {
-      background-color: #ff3860;
-    }
-
-    .close {
-      position: absolute;
-      right: .5em;
-      top: .5em;
-    }
-  }
-
   // customize switch toggle button
   .vue-switcher-theme--bootstrap {
     input {

@@ -99,7 +99,7 @@
           <div class="table-container text-regular text-left">
             <b-table show-empty
                     stacked="md"
-                    :items="expense.expense_amounts"
+                    :items="getExpenseAmounts"
                     :fields="fields"
                     :current-page="currentPage"
                     :per-page="perPage"
@@ -113,19 +113,20 @@
               <template slot="top-row" slot-scope="data">
                 <td colspan="3"><b-form-input v-model="filter" size="sm" placeholder="Type to Search" /></td>
               </template>
-              <template slot="amount" slot-scope="data">
-                {{data.item.amount.toLocaleString('sv-SE')}} SEK
+              <template slot="amount" slot-scope="row">
+                <vue-numeric v-show="row.item.is_edit"  currency="SEK" currency-symbol-position="suffix" thousand-separator=" "  v-model="row.item.edit_amount" class="form-control form-control-sm text-regular amount-per-month" :minus="true"></vue-numeric>
+                <span v-show="!row.item.is_edit">{{row.item.amount.toLocaleString('sv-SE')}} SEK </span>
               </template>
               <template slot="actions" slot-scope="row">
-                <button class='btn plain-btn text-regular' :disabled="customDisabled">
+                <button v-show="!row.item.is_edit" class='btn plain-btn text-regular' :disabled="customDisabled" @click.stop="editRow(row.item)">
                   <i class="flaticon solid edit-3 text-primary"></i> Edit
                 </button>
-                <!-- <button class='btn plain-btn text-regular'>
-                  <i class="fa fa-check mr-2 text-success"></i> Save
+                <button v-show="row.item.is_edit" class='btn plain-btn text-regular' @click.stop="saveRow(row.item)">
+                  <i class="flaticon stroke checkmark text-success"></i> Save
                 </button>
-                <button class='btn plain-btn text-regular'>
-                  <i class="fa fa-times mr-2 text-danger"></i> Cancel
-                </button> -->
+                <button v-show="row.item.is_edit" class='btn plain-btn text-regular' @click.stop="cancelRow(row.item)">
+                  <i class="fa fa-times text-danger"></i> Cancel
+                </button>
               </template>
             </b-table>
             <div class="d-flex  flex-column flex-md-row justify-content-between">
@@ -347,7 +348,7 @@ export default {
       cashflow: [],
       periodOptions: [
         { value: null, text: 'Please select an option', disabled: true },
-        { value: 'month', text: 'Monthly' },
+        { value: 'monthly', text: 'Monthly' },
         { value: 'daily', text: 'Daily' },
         { value: 'weekly', text: 'Weekly' },
         { value: 'quarterly', text: 'Quarterly' },
@@ -532,6 +533,33 @@ export default {
           })
         }
       }
+    },
+    editRow (item) {
+      item.is_edit = true
+      item.edit_amount = item.amount
+    },
+    cancelRow (item) {
+      item.is_edit = false
+      item.edit_amount = 0
+    },
+    async saveRow (item) {
+      let data = {
+        amount: item.edit_amount
+      }
+      await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}/amounts/${item.id}`, data)
+      item.amount = item.edit_amount
+      item.edit_amount = 0
+      item.is_edit = false
+    },
+    getExpenseAmounts (ctx) {
+      let promise = axios.get(`${process.env.ROOT_API}/expenses/${this.$route.params.id}/amounts?page=${ctx.currentPage}&size=${ctx.perPage}&filter=${ctx.filter}&sortBy=${ctx.sortBy}&sortDesc=${ctx.sortDesc}`)
+
+      return promise.then((response) => {
+        return response.data.data
+      }).catch(error => {
+        console.log(error)
+        return []
+      })
     }
   },
   watch: {
@@ -601,6 +629,10 @@ export default {
       background-color:transparent;
       font-size: 12px;
       line-height: 24px;
+
+      i {
+        margin-right: 4px;
+      }
     }
 
     // chart wrapper
@@ -775,6 +807,16 @@ export default {
               vertical-align: middle;
               padding-top: 6px;
               padding-bottom: 6px;
+
+              .amount-per-month {
+                width: 130px;
+                margin-right: 20px;
+                text-align:right;
+              }
+
+              .hide-element {
+                display: none
+              }
             }
           }
 

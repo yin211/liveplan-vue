@@ -213,25 +213,21 @@ export default {
 
       let startEndTickSize = -(this.chartHeight + this.mehrHeight)
 
-      let startYearTick = this.chart.select(`#xTick-${this.startYear}`)
-      let endYeartTick = this.chart.select(`#xTick-${this.endYear}`)
-      startYearTick.select('line').attr('y2', startEndTickSize)
-      endYeartTick.select('line').attr('y2', startEndTickSize)
-      startYearTick.append('circle')
-          .attr('r', 5)
-          .attr('fill', '#1971ff')
-          .attr('stroke', '#fff')
-          .attr('stroke-width', 1.5)
-          .attr('transform', `translate(0, ${startEndTickSize})`)
-
-      endYeartTick.append('circle')
-          .attr('r', 5)
-          .attr('fill', '#1971ff')
-          .attr('stroke', '#fff')
-          .attr('stroke-width', 1.5)
-          .attr('transform', `translate(0, ${startEndTickSize})`)
-
       if (this.startYear >= this.domain[0]) {
+        // start year circles
+        let startYearTick = this.chart.select(`#xTick-${this.startYear}`)
+        startYearTick.select('line').attr('y2', startEndTickSize)
+        let startYearCircle = startYearTick.selectAll('circle.startYearCircle')
+                                  .data(['startYearCircle'])
+        startYearCircle = startYearCircle.enter()
+          .append('circle')
+          .attr('r', 5)
+          .attr('fill', '#1971ff')
+          .attr('stroke', '#fff')
+          .attr('stroke-width', 1.5)
+          .attr('transform', `translate(0, ${startEndTickSize})`)
+          .merge(startYearCircle)
+        startYearCircle.attr('class', 'startYearCircle')
         let startYearGroup = this.chart.selectAll('g.startYear')
                                .data(['startYear'])
         startYearGroup = startYearGroup.enter()
@@ -260,6 +256,20 @@ export default {
       }
 
       if (this.endYear <= this.domain[this.domain.length - 1]) {
+        let endYeartTick = this.chart.select(`#xTick-${this.endYear}`)
+        endYeartTick.select('line').attr('y2', startEndTickSize)
+        let endYearCircle = endYeartTick.selectAll('circle.endYearCircle')
+                              .data(['endYearCircle'])
+
+        endYearCircle = endYearCircle.enter()
+          .append('circle')
+          .attr('r', 5)
+          .attr('fill', '#1971ff')
+          .attr('stroke', '#fff')
+          .attr('stroke-width', 1.5)
+          .attr('transform', `translate(0, ${startEndTickSize})`)
+          .merge(endYearCircle)
+        endYearCircle.attr('class', 'endYearCircle')
         let endYearGroup = this.chart.selectAll('g.endYear')
                               .data(['endYear'])
 

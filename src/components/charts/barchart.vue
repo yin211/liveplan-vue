@@ -37,8 +37,8 @@
                     :x2="width"
                     :y1="margin.top + chartHeight + hoverrectMehrYBottom"
                     :y2="margin.top + chartHeight + hoverrectMehrYBottom"
-                    stroke="#2c3468"
-                    stroke-width="1">
+                    :stroke="divisionLineColor"
+                    stroke-width="0.5">
             </line>
             <g :transform="`translate(${sliderMarginLeft}, ${margin.top + chartHeight + hoverrectMehrYBottom + 35})`" class="slider-wrapper">
             </g>
@@ -61,6 +61,7 @@
 </template>
 
 <script>
+import { patternify } from './helpers'
 export default {
   name: 'barchart',
   props: ['dataArray', 'startYear', 'endYear', 'birthYear'],
@@ -73,10 +74,13 @@ export default {
       hoverrectMehrYTop: 25,
       hoverrectMehrYBottom: 60,
       mehrHeight: 60,
+      divisionLineColor: '#2c3468',
       barColor: '#FEC600',
       sliderHandlerColor: '#1971ff',
       sliderBackColor: '#636e7f',
-      sliderHandlerRadius: 8,
+      circleColor: '#1971ff',
+      darkColor: '#A5ADBA',
+      sliderHandlerRadius: 12,
       domain: [],
       staticDomain: [],
       maximumSliderRange: 20, // maximum 20 years
@@ -125,7 +129,7 @@ export default {
       let thousandsFormat = locale.format(',')
       let tf = this.$d3.select('#tooltipForeignObj')
       let x = this.xScale(d.year) + this.xScale.bandwidth() / 2 + this.margin.left
-      if (d.year >= this.domain[this.domain.length - 3]) {
+      if (d.year >= this.domain[this.domain.length - 6]) {
         x -= 270
       }
       let xTickCircle = this.chart.select(`#xTick-${d.year} circle`)
@@ -155,26 +159,29 @@ export default {
       let xAxis = this.$d3.axisBottom(this.xScale).tickSize(-(tickSize))
       let yAxis = this.$d3.axisLeft(this.yScale).ticks(5)
 
-      let xAxisGroup = this.chart.selectAll('g.xAxis')
-                            .data(['xAxis'])
+      // append xAxis
+      patternify({
+        container: this.chart,
+        tag: 'g',
+        selector: 'xAxis'
+      })
+      .attr('class', 'xAxis axis')
+      .attr('transform', `translate(${0}, ${this.chartHeight})`)
+      .call(xAxis)
 
-      let yAxisGroup = this.chart.selectAll('g.yAxis')
-                            .data(['yAxis'])
-
-      xAxisGroup = xAxisGroup.enter().append('g')
-                .attr('class', 'axis xAxis')
-                .attr('transform', `translate(${0}, ${this.chartHeight})`)
-                .merge(xAxisGroup)
-
-      yAxisGroup = yAxisGroup.enter().append('g')
-                .attr('class', 'axis yAxis')
-                .merge(yAxisGroup)
-
-      xAxisGroup.call(xAxis)
-
-      yAxisGroup.call(yAxis)
+      // append yAxis
+      patternify({
+        container: this.chart,
+        tag: 'g',
+        selector: 'yAxis'
+      })
+      .attr('class', 'yAxis axis')
+      .call(yAxis)
     },
     adjustAxis () {
+      let self = this
+      let startEndTickSize = -(this.chartHeight + this.mehrHeight)
+
       let ticks = this.chart.select('g.xAxis')
                 .selectAll('.tick')
                 .attr('data-age', (d, i) => {
@@ -186,273 +193,264 @@ export default {
                   return `xTick-${year}`
                 })
 
-      let circles = ticks.selectAll('circle')
-                         .data(['circle'])
-
-      circles.enter().append('circle')
-          .attr('r', 5)
-          .attr('fill', '#1971ff')
-          .attr('stroke', '#fff')
-          .attr('stroke-width', 1.5)
-
+      // reposition texts within the axis
       ticks.select('text')
            .attr('dy', '4em')
+           .attr('fill', this.darkColor)
 
-      let self = this
-      let secondaryText = ticks.selectAll('text.secondaryAxisText')
-                               .data(['secondaryAxisText'])
+      // append circles
+      patternify({
+        container: ticks,
+        tag: 'circle',
+        selector: 'tickCircle'
+      })
+      .attr('r', 5)
+      .attr('fill', this.circleColor)
+      .attr('stroke', '#fff')
+      .attr('stroke-width', 1.5)
 
-      secondaryText.enter()
-          .append('text')
-          .merge(secondaryText)
-          .attr('class', 'secondaryAxisText')
-          .attr('dy', '2.5em')
-          .text(function (d, i) {
-            let tick = self.$d3.select(this.parentElement)
-            return tick.attr('data-age')
-          })
-
-      let startEndTickSize = -(this.chartHeight + this.mehrHeight)
+      // append ages
+      patternify({
+        container: ticks,
+        tag: 'text',
+        selector: 'secondaryAxisText'
+      })
+      .attr('class', 'secondaryAxisText')
+      .attr('dy', '2.5em')
+      .text(function (d, i) {
+        let tick = self.$d3.select(this.parentElement)
+        return tick.attr('data-age')
+      })
 
       if (this.startYear >= this.domain[0]) {
-        // start year circles
+        // start year tick selection
         let startYearTick = this.chart.select(`#xTick-${this.startYear}`)
-        startYearTick.select('line').attr('y2', startEndTickSize)
-        let startYearCircle = startYearTick.selectAll('circle.startYearCircle')
-                                  .data(['startYearCircle'])
-        startYearCircle = startYearCircle.enter()
-          .append('circle')
-          .attr('r', 5)
-          .attr('fill', '#1971ff')
-          .attr('stroke', '#fff')
-          .attr('stroke-width', 1.5)
-          .attr('transform', `translate(0, ${startEndTickSize})`)
-          .merge(startYearCircle)
-        startYearCircle.attr('class', 'startYearCircle')
-        let startYearGroup = this.chart.selectAll('g.startYear')
-                               .data(['startYear'])
-        startYearGroup = startYearGroup.enter()
-                                     .append('g')
-                                     .attr('class', 'startYear')
-                                     .merge(startYearGroup)
-        startYearGroup.attr('transform', `translate(${this.xScale(this.startYear) + this.xScale.bandwidth() / 2 + 10}, ${this.mehrHeight - this.margin.top - 15})`)
-        startYearGroup.selectAll('text.startYearTxt')
-          .data(['startYearTxt'])
-          .enter()
-          .append('text')
-          .attr('class', 'startYearTxt')
-          .text('Start Year')
-          .attr('stroke', '#fff')
+        startYearTick
+          .select('line')
+          .attr('y2', startEndTickSize)
 
-        startYearGroup.selectAll('text.endYearTxt')
-            .data(['endYearTxt'])
-            .enter()
-            .append('text')
-            .attr('class', 'endYearTxt')
-            .text(this.startYear)
-            .attr('stroke', '#fff')
-            .attr('dy', 20)
+        // append circle for the startYear tick
+        patternify({
+          container: startYearTick,
+          tag: 'circle',
+          selector: 'startYearCircle'
+        })
+        .attr('r', 5)
+        .attr('fill', this.circleColor)
+        .attr('stroke', '#fff')
+        .attr('stroke-width', 1.5)
+        .attr('transform', `translate(0, ${startEndTickSize})`)
+
+        // start year text group
+        let startYearGroup = patternify({
+          container: this.chart,
+          tag: 'g',
+          selector: 'startYear'
+        })
+        .attr('transform', `translate(${this.xScale(this.startYear) + this.xScale.bandwidth() / 2 + 10}, ${this.mehrHeight - this.margin.top - 15})`)
+
+        patternify({
+          container: startYearGroup,
+          tag: 'text',
+          selector: 'startYearTxt'
+        })
+        .text('Start Year')
+        .attr('fill', this.darkColor)
+        .attr('font-size', '0.8rem')
+
+        patternify({
+          container: startYearGroup,
+          tag: 'text',
+          selector: 'startYearY'
+        })
+        .text(this.startYear)
+        .attr('fill', '#fff')
+        .attr('dy', 20)
       } else {
         this.chart.selectAll('g.startYear').remove()
       }
 
       if (this.endYear <= this.domain[this.domain.length - 1]) {
+        // end year tick selection
         let endYeartTick = this.chart.select(`#xTick-${this.endYear}`)
-        endYeartTick.select('line').attr('y2', startEndTickSize)
-        let endYearCircle = endYeartTick.selectAll('circle.endYearCircle')
-                              .data(['endYearCircle'])
+        endYeartTick
+          .select('line')
+          .attr('y2', startEndTickSize)
 
-        endYearCircle = endYearCircle.enter()
-          .append('circle')
-          .attr('r', 5)
-          .attr('fill', '#1971ff')
-          .attr('stroke', '#fff')
-          .attr('stroke-width', 1.5)
-          .attr('transform', `translate(0, ${startEndTickSize})`)
-          .merge(endYearCircle)
-        endYearCircle.attr('class', 'endYearCircle')
-        let endYearGroup = this.chart.selectAll('g.endYear')
-                              .data(['endYear'])
+        // add circle to the end year tick
+        patternify({
+          container: endYeartTick,
+          tag: 'circle',
+          selector: 'endYearCircle'
+        })
+        .attr('r', 5)
+        .attr('fill', '#1971ff')
+        .attr('stroke', '#fff')
+        .attr('stroke-width', 1.5)
+        .attr('transform', `translate(0, ${startEndTickSize})`)
 
-        endYearGroup = endYearGroup.enter()
-                                     .append('g')
-                                     .attr('class', 'endYear')
-                                     .merge(endYearGroup)
-        endYearGroup.attr('transform', `translate(${this.xScale(this.endYear) + this.xScale.bandwidth() / 2 + 10}, ${this.mehrHeight - this.margin.top - 15})`)
-        endYearGroup.selectAll('text.startYearY')
-          .data(['startYearY'])
-          .enter()
-          .append('text')
-          .attr('class', 'startYearY')
-          .text('End Year')
-          .attr('stroke', '#fff')
+        // end year text group
+        let endYearGroup = patternify({
+          container: this.chart,
+          tag: 'g',
+          selector: 'endYear'
+        })
+        .attr('transform', `translate(${this.xScale(this.endYear) + this.xScale.bandwidth() / 2 + 10}, ${this.mehrHeight - this.margin.top - 15})`)
 
-        endYearGroup.selectAll('text.endYearY')
-          .data(['endYearY'])
-          .enter()
-          .append('text')
-          .attr('class', 'endYearY')
-          .text(this.endYear)
-          .attr('stroke', '#fff')
-          .attr('dy', 20)
+        patternify({
+          container: endYearGroup,
+          tag: 'text',
+          selector: 'endYearTxt'
+        })
+        .text('End Year')
+        .attr('fill', this.darkColor)
+        .attr('font-size', '0.8rem')
+
+        patternify({
+          container: endYearGroup,
+          tag: 'text',
+          selector: 'endYearY'
+        })
+        .text(this.endYear)
+        .attr('fill', '#fff')
+        .attr('dy', 20)
       } else {
         this.chart.selectAll('g.endYear').remove()
       }
     },
     drawSlider (selection, width) {
-      var padding = 50
+      var padding = 60
       var self = this
       var scale = this.$d3
-                      .scaleBand()
-                      .domain(this.staticDomain)
-                      .range([0, width - padding * 2])
+                  .scaleBand()
+                  .domain(this.staticDomain)
+                  .range([0, width - padding * 2])
       var currentSelectedArea = [scale(this.domain[0]), scale(this.domain[this.domain.length - 1]) + scale.bandwidth()]
       // append texts
-      let startText = selection.selectAll('text.sliderStartTxt')
-                               .data(['sliderStartTxt'])
-      let endText = selection.selectAll('text.sliderEndTxt')
-                             .data(['sliderEndTxt'])
-      startText.enter()
-               .append('text')
-               .attr('class', 'sliderStartTxt')
-               .text(this.staticDomain[0])
-               .attr('fill', '#fff')
-      endText = endText.enter()
-                .append('text')
-                .attr('class', 'sliderEndTxt')
-                .text(this.staticDomain[this.staticDomain.length - 1])
-                .attr('fill', '#fff')
-                .merge(endText)
+      patternify({
+        container: selection,
+        tag: 'text',
+        selector: 'sliderStartTxt'
+      })
+      .text(this.staticDomain[0])
+      .attr('fill', '#fff')
 
-      endText.attr('x', width - 35)
+      patternify({
+        container: selection,
+        tag: 'text',
+        selector: 'sliderEndTxt'
+      })
+      .text(this.staticDomain[this.staticDomain.length - 1])
+      .attr('fill', '#fff')
+      .attr('x', width - 35)
 
       // slider group
-      var slider = selection.selectAll('g.slider')
-                            .data(['slider'])
+      var slider = patternify({
+        container: selection,
+        tag: 'g',
+        selector: 'slider'
+      })
+      .attr('overflow', 'visible')
+      .attr('transform', `translate(${padding}, ${-6})`)
 
-      slider = slider.enter()
-               .append('g')
-               .merge(slider)
-               .attr('class', 'slider')
-               .attr('overflow', 'visible')
-               .attr('transform', `translate(${padding}, ${-6})`)
+      // background line
+      patternify({
+        container: slider,
+        tag: 'line',
+        selector: 'backgroundLine'
+      })
+      .attr('stroke-width', 8)
+      .attr('stroke', this.sliderBackColor)
+      .attr('stroke-linecap', 'round')
+      .attr('x2', width - padding * 2)
 
-      var firstLine = slider.selectAll('line.firstSliderLine')
-                            .data(['firstSliderLine'])
-
-      firstLine = firstLine.enter()
-        .append('line')
-        .attr('class', 'firstSliderLine')
-        .attr('stroke-width', 6)
-        .attr('stroke', this.sliderBackColor)
-        .attr('stroke-linecap', 'round')
-        .merge(firstLine)
-
-      firstLine.attr('x2', width - padding * 2)
-
-      var secondLine = slider.selectAll('line.secondSliderLine')
-                            .data(['secondSliderLine'])
-
-      secondLine = secondLine.enter()
-        .append('line')
-        .attr('class', 'secondSliderLine')
-        .attr('stroke-width', 2)
-        .attr('stroke', '#fff')
-        .attr('stroke-linecap', 'round')
-        .merge(secondLine)
-
-      secondLine.attr('x1', currentSelectedArea[0])
-                .attr('x2', currentSelectedArea[1])
+      // foreground line
+      let foregroundLine = patternify({
+        container: slider,
+        tag: 'line',
+        selector: 'foregroundLine'
+      })
+      .attr('stroke-width', 2)
+      .attr('stroke', '#fff')
+      .attr('stroke-linecap', 'round')
+      .attr('x1', currentSelectedArea[0])
+      .attr('x2', currentSelectedArea[1])
 
       // first circle group
-      var firstCircleGroup = slider.selectAll('g.firstCircleGroup')
-                                   .data(['firstCircleGroup'])
-
-      firstCircleGroup = firstCircleGroup.enter().append('g')
-                                   .attr('class', 'firstCircleGroup')
-                                   .call(this.$d3.drag()
-                                    .on('drag', d => {
-                                      return dragged(d, 'first')
-                                    })
-                                    .on('end', d => {
-                                      return dragEnd(d)
-                                    }))
-                                    .merge(firstCircleGroup)
-
-      var firstCircle = firstCircleGroup.selectAll('circle.firstCircle')
-                          .data(['firstCircle'])
-
-      firstCircle = firstCircle.enter().append('circle')
-                         .attr('cursor', 'pointer')
-                         .attr('r', this.sliderHandlerRadius)
-                         .attr('fill', this.sliderHandlerColor)
-                         .attr('stroke', '#fff')
-                         .attr('stroke-width', 0.5)
-                         .merge(firstCircle)
-
-      firstCircle.attr('class', 'firstCircle')
-
-      var vBarsFirst = firstCircleGroup.selectAll('line.vBarFirst')
-                            .data([-1, 0, 1])
-
-      vBarsFirst = vBarsFirst.enter()
-                        .append('line')
-                        .attr('x1', d => d * 2)
-                        .attr('x2', d => d * 2)
-                        .attr('y1', -3)
-                        .attr('y2', 3)
-                        .attr('stroke', '#fff')
-                        .merge(vBarsFirst)
-
-      vBarsFirst.attr('class', 'vBarFirst')
-
-      firstCircleGroup.attr('transform', `translate(${currentSelectedArea[0]})`)
+      let firstCircleGroup = patternify({
+        container: slider,
+        tag: 'g',
+        selector: 'firstCircleGroup'
+      })
+      .attr('transform', `translate(${currentSelectedArea[0]})`)
+      .call(this.$d3.drag()
+              .on('drag', d => {
+                return dragged(d, 'first')
+              })
+              .on('end', d => {
+                return dragEnd(d)
+              }))
 
       // second circle group
-      var secondCircleGroup = slider.selectAll('g.secondCircleGroup')
-                                   .data(['secondCircleGroup'])
+      var secondCircleGroup = patternify({
+        container: slider,
+        tag: 'g',
+        selector: 'secondCircleGroup'
+      })
+      .attr('transform', `translate(${currentSelectedArea[1]})`)
+      .call(this.$d3.drag()
+              .on('drag', d => {
+                return dragged(d, 'second')
+              })
+              .on('end', d => {
+                return dragEnd(d)
+              }))
 
-      secondCircleGroup = secondCircleGroup.enter().append('g')
-                                   .attr('class', 'secondCircleGroup')
-                                   .call(this.$d3.drag()
-                                    .on('drag', d => {
-                                      return dragged(d, 'second')
-                                    })
-                                    .on('end', d => {
-                                      return dragEnd(d)
-                                    }))
-                                    .merge(secondCircleGroup)
+      patternify({
+        container: firstCircleGroup,
+        tag: 'circle',
+        selector: 'firstCircle'
+      })
+      .attr('cursor', 'pointer')
+      .attr('r', this.sliderHandlerRadius)
+      .attr('fill', this.sliderHandlerColor)
+      .attr('stroke', '#fff')
+      .attr('stroke-width', 0.5)
 
-      var handler = secondCircleGroup.selectAll('circle.handler')
-                          .data(['handler'])
+      patternify({
+        container: secondCircleGroup,
+        tag: 'circle',
+        selector: 'secondCircle'
+      })
+      .attr('cursor', 'pointer')
+      .attr('r', this.sliderHandlerRadius)
+      .attr('fill', this.sliderHandlerColor)
+      .attr('stroke', '#fff')
+      .attr('stroke-width', 0.5)
 
-      handler = handler.enter()
-                       .append('circle')
-                       .attr('cursor', 'pointer')
-                       .attr('data-curentPercentCx', 0)
-                       .attr('r', this.sliderHandlerRadius)
-                       .attr('fill', this.sliderHandlerColor)
-                       .attr('stroke', '#fff')
-                       .attr('stroke-width', 0.5)
-                       .merge(handler)
+      patternify({
+        container: firstCircleGroup,
+        tag: 'line',
+        selector: 'vBarFirst',
+        data: [-1, 0, 1]
+      })
+      .attr('x1', d => d * 3)
+      .attr('x2', d => d * 3)
+      .attr('y1', -4)
+      .attr('y2', 4)
+      .attr('stroke', '#fff')
 
-      handler.attr('class', 'handler')
-
-      var vBarsSecond = secondCircleGroup.selectAll('line.vBarSecond')
-                            .data([-1, 0, 1])
-
-      vBarsSecond = vBarsSecond.enter()
-                        .append('line')
-                        .attr('x1', d => d * 2)
-                        .attr('x2', d => d * 2)
-                        .attr('y1', -3)
-                        .attr('y2', 3)
-                        .attr('stroke', '#fff')
-                        .merge(vBarsSecond)
-
-      vBarsSecond.attr('class', 'vBarSecond')
-
-      secondCircleGroup.attr('transform', `translate(${currentSelectedArea[1]})`)
+      patternify({
+        container: secondCircleGroup,
+        tag: 'line',
+        selector: 'vBarSecond',
+        data: [-1, 0, 1]
+      })
+      .attr('x1', d => d * 3)
+      .attr('x2', d => d * 3)
+      .attr('y1', -4)
+      .attr('y2', 4)
+      .attr('stroke', '#fff')
 
       // drag handlers
       function dragged (d, flag) {
@@ -463,14 +461,14 @@ export default {
           }
           currentSelectedArea[0] = cx
           firstCircleGroup.attr('transform', `translate(${currentSelectedArea[0]})`)
-          secondLine.attr('x1', cx)
+          foregroundLine.attr('x1', cx)
         } else {
           if (cx < currentSelectedArea[0] + scale.bandwidth() * self.maximumSliderRange) {
             cx = currentSelectedArea[0] + scale.bandwidth() * self.maximumSliderRange
           }
           currentSelectedArea[1] = cx
           secondCircleGroup.attr('transform', `translate(${currentSelectedArea[1]})`)
-          secondLine.attr('x2', cx)
+          foregroundLine.attr('x2', cx)
         }
       }
 
@@ -536,8 +534,11 @@ export default {
             .hiddenrect {
               fill: transparent;
             }
-            .axis text {
+            .yAxis text {
                 fill: #fff;
+            }
+            .secondaryAxisText {
+              fill: #fff;
             }
             .axis  {
               pointer-events: none;

@@ -8,9 +8,11 @@
         Delete Expense
       </button>
     </div>
+    <!-- chart Wrapper -->
     <section class="chart-container depth-2">
       <barchart v-if="cashflow.length" :dataArray="cashflow" :startYear="2018" :endYear="2036" :birthYear="1981"></barchart>
     </section>
+    <!-- Auto Calculation, Custom Values Tabs Card-->
     <b-card no-body class="expense-tabs-card depth-1">
       <b-tabs pills card>
         <b-tab title="Auto Calculation" :title-link-class="'expense-tab'" active>
@@ -118,7 +120,7 @@
                 </button>
               </template>
               <template slot="HEAD_actions" slot-scope="row">
-                <button class='btn btn-sm icon-btn text-regular add-row-btn' :disabled="customDisabled"  style="border-color: #eaecef;">
+                <button class='btn btn-sm icon-btn text-regular add-row-btn' :disabled="customDisabled"  style="border-color: #eaecef;" @click.stop="openAddRowModal">
                   <i class="flaticon stroke plus text-primary"></i>
                   Add Row
                 </button>
@@ -143,6 +145,7 @@
         </b-tab>
       </b-tabs>
     </b-card>
+    <!-- Expense Information Show Card -->
     <b-card class="depth-1 edit-info-card">
       <b-container fluid>
         <b-row class="text-left">
@@ -191,7 +194,7 @@
             </b-row>
           </b-col>
           <b-col md="3" xl="5" class="d-flex justify-content-center  justify-content-md-end align-items-center">
-              <button class='btn btn-sm icon-btn text-regular' style="border-color: #eaecef;" @click="openEditModal">
+              <button class='btn btn-sm icon-btn text-regular' style="border-color: #eaecef;" @click="openEditInfoModal">
                 <i class="flaticon solid edit-3 text-primary"></i>
                 Edit Info
               </button>
@@ -199,10 +202,46 @@
         </b-row>
       </b-container>
     </b-card>
-    <b-modal id="edit-info-modal" size="lg" v-model="editInfoModalShow" hide-footer>
+    <!-- Add Row Modal -->
+    <b-modal id="add-row-modal" class="livsplan-modal" size="lg" v-model="addRowModalShow" hide-footer>
+      <div slot="modal-header" class="w-100 mx-auto">
+        <h1> Add Row </h1>
+        <button type="button" class="close" aria-label="Close" @click="addRowModalShow = false">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <b-form id="addRowForm" ref="addRowForm" novalidate :validated="addRowValidated" @submit.prevent="onAddRowSubmit">
+        <b-container style="width: 60%">
+          <b-row>
+            <b-col sm="3" class="d-flex justify-content-end mt-3"><label :for="'year-input'">Year</label></b-col>
+            <b-col sm="9">
+              <b-form-group label-for="year-input" :state="yearState" class="text-left">
+                <b-form-input id="year-input" type="number" v-model="newRow.year" :state="yearState" aria-describedby="yearInputFeedback" min="2000" max="2140" required></b-form-input>
+                <b-form-invalid-feedback id="yearInputFeedback">
+                  Year is required and must be between 2000 and 2140
+                </b-form-invalid-feedback>
+              </b-form-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col sm="3" class="d-flex justify-content-end mt-3"><label :for="'amount-input'">Amount</label></b-col>
+            <b-col sm="9">
+              <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-model="newRow.amount" class="form-control text-regular mb-3" :minus="true"></vue-numeric>
+            </b-col>
+          </b-row>
+          <div class="w-100 mx-auto">
+            <b-btn type="submit" size="lg" variant="primary">
+              Save
+            </b-btn>
+          </div>
+        </b-container>
+      </b-form>
+    </b-modal>
+    <!-- Edit Info Modal -->
+    <b-modal id="edit-info-modal" class="livsplan-modal" size="lg" v-model="editInfoModalShow" hide-footer>
       <div slot="modal-header" class="w-100 mx-auto">
         <h1>Edit: {{expense.name}}</h1>
-        <button type="button" class="close" aria-label="Close" @click="closeEditModal">
+        <button type="button" class="close" aria-label="Close" @click="closeEditInfoModal">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -304,6 +343,7 @@ import axios from 'axios'
 import barchart from '../../charts/barchart'
 import Switches from 'vue-switches'
 import EventBus from '../../../event-bus.js'
+const MAX_NUM = 999999999999
 
 export default {
   name: 'expense',
@@ -340,6 +380,7 @@ export default {
       }],
       expense: {},
       editExpense: {},
+      newRow: {},
       cashflow: [],
       periodOptions: [
         { value: null, text: 'Please select an option', disabled: true },
@@ -377,9 +418,11 @@ export default {
       pageOptions: [ 5, 10, 15, 25 ],
       totalRows: 0,
       editInfoModalShow: false,
+      addRowModalShow: false,
       isCalcSaveDisabled: true,
       autoCalcValidated: false,
       editInfoValidated: false,
+      addRowValidated: false,
       isSaving: false,
       customDisabled: true
     }
@@ -397,6 +440,13 @@ export default {
     },
     endYearState () {
       return !this.autoCalcValidated || (parseInt(this.expense.start_year) > 1999 && parseInt(this.expense.start_year) < 2141)
+    },
+    yearState () {
+      if (!this.addRowValidated) {
+        return null
+      } else {
+        return (parseInt(this.newRow.year) > 1999 && parseInt(this.newRow.year) < 2141)
+      }
     },
     nameState () {
       if (!this.editInfoValidated) {
@@ -482,13 +532,13 @@ export default {
         }
       }
     },
-    openEditModal () {
+    openEditInfoModal () {
       this.autoCalcValidated = false
       this.editInfoValidated = false
       this.editInfoModalShow = true
       this.editExpense = JSON.parse(JSON.stringify(this.expense))
     },
-    closeEditModal () {
+    closeEditInfoModal () {
       this.editInfoModalShow = false
       this.editExpense = {}
     },
@@ -523,13 +573,47 @@ export default {
         }
       }
     },
+    openAddRowModal () {
+      this.addRowValidated = false
+      this.addRowModalShow = true
+      this.newRow = {}
+    },
+    async onAddRowSubmit (ev) {
+      this.addRowValidated = true
+      if (this.$refs.addRowForm.checkValidity() === true) {
+        try {
+          let data = {
+            expense_id: this.expense.id,
+            plan_id: this.expense.plan_id,
+            year: this.newRow.year,
+            amount: this.newRow.amount ? this.newRow.amount : 0
+          }
+          let response = await axios.post(`${process.env.ROOT_API}/expenses/${this.$route.params.id}/amounts`, data)
+          this.expense.expense_amounts.push(response.data.data)
+          this.addRowModalShow = false
+          EventBus.$emit('notify-me', {
+            title: 'Success!',
+            text: 'New Row has been added successfully!',
+            status: 'is-success'
+          })
+        } catch (err) {
+          console.log(err)
+          EventBus.$emit('notify-me', {
+            title: 'Failed!',
+            text: 'Something went wrong!',
+            status: 'is-danger'
+          })
+        }
+      }
+    },
     editRow (item) {
       item.is_edit = true
+      item.edit_amount = MAX_NUM
       item.edit_amount = item.amount
     },
     cancelRow (item) {
       item.is_edit = false
-      item.edit_amount = 0
+      item.edit_amount = MAX_NUM
     },
     async saveRow (item) {
       let data = {
@@ -537,7 +621,7 @@ export default {
       }
       await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}/amounts/${item.id}`, data)
       item.amount = item.edit_amount
-      item.edit_amount = 0
+      item.edit_amount = MAX_NUM
       item.is_edit = false
     }
   },

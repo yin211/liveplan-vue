@@ -25,7 +25,6 @@ export default {
   },
   created () {
     EventBus.$on('notify-me', res => {
-      console.log(res)
       this.bus.$emit('notify-me', {
         status: res.status,
         data: {

@@ -227,6 +227,9 @@
     }
 
     ul[aria-label="Pagination"] {
+      display: flex;
+      align-items: center;
+
       .page-link {
         background: transparent;
         font-size: 13px;
@@ -247,53 +250,6 @@
       width: 60px;
       background-color: transparent;
       border: none;
-    }
-  }
-
-  // customize modal
-  #edit-info-modal {
-    .modal-header {
-      padding: 48px;
-      border-bottom: none;
-      box-shadow: 0px 24px 1px -24px #232B36;
-      .close {
-        font-size: 48px;
-        padding: 0;
-        position: absolute;
-        top: 24px;
-        right: 32px;
-        outline: none;
-
-        span {
-          color: #A5ADBA;
-          font-weight: 300;
-        }
-      }
-    }
-
-    .modal-body {
-      label {
-        color: #232B36;
-        font-size: 14px;
-        line-height: 20px;
-      }
-      form {
-        .btn {
-          width: 204px;
-          border-radius: 40px;
-          font-size: 14px;
-          font-weight: 600;
-          padding: .75rem 1rem;
-          margin: 64px auto;
-        }
-        .invalid-feedback {
-          position: absolute;
-        }
-
-        .row {
-          margin-top: 0.5rem;
-        }
-      }
     }
   }
 
@@ -344,40 +300,6 @@
   }
   .slider:focus::-ms-fill-upper {
     background: #ccc;
-  }
-
-  // customize switch toggle button
-  .vue-switcher-theme--bootstrap {
-    input {
-      position: relative;
-    }
-    &.vue-switcher-color--success {
-      div {
-          background-color: #EF5350;
-          width: 40px;
-          height: 22px;
-
-          &:after {
-              // for the circle on the switch
-              background-color: white;
-              height: 16px;
-              width: 16px;
-              top: 3px;
-              margin-left: -20px;
-          }
-      }
-
-      &.vue-switcher--unchecked {
-          div {
-              background-color: #36b37E;
-
-              &:after {
-                background-color: white;
-                margin-left: -25px;
-              }
-          }
-      }
-    }
   }
 
 }

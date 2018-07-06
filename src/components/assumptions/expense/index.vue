@@ -90,7 +90,7 @@
           <div class="table-container text-regular text-left">
             <b-table show-empty
                     stacked="md"
-                    :items="getExpenseAmounts"
+                    :items="expense.expense_amounts"
                     :fields="fields"
                     :current-page="currentPage"
                     :per-page="perPage"

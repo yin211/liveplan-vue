@@ -117,15 +117,12 @@
                 </button>
                 <button v-show="row.item.is_edit" class='btn plain-btn text-regular' @click.stop="cancelRow(row.item)">
                   <i class="fa fa-times text-danger"></i> Cancel
-<<<<<<< HEAD:src/components/assumptions/expense.vue
-=======
                 </button>
               </template>
               <template slot="HEAD_actions" slot-scope="row">
                 <button class='btn btn-sm icon-btn text-regular add-row-btn' :disabled="customDisabled"  style="border-color: #eaecef;" @click.stop="openAddRowModal">
                   <i class="flaticon stroke plus text-primary"></i>
                   Add Row
->>>>>>> feb37ec9940a4f2c591c70a27e19652c25163f1d:src/components/assumptions/expense/index.vue
                 </button>
               </template>
             </b-table>

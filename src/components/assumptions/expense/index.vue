@@ -1,16 +1,5 @@
 <template>
   <div class="expense bg-light">
-    <notify-me
-      close="bootstrap"
-      :event-bus="bus"
-    >
-      <template slot="content" slot-scope="{data}">
-          <div>
-              <h4><b>{{data.title}}</b></h4>
-              <p style="margin: 0">{{data.text}}</p>
-          </div>
-      </template>
-    </notify-me>
     <b-breadcrumb :items="items" class="p-0"/>
     <div class="d-flex justify-content-between align-items-center">
       <h1 class="text-regular text-left">{{expense.name}} </h1>
@@ -19,9 +8,11 @@
         Delete Expense
       </button>
     </div>
+    <!-- chart Wrapper -->
     <section class="chart-container depth-2">
       <barchart v-if="cashflow.length" :dataArray="cashflow" :startYear="2018" :endYear="2036" :birthYear="1981"></barchart>
     </section>
+    <!-- Auto Calculation, Custom Values Tabs Card-->
     <b-card no-body class="expense-tabs-card depth-1">
       <b-tabs pills card>
         <b-tab title="Auto Calculation" :title-link-class="'expense-tab'" active>
@@ -126,6 +117,15 @@
                 </button>
                 <button v-show="row.item.is_edit" class='btn plain-btn text-regular' @click.stop="cancelRow(row.item)">
                   <i class="fa fa-times text-danger"></i> Cancel
+<<<<<<< HEAD:src/components/assumptions/expense.vue
+=======
+                </button>
+              </template>
+              <template slot="HEAD_actions" slot-scope="row">
+                <button class='btn btn-sm icon-btn text-regular add-row-btn' :disabled="customDisabled"  style="border-color: #eaecef;" @click.stop="openAddRowModal">
+                  <i class="flaticon stroke plus text-primary"></i>
+                  Add Row
+>>>>>>> feb37ec9940a4f2c591c70a27e19652c25163f1d:src/components/assumptions/expense/index.vue
                 </button>
               </template>
             </b-table>
@@ -148,6 +148,7 @@
         </b-tab>
       </b-tabs>
     </b-card>
+    <!-- Expense Information Show Card -->
     <b-card class="depth-1 edit-info-card">
       <b-container fluid>
         <b-row class="text-left">
@@ -196,7 +197,7 @@
             </b-row>
           </b-col>
           <b-col md="3" xl="5" class="d-flex justify-content-center  justify-content-md-end align-items-center">
-              <button class='btn btn-sm icon-btn text-regular' style="border-color: #eaecef;" @click="openEditModal">
+              <button class='btn btn-sm icon-btn text-regular' style="border-color: #eaecef;" @click="openEditInfoModal">
                 <i class="flaticon solid edit-3 text-primary"></i>
                 Edit Info
               </button>
@@ -204,10 +205,46 @@
         </b-row>
       </b-container>
     </b-card>
-    <b-modal id="edit-info-modal" size="lg" v-model="modalShow" hide-footer>
+    <!-- Add Row Modal -->
+    <b-modal id="add-row-modal" class="livsplan-modal" size="lg" v-model="addRowModalShow" hide-footer>
+      <div slot="modal-header" class="w-100 mx-auto">
+        <h1> Add Row </h1>
+        <button type="button" class="close" aria-label="Close" @click="addRowModalShow = false">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <b-form id="addRowForm" ref="addRowForm" novalidate :validated="addRowValidated" @submit.prevent="onAddRowSubmit">
+        <b-container style="width: 60%">
+          <b-row>
+            <b-col sm="3" class="d-flex justify-content-end mt-3"><label :for="'year-input'">Year</label></b-col>
+            <b-col sm="9">
+              <b-form-group label-for="year-input" :state="yearState" class="text-left">
+                <b-form-input id="year-input" type="number" v-model="newRow.year" :state="yearState" aria-describedby="yearInputFeedback" min="2000" max="2140" required></b-form-input>
+                <b-form-invalid-feedback id="yearInputFeedback">
+                  Year is required and must be between 2000 and 2140
+                </b-form-invalid-feedback>
+              </b-form-group>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col sm="3" class="d-flex justify-content-end mt-3"><label :for="'amount-input'">Amount</label></b-col>
+            <b-col sm="9">
+              <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-model="newRow.amount" class="form-control text-regular mb-3" :minus="true"></vue-numeric>
+            </b-col>
+          </b-row>
+          <div class="w-100 mx-auto">
+            <b-btn type="submit" size="lg" variant="primary">
+              Save
+            </b-btn>
+          </div>
+        </b-container>
+      </b-form>
+    </b-modal>
+    <!-- Edit Info Modal -->
+    <b-modal id="edit-info-modal" class="livsplan-modal" size="lg" v-model="editInfoModalShow" hide-footer>
       <div slot="modal-header" class="w-100 mx-auto">
         <h1>Edit: {{expense.name}}</h1>
-        <button type="button" class="close" aria-label="Close" @click="closeEditModal">
+        <button type="button" class="close" aria-label="Close" @click="closeEditInfoModal">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -306,11 +343,10 @@
 
 <script>
 import axios from 'axios'
-import barchart from '../charts/barchart'
-import Notify from 'vue-notify-me'
+import barchart from '../../charts/barchart'
 import Switches from 'vue-switches'
-import Vue from 'vue'
-const bus = new Vue()
+import EventBus from '../../../event-bus.js'
+const MAX_NUM = 999999999999
 
 export default {
   name: 'expense',
@@ -329,13 +365,15 @@ export default {
       for (let item of response.data.data) {
         this.categoryOptions.push({value: item.id, text: item.name})
       }
+      setTimeout(() => {
+        this.perPage = 10
+      }, 1000)
     } catch (err) {
       console.log(err)
     }
   },
   data () {
     return {
-      bus,
       items: [{
         text: 'Assumptions',
         to: { name: 'assumptions' }
@@ -345,6 +383,7 @@ export default {
       }],
       expense: {},
       editExpense: {},
+      newRow: {},
       cashflow: [],
       periodOptions: [
         { value: null, text: 'Please select an option', disabled: true },
@@ -374,17 +413,19 @@ export default {
         { key: 'actions', 'class': 'd-flex justify-content-end' }
       ],
       currentPage: 1,
-      perPage: 10,
+      perPage: 0,
       filter: null,
       sortBy: null,
       sortDesc: false,
       sortDirection: 'asc',
       pageOptions: [ 5, 10, 15, 25 ],
       totalRows: 0,
-      modalShow: false,
+      editInfoModalShow: false,
+      addRowModalShow: false,
       isCalcSaveDisabled: true,
       autoCalcValidated: false,
       editInfoValidated: false,
+      addRowValidated: false,
       isSaving: false,
       customDisabled: true
     }
@@ -402,6 +443,13 @@ export default {
     },
     endYearState () {
       return !this.autoCalcValidated || (parseInt(this.expense.start_year) > 1999 && parseInt(this.expense.start_year) < 2141)
+    },
+    yearState () {
+      if (!this.addRowValidated) {
+        return null
+      } else {
+        return (parseInt(this.newRow.year) > 1999 && parseInt(this.newRow.year) < 2141)
+      }
     },
     nameState () {
       if (!this.editInfoValidated) {
@@ -471,33 +519,30 @@ export default {
           }
           await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`, data)
           this.isSaving = false
-          this.bus.$emit('notify-me', {
-            data: {
-              title: 'Success!',
-              text: 'New vaules have been saved successfully!'
-            }
+          EventBus.$emit('notify-me', {
+            title: 'Success!',
+            text: 'New vaules have been saved successfully!',
+            status: 'is-success'
           })
         } catch (err) {
           console.log(err)
           this.isSaving = false
-          this.bus.$emit('notify-me', {
-            data: {
-              title: 'Failed!',
-              text: 'Something went wrong!'
-            },
+          EventBus.$emit('notify-me', {
+            title: 'Failed!',
+            text: 'Something went wrong!',
             status: 'is-danger'
           })
         }
       }
     },
-    openEditModal () {
+    openEditInfoModal () {
       this.autoCalcValidated = false
       this.editInfoValidated = false
-      this.modalShow = true
+      this.editInfoModalShow = true
       this.editExpense = JSON.parse(JSON.stringify(this.expense))
     },
-    closeEditModal () {
-      this.modalShow = false
+    closeEditInfoModal () {
+      this.editInfoModalShow = false
       this.editExpense = {}
     },
     async onEditInfoSumbit (ev) {
@@ -513,22 +558,52 @@ export default {
             inflation_rate: this.editExpense.inflation_rate
           }
           await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`, data)
-          this.bus.$emit('notify-me', {
-            data: {
-              title: 'Success!',
-              text: 'New vaules have been saved successfully!'
-            }
+          EventBus.$emit('notify-me', {
+            title: 'Success!',
+            text: 'New vaules have been saved successfully!',
+            status: 'is-success'
           })
-          this.modalShow = false
+          this.editInfoModalShow = false
           let response = await axios.get(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`)
           this.expense = response.data.data
         } catch (err) {
           console.log(err)
-          this.bus.$emit('notify-me', {
-            data: {
-              title: 'Failed!',
-              text: 'Something went wrong!'
-            },
+          EventBus.$emit('notify-me', {
+            title: 'Failed!',
+            text: 'Something went wrong!',
+            status: 'is-danger'
+          })
+        }
+      }
+    },
+    openAddRowModal () {
+      this.addRowValidated = false
+      this.addRowModalShow = true
+      this.newRow = {}
+    },
+    async onAddRowSubmit (ev) {
+      this.addRowValidated = true
+      if (this.$refs.addRowForm.checkValidity() === true) {
+        try {
+          let data = {
+            expense_id: this.expense.id,
+            plan_id: this.expense.plan_id,
+            year: this.newRow.year,
+            amount: this.newRow.amount ? this.newRow.amount : 0
+          }
+          let response = await axios.post(`${process.env.ROOT_API}/expenses/${this.$route.params.id}/amounts`, data)
+          this.expense.expense_amounts.push(response.data.data)
+          this.addRowModalShow = false
+          EventBus.$emit('notify-me', {
+            title: 'Success!',
+            text: 'New Row has been added successfully!',
+            status: 'is-success'
+          })
+        } catch (err) {
+          console.log(err)
+          EventBus.$emit('notify-me', {
+            title: 'Failed!',
+            text: 'Something went wrong!',
             status: 'is-danger'
           })
         }
@@ -536,11 +611,12 @@ export default {
     },
     editRow (item) {
       item.is_edit = true
+      item.edit_amount = MAX_NUM
       item.edit_amount = item.amount
     },
     cancelRow (item) {
       item.is_edit = false
-      item.edit_amount = 0
+      item.edit_amount = MAX_NUM
     },
     async saveRow (item) {
       let data = {
@@ -548,18 +624,8 @@ export default {
       }
       await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}/amounts/${item.id}`, data)
       item.amount = item.edit_amount
-      item.edit_amount = 0
+      item.edit_amount = MAX_NUM
       item.is_edit = false
-    },
-    getExpenseAmounts (ctx) {
-      let promise = axios.get(`${process.env.ROOT_API}/expenses/${this.$route.params.id}/amounts?page=${ctx.currentPage}&size=${ctx.perPage}&filter=${ctx.filter}&sortBy=${ctx.sortBy}&sortDesc=${ctx.sortDesc}`)
-
-      return promise.then((response) => {
-        return response.data.data
-      }).catch(error => {
-        console.log(error)
-        return []
-      })
     }
   },
   watch: {
@@ -577,425 +643,21 @@ export default {
         }
         await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`, data)
         this.expense.calculation_mode = val ? 'auto' : 'custom'
-        this.bus.$emit('notify-me', {
-          data: {
-            title: 'Success!',
-            text: 'Calculation mode has been updated successfully!'
-          }
+        EventBus.$emit('notify-me', {
+          title: 'Success!',
+          text: 'Calculation mode has been updated successfully!',
+          status: 'is-success'
         })
       }
     }
   },
   components: {
     barchart,
-    'notify-me': Notify,
     Switches
   }
 }
 </script>
 
 <style lang="scss">
-  .expense {
-    padding: 120px 34px;
-
-    section {
-      margin-bottom: 120px;
-    }
-
-    .element-spacer {
-      margin-top: 6px;
-    }
-
-    .date-spacer {
-      min-width: 20px;
-      margin-top: 10px;
-      text-align: center;
-    }
-
-    .space-divider {
-      background-color: #C8C8C8;
-      height: 60%;
-      width: 1px;
-      margin: auto 24px;
-    }
-
-    .car-icon {
-      color: #A5ADBA;
-      width: 23px;
-      height: 19px;
-    }
-
-    .plain-btn {
-      background-color:transparent;
-      font-size: 12px;
-      line-height: 24px;
-
-      i {
-        margin-right: 4px;
-      }
-    }
-
-    // chart wrapper
-    .chart-container {
-      margin-left: calc(50% - 50vw);
-      margin-right: calc(50% - 49.5vw);
-      margin-top: 38px;
-    }
-
-    // customize card
-    .card {
-      border-radius: 0;
-      span {
-        font-size: 14px;
-        line-height: 20px;
-      }
-      &.expense-tabs-card {
-        margin-top: -170px;
-
-        .card-header {
-          padding: 34px 30px;
-          background: white;
-          border-bottom: none;
-
-          .card-header-pills {
-            outline: none;
-
-            .expense-tab {
-              font-size: 24px;
-              line-height: 32px;
-              color: #84888F;
-              &.active {
-                color: #434343;
-                font-weight: 600;
-                background-color: transparent;
-              }
-            }
-          }
-        }
-
-        .tab-content {
-          padding-top: 28px;
-          background: linear-gradient(0deg, #FFFFFF 0%, #F8F8F8 100%);
-
-          .card-body {
-            padding: 0px 0px 28px 0px;
-
-            #autoCalcForm {
-              &.custom-is-enabled {
-                margin-top: 24px;
-              }
-
-              .start_end_year
-              {
-                text-align:center;
-              }
-              .amount-per-month {
-                width: 130px;
-                margin-right: 20px;
-                text-align:right;
-              }
-              .annual-growth-rate {
-                width: 54px;
-                margin-right: 20px;
-                text-align:right;
-              }
-
-              .save-calc-btn {
-                position: absolute;
-                right: 30px;
-                top: 42px;
-                border-radius: 40px;
-                font-weight: 500;
-                display: flex;
-                i {
-                  font-size: 1rem;
-                  margin-right: 0.5rem;
-                }
-              }
-            }
-
-            .upload-file-btn {
-              position: absolute;
-              right: 30px;
-              top: 42px;
-              border-color: #eaecef;
-            }
-
-            .custom-values-bar {
-              position: absolute;
-              top: 80px;
-              width: 100%;
-              background-color: white;
-              padding: 10px 0;
-              & > div {
-                padding: 0px 20px;
-                margin: 0px 10px;
-                padding: 0 20px;
-                &.bar-disable-color {
-                  background-color: #F8F8F8;
-                  border: 1px dashed #D8D8D8;
-                }
-                &.bar-enable-color {
-                  background-color: rgba(54,179,126,0.1);
-                  border: 1px dashed #36B37E;
-                }
-              }
-
-              .alert {
-                border: 1px dashed;
-                border-radius: unset;
-                font-size: 14px;
-                line-height: 20px;
-              }
-            }
-          }
-
-        }
-      }
-
-      &.edit-info-card {
-        margin-top: 34px;
-        margin-bottom: 120px;
-
-        .card-body {
-          padding: 30px 15px 33px;
-        }
-      }
-    }
-
-    // customize table
-    .table-container {
-      padding: 30px 20px;
-      font-size: 14px;
-
-      table {
-        th {
-          padding-top: 18px;
-          padding-bottom: 18px;
-          background: white;
-          box-shadow: 9px 8px 16px 0 rgba(0,0,0,0.07);
-          outline: none;
-          border: none;
-        }
-
-        tbody {
-          tr {
-            border-bottom-style: dotted;
-            border-bottom-width: 2px;
-            border-bottom-color: #CACACA;
-
-            // &:nth-of-type(odd) {
-            //   background-color: #F1F2F8 !important;
-            // }
-
-            &:hover {
-              background: #FAFBFC !important;
-            }
-
-            &.b-table-top-row {
-              border: none;
-              td {
-                width: 100%;
-                padding: 0;
-                input {
-                  border: none;
-                }
-              }
-            }
-
-            td {
-              vertical-align: middle;
-              padding-top: 6px;
-              padding-bottom: 6px;
-
-              .amount-per-month {
-                width: 130px;
-                margin-right: 20px;
-                text-align:right;
-              }
-
-              .hide-element {
-                display: none
-              }
-            }
-          }
-
-        }
-      }
-
-      ul[aria-label="Pagination"] {
-        .page-link {
-          background: transparent;
-          font-size: 13px;
-          line-height: 13px;
-          border: none;
-          color: #4A4A4A;
-          display: inline;
-        }
-
-        .page-item.active .page-link {
-          border-radius: 50%;
-          background: #525670;
-          color: white;
-        }
-      }
-
-      .selectPerPage {
-        width: 60px;
-        background-color: transparent;
-        border: none;
-      }
-    }
-
-    // customize modal
-    #edit-info-modal {
-      .modal-header {
-        padding: 48px;
-        border-bottom: none;
-        box-shadow: 0px 24px 1px -24px #232B36;
-        .close {
-          font-size: 48px;
-          padding: 0;
-          position: absolute;
-          top: 24px;
-          right: 32px;
-          outline: none;
-
-          span {
-            color: #A5ADBA;
-            font-weight: 300;
-          }
-        }
-      }
-
-      .modal-body {
-        label {
-          color: #232B36;
-          font-size: 14px;
-          line-height: 20px;
-        }
-        form {
-          .btn {
-            width: 204px;
-            border-radius: 40px;
-            font-size: 14px;
-            font-weight: 600;
-            padding: .75rem 1rem;
-            margin: 64px auto;
-          }
-          .invalid-feedback {
-            position: absolute;
-          }
-
-          .row {
-            margin-top: 0.5rem;
-          }
-        }
-      }
-    }
-
-    // customize slider
-    .slider {
-      -webkit-appearance: none;
-      width: 100%;
-      background: #C1C7D0;
-      outline: none;
-      height: 1px !important;
-      padding: 0;
-      margin-top: 23px;
-    }
-
-    .slider::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      background: url('../../assets/img/slider.png');
-      border-radius: 50%;
-      cursor: pointer;
-      background-color: #FFFFFF;
-      height: 16px;
-      width: 16px;
-      background-size: 16px;
-    }
-
-    .slider::-moz-range-thumb {
-      background: url('../../assets/img/slider.png');
-      border-radius: 50%;
-      cursor: pointer;
-      background-color: #FFFFFF;
-      height: 16px;
-      width: 16px;
-      background-size: 16px;
-    }
-
-    .slider::-ms-thumb {
-      background: url('../../assets/img/slider.png');
-      border-radius: 50%;
-      cursor: pointer;
-      background-color: #FFFFFF;
-      height: 16px;
-      width: 16px;
-      background-size: 16px;
-    }
-
-    .slider:focus::-ms-fill-lower {
-      background: #888;
-    }
-    .slider:focus::-ms-fill-upper {
-      background: #ccc;
-    }
-
-    // customize notification
-    .notification {
-      padding: 1.25rem 1.5rem;
-      color: #fff;
-
-      &.is-success {
-        background-color: #23d160;
-      }
-
-      &.is-danger {
-        background-color: #ff3860;
-      }
-
-      .close {
-        position: absolute;
-        right: .5em;
-        top: .5em;
-      }
-    }
-
-    // customize switch toggle button
-    .vue-switcher-theme--bootstrap {
-      input {
-        position: relative;
-      }
-      &.vue-switcher-color--success {
-        div {
-            background-color: #EF5350;
-            width: 40px;
-            height: 22px;
-
-            &:after {
-                // for the circle on the switch
-                background-color: white;
-                height: 16px;
-                width: 16px;
-                top: 3px;
-                margin-left: -20px;
-            }
-        }
-
-        &.vue-switcher--unchecked {
-            div {
-                background-color: #36b37E;
-
-                &:after {
-                  background-color: white;
-                  margin-left: -25px;
-                }
-            }
-        }
-      }
-    }
-
-  }
+  @import './style.scss'
 </style>

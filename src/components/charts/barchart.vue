@@ -11,7 +11,16 @@
                       :width="xScale.bandwidth()"
                       :height="chartHeight - yScale(d.value)"
                       :data-year="d.year"
-                      :fill="barColor"
+                      fill="#F4D03F">
+                </rect>
+                <rect v-for="(d,i) in bars"
+                      :key="`hiddenrect-${i}`"
+                      :x="xScale(d.year)"
+                      :y="0"
+                      :width="xScale.bandwidth()"
+                      :height="chartHeight + hoverrectMehrYBottom"
+                      :data-year="d.year"
+                      class="hiddenrect"
                       @mouseover="rectmouseover(d, i)"
                       @mouseout="rectmouseout(d, i)">
                 </rect>
@@ -43,7 +52,7 @@
                     <strong><span id="tooltipyear"></span></strong> ( age of <strong><span id="tooltipage"></span></strong> )
                   </div>
                   <div>
-                    <span id="incomespan"></span>   Income <strong><span id="tooltipincome"></span> SEK</strong>
+                    <span id="incomespan"></span>   Income <span class="tooltip-right"><strong><span id="tooltipincome"></span> SEK</strong></span>
                   </div>
                 </div>
             </foreignObject>
@@ -63,7 +72,6 @@ export default {
       tooltipVisible: false,
       hoverrectMehrYTop: 25,
       hoverrectMehrYBottom: 60,
-      sliderMarginLeft: 100,
       mehrHeight: 60,
       barColor: '#FEC600',
       sliderHandlerColor: '#1971ff',
@@ -102,10 +110,19 @@ export default {
     },
     bars () {
       return this.dataArray.filter(x => this.domain.indexOf(x.year) > -1)
+    },
+    sliderMarginLeft () {
+      return (this.width - document.getElementById('autoCalcForm').clientWidth) / 2
     }
   },
   methods: {
     rectmouseover (d, i) {
+      let locale = this.$d3.formatLocale({
+        decimal: ',',
+        thousands: ' ',
+        grouping: [3]
+      })
+      let thousandsFormat = locale.format(',')
       let tf = this.$d3.select('#tooltipForeignObj')
       let x = this.xScale(d.year) + this.xScale.bandwidth() / 2 + this.margin.left
       if (d.year >= this.domain[this.domain.length - 3]) {
@@ -116,12 +133,11 @@ export default {
                   .attr('stroke', '#1971ff')
       tf.select('#tooltipyear').html(d.year)
       tf.select('#tooltipage').html(d.year - this.birthYear)
-      tf.select('#tooltipincome').html(d.value)
+      tf.select('#tooltipincome').html(thousandsFormat(d.value))
       tf.transition()
         .duration(500)
         .attr('transform', `translate(${x + 10}, ${this.margin.top * 1.5})`)
       let hoverrect = this.$d3.select('#hoverrect')
-      console.log(`xScale: ${this.xScale(d.year)}`)
       hoverrect.attr('x', this.xScale(d.year))
                .style('display', 'block')
       this.tooltipVisible = true
@@ -198,25 +214,21 @@ export default {
 
       let startEndTickSize = -(this.chartHeight + this.mehrHeight)
 
-      let startYearTick = this.chart.select(`#xTick-${this.startYear}`)
-      let endYeartTick = this.chart.select(`#xTick-${this.endYear}`)
-      startYearTick.select('line').attr('y2', startEndTickSize)
-      endYeartTick.select('line').attr('y2', startEndTickSize)
-      startYearTick.append('circle')
-          .attr('r', 5)
-          .attr('fill', '#1971ff')
-          .attr('stroke', '#fff')
-          .attr('stroke-width', 1.5)
-          .attr('transform', `translate(0, ${startEndTickSize})`)
-
-      endYeartTick.append('circle')
-          .attr('r', 5)
-          .attr('fill', '#1971ff')
-          .attr('stroke', '#fff')
-          .attr('stroke-width', 1.5)
-          .attr('transform', `translate(0, ${startEndTickSize})`)
-
       if (this.startYear >= this.domain[0]) {
+        // start year circles
+        let startYearTick = this.chart.select(`#xTick-${this.startYear}`)
+        startYearTick.select('line').attr('y2', startEndTickSize)
+        let startYearCircle = startYearTick.selectAll('circle.startYearCircle')
+                                  .data(['startYearCircle'])
+        startYearCircle = startYearCircle.enter()
+          .append('circle')
+          .attr('r', 5)
+          .attr('fill', '#1971ff')
+          .attr('stroke', '#fff')
+          .attr('stroke-width', 1.5)
+          .attr('transform', `translate(0, ${startEndTickSize})`)
+          .merge(startYearCircle)
+        startYearCircle.attr('class', 'startYearCircle')
         let startYearGroup = this.chart.selectAll('g.startYear')
                                .data(['startYear'])
         startYearGroup = startYearGroup.enter()
@@ -245,6 +257,20 @@ export default {
       }
 
       if (this.endYear <= this.domain[this.domain.length - 1]) {
+        let endYeartTick = this.chart.select(`#xTick-${this.endYear}`)
+        endYeartTick.select('line').attr('y2', startEndTickSize)
+        let endYearCircle = endYeartTick.selectAll('circle.endYearCircle')
+                              .data(['endYearCircle'])
+
+        endYearCircle = endYearCircle.enter()
+          .append('circle')
+          .attr('r', 5)
+          .attr('fill', '#1971ff')
+          .attr('stroke', '#fff')
+          .attr('stroke-width', 1.5)
+          .attr('transform', `translate(0, ${startEndTickSize})`)
+          .merge(endYearCircle)
+        endYearCircle.attr('class', 'endYearCircle')
         let endYearGroup = this.chart.selectAll('g.endYear')
                               .data(['endYear'])
 
@@ -308,6 +334,7 @@ export default {
                .append('g')
                .merge(slider)
                .attr('class', 'slider')
+               .attr('overflow', 'visible')
                .attr('transform', `translate(${padding}, ${-6})`)
 
       var firstLine = slider.selectAll('line.firstSliderLine')
@@ -337,45 +364,97 @@ export default {
       secondLine.attr('x1', currentSelectedArea[0])
                 .attr('x2', currentSelectedArea[1])
 
-      var firstCircle = slider.selectAll('circle.firstCircle')
+      // first circle group
+      var firstCircleGroup = slider.selectAll('g.firstCircleGroup')
+                                   .data(['firstCircleGroup'])
+
+      firstCircleGroup = firstCircleGroup.enter().append('g')
+                                   .attr('class', 'firstCircleGroup')
+                                   .call(this.$d3.drag()
+                                    .on('drag', d => {
+                                      return dragged(d, 'first')
+                                    })
+                                    .on('end', d => {
+                                      return dragEnd(d)
+                                    }))
+                                    .merge(firstCircleGroup)
+
+      var firstCircle = firstCircleGroup.selectAll('circle.firstCircle')
                           .data(['firstCircle'])
 
       firstCircle = firstCircle.enter().append('circle')
-                         .attr('class', 'firstCircle')
                          .attr('cursor', 'pointer')
                          .attr('r', this.sliderHandlerRadius)
                          .attr('fill', this.sliderHandlerColor)
-                         .call(this.$d3.drag()
-                                 .on('drag', d => {
-                                   return dragged(d, 'first')
-                                 })
-                                 .on('end', d => {
-                                   return dragEnd(d)
-                                 }))
+                         .attr('stroke', '#fff')
+                         .attr('stroke-width', 0.5)
                          .merge(firstCircle)
 
-      firstCircle.attr('cx', currentSelectedArea[0])
-      var handler = slider.selectAll('circle.handler')
+      firstCircle.attr('class', 'firstCircle')
+
+      var vBarsFirst = firstCircleGroup.selectAll('line.vBarFirst')
+                            .data([-1, 0, 1])
+
+      vBarsFirst = vBarsFirst.enter()
+                        .append('line')
+                        .attr('x1', d => d * 2)
+                        .attr('x2', d => d * 2)
+                        .attr('y1', -3)
+                        .attr('y2', 3)
+                        .attr('stroke', '#fff')
+                        .merge(vBarsFirst)
+
+      vBarsFirst.attr('class', 'vBarFirst')
+
+      firstCircleGroup.attr('transform', `translate(${currentSelectedArea[0]})`)
+
+      // second circle group
+      var secondCircleGroup = slider.selectAll('g.secondCircleGroup')
+                                   .data(['secondCircleGroup'])
+
+      secondCircleGroup = secondCircleGroup.enter().append('g')
+                                   .attr('class', 'secondCircleGroup')
+                                   .call(this.$d3.drag()
+                                    .on('drag', d => {
+                                      return dragged(d, 'second')
+                                    })
+                                    .on('end', d => {
+                                      return dragEnd(d)
+                                    }))
+                                    .merge(secondCircleGroup)
+
+      var handler = secondCircleGroup.selectAll('circle.handler')
                           .data(['handler'])
 
       handler = handler.enter()
                        .append('circle')
-                       .attr('class', 'handler')
                        .attr('cursor', 'pointer')
                        .attr('data-curentPercentCx', 0)
                        .attr('r', this.sliderHandlerRadius)
                        .attr('fill', this.sliderHandlerColor)
-                       .call(this.$d3.drag()
-                                 .on('drag', d => {
-                                   return dragged(d, 'second')
-                                 })
-                                 .on('end', d => {
-                                   return dragEnd(d)
-                                 }))
+                       .attr('stroke', '#fff')
+                       .attr('stroke-width', 0.5)
                        .merge(handler)
 
-      handler.attr('cx', currentSelectedArea[1])
+      handler.attr('class', 'handler')
 
+      var vBarsSecond = secondCircleGroup.selectAll('line.vBarSecond')
+                            .data([-1, 0, 1])
+
+      vBarsSecond = vBarsSecond.enter()
+                        .append('line')
+                        .attr('x1', d => d * 2)
+                        .attr('x2', d => d * 2)
+                        .attr('y1', -3)
+                        .attr('y2', 3)
+                        .attr('stroke', '#fff')
+                        .merge(vBarsSecond)
+
+      vBarsSecond.attr('class', 'vBarSecond')
+
+      secondCircleGroup.attr('transform', `translate(${currentSelectedArea[1]})`)
+
+      // drag handlers
       function dragged (d, flag) {
         var cx = getDragCoord()
         if (flag === 'first') {
@@ -383,14 +462,14 @@ export default {
             cx = currentSelectedArea[1] - scale.bandwidth() * self.maximumSliderRange
           }
           currentSelectedArea[0] = cx
-          firstCircle.attr('cx', cx)
+          firstCircleGroup.attr('transform', `translate(${currentSelectedArea[0]})`)
           secondLine.attr('x1', cx)
         } else {
           if (cx < currentSelectedArea[0] + scale.bandwidth() * self.maximumSliderRange) {
             cx = currentSelectedArea[0] + scale.bandwidth() * self.maximumSliderRange
           }
           currentSelectedArea[1] = cx
-          handler.attr('cx', cx)
+          secondCircleGroup.attr('transform', `translate(${currentSelectedArea[1]})`)
           secondLine.attr('x2', cx)
         }
       }
@@ -429,7 +508,7 @@ export default {
       this.setWidth()
       this.drawAxis()
       this.adjustAxis()
-      this.drawSlider(this.$d3.select('g.slider-wrapper'), this.chartWidth - 2 * this.sliderMarginLeft)
+      this.drawSlider(this.$d3.select('g.slider-wrapper'), this.width - 2 * this.sliderMarginLeft)
     }
   },
   mounted () {
@@ -447,11 +526,15 @@ export default {
         width: 100%;
         margin: 0px;
         padding: 0px;
-        background-color: #525670;
         svg {
+            background: linear-gradient(193.11deg, #685B7A 0%, #445B7C 100%);
+            box-shadow: 20px 22px 44px 0 rgba(82,86,112,0.55);
             #hoverrect {
               display: none;
               pointer-events: none;
+            }
+            .hiddenrect {
+              fill: transparent;
             }
             .axis text {
                 fill: #fff;
@@ -471,7 +554,7 @@ export default {
             }
             .toolTip {
               background-color: #fff;
-              padding: 15px;
+              padding: 20px;
               text-align: left;
               div:first-child {
                 margin-bottom: 20px;
@@ -486,6 +569,9 @@ export default {
               #tooltipincome {
                 position: relative;
                 right: 0px;
+              }
+              .tooltip-right {
+                float: right;
               }
             }
         }

@@ -33,7 +33,7 @@
               <div class="idInputContainer">
                 <b-form-input class="idInput" type="text" v-model="form.login.id" required v-bind:placeholder="$t('login.placeholder.social_number')">
                 </b-form-input>
-                <b-img :src="require('../../assets/img/bank-id.png')" width="24" height="24"/>
+                <b-img :src="require('../../../assets/img/bank-id.png')" width="24" height="24"/>
               </div>
           </b-form-group>
 
@@ -91,6 +91,7 @@
 
 <script>
 import {AUTH_REQUEST} from '@/store/actions/auth'
+import EventBus from '../../../event-bus.js'
 export default {
   name: 'login',
   mounted () {
@@ -221,12 +222,10 @@ export default {
         this.$store.dispatch(AUTH_REQUEST, { email, password }).then(() => {
           this.$router.push('/assumptions/expense/1')
         }, () => {
-          this.$notify({
-            group: 'notify',
-            type: 'error',
-            title: 'Error',
-            duration: 3000,
-            text: 'Authentication Failed!'
+          EventBus.$emit('notify-me', {
+            title: 'Authentication Failed!',
+            text: 'Something went wrong!',
+            status: 'is-danger'
           })
         })
       }
@@ -246,81 +245,5 @@ export default {
 </script>
 
 <style lang="scss" >
-  .login {
-    height: calc(100vh - 102px);
-    min-height: 900px;
-    overflow: auto;
-
-    .main {
-      height: 446px;
-
-      form {
-        width: 381px;
-        padding: 58px 30px 65px;
-        margin-top: 146px;
-
-        button[type="submit"] {
-          font-weight: 600;
-          height: 3rem;
-          font-size: 14px;
-        }
-
-        .invalid-feedback {
-          position: absolute;
-        }
-
-        .idInputContainer {
-          position: relative;
-          img {
-            position: absolute;
-            right: 12px;
-            top: 12px;
-          }
-        }
-      }
-
-      ul {
-        list-style: none;
-        margin-right: 114px;
-
-        li {
-          font-size: 13px;
-          font-weight: 500;
-          letter-spacing: 0.5px;
-          line-height: 24px;
-          margin: 24px 0;
-          opacity: 0.59;
-          color: #383838;
-          display: table;
-          cursor: pointer;
-
-          &:after {
-            border-bottom: 4px solid #36B37E;
-            padding-left: 15px;
-            display:block;
-            content: '';
-            transform: scaleX(0);
-            transition: transform 250ms ease-in-out;
-          }
-          &[class="elem-active"] {
-            opacity: 1;
-          }
-          &[class="elem-active"]:after {
-            transform: scaleX(1);
-          }
-        }
-      }
-    }
-
-    .bottom {
-      ul {
-        list-style: none;
-        font-size: 14px;
-        line-height: 20px;
-        li {
-          cursor: pointer;
-        }
-      }
-    }
-  }
+  @import './style.scss'
 </style>

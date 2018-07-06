@@ -5,7 +5,7 @@
       <router-view></router-view>
       <v-footer class="bg-dark" v-if="isAuthenticated"></v-footer>
     </div>
-    <notifications group="notify" classes="notify-style"/>
+    <v-notify></v-notify>
   </div>
 </template>
 
@@ -14,12 +14,14 @@ import axios from 'axios'
 import {AUTH_LOGOUT} from '@/store/actions/auth'
 import vheader from '@/components/header'
 import vfooter from '@/components/footer'
+import vnotify from '@/components/common/notify'
 
 export default {
   name: 'app',
   components: {
     'v-header': vheader,
-    'v-footer': vfooter
+    'v-footer': vfooter,
+    'v-notify': vnotify
   },
   created () {
     axios.interceptors.response.use(function (response) {

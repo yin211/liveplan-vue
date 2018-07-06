@@ -11,7 +11,7 @@
                       :width="xScale.bandwidth()"
                       :height="chartHeight - yScale(d.value)"
                       :data-year="d.year"
-                      fill="#F4D03F">
+                      :fill="barColor">
                 </rect>
                 <rect v-for="(d,i) in bars"
                       :key="`hiddenrect-${i}`"

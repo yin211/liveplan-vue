@@ -109,14 +109,17 @@
                 <span v-show="!row.item.is_edit">{{row.item.amount.toLocaleString('sv-SE')}} SEK </span>
               </template>
               <template slot="actions" slot-scope="row">
-                <button v-show="!row.item.is_edit" class='btn plain-btn text-regular' :disabled="customDisabled" @click.stop="editRow(row.item)">
-                  <i class="flaticon solid edit-3 text-primary"></i> Edit
-                </button>
                 <button v-show="row.item.is_edit" class='btn plain-btn text-regular' @click.stop="saveRow(row.item)">
                   <i class="flaticon stroke checkmark text-success"></i> Save
                 </button>
                 <button v-show="row.item.is_edit" class='btn plain-btn text-regular' @click.stop="cancelRow(row.item)">
-                  <i class="fa fa-times text-danger"></i> Cancel
+                  <i class="fa fa-times text-warning"></i> Cancel
+                </button>
+                <button v-show="!row.item.is_edit" class='btn plain-btn text-regular' :disabled="customDisabled" @click.stop="editRow(row.item)">
+                  <i class="flaticon solid edit-3 text-primary"></i> Edit
+                </button>
+                <button class='btn plain-btn text-regular' :disabled="customDisabled" @click.stop="deleteRow(row.item)">
+                  <i class="flaticon stroke trash-2 text-danger"></i> Delete
                 </button>
               </template>
               <template slot="HEAD_actions" slot-scope="row">
@@ -623,6 +626,10 @@ export default {
       item.amount = item.edit_amount
       item.edit_amount = MAX_NUM
       item.is_edit = false
+    },
+    async deleteRow (item) {
+      await axios.delete(`${process.env.ROOT_API}/expenses/${this.$route.params.id}/amounts/${item.id}`)
+      this.expense.expense_amounts = this.expense.expense_amounts.filter(amount => amount.id !== item.id)
     }
   },
   watch: {

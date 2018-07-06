@@ -25,21 +25,24 @@
     <b-card no-body class="expense-tabs-card depth-1">
       <b-tabs pills card>
         <b-tab title="Auto Calculation" :title-link-class="'expense-tab'" active>
-          <b-form id="autoCalcForm" ref="autoCalcForm" @change="autoCalcformChanged" novalidate :validated="autoCalcValidated" @submit.prevent="onAutoCalcSumbit">
+          <div class="custom-values-bar" v-if="!customDisabled">
+            <b-alert show variant="warning" class="py-3">Values are disabled since expense is in custom mode</b-alert>
+          </div>
+          <b-form id="autoCalcForm" ref="autoCalcForm" @change="autoCalcformChanged" novalidate :validated="autoCalcValidated" @submit.prevent="onAutoCalcSumbit" v-bind:class="{ 'custom-is-enabled': !customDisabled }">
             <b-container fluid>
               <b-row class="text-left mx-auto">
                 <b-col lg="2">
                   <span class="text-regular">Period (start - end year) (?)</span>
                   <div class="d-flex element-spacer">
                     <b-form-group label-for="startYearInput" aria-describedby="invalidStartYearFeedback" :state="startYearState">
-                      <b-form-input id="startYearInput" required v-model="expense.start_year" type="number" size="sm" v-b-tooltip.hover.bottom title="The year when this expense first occurs." class="text-regular start_end_year start_year" style="width: 86px" placeholder="Start year" min="2000" max="2140"></b-form-input>
+                      <b-form-input id="startYearInput" required v-model="expense.start_year" type="number" size="sm" v-b-tooltip.hover.bottom title="The year when this expense first occurs." class="text-regular start_end_year start_year" style="width: 86px" placeholder="Start year" min="2000" max="2140" :disabled="!customDisabled"></b-form-input>
                       <b-form-invalid-feedback id="invalidStartYearFeedback">
                         This is a required field and must be between 2000 and 2140
                       </b-form-invalid-feedback>
                     </b-form-group>
                     <span class="date-spacer">-</span>
                     <b-form-group label-for="endYearInput" aria-describedby="invalidEndYearFeedback" :state="endYearState">
-                      <b-form-input id="endYearInput" required v-model="expense.end_year" type="number" size="sm" v-b-tooltip.hover.bottom title="The year when this expense stops occuring." class="text-regular start_end_year end_year" style="width: 86px" placeholder="End year" min="2000" max="2140"></b-form-input>
+                      <b-form-input id="endYearInput" required v-model="expense.end_year" type="number" size="sm" v-b-tooltip.hover.bottom title="The year when this expense stops occuring." class="text-regular start_end_year end_year" style="width: 86px" placeholder="End year" min="2000" max="2140" :disabled="!customDisabled"></b-form-input>
                       <b-form-invalid-feedback id="invalidEndYearFeedback">
                         This is a required field and must be between 2000 and 2140
                       </b-form-invalid-feedback>
@@ -49,18 +52,18 @@
                 <b-col lg="5">
                   <span class="text-regular">Amount Per Month (?)</span>
                   <div class="d-flex">
-                    <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-b-tooltip.hover.bottom title="The amount per period." v-model="expense.initial_amount" class="form-control form-control-sm element-spacer text-regular amount-per-month" :min="0"></vue-numeric>
+                    <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-b-tooltip.hover.bottom title="The amount per period." v-model="expense.amount" class="form-control form-control-sm element-spacer text-regular amount-per-month" :min="0" :disabled="!customDisabled"></vue-numeric>
                     <b-input-group size="sm" class="element-spacer">
-                      <b-form-input v-model="expense.initial_amount" min="0" max="10000" class="slider" type="range"></b-form-input>
+                      <b-form-input v-model="expense.amount" min="0" max="10000" class="slider" type="range" :disabled="!customDisabled"></b-form-input>
                     </b-input-group>
                   </div>
                 </b-col>
                 <b-col lg="5">
                   <span class="text-regular">Annual Growth Rate (?)</span>
                   <div class="d-flex">
-                    <vue-numeric currency="%" currency-symbol-position="suffix" v-model="expense.annual_increase_percentage" v-b-tooltip.hover.bottom title="The expense grows with this percentage per year." class="form-control form-control-sm element-spacer text-regular annual-growth-rate" :min="0" :max="20"></vue-numeric>
+                    <vue-numeric currency="%" currency-symbol-position="suffix" v-model="expense.annual_increase_percentage" v-b-tooltip.hover.bottom title="The expense grows with this percentage per year." class="form-control form-control-sm element-spacer text-regular annual-growth-rate" :min="0" :max="20" :disabled="!customDisabled"></vue-numeric>
                     <b-input-group size="sm" class="element-spacer">
-                      <b-form-input v-model="expense.annual_increase_percentage" min="0" max="20" class="slider" type="range"></b-form-input>
+                      <b-form-input v-model="expense.annual_increase_percentage" min="0" max="20" class="slider" type="range" :disabled="!customDisabled"></b-form-input>
                     </b-input-group>
                   </div>
                 </b-col>
@@ -74,10 +77,29 @@
           </b-form>
         </b-tab>
         <b-tab title="Custom Values" :title-link-class="'expense-tab'">
+          <button class='btn btn-sm icon-btn text-regular upload-file-btn' :disabled="customDisabled">
+            <i class="flaticon stroke upload text-primary"></i>
+            Upload Files
+          </button>
+          <div class="custom-values-bar">
+            <div class="d-flex justify-content-between align-items-center" :class="[customDisabled ? 'bar-disable-color' :'bar-enable-color']">
+              <div class="d-flex align-items-center">
+                <span class="mr-3" :class="{ 'font-weight-bold': !customDisabled }">Enable</span>
+                <switches v-model="customDisabled" theme="bootstrap" type-bold="true" color="success"></switches>
+                <span class="ml-3" :class="{ 'font-weight-bold': customDisabled }">Disable</span>
+              </div>
+              <span v-if="customDisabled" class="text-gray">
+                Enabling "Custom Values" will disable "Auto Calculation". You can choose one of the two.
+              </span>
+              <span v-else class="text-gray">
+                Enabling "Auto Calculation" will disable "Custom Values". You need to choose one of the two.
+              </span>
+            </div>
+          </div>
           <div class="table-container text-regular text-left">
             <b-table show-empty
                     stacked="md"
-                    :items="expense.expense_amounts"
+                    :items="getExpenseAmounts"
                     :fields="fields"
                     :current-page="currentPage"
                     :per-page="perPage"
@@ -88,28 +110,23 @@
                     @filtered="onFiltered"
                     hover
             >
-              <template slot="HEAD_actions" slot-scope="data">
-                <button class='btn btn-sm icon-btn text-regular' style="border-color: #eaecef;">
-                  <i class="flaticon stroke trash-2 text-danger"></i>
-                  Upload Files
-                </button>
-              </template>
               <template slot="top-row" slot-scope="data">
                 <td colspan="3"><b-form-input v-model="filter" size="sm" placeholder="Type to Search" /></td>
               </template>
-              <template slot="amount" slot-scope="data">
-                {{data.item.amount.toLocaleString('sv-SE')}} SEK
+              <template slot="amount" slot-scope="row">
+                <vue-numeric v-show="row.item.is_edit"  currency="SEK" currency-symbol-position="suffix" thousand-separator=" "  v-model="row.item.edit_amount" class="form-control form-control-sm text-regular amount-per-month" :minus="true"></vue-numeric>
+                <span v-show="!row.item.is_edit">{{row.item.amount.toLocaleString('sv-SE')}} SEK </span>
               </template>
               <template slot="actions" slot-scope="row">
-                <button class='btn plain-btn text-regular'>
+                <button v-show="!row.item.is_edit" class='btn plain-btn text-regular' :disabled="customDisabled" @click.stop="editRow(row.item)">
                   <i class="flaticon solid edit-3 text-primary"></i> Edit
                 </button>
-                <!-- <button class='btn plain-btn text-regular'>
-                  <i class="fa fa-check mr-2 text-success"></i> Save
+                <button v-show="row.item.is_edit" class='btn plain-btn text-regular' @click.stop="saveRow(row.item)">
+                  <i class="flaticon stroke checkmark text-success"></i> Save
                 </button>
-                <button class='btn plain-btn text-regular'>
-                  <i class="fa fa-times mr-2 text-danger"></i> Cancel
-                </button> -->
+                <button v-show="row.item.is_edit" class='btn plain-btn text-regular' @click.stop="cancelRow(row.item)">
+                  <i class="fa fa-times text-danger"></i> Cancel
+                </button>
               </template>
             </b-table>
             <div class="d-flex  flex-column flex-md-row justify-content-between">
@@ -163,7 +180,7 @@
 
                 <div class="d-flex flex-column">
                   <span class="text-gray">Period</span>
-                  <span class="text-regular font-weigth-medium">{{expense.initial_amount_period}}</span>
+                  <span class="text-regular font-weigth-medium">{{expense.amount_recurrence}}</span>
                 </div>
 
                 <div class="d-flex flex-column">
@@ -219,7 +236,7 @@
             <b-col sm="3" class="d-flex mt-3 justify-content-end"><label :for="'period-select'">Period</label></b-col>
             <b-col sm="9">
               <b-form-group label-for="period-select" :state="periodState" class="text-left">
-                <b-form-select :options="periodOptions" v-model="editExpense.initial_amount_period" :id="'period-select'" :state="periodState" aria-describedby="periodSelectFeedback" required/>
+                <b-form-select :options="periodOptions" v-model="editExpense.amount_recurrence" :id="'period-select'" :state="periodState" aria-describedby="periodSelectFeedback" required/>
                 <b-form-invalid-feedback id="periodSelectFeedback">
                     This field is required
                 </b-form-invalid-feedback>
@@ -291,6 +308,7 @@
 import axios from 'axios'
 import barchart from '../charts/barchart'
 import Notify from 'vue-notify-me'
+import Switches from 'vue-switches'
 import Vue from 'vue'
 const bus = new Vue()
 
@@ -300,6 +318,11 @@ export default {
     try {
       let response = await axios.get(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`)
       this.expense = response.data.data
+      if (this.expense.calculation_mode === 'auto') {
+        this.customDisabled = true
+      } else {
+        this.customDisabled = false
+      }
       let cashflow = await axios.get('/static/tempdata/data.json')
       this.cashflow = this.processCashflow(cashflow.data)
       response = await axios.get(`${process.env.ROOT_API}/categories`)
@@ -325,7 +348,7 @@ export default {
       cashflow: [],
       periodOptions: [
         { value: null, text: 'Please select an option', disabled: true },
-        { value: 'month', text: 'Monthly' },
+        { value: 'monthly', text: 'Monthly' },
         { value: 'daily', text: 'Daily' },
         { value: 'weekly', text: 'Weekly' },
         { value: 'quarterly', text: 'Quarterly' },
@@ -362,7 +385,8 @@ export default {
       isCalcSaveDisabled: true,
       autoCalcValidated: false,
       editInfoValidated: false,
-      isSaving: false
+      isSaving: false,
+      customDisabled: true
     }
   },
   computed: {
@@ -390,7 +414,7 @@ export default {
       if (!this.editInfoValidated) {
         return null
       } else {
-        return this.editExpense.initial_amount_period != null
+        return this.editExpense.amount_recurrence != null
       }
     },
     categoryState () {
@@ -442,7 +466,7 @@ export default {
           let data = {
             start_year: this.expense.start_year,
             end_year: this.expense.end_year,
-            initial_amount: this.expense.initial_amount,
+            amount: this.expense.amount,
             annual_increase_percentage: this.expense.annual_increase_percentage
           }
           await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`, data)
@@ -482,7 +506,7 @@ export default {
         try {
           let data = {
             name: this.editExpense.name,
-            initial_amount_period: this.editExpense.initial_amount_period,
+            amount_recurrence: this.editExpense.amount_recurrence,
             category_id: this.editExpense.category_id,
             person_id: this.editExpense.person_id,
             expense_subtype_id: this.editExpense.expense_subtype_id,
@@ -509,11 +533,63 @@ export default {
           })
         }
       }
+    },
+    editRow (item) {
+      item.is_edit = true
+      item.edit_amount = item.amount
+    },
+    cancelRow (item) {
+      item.is_edit = false
+      item.edit_amount = 0
+    },
+    async saveRow (item) {
+      let data = {
+        amount: item.edit_amount
+      }
+      await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}/amounts/${item.id}`, data)
+      item.amount = item.edit_amount
+      item.edit_amount = 0
+      item.is_edit = false
+    },
+    getExpenseAmounts (ctx) {
+      let promise = axios.get(`${process.env.ROOT_API}/expenses/${this.$route.params.id}/amounts?page=${ctx.currentPage}&size=${ctx.perPage}&filter=${ctx.filter}&sortBy=${ctx.sortBy}&sortDesc=${ctx.sortDesc}`)
+
+      return promise.then((response) => {
+        return response.data.data
+      }).catch(error => {
+        console.log(error)
+        return []
+      })
+    }
+  },
+  watch: {
+    customDisabled: async function (val) {
+      let modeChanged = false
+      if (val && this.expense.calculation_mode === 'custom') {
+        modeChanged = true
+      } else if (!val && this.expense.calculation_mode === 'auto') {
+        modeChanged = true
+      }
+
+      if (modeChanged) {
+        let data = {
+          calculation_mode: val ? 'auto' : 'custom'
+        }
+        await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`, data)
+        this.expense.calculation_mode = val ? 'auto' : 'custom'
+        this.bus.$emit('notify-me', {
+          data: {
+            title: 'Success!',
+            text: 'Calculation mode has been updated successfully!'
+          }
+        })
+      }
     }
   },
   components: {
     barchart,
-    'notify-me': Notify
+    'notify-me': Notify,
+    Switches
   }
 }
 </script>
@@ -553,6 +629,10 @@ export default {
       background-color:transparent;
       font-size: 12px;
       line-height: 24px;
+
+      i {
+        margin-right: 4px;
+      }
     }
 
     // chart wrapper
@@ -578,6 +658,8 @@ export default {
           border-bottom: none;
 
           .card-header-pills {
+            outline: none;
+
             .expense-tab {
               font-size: 24px;
               line-height: 32px;
@@ -598,7 +680,10 @@ export default {
           .card-body {
             padding: 0px 0px 28px 0px;
 
-            form {
+            #autoCalcForm {
+              &.custom-is-enabled {
+                margin-top: 24px;
+              }
 
               .start_end_year
               {
@@ -628,6 +713,41 @@ export default {
                 }
               }
             }
+
+            .upload-file-btn {
+              position: absolute;
+              right: 30px;
+              top: 42px;
+              border-color: #eaecef;
+            }
+
+            .custom-values-bar {
+              position: absolute;
+              top: 80px;
+              width: 100%;
+              background-color: white;
+              padding: 10px 0;
+              & > div {
+                padding: 0px 20px;
+                margin: 0px 10px;
+                padding: 0 20px;
+                &.bar-disable-color {
+                  background-color: #F8F8F8;
+                  border: 1px dashed #D8D8D8;
+                }
+                &.bar-enable-color {
+                  background-color: rgba(54,179,126,0.1);
+                  border: 1px dashed #36B37E;
+                }
+              }
+
+              .alert {
+                border: 1px dashed;
+                border-radius: unset;
+                font-size: 14px;
+                line-height: 20px;
+              }
+            }
           }
 
         }
@@ -645,7 +765,7 @@ export default {
 
     // customize table
     .table-container {
-      padding: 0 20px;
+      padding: 30px 20px;
       font-size: 14px;
 
       table {
@@ -687,6 +807,16 @@ export default {
               vertical-align: middle;
               padding-top: 6px;
               padding-bottom: 6px;
+
+              .amount-per-month {
+                width: 130px;
+                margin-right: 20px;
+                text-align:right;
+              }
+
+              .hide-element {
+                display: none
+              }
             }
           }
 
@@ -765,7 +895,6 @@ export default {
     }
 
     // customize slider
-
     .slider {
       -webkit-appearance: none;
       width: 100%;
@@ -831,6 +960,40 @@ export default {
         position: absolute;
         right: .5em;
         top: .5em;
+      }
+    }
+
+    // customize switch toggle button
+    .vue-switcher-theme--bootstrap {
+      input {
+        position: relative;
+      }
+      &.vue-switcher-color--success {
+        div {
+            background-color: #EF5350;
+            width: 40px;
+            height: 22px;
+
+            &:after {
+                // for the circle on the switch
+                background-color: white;
+                height: 16px;
+                width: 16px;
+                top: 3px;
+                margin-left: -20px;
+            }
+        }
+
+        &.vue-switcher--unchecked {
+            div {
+                background-color: #36b37E;
+
+                &:after {
+                  background-color: white;
+                  margin-left: -25px;
+                }
+            }
+        }
       }
     }
 

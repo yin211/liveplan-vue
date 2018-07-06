@@ -11,7 +11,7 @@
                       :width="xScale.bandwidth()"
                       :height="chartHeight - yScale(d.value)"
                       :data-year="d.year"
-                      fill="#F4D03F"
+                      :fill="barColor"
                       @mouseover="rectmouseover(d, i)"
                       @mouseout="rectmouseout(d, i)">
                 </rect>
@@ -65,6 +65,7 @@ export default {
       hoverrectMehrYBottom: 60,
       sliderMarginLeft: 100,
       mehrHeight: 60,
+      barColor: '#FEC600',
       sliderHandlerColor: '#1971ff',
       sliderBackColor: '#636e7f',
       sliderHandlerRadius: 8,
@@ -376,7 +377,6 @@ export default {
       handler.attr('cx', currentSelectedArea[1])
 
       function dragged (d, flag) {
-        debugger
         var cx = getDragCoord()
         if (flag === 'first') {
           if (cx > currentSelectedArea[1] - scale.bandwidth() * self.maximumSliderRange) {
@@ -480,7 +480,7 @@ export default {
                 width: 35px;
                 height: 13px;
                 display: inline-block;
-                background-color: #F4D03F;
+                background-color: #FEC600;
                 border-radius: 4px;
               }
               #tooltipincome {

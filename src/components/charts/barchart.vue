@@ -76,7 +76,6 @@ export default {
       mehrHeight: 60,
       divisionLineColor: '#2c3468',
       barColor: '#FEC600',
-      sliderHandlerColor: '#1971ff',
       sliderBackColor: '#636e7f',
       circleColor: '#1971ff',
       darkColor: '#A5ADBA',
@@ -132,9 +131,12 @@ export default {
       if (d.year >= this.domain[this.domain.length - 6]) {
         x -= 270
       }
-      let xTickCircle = this.chart.select(`#xTick-${d.year} circle`)
+      let xTick = this.chart.select(`#xTick-${d.year}`)
+      let xTickCircle = xTick.select('circle')
       xTickCircle.attr('fill', '#fff')
                   .attr('stroke', '#1971ff')
+      let xTickYear = xTick.select('.tick-year')
+      xTickYear.attr('fill', '#fff')
       tf.select('#tooltipyear').html(d.year)
       tf.select('#tooltipage').html(d.year - this.birthYear)
       tf.select('#tooltipincome').html(thousandsFormat(d.value))
@@ -147,9 +149,12 @@ export default {
       this.tooltipVisible = true
     },
     rectmouseout (d, i) {
-      let xTickCircle = this.chart.select(`#xTick-${d.year} circle`)
+      let xTick = this.chart.select(`#xTick-${d.year}`)
+      let xTickCircle = xTick.select('circle')
       xTickCircle.attr('fill', '#1971ff')
                   .attr('stroke', '#fff')
+      let xTickYear = xTick.select('.tick-year')
+      xTickYear.attr('fill', this.darkColor)
       let hoverrect = this.$d3.select('#hoverrect')
       hoverrect.style('display', 'none')
       this.tooltipVisible = false
@@ -195,6 +200,7 @@ export default {
 
       // reposition texts within the axis
       ticks.select('text')
+           .attr('class', 'tick-year')
            .attr('dy', '4em')
            .attr('fill', this.darkColor)
 
@@ -370,11 +376,18 @@ export default {
         tag: 'line',
         selector: 'foregroundLine'
       })
-      .attr('stroke-width', 2)
+      .attr('stroke-width', 3)
       .attr('stroke', '#fff')
+      .attr('cursor', 'pointer')
       .attr('stroke-linecap', 'round')
       .attr('x1', currentSelectedArea[0])
       .attr('x2', currentSelectedArea[1])
+      .on('mouseover', lineMouseOver)
+      .on('mouseout', lineMouseOut)
+      .call(this.$d3.drag()
+              .on('start', lineDragStart)
+              .on('drag', lineDrag)
+              .on('end', lineDragEnd))
 
       // first circle group
       let firstCircleGroup = patternify({
@@ -413,7 +426,7 @@ export default {
       })
       .attr('cursor', 'pointer')
       .attr('r', this.sliderHandlerRadius)
-      .attr('fill', this.sliderHandlerColor)
+      .attr('fill', this.circleColor)
       .attr('stroke', '#fff')
       .attr('stroke-width', 0.5)
 
@@ -424,7 +437,7 @@ export default {
       })
       .attr('cursor', 'pointer')
       .attr('r', this.sliderHandlerRadius)
-      .attr('fill', this.sliderHandlerColor)
+      .attr('fill', this.circleColor)
       .attr('stroke', '#fff')
       .attr('stroke-width', 0.5)
 
@@ -487,10 +500,66 @@ export default {
       }
 
       function getDragCoord () {
-        var cx = self.$d3.event.x
-        if (cx < 0) cx = 0
-        else if (cx > width - padding * 2) cx = width - padding * 2
+        let cx = self.$d3.event.x
+        if (cx < 0) {
+          cx = 0
+        } else if (cx > width - padding * 2) {
+          cx = width - padding * 2
+        }
         return cx
+      }
+
+      let startX = 0
+      function getLineDragCoords () {
+        let dx = self.$d3.event.x - startX
+        if (currentSelectedArea[0] + dx <= 0) {
+          dx = 0 - currentSelectedArea[0]
+        }
+        if (currentSelectedArea[1] + dx >= width - padding * 2) {
+          dx = width - padding * 2 - currentSelectedArea[1]
+        }
+        return [currentSelectedArea[0] + dx, currentSelectedArea[1] + dx]
+      }
+
+      function lineDragStart () {
+        startX = self.$d3.event.x
+      }
+
+      function lineDrag () {
+        let coords = getLineDragCoords()
+        firstCircleGroup.attr('transform', `translate(${coords[0]})`)
+        secondCircleGroup.attr('transform', `translate(${coords[1]})`)
+        foregroundLine.attr('x1', coords[0])
+                      .attr('x2', coords[1])
+      }
+
+      function lineDragEnd () {
+        let coords = getLineDragCoords()
+        currentSelectedArea[0] = coords[0]
+        currentSelectedArea[1] = coords[1]
+        let newDomain = getNewDomain()
+        self.domain = newDomain
+        self.drawAxis()
+        self.adjustAxis()
+        startX = 0
+      }
+
+      function lineMouseOver () {
+        let that = self.$d3.select(this)
+        that
+            .transition()
+            .duration(250)
+            .attr('stroke-width', 7)
+      }
+
+      function lineMouseOut () {
+        if (startX === 0) {
+          let that = self.$d3.select(this)
+          that
+              .transition()
+              .duration(250)
+              .attr('stroke-width', 3)
+        }
       }
     },
     setWidth () {

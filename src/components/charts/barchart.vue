@@ -74,6 +74,7 @@ export default {
       hoverrectMehrYTop: 25,
       hoverrectMehrYBottom: 60,
       mehrHeight: 60,
+      axisCircleSize: 3.5,
       divisionLineColor: '#2c3468',
       barColor: '#FEC600',
       sliderBackColor: '#636e7f',
@@ -87,7 +88,7 @@ export default {
         top: 100,
         right: 15,
         bottom: 15,
-        left: 65
+        left: 75
       },
       chart: ''
     }
@@ -98,7 +99,6 @@ export default {
                   .domain(this.domain)
                   .range([0, this.chartWidth])
                   .paddingInner([0.05])
-                  .paddingOuter([0.05])
     },
     yScale () {
       return this.$d3.scaleLinear()
@@ -116,16 +116,18 @@ export default {
     },
     sliderMarginLeft () {
       return (this.width - document.getElementById('autoCalcForm').clientWidth) / 2
-    }
-  },
-  methods: {
-    rectmouseover (d, i) {
+    },
+    thousandsFormat () {
       let locale = this.$d3.formatLocale({
         decimal: ',',
         thousands: ' ',
         grouping: [3]
       })
-      let thousandsFormat = locale.format(',')
+      return locale.format(',')
+    }
+  },
+  methods: {
+    rectmouseover (d, i) {
       let tf = this.$d3.select('#tooltipForeignObj')
       let x = this.xScale(d.year) + this.xScale.bandwidth() / 2 + this.margin.left
       if (d.year >= this.domain[this.domain.length - 6]) {
@@ -139,7 +141,7 @@ export default {
       xTickYear.attr('fill', '#fff')
       tf.select('#tooltipyear').html(d.year)
       tf.select('#tooltipage').html(d.year - this.birthYear)
-      tf.select('#tooltipincome').html(thousandsFormat(d.value))
+      tf.select('#tooltipincome').html(this.thousandsFormat(d.value))
       tf.transition()
         .duration(500)
         .attr('transform', `translate(${x + 10}, ${this.margin.top * 1.5})`)
@@ -162,7 +164,7 @@ export default {
     drawAxis () {
       let tickSize = this.chartHeight
       let xAxis = this.$d3.axisBottom(this.xScale).tickSize(-(tickSize))
-      let yAxis = this.$d3.axisLeft(this.yScale).ticks(5)
+      let yAxis = this.$d3.axisLeft(this.yScale).ticks(5).tickFormat(d => this.thousandsFormat(d) + ' Kr')
 
       // append xAxis
       patternify({
@@ -198,6 +200,11 @@ export default {
                   return `xTick-${year}`
                 })
 
+      ticks.select('line')
+        .attr('stroke', this.darkColor)
+        .attr('stroke-dasharray', '1.5px')
+        .attr('opacity', 0.5)
+
       // reposition texts within the axis
       ticks.select('text')
            .attr('class', 'tick-year')
@@ -210,7 +217,7 @@ export default {
         tag: 'circle',
         selector: 'tickCircle'
       })
-      .attr('r', 5)
+      .attr('r', this.axisCircleSize)
       .attr('fill', this.circleColor)
       .attr('stroke', '#fff')
       .attr('stroke-width', 1.5)
@@ -228,12 +235,44 @@ export default {
         return tick.attr('data-age')
       })
 
+      // adjust xAxis
+      let yTicks = this.chart.select('g.yAxis')
+          .selectAll('.tick')
+
+      // reposition lines
+      yTicks.select('line')
+        .attr('x1', (d, i) => {
+          if (i) {
+            return 10
+          }
+          return 0
+        })
+        .attr('x2', (d, i) => {
+          if (i) {
+            return 20
+          }
+          return 0
+        })
+
+      // append circles
+      patternify({
+        container: yTicks,
+        tag: 'circle',
+        selector: 'tickCircle'
+      })
+      .attr('r', this.axisCircleSize)
+      .attr('cx', 7)
+      .attr('fill', this.darkColor)
+      .attr('stroke', '#fff')
+      .attr('stroke-width', 1)
+
       if (this.startYear >= this.domain[0]) {
         // start year tick selection
         let startYearTick = this.chart.select(`#xTick-${this.startYear}`)
         startYearTick
           .select('line')
           .attr('y2', startEndTickSize)
+          .attr('stroke', '#fff')
 
         // append circle for the startYear tick
         patternify({
@@ -241,7 +280,7 @@ export default {
           tag: 'circle',
           selector: 'startYearCircle'
         })
-        .attr('r', 5)
+        .attr('r', this.axisCircleSize)
         .attr('fill', this.circleColor)
         .attr('stroke', '#fff')
         .attr('stroke-width', 1.5)
@@ -282,6 +321,8 @@ export default {
         endYeartTick
           .select('line')
           .attr('y2', startEndTickSize)
+          .attr('stroke', '#fff')
+          .attr('opacity', 0.7)
 
         // add circle to the end year tick
         patternify({
@@ -289,7 +330,7 @@ export default {
           tag: 'circle',
           selector: 'endYearCircle'
         })
-        .attr('r', 5)
+        .attr('r', this.axisCircleSize)
         .attr('fill', '#1971ff')
         .attr('stroke', '#fff')
         .attr('stroke-width', 1.5)
@@ -604,17 +645,16 @@ export default {
               fill: transparent;
             }
             .yAxis text {
-                fill: #fff;
+              fill: #fff;
+            }
+            .yAxis line { 
+              stroke: #A5ADBA;
             }
             .secondaryAxisText {
               fill: #fff;
             }
             .axis  {
               pointer-events: none;
-              line {
-                stroke: #fff;
-                stroke-dasharray: 4px;
-              }
               .domain {
                 display: none;
               }

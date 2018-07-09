@@ -10,12 +10,12 @@
     </div>
     <!-- chart Wrapper -->
     <section class="chart-container depth-2">
-      <barchart v-if="cashflow.length" :dataArray="cashflow" :startYear="2018" :endYear="2036" :birthYear="1981"></barchart>
+      <barchart v-if="calculatedExpense.expense_amounts && calculatedExpense.expense_amounts.length" :dataArray="calculatedExpense.expense_amounts" :startYear="calculatedExpense.start_year" :endYear="calculatedExpense.end_year" :birthYear="1981"></barchart>
     </section>
     <!-- Auto Calculation, Custom Values Tabs Card-->
     <b-card no-body class="expense-tabs-card depth-1">
-      <b-tabs pills card>
-        <b-tab title="Auto Calculation" :title-link-class="'expense-tab'" active>
+      <b-tabs pills card lazy>
+        <b-tab title="Auto Calculation" :title-link-class="'expense-tab'" :active="customDisabled">
           <div class="custom-values-bar" v-if="!customDisabled">
             <b-alert show variant="warning" class="py-3">Values are disabled since expense is in custom mode</b-alert>
           </div>
@@ -67,7 +67,7 @@
             </b-button>
           </b-form>
         </b-tab>
-        <b-tab title="Custom Values" :title-link-class="'expense-tab'">
+        <b-tab title="Custom Values" :title-link-class="'expense-tab'" :active="!customDisabled">
           <button class='btn btn-sm icon-btn text-regular upload-file-btn' :disabled="customDisabled">
             <i class="flaticon stroke upload text-primary"></i>
             Upload Files
@@ -343,6 +343,7 @@
 
 <script>
 import axios from 'axios'
+import _ from 'lodash'
 import barchart from '../../charts/barchart'
 import Switches from 'vue-switches'
 import EventBus from '../../../event-bus.js'
@@ -359,8 +360,8 @@ export default {
       } else {
         this.customDisabled = false
       }
-      let cashflow = await axios.get('/static/tempdata/data.json')
-      this.cashflow = this.processCashflow(cashflow.data)
+      // let cashflow = await axios.get('/static/tempdata/data.json')
+      // this.cashflow = this.processCashflow(cashflow.data)
       response = await axios.get(`${process.env.ROOT_API}/categories`)
       for (let item of response.data.data) {
         this.categoryOptions.push({value: item.id, text: item.name})
@@ -383,6 +384,7 @@ export default {
       }],
       expense: {},
       editExpense: {},
+      calculatedExpense: {},
       newRow: {},
       cashflow: [],
       periodOptions: [
@@ -645,7 +647,20 @@ export default {
           status: 'is-success'
         })
       })
-    }
+    },
+    recalculateChart: _.debounce(async (expense) => {
+      let data = {
+        start_year: expense.start_year,
+        end_year: expense.end_year,
+        amount: expense.amount,
+        annual_increase_percentage: expense.annual_increase_percentage,
+        calculation_mode: expense.calculation_mode,
+        amount_recurrence: expense.amount_recurrence,
+        inflation_rate: expense.inflation_rate
+      }
+      let response = await axios.post(`${process.env.ROOT_API}/expenses/amounts/calculate`, data)
+      this.calculatedExpense = response.data.data
+    }, 1000)
   },
   watch: {
     customDisabled: async function (val) {
@@ -668,6 +683,18 @@ export default {
           status: 'is-success'
         })
       }
+    },
+    'expense.start_year': function (val) {
+      this.recalculateChart(this.expense)
+    },
+    'expense.end_year': function (val) {
+      this.recalculateChart(this.expense)
+    },
+    'expense.amount': function (val) {
+      this.recalculateChart(this.expense)
+    },
+    'expense.annual_increase_percentage': function (val) {
+      this.recalculateChart(this.expense)
     }
   },
   components: {

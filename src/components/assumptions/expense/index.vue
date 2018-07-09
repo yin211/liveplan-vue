@@ -390,7 +390,6 @@ export default {
       }],
       expense: {},
       editExpense: {},
-      calculatedExpense: {},
       newRow: {},
       periodOptions: [
         { value: null, text: 'Please select an option', disabled: true },
@@ -435,7 +434,7 @@ export default {
       addRowValidated: false,
       isSaving: false,
       customDisabled: true,
-      tabIndex: 1
+      tabIndex: 0
     }
   },
   computed: {

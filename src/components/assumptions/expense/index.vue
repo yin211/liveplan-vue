@@ -10,7 +10,11 @@
     </div>
     <!-- chart Wrapper -->
     <section class="chart-container depth-2">
-      <barchart v-if="calculatedExpense.expense_amounts && calculatedExpense.expense_amounts.length" :dataArray="calculatedExpense.expense_amounts" :startYear="calculatedExpense.start_year" :endYear="calculatedExpense.end_year" :birthYear="1981"></barchart>
+      <barchart v-if="calculatedExpense.expense_amounts && calculatedExpense.expense_amounts.length" 
+                :dataArray="calculatedExpense.expense_amounts" 
+                :startYear="calculatedExpense.start_year" 
+                :endYear="calculatedExpense.end_year" 
+                :birthYear="1981"></barchart>
     </section>
     <!-- Auto Calculation, Custom Values Tabs Card-->
     <b-card no-body class="expense-tabs-card depth-1">
@@ -386,7 +390,6 @@ export default {
       editExpense: {},
       calculatedExpense: {},
       newRow: {},
-      cashflow: [],
       periodOptions: [
         { value: null, text: 'Please select an option', disabled: true },
         { value: 'monthly', text: 'Monthly' },
@@ -487,20 +490,6 @@ export default {
       // Trigger pagination to update the number of buttons/pages due to filtering
       this.totalRows = filteredItems.length
       this.currentPage = 1
-    },
-    processCashflow (data) {
-      let d = []
-      for (const key in data) {
-        if (data.hasOwnProperty(key)) {
-          if (+data[key] >= 0) {
-            d.push({
-              year: +key,
-              value: +data[key]
-            })
-          }
-        }
-      }
-      return d
     },
     autoCalcformChanged  (ev) {
       this.isCalcSaveDisabled = false

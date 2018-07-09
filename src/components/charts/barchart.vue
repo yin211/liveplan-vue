@@ -97,7 +97,7 @@ export default {
     console.log(this.dataArray)
   },
   computed: {
-    data () {
+    computedData () {
       return this.dataArray.map(d => {
         return {
           year: d.year,
@@ -114,7 +114,7 @@ export default {
     },
     yScale () {
       return this.$d3.scaleLinear()
-              .domain([this.$d3.min(this.data, d => d.value), this.$d3.max(this.data, d => d.value)])
+              .domain([this.$d3.min(this.computedData, d => d.value), this.$d3.max(this.computedData, d => d.value)])
               .range([this.chartHeight, 0])
     },
     chartHeight () {
@@ -124,7 +124,7 @@ export default {
       return this.width - this.margin.left - this.margin.right
     },
     bars () {
-      return this.data.filter(x => this.domain.indexOf(x.year) > -1)
+      return this.computedData.filter(x => this.domain.indexOf(x.year) > -1)
     },
     sliderMarginLeft () {
       return (this.width - document.getElementById('autoCalcForm').clientWidth) / 2
@@ -622,8 +622,8 @@ export default {
       this.width = this.$el.offsetWidth
     },
     setDomain () {
-      let min = this.$d3.min(this.data, d => d.year)
-      let max = this.$d3.max(this.data, d => d.year)
+      let min = this.$d3.min(this.computedData, d => d.year)
+      let max = this.$d3.max(this.computedData, d => d.year)
       this.domain = this.$d3.range(min, max + 1)
       this.staticDomain = this.domain
     },

@@ -88,7 +88,7 @@ export default {
         top: 100,
         right: 15,
         bottom: 15,
-        left: 75
+        left: 85
       },
       chart: ''
     }
@@ -99,6 +99,7 @@ export default {
                   .domain(this.domain)
                   .range([0, this.chartWidth])
                   .paddingInner([0.05])
+                  .paddingOuter([0.1])
     },
     yScale () {
       return this.$d3.scaleLinear()
@@ -243,16 +244,19 @@ export default {
       yTicks.select('line')
         .attr('x1', (d, i) => {
           if (i) {
-            return 10
+            return -7
           }
           return 0
         })
         .attr('x2', (d, i) => {
           if (i) {
-            return 20
+            return 4
           }
           return 0
         })
+
+      yTicks.select('text')
+        .attr('x', -19)
 
       // append circles
       patternify({
@@ -261,7 +265,7 @@ export default {
         selector: 'tickCircle'
       })
       .attr('r', this.axisCircleSize)
-      .attr('cx', 7)
+      .attr('cx', -10)
       .attr('fill', this.darkColor)
       .attr('stroke', '#fff')
       .attr('stroke-width', 1)

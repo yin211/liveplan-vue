@@ -14,8 +14,8 @@
     </section>
     <!-- Auto Calculation, Custom Values Tabs Card-->
     <b-card no-body class="expense-tabs-card depth-1">
-      <b-tabs pills card lazy>
-        <b-tab title="Auto Calculation" :title-link-class="'expense-tab'" :active="customDisabled">
+      <b-tabs pills card v-model="tabIndex">
+        <b-tab title="Auto Calculation" :title-link-class="'expense-tab'">
           <div class="custom-values-bar" v-if="!customDisabled">
             <b-alert show variant="warning" class="py-3">Values are disabled since expense is in custom mode</b-alert>
           </div>
@@ -67,7 +67,7 @@
             </b-button>
           </b-form>
         </b-tab>
-        <b-tab title="Custom Values" :title-link-class="'expense-tab'" :active="!customDisabled">
+        <b-tab title="Custom Values" :title-link-class="'expense-tab'">
           <button class='btn btn-sm icon-btn text-regular upload-file-btn' :disabled="customDisabled">
             <i class="flaticon stroke upload text-primary"></i>
             Upload Files
@@ -357,8 +357,10 @@ export default {
       this.expense = response.data.data
       if (this.expense.calculation_mode === 'auto') {
         this.customDisabled = true
+        this.tabIndex = 0
       } else {
         this.customDisabled = false
+        this.tabIndex = 1
       }
       // let cashflow = await axios.get('/static/tempdata/data.json')
       // this.cashflow = this.processCashflow(cashflow.data)
@@ -429,7 +431,8 @@ export default {
       editInfoValidated: false,
       addRowValidated: false,
       isSaving: false,
-      customDisabled: true
+      customDisabled: true,
+      tabIndex: 1
     }
   },
   computed: {
@@ -649,17 +652,19 @@ export default {
       })
     },
     recalculateChart: _.debounce(async (expense) => {
-      let data = {
-        start_year: expense.start_year,
-        end_year: expense.end_year,
-        amount: expense.amount,
-        annual_increase_percentage: expense.annual_increase_percentage,
-        calculation_mode: expense.calculation_mode,
-        amount_recurrence: expense.amount_recurrence,
-        inflation_rate: expense.inflation_rate
+      if (expense.calculation_mode === 'auto') {
+        let data = {
+          start_year: expense.start_year,
+          end_year: expense.end_year,
+          amount: expense.amount,
+          annual_increase_percentage: expense.annual_increase_percentage,
+          calculation_mode: 'auto',
+          amount_recurrence: expense.amount_recurrence,
+          inflation_rate: expense.inflation_rate
+        }
+        let response = await axios.post(`${process.env.ROOT_API}/expenses/amounts/calculate`, data)
+        this.calculatedExpense = response.data.data
       }
-      let response = await axios.post(`${process.env.ROOT_API}/expenses/amounts/calculate`, data)
-      this.calculatedExpense = response.data.data
     }, 1000)
   },
   watch: {

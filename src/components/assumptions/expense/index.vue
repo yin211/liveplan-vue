@@ -10,10 +10,10 @@
     </div>
     <!-- chart Wrapper -->
     <section class="chart-container depth-2">
-      <barchart v-if="calculatedExpense.expense_amounts && calculatedExpense.expense_amounts.length" 
-                :dataArray="calculatedExpense.expense_amounts" 
-                :startYear="calculatedExpense.start_year" 
-                :endYear="calculatedExpense.end_year" 
+      <barchart v-if="expense.expense_amounts && expense.expense_amounts.length"
+                :dataArray="expense.expense_amounts"
+                :startYear="expense.start_year"
+                :endYear="expense.end_year"
                 :birthYear="1981"></barchart>
     </section>
     <!-- Auto Calculation, Custom Values Tabs Card-->
@@ -652,7 +652,7 @@ export default {
           inflation_rate: expense.inflation_rate
         }
         let response = await axios.post(`${process.env.ROOT_API}/expenses/amounts/calculate`, data)
-        this.calculatedExpense = response.data.data
+        this.expense = response.data.data
       }
     }, 1000)
   },

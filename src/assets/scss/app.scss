@@ -119,6 +119,34 @@ form {
   font-size: 14px;
 }
 
+// customize confirm modal
+.dg-main-content {
+  max-width: 500px;
+
+  .dg-title {
+    padding: 1rem 1rem 1rem 0;
+    font-size: 1.5rem;
+    letter-spacing: 0.5px;
+    border-bottom: 1px solid #e9ecef;
+  }
+
+  .dg-content {
+    padding: 1rem;
+  }
+
+  .dg-content-footer {
+    .dg-btn--cancel {
+      background-color: #0065FF;
+      float: right;
+      margin-left: 4px;
+    }
+    .dg-btn--ok {
+      color: #0065FF;
+      border-color: #0065ff;
+    }
+  }
+}
+
 // customize modal
 .livsplan-modal {
   .modal-header {

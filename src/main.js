@@ -11,6 +11,14 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'font-awesome/css/font-awesome.css'
 import VueD3 from 'vue-d3'
 import VueNumeric from 'vue-numeric'
+import Lodash from 'lodash'
+import VuejsDialog from 'vuejs-dialog'
+Vue.use(VuejsDialog, {
+  okText: 'OK',
+  cancelText: 'Cancel',
+  backdropClose: true
+})
+Vue.use(Lodash)
 Vue.use(BootstrapVue)
 Vue.use(VueD3)
 Vue.use(VueNumeric)

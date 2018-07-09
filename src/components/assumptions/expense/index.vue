@@ -3,7 +3,7 @@
     <b-breadcrumb :items="items" class="p-0"/>
     <div class="d-flex justify-content-between align-items-center">
       <h1 class="text-regular text-left">{{expense.name}} </h1>
-      <button class='btn btn-sm icon-btn text-regular'>
+      <button class='btn btn-sm icon-btn text-regular' @click="deleteExpense()">
         <i class="flaticon stroke trash-2 text-danger"></i>
         Delete Expense
       </button>
@@ -630,6 +630,21 @@ export default {
     async deleteRow (item) {
       await axios.delete(`${process.env.ROOT_API}/expenses/${this.$route.params.id}/amounts/${item.id}`)
       this.expense.expense_amounts = this.expense.expense_amounts.filter(amount => amount.id !== item.id)
+    },
+    deleteExpense () {
+      let message = {
+        title: 'Confirm',
+        body: 'Are you sure you want to delete this expense?'
+      }
+      this.$dialog.confirm(message)
+      .then(async () => {
+        await axios.delete(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`)
+        EventBus.$emit('notify-me', {
+          title: 'Success!',
+          text: 'This expense has been deleted successfully!',
+          status: 'is-success'
+        })
+      })
     }
   },
   watch: {

@@ -1,10 +1,8 @@
 <template>
   <div id="app">
-    <v-header class="bg-dark"></v-header>
-    <div class="container main-box">
-      <router-view></router-view>
-      <v-footer class="bg-dark" v-if="isAuthenticated"></v-footer>
-    </div>
+    <v-header></v-header>
+    <router-view></router-view>
+    <v-footer></v-footer>
     <v-notify></v-notify>
   </div>
 </template>
@@ -44,11 +42,6 @@ export default {
       }
       return Promise.reject(error)
     })
-  },
-  computed: {
-    isAuthenticated () {
-      return this.$store.getters.isAuthenticated
-    }
   }
 }
 </script>
@@ -62,14 +55,7 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
-    height: 100vh;
     padding-top: 24px;
-
-    .main-box {
-      max-width: 1440px;
-      padding-left: 0px;
-      padding-right: 0px;
-    }
   }
 
 </style>

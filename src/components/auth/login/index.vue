@@ -1,5 +1,5 @@
 <template>
-  <div class="login d-flex justify-content-between flex-column">
+  <div class="login d-flex justify-content-between flex-column mx-auto">
     <div class="main d-flex justify-content-center bg-light">
         <ul class="d-flex flex-column justify-content-end align-items-end mb-5">
           <li @click="loginWithEmail" :class="{'elem-active': isLoginWithEmail}">{{ $t('login.label.login_with_email') }}</li>
@@ -224,7 +224,7 @@ export default {
         }, () => {
           EventBus.$emit('notify-me', {
             title: 'Authentication Failed!',
-            text: 'Something went wrong!',
+            text: 'Username or Password is incorrect!',
             status: 'is-danger'
           })
         })

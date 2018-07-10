@@ -1,5 +1,5 @@
 <template>
-  <div class="vfooter d-flex justify-content-between align-items-center">
+  <div v-if="isAuthenticated" class="vfooter d-flex justify-content-between align-items-center bg-dark mx-auto">
 
       <div class="d-flex flex-column text-left left-container">
         <div class="text-white logo-text">{{ $t('footer.logo') }}</div>
@@ -22,12 +22,18 @@
 
 <script>
 export default {
-  name: 'vfooter'
+  name: 'vfooter',
+  computed: {
+    isAuthenticated () {
+      return this.$store.getters.isAuthenticated
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
   .vfooter {
+    max-width: 1440px;
     height: 150px;
     margin-bottom: 24px;
     padding: 0 2.25rem;

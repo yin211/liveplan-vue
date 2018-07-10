@@ -241,11 +241,11 @@ form {
   .breadcrumb-item {
     font-size: 14px;
     line-height: 20px;
-    color: #84888F;
+    color: white;
+    opacity: 0.5;
 
     &::after {
       padding-left: 20px;
-      color: #7A869A;
       font-family: "FontAwesome";
       content: "\f054";
       font-size: 12px;
@@ -256,7 +256,7 @@ form {
     }
 
     a {
-      color: #84888F;
+      color: white;
     }
   }
 

@@ -650,7 +650,7 @@ export default {
         margin: 0px;
         padding: 0px;
         svg {
-            background: linear-gradient(193.11deg, #685B7A 0%, #445B7C 100%);
+            // background: linear-gradient(193.11deg, #685B7A 0%, #445B7C 100%);
             box-shadow: 20px 22px 44px 0 rgba(82,86,112,0.55);
             #hoverrect {
               display: none;
@@ -662,7 +662,7 @@ export default {
             .yAxis text {
               fill: #fff;
             }
-            .yAxis line { 
+            .yAxis line {
               stroke: #A5ADBA;
             }
             .secondaryAxisText {

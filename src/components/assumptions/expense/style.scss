@@ -1,8 +1,18 @@
 .expense {
-  padding: 120px 34px;
 
-  section {
-    margin-bottom: 120px;
+  .title-container {
+    max-width: 1440px;
+    padding: 85px 34px 24px;
+  }
+
+  .card-container {
+    background: #d9dae7;
+    > div {
+      max-width: 1440px;
+      padding-left: 34px;
+      padding-right: 34px;
+      padding-bottom: 240px;
+    }
   }
 
   .element-spacer {
@@ -38,13 +48,6 @@
     }
   }
 
-  // chart wrapper
-  .chart-container {
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 49.5vw);
-    margin-top: 38px;
-  }
-
   // customize card
   .card {
     border-radius: 0;
@@ -53,7 +56,7 @@
       line-height: 20px;
     }
     &.expense-tabs-card {
-      margin-top: -170px;
+      top: -42px;
 
       .card-header {
         padding: 34px 30px;
@@ -157,8 +160,6 @@
     }
 
     &.edit-info-card {
-      margin-top: 34px;
-      margin-bottom: 120px;
 
       .card-body {
         padding: 30px 15px 33px;

@@ -1,5 +1,5 @@
 <template>
-  <div class="container-fluid vheader">
+  <div class="container-fluid vheader bg-dark">
     <b-navbar class="container px-5" toggleable="md" type="dark" variant="dark">
       <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
@@ -107,8 +107,8 @@ export default {
       max-width: 1400px;
 
       .navbar-brand {
-        width: 170px;
-        height: 126px;
+        min-width: 170px;
+        min-height: 126px;
         background-color: white;
         font-size: 24px;
         font-weight: bold;

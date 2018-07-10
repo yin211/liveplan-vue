@@ -12,7 +12,7 @@
         </div>
       </div>
       <!-- chart Wrapper -->
-      <div class="chart-container depth-2">
+      <div class="chart-container">
         <barchart v-if="cashflow.expense_amounts && cashflow.expense_amounts.length"
                   :dataArray="cashflow.expense_amounts"
                   :startYear="cashflow.start_year"

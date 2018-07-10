@@ -367,8 +367,6 @@ export default {
         this.customDisabled = false
         this.tabIndex = 1
       }
-      // let cashflow = await axios.get('/static/tempdata/data.json')
-      // this.cashflow = this.processCashflow(cashflow.data)
       response = await axios.get(`${process.env.ROOT_API}/categories`)
       for (let item of response.data.data) {
         this.categoryOptions.push({value: item.id, text: item.name})
@@ -524,7 +522,7 @@ export default {
           this.isSaving = false
           EventBus.$emit('notify-me', {
             title: 'Failed!',
-            text: 'Something went wrong!',
+            text: err.message,
             status: 'is-danger'
           })
         }
@@ -565,7 +563,7 @@ export default {
           console.log(err)
           EventBus.$emit('notify-me', {
             title: 'Failed!',
-            text: 'Something went wrong!',
+            text: err.message,
             status: 'is-danger'
           })
         }
@@ -598,7 +596,7 @@ export default {
           console.log(err)
           EventBus.$emit('notify-me', {
             title: 'Failed!',
-            text: 'Something went wrong!',
+            text: err.message,
             status: 'is-danger'
           })
         }
@@ -641,16 +639,16 @@ export default {
         })
       })
     },
-    recalculateChart: _.debounce(async (expense, _this) => {
-      if (expense.calculation_mode === 'auto') {
+    recalculateChart: _.debounce(async (_this) => {
+      if (_this.expense.calculation_mode === 'auto') {
         let data = {
-          start_year: expense.start_year,
-          end_year: expense.end_year,
-          amount: expense.amount,
-          annual_increase_percentage: expense.annual_increase_percentage,
+          start_year: _this.expense.start_year,
+          end_year: _this.expense.end_year,
+          amount: _this.expense.amount,
+          annual_increase_percentage: _this.expense.annual_increase_percentage,
           calculation_mode: 'auto',
-          amount_recurrence: expense.amount_recurrence,
-          inflation_rate: expense.inflation_rate
+          amount_recurrence: _this.expense.amount_recurrence,
+          inflation_rate: _this.expense.inflation_rate
         }
         let response = await axios.post(`${process.env.ROOT_API}/expenses/amounts/calculate`, data)
         _this.cashflow = response.data.data
@@ -670,26 +668,35 @@ export default {
         let data = {
           calculation_mode: val ? 'auto' : 'custom'
         }
-        await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`, data)
-        this.expense.calculation_mode = val ? 'auto' : 'custom'
-        EventBus.$emit('notify-me', {
-          title: 'Success!',
-          text: 'Calculation mode has been updated successfully!',
-          status: 'is-success'
-        })
+        try {
+          await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`, data)
+          this.expense.calculation_mode = val ? 'auto' : 'custom'
+          EventBus.$emit('notify-me', {
+            title: 'Success!',
+            text: 'Calculation mode has been updated successfully!',
+            status: 'is-success'
+          })
+        } catch (err) {
+          console.log(err)
+          EventBus.$emit('notify-me', {
+            title: 'Failed!',
+            text: err.message,
+            status: 'is-danger'
+          })
+        }
       }
     },
     'expense.start_year': function (val) {
-      this.recalculateChart(this.expense, this)
+      this.recalculateChart(this)
     },
     'expense.end_year': function (val) {
-      this.recalculateChart(this.expense, this)
+      this.recalculateChart(this)
     },
     'expense.amount': function (val) {
-      this.recalculateChart(this.expense, this)
+      this.recalculateChart(this)
     },
     'expense.annual_increase_percentage': function (val) {
-      this.recalculateChart(this.expense, this)
+      this.recalculateChart(this)
     }
   },
   components: {

@@ -10,10 +10,10 @@
     </div>
     <!-- chart Wrapper -->
     <section class="chart-container depth-2">
-      <barchart v-if="expense.expense_amounts && expense.expense_amounts.length"
-                :dataArray="expense.expense_amounts"
-                :startYear="expense.start_year"
-                :endYear="expense.end_year"
+      <barchart v-if="cashflow.expense_amounts && cashflow.expense_amounts.length"
+                :dataArray="cashflow.expense_amounts"
+                :startYear="cashflow.start_year"
+                :endYear="cashflow.end_year"
                 :birthYear="1981"></barchart>
     </section>
     <!-- Auto Calculation, Custom Values Tabs Card-->
@@ -359,6 +359,7 @@ export default {
     try {
       let response = await axios.get(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`)
       this.expense = response.data.data
+      this.cashflow = this.expense
       if (this.expense.calculation_mode === 'auto') {
         this.customDisabled = true
         this.tabIndex = 0
@@ -434,7 +435,8 @@ export default {
       addRowValidated: false,
       isSaving: false,
       customDisabled: true,
-      tabIndex: 0
+      tabIndex: 0,
+      cashflow: {}
     }
   },
   computed: {
@@ -639,7 +641,7 @@ export default {
         })
       })
     },
-    recalculateChart: _.debounce(async (expense) => {
+    recalculateChart: _.debounce(async (expense, _this) => {
       if (expense.calculation_mode === 'auto') {
         let data = {
           start_year: expense.start_year,
@@ -651,7 +653,7 @@ export default {
           inflation_rate: expense.inflation_rate
         }
         let response = await axios.post(`${process.env.ROOT_API}/expenses/amounts/calculate`, data)
-        this.expense = response.data.data
+        _this.cashflow = response.data.data
       }
     }, 1000)
   },
@@ -678,16 +680,16 @@ export default {
       }
     },
     'expense.start_year': function (val) {
-      this.recalculateChart(this.expense)
+      this.recalculateChart(this.expense, this)
     },
     'expense.end_year': function (val) {
-      this.recalculateChart(this.expense)
+      this.recalculateChart(this.expense, this)
     },
     'expense.amount': function (val) {
-      this.recalculateChart(this.expense)
+      this.recalculateChart(this.expense, this)
     },
     'expense.annual_increase_percentage': function (val) {
-      this.recalculateChart(this.expense)
+      this.recalculateChart(this.expense, this)
     }
   },
   components: {

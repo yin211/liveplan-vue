@@ -11,7 +11,8 @@
                       :width="xScale.bandwidth()"
                       :height="chartHeight - yScale(d.value)"
                       :data-year="d.year"
-                      :fill="barColor">
+                      :fill="barColor"
+                      :opacity="calcOpacity(d, i)">
                 </rect>
                 <rect v-for="(d,i) in bars"
                       :key="`hiddenrect-${i}`"
@@ -173,6 +174,17 @@ export default {
       hoverrect.style('display', 'none')
       this.tooltipVisible = false
     },
+    calcOpacity (d, i) {
+      let l = Math.round(this.dataArray.length * 0.1)
+      let h = this.dataArray.length - l
+      if (i < l) {
+        return 0.5 * (1 + i)
+      }
+      if (i > h) {
+        return 0.5 * (this.dataArray.length - i)
+      }
+      return 1
+    },
     drawAxis () {
       let tickSize = this.chartHeight
       let xAxis = this.$d3.axisBottom(this.xScale).tickSize(-(tickSize))
@@ -211,11 +223,21 @@ export default {
                   let year = this.xScale.domain()[0] + i
                   return `xTick-${year}`
                 })
+                .attr('opacity', (d, i) => {
+                  let l = Math.round(this.dataArray.length * 0.1)
+                  let h = this.dataArray.length - l
+                  if (i < l) {
+                    return 0.25 * (1 + i)
+                  }
+                  if (i > h) {
+                    return 0.25 * (this.dataArray.length - i)
+                  }
+                  return 0.75
+                })
 
       ticks.select('line')
         .attr('stroke', this.darkColor)
         .attr('stroke-dasharray', '1.5px')
-        .attr('opacity', 0.5)
 
       // reposition texts within the axis
       ticks.select('text')

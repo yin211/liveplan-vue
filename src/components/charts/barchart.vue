@@ -83,7 +83,7 @@ export default {
       sliderHandlerRadius: 12,
       domain: [],
       staticDomain: [],
-      maximumSliderRange: 20, // maximum 20 years
+      maximumSliderRange: this.dataArray.length / 2,
       margin: {
         top: 100,
         right: 15,

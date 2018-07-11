@@ -23,7 +23,12 @@
 
         <b-navbar-nav class="left-nav">
           <b-nav-item to="/overview">{{ $t('header.header_menu.overview') }}</b-nav-item>
-          <b-nav-item to="/assumptions/expense/1">{{ $t('header.header_menu.assumptions') }}</b-nav-item>
+          <b-nav-item-dropdown :text="$t('header.header_menu.assumptions')" right v-bind:class="{ active: isAssumptionActive }">
+            <b-dropdown-item href="#">INCOMES</b-dropdown-item>
+            <b-dropdown-item to="/assumptions/expense/1">EXPENSES</b-dropdown-item>
+            <b-dropdown-item href="#">ASSETS</b-dropdown-item>
+            <b-dropdown-item href="#">DEBTS</b-dropdown-item>
+          </b-nav-item-dropdown>
           <b-nav-item to="/timeline">{{ $t('header.header_menu.timeline') }}</b-nav-item>
           <b-nav-item to="/whatif">{{ $t('header.header_menu.whatif') }}</b-nav-item>
           <b-nav-item to="/tools-and-insights">{{ $t('header.header_menu.tools_and_insights') }}</b-nav-item>
@@ -32,7 +37,9 @@
         <!-- Right aligned nav items -->
         <b-navbar-nav class="ml-auto right-nav">
           <b-dropdown id="ddown1" right size="sm" :text="selectedPlanText">
-            <b-dropdown-item-button v-for="plan in plans" :key="plan.id" @click="selectPlan(plan)">{{plan.description}}</b-dropdown-item-button>
+            <b-dropdown-item-button v-for="plan in plans" :key="plan.id" @click="selectPlan(plan)" class="d-flex align-items-center pl-3" v-bind:class="{active: selectedPlan && plan.id === selectedPlan.id}">
+              <i class="flaticon stroke checkmark"></i>{{plan.description}}
+            </b-dropdown-item-button>
           </b-dropdown>
           <div class="mx-4 spacing-divider"></div>
           <b-nav-item-dropdown right no-caret>
@@ -59,7 +66,8 @@ export default {
   data () {
     return {
       plans: [],
-      selectedPlan: null
+      selectedPlan: null,
+      isAssumptionActive: this.$router.history.current.path.indexOf('/assumptions/') === 0
     }
   },
   async mounted () {
@@ -83,6 +91,11 @@ export default {
       } else {
         return 'Select Plan'
       }
+    }
+  },
+  watch: {
+    $route (to, from) {
+      this.isAssumptionActive = this.$router.history.current.path.indexOf('/assumptions/') === 0
     }
   },
   methods: {
@@ -131,6 +144,19 @@ export default {
           line-height: 24px;
           padding: 0px 16px !important;
 
+
+          [aria-expanded="true"].dropdown-toggle::after {
+            border-top: 0 !important;
+            border-bottom: .5em solid !important;
+          }
+
+          &.active {
+            .nav-link {
+              border-bottom: 4px solid #36B37E;
+              opacity: 1;
+            }
+          }
+
           .nav-link {
             border-bottom: 4px solid transparent;
             opacity: 0.59;
@@ -140,6 +166,44 @@ export default {
               border-bottom: 4px solid #36B37E;
               opacity: 1;
             }
+            &.dropdown-toggle::after {
+              margin-left: 0.5em;
+              vertical-align: 0.1em;
+              border-top: 0.5em solid;
+              border-right: 0.5em solid transparent;
+              border-bottom: 0;
+              border-left: 0.5em solid transparent;
+            }
+          }
+
+          .dropdown-menu {
+            padding-top: 1rem;
+            padding-bottom: 1rem;
+            margin-top: 0.5rem;
+            border-radius: 0;
+
+            &:after {
+              position: absolute;
+              top: -8px;
+              left: 20px;
+              display: inline-block;
+              border-right: 8px solid transparent;
+              border-bottom: 8px solid white;
+              border-left: 8px solid transparent;
+              content: '';
+            }
+
+            .dropdown-item {
+              font-size: 13px;
+              font-weight: 500;
+              outline: none;
+              line-height: 32px;
+
+              &.active {
+                color: #36B37E;
+                background-color: transparent;
+              }
+            }
           }
         }
       }
@@ -148,6 +212,7 @@ export default {
         .dropdown-toggle {
           padding: 8px 8px 8px 16px;
           line-height: 24px;
+          background-color: #74778D;
 
           &::after {
             margin-left: 1em;
@@ -156,6 +221,38 @@ export default {
             font-size: 20px;
           }
         }
+
+        .dropdown-menu {
+          background-color: #74788D;
+
+          .dropdown-item {
+            color: white;
+            opacity: 0.7;
+            outline: none;
+            font-size: 14px;
+            background-color: transparent;
+
+            &:hover, &:focus {
+              opacity: 1;
+              cursor: pointer;
+            }
+
+            &.active {
+              opacity: 1;
+              font-weight: bold;
+              i {
+                visibility: visible;
+              }
+            }
+
+            i {
+              font-size: 20px;
+              padding-right: 0.25rem;
+              visibility: hidden;
+            }
+          }
+        }
+
         .spacing-divider {
           opacity: .13;
           border: 1px solid #FFFFFF;

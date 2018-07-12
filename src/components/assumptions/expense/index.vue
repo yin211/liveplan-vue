@@ -115,8 +115,8 @@
                     <td colspan="3"><b-form-input v-model="filter" size="sm" placeholder="Type to Search" /></td>
                   </template>
                   <template slot="amount" slot-scope="row">
-                    <vue-numeric v-show="row.item.is_edit"  currency="SEK" currency-symbol-position="suffix" thousand-separator=" "  v-model="row.item.edit_amount" class="form-control form-control-sm text-regular amount-per-month" :minus="true"></vue-numeric>
-                    <span v-show="!row.item.is_edit">{{row.item.amount.toLocaleString('sv-SE')}} SEK </span>
+                    <vue-numeric v-show="row.item.is_edit"  @keyup.native.enter.stop.prevent="saveRow(row.item)" currency="SEK" currency-symbol-position="suffix" thousand-separator=" "  v-model="row.item.edit_amount" class="form-control form-control-sm text-regular amount-per-month" :minus="true"></vue-numeric>
+                    <span v-show="!row.item.is_edit"  @dblclick="editRow(row.item)">{{row.item.amount.toLocaleString('sv-SE')}} SEK </span>
                   </template>
                   <template slot="actions" slot-scope="row">
                     <button v-show="row.item.is_edit" class='btn plain-btn text-regular' @click.stop="saveRow(row.item)">
@@ -628,9 +628,16 @@ export default {
       item.edit_amount = MAX_NUM
       item.is_edit = false
     },
-    async deleteRow (item) {
-      await axios.delete(`${process.env.ROOT_API}/expenses/${this.$route.params.id}/amounts/${item.id}`)
-      this.expense.expense_amounts = this.expense.expense_amounts.filter(amount => amount.id !== item.id)
+    deleteRow (item) {
+      let message = {
+        title: 'Confirm',
+        body: 'Are you sure you want to delete this row?'
+      }
+      this.$dialog.confirm(message)
+      .then(async () => {
+        await axios.delete(`${process.env.ROOT_API}/expenses/${this.$route.params.id}/amounts/${item.id}`)
+        this.expense.expense_amounts = this.expense.expense_amounts.filter(amount => amount.id !== item.id)
+      })
     },
     deleteExpense () {
       let message = {

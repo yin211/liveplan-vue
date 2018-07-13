@@ -17,7 +17,7 @@
                 <text v-if="debug"
                       v-for="(d,i) in bars"
                       :key="i"
-                      :x="xScale(d.year) + 12"
+                      :x="xScale(d.year)"
                       :y="yScale(d.value) - 8"
                       :fill="darkColor">
                       {{ d.value }}

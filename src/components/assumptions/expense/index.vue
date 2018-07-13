@@ -78,10 +78,7 @@
               </b-form>
             </b-tab>
             <b-tab title="Custom Values" :title-link-class="'expense-tab'">
-              <button class='btn btn-sm icon-btn text-regular upload-file-btn' :disabled="customDisabled">
-                <i class="flaticon stroke upload text-primary"></i>
-                Upload Files
-              </button>
+              <csv-download v-if="expense.expense_amounts" class="upload-file-btn" :disabled="customDisabled" :title="'Upload File'" :data-json="expense.expense_amounts"></csv-download>
               <div class="custom-values-bar">
                 <div class="d-flex justify-content-between align-items-center" :class="[customDisabled ? 'bar-disable-color' :'bar-enable-color']">
                   <div class="d-flex align-items-center">
@@ -593,7 +590,12 @@ export default {
             amount: this.newRow.amount ? this.newRow.amount : 0
           }
           let response = await axios.post(`${process.env.ROOT_API}/expenses/${this.$route.params.id}/amounts`, data)
-          this.expense.expense_amounts.push(response.data.data)
+          let found = this.expense.expense_amounts.find(element => parseInt(element.year) === parseInt(response.data.data.year))
+          if (found) {
+            found.amount = response.data.data.amount
+          } else {
+            this.expense.expense_amounts.unshift(response.data.data)
+          }
           this.addRowModalShow = false
           EventBus.$emit('notify-me', {
             title: 'Success!',

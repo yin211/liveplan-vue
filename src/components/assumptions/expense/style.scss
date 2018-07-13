@@ -307,4 +307,39 @@
     background: #ccc;
   }
 
+  // customize csv download button
+  .csvdownload {
+    > button {
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 24px;
+      border-radius: 30px;
+      outline: none;
+      padding: .25rem .5rem;
+      cursor: pointer;
+      border: 1px solid #eaecef;
+
+      &::before {
+        font-family: Flaticons Stroke;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        content: "\E55E";
+        margin-right: .5rem;
+        color: #0065ff;
+      }
+    }
+
+    &[disabled="disabled"] {
+      > button {
+        pointer-events:none;
+      }
+    }
+
+    .csvoption {
+      display: none
+    }
+  }
+
 }

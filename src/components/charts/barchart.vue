@@ -94,14 +94,11 @@ export default {
       chart: ''
     }
   },
-  created () {
-    console.log(this.dataArray)
-  },
   computed: {
     computedData () {
       return this.dataArray.map(d => {
         return {
-          year: d.year,
+          year: +d.year,
           value: Math.abs(d.amount)
         }
       })
@@ -115,7 +112,7 @@ export default {
     },
     yScale () {
       return this.$d3.scaleLinear()
-              .domain([this.$d3.min(this.computedData, d => d.value), this.$d3.max(this.computedData, d => d.value)])
+              .domain([0, this.$d3.max(this.computedData, d => d.value)])
               .range([this.chartHeight, 0])
     },
     chartHeight () {
@@ -304,6 +301,8 @@ export default {
       .attr('stroke-width', 1)
 
       if (this.startYear >= this.domain[0]) {
+        this.chart.selectAll('circle.startYearCircle')
+            .remove()
         // start year tick selection
         let startYearTick = this.chart.select(`#xTick-${this.startYear}`)
         startYearTick
@@ -353,6 +352,8 @@ export default {
       }
 
       if (this.endYear <= this.domain[this.domain.length - 1]) {
+        this.chart.selectAll('circle.endYearCircle')
+            .remove()
         // end year tick selection
         let endYeartTick = this.chart.select(`#xTick-${this.endYear}`)
         endYeartTick
@@ -656,11 +657,20 @@ export default {
       this.drawSlider(this.$d3.select('g.slider-wrapper'), this.width - 2 * this.sliderMarginLeft)
     }
   },
+  watch: {
+    computedData () {
+      console.log(this.computedData)
+      this.setDomain()
+      this.drawAxis()
+      this.adjustAxis()
+    }
+  },
   mounted () {
     this.chart = this.$d3.select('#barChartRent g')
     this.setDomain()
     this.onResize()
     this.$d3.select(window).on('resize', this.onResize)
+    console.log(this.bars)
   }
 }
 </script>

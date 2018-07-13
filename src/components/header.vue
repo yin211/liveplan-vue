@@ -25,7 +25,7 @@
           <b-nav-item to="/overview">{{ $t('header.header_menu.overview') }}</b-nav-item>
           <b-nav-item-dropdown :text="$t('header.header_menu.assumptions')" right v-bind:class="{ active: isAssumptionActive }">
             <b-dropdown-item href="#">INCOMES</b-dropdown-item>
-            <b-dropdown-item to="/assumptions/expense/1">EXPENSES</b-dropdown-item>
+            <b-dropdown-item to="/assumptions/expenses/1">EXPENSES</b-dropdown-item>
             <b-dropdown-item href="#">ASSETS</b-dropdown-item>
             <b-dropdown-item href="#">DEBTS</b-dropdown-item>
           </b-nav-item-dropdown>
@@ -60,6 +60,7 @@
 <script>
 import {AUTH_LOGOUT} from '@/store/actions/auth'
 import axios from 'axios'
+import EventBus from '../event-bus.js'
 
 export default {
   name: 'vheader',
@@ -74,9 +75,10 @@ export default {
     try {
       let response = await axios.get(`${process.env.ROOT_API}/plans`)
       this.plans = response.data.data
-      response = await axios.get(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`)
-      response = this.plans.filter(plan => plan.id === response.data.data.plan_id)
-      this.selectedPlan = response[0]
+      EventBus.$on('select-plan', async params => {
+        response = this.plans.filter(plan => plan.id === params.plan_id)
+        this.selectedPlan = response[0]
+      })
     } catch (err) {
       console.log(err)
     }

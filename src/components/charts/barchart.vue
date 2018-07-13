@@ -14,6 +14,14 @@
                       :fill="barColor"
                       :opacity="calcOpacity(d, i)">
                 </rect>
+                <text v-if="debug"
+                      v-for="(d,i) in bars"
+                      :key="i"
+                      :x="xScale(d.year) + 12"
+                      :y="yScale(d.value) - 8"
+                      :fill="darkColor">
+                      {{ d.value }}
+                </text>
                 <rect v-for="(d,i) in bars"
                       :key="`hiddenrect-${i}`"
                       :x="xScale(d.year)"
@@ -91,7 +99,8 @@ export default {
         bottom: 15,
         left: 85
       },
-      chart: ''
+      chart: '',
+      debug: true
     }
   },
   computed: {
@@ -688,7 +697,6 @@ export default {
     this.setDomain()
     this.onResize()
     this.$d3.select(window).on('resize', this.onResize)
-    console.log(this.computedData)
   }
 }
 </script>

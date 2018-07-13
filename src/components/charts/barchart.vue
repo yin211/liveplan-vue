@@ -65,7 +65,7 @@
 import { patternify } from './helpers'
 export default {
   name: 'barchart',
-  props: ['dataArray', 'startYear', 'endYear', 'birthYear'],
+  props: ['dataObject', 'planStartYear', 'planEndYear', 'birthYear'],
   data () {
     return {
       width: 0,
@@ -84,6 +84,7 @@ export default {
       sliderHandlerRadius: 12,
       domain: [],
       staticDomain: [],
+      capacityPercentage: 0.1,
       margin: {
         top: 100,
         right: 15,
@@ -95,12 +96,26 @@ export default {
   },
   computed: {
     computedData () {
-      return this.dataArray.map(d => {
+      let startYear = this.dataObject.start_year < this.planStartYear ? this.dataObject.start_year : this.planStartYear
+      let endYear = this.dataObject.end_year > this.planEndYear ? this.dataObject.end_year : this.planEndYear
+      let range = this.$d3.range(startYear, endYear + 1)
+      return range.map(d => {
+        let f = this.dataObject.expense_amounts.filter(x => +x.year === d)
+        let amount = 0
+        if (f.length) {
+          amount = Math.abs(f[0].amount)
+        }
         return {
-          year: +d.year,
-          value: Math.abs(d.amount)
+          year: d,
+          value: amount
         }
       })
+    },
+    startYear () {
+      return this.dataObject.start_year
+    },
+    endYear () {
+      return this.dataObject.end_year
     },
     xScale () {
       return this.$d3.scaleBand()
@@ -127,7 +142,7 @@ export default {
       return (this.width - document.getElementById('autoCalcForm').clientWidth) / 2
     },
     maximumSliderRange () {
-      return Math.round(this.dataArray.length / 2.5)
+      return Math.round(this.computedData.length / 2.5)
     },
     thousandsFormat () {
       let locale = this.$d3.formatLocale({
@@ -174,13 +189,13 @@ export default {
       this.tooltipVisible = false
     },
     calcOpacity (d, i) {
-      let l = Math.round(this.dataArray.length * 0.1)
-      let h = this.dataArray.length - l
+      let l = Math.round(this.computedData.length * this.capacityPercentage)
+      let h = this.computedData.length - l
       if (i < l) {
         return 0.5 * (1 + i)
       }
       if (i > h) {
-        return 0.5 * (this.dataArray.length - i)
+        return 0.5 * (this.computedData.length - i)
       }
       return 1
     },
@@ -223,13 +238,13 @@ export default {
                   return `xTick-${year}`
                 })
                 .attr('opacity', (d, i) => {
-                  let l = Math.round(this.dataArray.length * 0.1)
-                  let h = this.dataArray.length - l
+                  let l = Math.round(this.computedData.length * this.capacityPercentage)
+                  let h = this.computedData.length - l
                   if (i < l) {
                     return 0.25 * (1 + i)
                   }
                   if (i > h) {
-                    return 0.25 * (this.dataArray.length - i)
+                    return 0.25 * (this.computedData.length - i)
                   }
                   return 0.75
                 })
@@ -467,7 +482,8 @@ export default {
       .on('mouseout', lineMouseOut)
       .call(this.$d3.drag()
               .on('start', lineDragStart)
-              .on('drag', lineDrag))
+              .on('drag', lineDrag)
+              .on('end', lineDragEnd))
 
       // first circle group
       let firstCircleGroup = patternify({
@@ -569,9 +585,13 @@ export default {
       }
 
       function getNewDomain () {
+        return getLiveDomain(currentSelectedArea)
+      }
+
+      function getLiveDomain (coords) {
         let sliderBandWidth = scale.bandwidth()
-        let f = Math.round(currentSelectedArea[0] / sliderBandWidth)
-        let s = Math.round(currentSelectedArea[1] / sliderBandWidth)
+        let f = Math.round(coords[0] / sliderBandWidth)
+        let s = Math.round(coords[1] / sliderBandWidth)
         return self.$d3.range(self.staticDomain[f], self.staticDomain[s - 1] + 1)
       }
 
@@ -608,17 +628,16 @@ export default {
         foregroundLine.attr('x1', coords[0])
                       .attr('x2', coords[1])
 
-        setTimeout(lineDragEnd, 150)
+        let newDomain = getLiveDomain(coords)
+        self.domain = newDomain
+        self.drawAxis()
+        self.adjustAxis()
       }
 
       function lineDragEnd () {
         let coords = getLineDragCoords()
         currentSelectedArea[0] = coords[0]
         currentSelectedArea[1] = coords[1]
-        let newDomain = getNewDomain()
-        self.domain = newDomain
-        self.drawAxis()
-        self.adjustAxis()
         startX = 0
       }
 
@@ -669,7 +688,7 @@ export default {
     this.setDomain()
     this.onResize()
     this.$d3.select(window).on('resize', this.onResize)
-    console.log(this.bars)
+    console.log(this.computedData)
   }
 }
 </script>

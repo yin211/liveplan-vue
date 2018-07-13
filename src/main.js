@@ -13,6 +13,8 @@ import VueD3 from 'vue-d3'
 import VueNumeric from 'vue-numeric'
 import Lodash from 'lodash'
 import VuejsDialog from 'vuejs-dialog'
+import VueCSV from 'vuecsv'
+Vue.use(VueCSV)
 Vue.use(VuejsDialog, {
   okText: 'OK',
   cancelText: 'Cancel',

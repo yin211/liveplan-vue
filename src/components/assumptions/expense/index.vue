@@ -78,10 +78,7 @@
               </b-form>
             </b-tab>
             <b-tab title="Custom Values" :title-link-class="'expense-tab'">
-              <button class='btn btn-sm icon-btn text-regular upload-file-btn' :disabled="customDisabled">
-                <i class="flaticon stroke upload text-primary"></i>
-                Upload Files
-              </button>
+              <csv-download v-if="expense.expense_amounts" class="upload-file-btn" :disabled="customDisabled" :title="'Upload File'" :data-json="expense.expense_amounts"></csv-download>
               <div class="custom-values-bar">
                 <div class="d-flex justify-content-between align-items-center" :class="[customDisabled ? 'bar-disable-color' :'bar-enable-color']">
                   <div class="d-flex align-items-center">

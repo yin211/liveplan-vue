@@ -84,7 +84,6 @@ export default {
       sliderHandlerRadius: 12,
       domain: [],
       staticDomain: [],
-      maximumSliderRange: this.dataArray.length / 2,
       margin: {
         top: 100,
         right: 15,
@@ -126,6 +125,9 @@ export default {
     },
     sliderMarginLeft () {
       return (this.width - document.getElementById('autoCalcForm').clientWidth) / 2
+    },
+    maximumSliderRange () {
+      return Math.round(this.dataArray.length / 2.5)
     },
     thousandsFormat () {
       let locale = this.$d3.formatLocale({
@@ -659,10 +661,10 @@ export default {
   },
   watch: {
     computedData () {
-      console.log(this.computedData)
       this.setDomain()
       this.drawAxis()
       this.adjustAxis()
+      this.drawSlider(this.$d3.select('g.slider-wrapper'), this.width - 2 * this.sliderMarginLeft)
     }
   },
   mounted () {

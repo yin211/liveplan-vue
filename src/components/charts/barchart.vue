@@ -467,8 +467,7 @@ export default {
       .on('mouseout', lineMouseOut)
       .call(this.$d3.drag()
               .on('start', lineDragStart)
-              .on('drag', lineDrag)
-              .on('end', lineDragEnd))
+              .on('drag', lineDrag))
 
       // first circle group
       let firstCircleGroup = patternify({
@@ -480,9 +479,6 @@ export default {
       .call(this.$d3.drag()
               .on('drag', d => {
                 return dragged(d, 'first')
-              })
-              .on('end', d => {
-                return dragEnd(d)
               }))
 
       // second circle group
@@ -495,9 +491,6 @@ export default {
       .call(this.$d3.drag()
               .on('drag', d => {
                 return dragged(d, 'second')
-              })
-              .on('end', d => {
-                return dragEnd(d)
               }))
 
       patternify({
@@ -564,6 +557,8 @@ export default {
           secondCircleGroup.attr('transform', `translate(${currentSelectedArea[1]})`)
           foregroundLine.attr('x2', cx)
         }
+
+        dragEnd()
       }
 
       function dragEnd () {
@@ -612,6 +607,8 @@ export default {
         secondCircleGroup.attr('transform', `translate(${coords[1]})`)
         foregroundLine.attr('x1', coords[0])
                       .attr('x2', coords[1])
+
+        setTimeout(lineDragEnd, 150)
       }
 
       function lineDragEnd () {

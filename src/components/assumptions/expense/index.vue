@@ -359,7 +359,7 @@ import EventBus from '../../../event-bus.js'
 const MAX_NUM = 999999999999
 
 export default {
-  name: 'expense',
+  name: 'expenses',
   async mounted () {
     try {
       let response = await axios.get(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`)
@@ -376,6 +376,9 @@ export default {
       for (let item of response.data.data) {
         this.categoryOptions.push({value: item.id, text: item.name})
       }
+      EventBus.$emit('select-plan', {
+        plan_id: this.expense.plan_id
+      })
       setTimeout(() => {
         this.perPage = 10
       }, 1000)

@@ -36,8 +36,8 @@ export default new Router({
       component: assumptions,
       children: [
         {
-          path: 'expense/:id',
-          name: 'expense',
+          path: 'expenses/:id',
+          name: 'expenses',
           component: expense
         }
       ]

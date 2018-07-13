@@ -13,10 +13,10 @@
       </div>
       <!-- chart Wrapper -->
       <div class="chart-container">
-        <barchart v-if="cashflow.expense_amounts && cashflow.expense_amounts.length"
-                  :dataArray="cashflow.expense_amounts"
-                  :startYear="cashflow.start_year"
-                  :endYear="cashflow.end_year"
+        <barchart v-if="cashflow.expense_amounts && cashflow.expense_amounts.length && planStartYear && planEndYear"
+                  :dataObject="cashflow"
+                  :planStartYear="planStartYear"
+                  :planEndYear="planEndYear"
                   :birthYear="1981"></barchart>
       </div>
     </div>
@@ -365,6 +365,10 @@ export default {
       let response = await axios.get(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`)
       this.expense = response.data.data
       this.cashflow = this.expense
+      let plan = await axios.get(`${process.env.ROOT_API}/plans/${this.$route.params.id}`)
+      // debugger
+      this.planStartYear = plan.data.data.start_year
+      this.planEndYear = plan.data.data.end_year
       if (this.expense.calculation_mode === 'auto') {
         this.customDisabled = true
         this.tabIndex = 0
@@ -442,7 +446,9 @@ export default {
       isSaving: false,
       customDisabled: true,
       tabIndex: 0,
-      cashflow: {}
+      cashflow: {},
+      planStartYear: null,
+      planEndYear: null
     }
   },
   computed: {

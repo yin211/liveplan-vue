@@ -593,7 +593,12 @@ export default {
             amount: this.newRow.amount ? this.newRow.amount : 0
           }
           let response = await axios.post(`${process.env.ROOT_API}/expenses/${this.$route.params.id}/amounts`, data)
-          this.expense.expense_amounts.push(response.data.data)
+          let found = this.expense.expense_amounts.find(element => parseInt(element.year) === parseInt(response.data.data.year))
+          if (found) {
+            found.amount = response.data.data.amount
+          } else {
+            this.expense.expense_amounts.unshift(response.data.data)
+          }
           this.addRowModalShow = false
           EventBus.$emit('notify-me', {
             title: 'Success!',

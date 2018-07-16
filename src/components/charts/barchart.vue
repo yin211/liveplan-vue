@@ -93,6 +93,7 @@ export default {
       domain: [],
       staticDomain: [],
       capacityPercentage: 0.1,
+      zoomArea: [],
       margin: {
         top: 100,
         right: 15,
@@ -436,7 +437,14 @@ export default {
                   .scaleBand()
                   .domain(this.staticDomain)
                   .range([0, width - padding * 2])
-      var currentSelectedArea = [scale(this.domain[0]), scale(this.domain[this.domain.length - 1]) + scale.bandwidth()]
+
+      var currentSelectedArea
+      if (this.zoomArea.length) {
+        currentSelectedArea = this.zoomArea
+      } else {
+        currentSelectedArea = [scale(this.domain[0]), scale(this.domain[0] + this.maximumSliderRange) + scale.bandwidth()]
+      }
+
       // append texts
       patternify({
         container: selection,
@@ -587,6 +595,7 @@ export default {
       }
 
       function dragEnd () {
+        self.zoomArea = currentSelectedArea
         let newDomain = getNewDomain()
         self.domain = newDomain
         self.drawAxis()
@@ -647,6 +656,7 @@ export default {
         let coords = getLineDragCoords()
         currentSelectedArea[0] = coords[0]
         currentSelectedArea[1] = coords[1]
+        self.zoomArea = currentSelectedArea
         startX = 0
       }
 
@@ -667,6 +677,8 @@ export default {
               .attr('stroke-width', 3)
         }
       }
+
+      dragEnd()
     },
     setWidth () {
       this.width = this.$el.offsetWidth

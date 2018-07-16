@@ -364,7 +364,7 @@ export default {
     try {
       let response = await axios.get(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`)
       this.expense = response.data.data
-      this.cashflow = this.expense
+      this.cashflow = JSON.parse(JSON.stringify(this.expense))
       let plan = await axios.get(`${process.env.ROOT_API}/plans/${this.$route.params.id}`)
       // debugger
       this.planStartYear = plan.data.data.start_year
@@ -622,9 +622,11 @@ export default {
       }
     },
     editRow (item) {
-      item.is_edit = true
-      item.edit_amount = MAX_NUM
-      item.edit_amount = item.amount
+      if (!this.customDisabled) {
+        item.is_edit = true
+        item.edit_amount = MAX_NUM
+        item.edit_amount = item.amount
+      }
     },
     cancelRow (item) {
       item.is_edit = false
@@ -713,16 +715,24 @@ export default {
       }
     },
     'expense.start_year': function (val) {
-      this.recalculateChart(this)
+      if (val !== undefined && this.cashflow.start_year !== undefined && val > 1999 && val < this.cashflow.end_year && val !== this.cashflow.start_year) {
+        this.recalculateChart(this)
+      }
     },
     'expense.end_year': function (val) {
-      this.recalculateChart(this)
+      if (val !== undefined && this.cashflow.end_year !== undefined && val < 2141 && val > this.cashflow.start_year && val !== this.cashflow.end_year) {
+        this.recalculateChart(this)
+      }
     },
     'expense.amount': function (val) {
-      this.recalculateChart(this)
+      if (val !== undefined && this.cashflow.amount !== undefined && val !== this.cashflow.amount) {
+        this.recalculateChart(this)
+      }
     },
     'expense.annual_increase_percentage': function (val) {
-      this.recalculateChart(this)
+      if (val !== undefined && this.cashflow.amount !== undefined && parseInt(val) !== parseInt(this.cashflow.annual_increase_percentage)) {
+        this.recalculateChart(this)
+      }
     }
   },
   components: {

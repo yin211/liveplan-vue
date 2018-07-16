@@ -100,7 +100,7 @@ export default {
         left: 85
       },
       chart: '',
-      debug: true
+      debug: false
     }
   },
   computed: {

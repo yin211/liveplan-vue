@@ -364,7 +364,7 @@ export default {
     try {
       let response = await axios.get(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`)
       this.expense = response.data.data
-      this.cashflow = this.expense
+      this.cashflow = JSON.parse(JSON.stringify(this.expense))
       let plan = await axios.get(`${process.env.ROOT_API}/plans/${this.$route.params.id}`)
       // debugger
       this.planStartYear = plan.data.data.start_year
@@ -730,7 +730,7 @@ export default {
       }
     },
     'expense.annual_increase_percentage': function (val) {
-      if (val !== undefined && this.cashflow.amount !== undefined && val !== this.cashflow.annual_increase_percentage) {
+      if (val !== undefined && this.cashflow.amount !== undefined && parseInt(val) !== parseInt(this.cashflow.annual_increase_percentage)) {
         this.recalculateChart(this)
       }
     }

@@ -436,7 +436,7 @@ export default {
                   .scaleBand()
                   .domain(this.staticDomain)
                   .range([0, width - padding * 2])
-      var currentSelectedArea = [scale(this.domain[0]), scale(this.domain[this.domain.length - 1]) + scale.bandwidth()]
+      var currentSelectedArea = [scale(this.domain[0]), scale(this.domain[0] + this.maximumSliderRange) + scale.bandwidth()]
       // append texts
       patternify({
         container: selection,
@@ -667,6 +667,8 @@ export default {
               .attr('stroke-width', 3)
         }
       }
+
+      dragEnd()
     },
     setWidth () {
       this.width = this.$el.offsetWidth

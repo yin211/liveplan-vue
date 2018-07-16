@@ -667,6 +667,13 @@ export default {
         })
       })
     },
+    convertToArray (obj) {
+      let arr = []
+      for (let prop in obj) {
+        arr.push(obj[prop])
+      }
+      return arr
+    },
     recalculateChart: _.debounce(async (_this) => {
       if (_this.expense.calculation_mode === 'auto') {
         let data = {
@@ -679,6 +686,7 @@ export default {
           inflation_rate: _this.expense.inflation_rate
         }
         let response = await axios.post(`${process.env.ROOT_API}/expenses/amounts/calculate`, data)
+        response.data.data.expense_amounts = _this.convertToArray(response.data.data.expense_amounts)
         _this.cashflow = response.data.data
       }
     }, 1000)

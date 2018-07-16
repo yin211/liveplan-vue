@@ -92,7 +92,7 @@ export default {
       sliderHandlerRadius: 12,
       domain: [],
       staticDomain: [],
-      capacityPercentage: 0.1,
+      capacityPercentage: 0.2,
       zoomArea: [],
       margin: {
         top: 100,
@@ -199,13 +199,19 @@ export default {
       this.tooltipVisible = false
     },
     calcOpacity (d, i) {
-      let l = Math.round(this.computedData.length * this.capacityPercentage)
-      let h = this.computedData.length - l
-      if (i < l) {
-        return 0.5 * (1 + i)
+      const length = this.domain[this.domain.length - 1] - this.domain[0]
+      const l = Math.round(length * this.capacityPercentage)
+      const h = length - l
+
+      let sc = this.$d3.scaleLinear()
+
+      if (i <= l) {
+        sc.domain([0, l]).range([0.25, 1])
+        return sc(i)
       }
-      if (i > h) {
-        return 0.5 * (this.computedData.length - i)
+      if (i >= h) {
+        sc.domain([h, this.domain.length - 1]).range([1, 0.25])
+        return sc(i)
       }
       return 1
     },
@@ -248,15 +254,7 @@ export default {
                   return `xTick-${year}`
                 })
                 .attr('opacity', (d, i) => {
-                  let l = Math.round(this.computedData.length * this.capacityPercentage)
-                  let h = this.computedData.length - l
-                  if (i < l) {
-                    return 0.25 * (1 + i)
-                  }
-                  if (i > h) {
-                    return 0.25 * (this.computedData.length - i)
-                  }
-                  return 0.75
+                  return this.calcOpacity(d, i)
                 })
 
       ticks.select('line')

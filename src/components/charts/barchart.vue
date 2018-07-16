@@ -16,7 +16,7 @@
                 </rect>
                 <text v-if="debug"
                       v-for="(d,i) in bars"
-                      :key="i"
+                      :key="`text-${i}`"
                       :x="xScale(d.year)"
                       :y="yScale(d.value) - 8"
                       :fill="darkColor">

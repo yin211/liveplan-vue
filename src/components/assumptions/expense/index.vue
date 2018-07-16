@@ -715,12 +715,12 @@ export default {
       }
     },
     'expense.start_year': function (val) {
-      if (val !== undefined && this.cashflow.start_year !== undefined && val !== this.cashflow.start_year) {
+      if (val !== undefined && this.cashflow.start_year !== undefined && val > 1999 && val < this.cashflow.end_year && val !== this.cashflow.start_year) {
         this.recalculateChart(this)
       }
     },
     'expense.end_year': function (val) {
-      if (val !== undefined && this.cashflow.end_year !== undefined && val !== this.cashflow.end_year) {
+      if (val !== undefined && this.cashflow.end_year !== undefined && val < 2141 && val > this.cashflow.start_year && val !== this.cashflow.end_year) {
         this.recalculateChart(this)
       }
     },

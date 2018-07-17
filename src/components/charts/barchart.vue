@@ -399,13 +399,20 @@ export default {
         .attr('stroke-width', 1.5)
         .attr('transform', `translate(0, ${startEndTickSize})`)
 
+        let translateX = this.xScale(this.endYear) + this.xScale.bandwidth() / 2 + 10
+        let translateY = this.mehrHeight - this.margin.top - 15
+
+        if (this.endYear >= this.domain[this.domain.length - 2]) {
+          translateX -= 70
+        }
+
         // end year text group
         let endYearGroup = patternify({
           container: this.chart,
           tag: 'g',
           selector: 'endYear'
         })
-        .attr('transform', `translate(${this.xScale(this.endYear) + this.xScale.bandwidth() / 2 + 10}, ${this.mehrHeight - this.margin.top - 15})`)
+        .attr('transform', `translate(${translateX}, ${translateY})`)
 
         patternify({
           container: endYearGroup,

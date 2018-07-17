@@ -680,13 +680,11 @@ export default {
       }
 
       function lineMouseOut () {
-        if (startX === 0) {
-          let that = self.$d3.select(this)
-          that
-              .transition()
-              .duration(250)
-              .attr('stroke-width', 3)
-        }
+        let that = self.$d3.select(this)
+        that
+            .transition()
+            .duration(250)
+            .attr('stroke-width', 3)
       }
     },
     setWidth () {

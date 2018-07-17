@@ -13,8 +13,8 @@
       </div>
       <!-- chart Wrapper -->
       <div class="chart-container">
-        <barchart v-if="cashflow.expense_amounts && cashflow.expense_amounts.length && planStartYear && planEndYear"
-                  :dataObject="cashflow"
+        <barchart v-if="plan.expense_amounts && plan.expense_amounts.length && planStartYear && planEndYear"
+                  :dataObject="plan"
                   :planStartYear="planStartYear"
                   :planEndYear="planEndYear"
                   :birthYear="1981"></barchart>
@@ -35,18 +35,12 @@
                     <b-col lg="2">
                       <span class="text-regular">Period (start - end year) (?)</span>
                       <div class="d-flex element-spacer">
-                        <b-form-group label-for="startYearInput" aria-describedby="invalidStartYearFeedback" :state="startYearState">
-                          <b-form-input id="startYearInput" required v-model="expense.start_year" type="number" size="sm" v-b-tooltip.hover.bottom title="The year when this expense first occurs." class="text-regular start_end_year start_year" style="width: 86px" placeholder="Start year" min="2000" max="2140" :disabled="!customDisabled"></b-form-input>
-                          <b-form-invalid-feedback id="invalidStartYearFeedback">
-                            This is a required field and must be between 2000 and 2140
-                          </b-form-invalid-feedback>
+                        <b-form-group label-for="startYearInput" :invalid-feedback="invalidStartYearFeedback" :state="startYearState">
+                          <b-form-input id="startYearInput" required v-model="expense.start_year" type="number" size="sm" v-b-tooltip.hover.bottom title="The year when this expense first occurs." class="text-regular start_end_year start_year" style="width: 86px" placeholder="Start year" :min="planStartYear" :max="expense.end_year - 1" :disabled="!customDisabled"></b-form-input>
                         </b-form-group>
                         <span class="date-spacer">-</span>
-                        <b-form-group label-for="endYearInput" aria-describedby="invalidEndYearFeedback" :state="endYearState">
-                          <b-form-input id="endYearInput" required v-model="expense.end_year" type="number" size="sm" v-b-tooltip.hover.bottom title="The year when this expense stops occuring." class="text-regular start_end_year end_year" style="width: 86px" placeholder="End year" min="2000" max="2140" :disabled="!customDisabled"></b-form-input>
-                          <b-form-invalid-feedback id="invalidEndYearFeedback">
-                            This is a required field and must be between 2000 and 2140
-                          </b-form-invalid-feedback>
+                        <b-form-group label-for="endYearInput" :invalid-feedback="invalidEndYearFeedback" :state="endYearState">
+                          <b-form-input id="endYearInput" required v-model="expense.end_year" type="number" size="sm" v-b-tooltip.hover.bottom title="The year when this expense stops occuring." class="text-regular start_end_year end_year" style="width: 86px" placeholder="End year" :min="planStartYear + 1" :max="planEndYear" :disabled="!customDisabled"></b-form-input>
                         </b-form-group>
                       </div>
                     </b-col>
@@ -78,7 +72,10 @@
               </b-form>
             </b-tab>
             <b-tab title="Custom Values" :title-link-class="'expense-tab'">
-              <csv-download v-if="expense.expense_amounts" class="upload-file-btn" :disabled="customDisabled" :title="'Upload File'" :data-json="expense.expense_amounts"></csv-download>
+              <button class='btn btn-sm icon-btn text-regular upload-file-btn' :disabled="customDisabled">
+                <i class="flaticon stroke upload text-primary"></i>
+                Upload Files
+              </button>
               <div class="custom-values-bar">
                 <div class="d-flex justify-content-between align-items-center" :class="[customDisabled ? 'bar-disable-color' :'bar-enable-color']">
                   <div class="d-flex align-items-center">
@@ -113,7 +110,7 @@
                   </template>
                   <template slot="amount" slot-scope="row">
                     <vue-numeric v-show="row.item.is_edit"  @keyup.native.enter.stop.prevent="saveRow(row.item)" currency="SEK" currency-symbol-position="suffix" thousand-separator=" "  v-model="row.item.edit_amount" class="form-control form-control-sm text-regular amount-per-month" :minus="true"></vue-numeric>
-                    <span v-show="!row.item.is_edit"  @dblclick="editRow(row.item)">{{row.item.amount.toLocaleString('sv-SE')}} SEK </span>
+                    <span v-show="!row.item.is_edit"  @dblclick="editRow(row.item)">{{row.item.amount ? row.item.amount.toLocaleString('sv-SE') : ''}} SEK </span>
                   </template>
                   <template slot="actions" slot-scope="row">
                     <button v-show="row.item.is_edit" class='btn plain-btn text-regular' @click.stop="saveRow(row.item)">
@@ -227,11 +224,8 @@
           <b-row>
             <b-col sm="3" class="d-flex justify-content-end mt-3"><label :for="'year-input'">Year</label></b-col>
             <b-col sm="9">
-              <b-form-group label-for="year-input" :state="yearState" class="text-left">
-                <b-form-input id="year-input" type="number" v-model="newRow.year" :state="yearState" aria-describedby="yearInputFeedback" min="2000" max="2140" required></b-form-input>
-                <b-form-invalid-feedback id="yearInputFeedback">
-                  Year is required and must be between 2000 and 2140
-                </b-form-invalid-feedback>
+              <b-form-group label-for="year-input" :state="yearState" :invalid-feedback="invalidYearFeedback" class="text-left">
+                <b-form-input id="year-input" type="number" v-model="newRow.year" required :min="planStartYear" :max="planEndYear"></b-form-input>
               </b-form-group>
             </b-col>
           </b-row>
@@ -352,7 +346,6 @@
 
 <script>
 import axios from 'axios'
-import _ from 'lodash'
 import barchart from '../../charts/barchart'
 import Switches from 'vue-switches'
 import EventBus from '../../../event-bus.js'
@@ -364,11 +357,11 @@ export default {
     try {
       let response = await axios.get(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`)
       this.expense = response.data.data
-      this.cashflow = JSON.parse(JSON.stringify(this.expense))
-      let plan = await axios.get(`${process.env.ROOT_API}/plans/${this.$route.params.id}`)
+      this.plan = JSON.parse(JSON.stringify(this.expense))
+      response = await axios.get(`${process.env.ROOT_API}/plans/${this.$route.params.id}`)
       // debugger
-      this.planStartYear = plan.data.data.start_year
-      this.planEndYear = plan.data.data.end_year
+      this.planStartYear = response.data.data.start_year
+      this.planEndYear = response.data.data.end_year
       if (this.expense.calculation_mode === 'auto') {
         this.customDisabled = true
         this.tabIndex = 0
@@ -446,7 +439,7 @@ export default {
       isSaving: false,
       customDisabled: true,
       tabIndex: 0,
-      cashflow: {},
+      plan: {},
       planStartYear: null,
       planEndYear: null
     }
@@ -460,16 +453,41 @@ export default {
       }
     },
     startYearState () {
-      return !this.autoCalcValidated || (parseInt(this.expense.start_year) > 1999 && parseInt(this.expense.start_year) < 2141)
+      return !this.autoCalcValidated || +this.expense.start_year >= +this.planStartYear && +this.expense.start_year < +this.expense.end_year
+    },
+    invalidStartYearFeedback () {
+      if (+this.expense.start_year >= +this.planStartYear) {
+        if (+this.expense.start_year >= +this.expense.end_year) {
+          return 'Start year must be less than end year'
+        } else {
+          return ''
+        }
+      } else {
+        return `Star year is required and must be at least ${this.planStartYear}`
+      }
     },
     endYearState () {
-      return !this.autoCalcValidated || (parseInt(this.expense.start_year) > 1999 && parseInt(this.expense.start_year) < 2141)
+      return !this.autoCalcValidated || +this.expense.end_year > +this.planStartYear && +this.expense.end_year <= +this.planEndYear
+    },
+    invalidEndYearFeedback () {
+      if (+this.expense.end_year <= +this.planEndYear) {
+        if (+this.expense.end_year <= +this.planStartYear) {
+          return `End year must be larger than ${this.planStartYear}`
+        } else {
+          return ''
+        }
+      } else {
+        return `End year must be less than ${this.planEndYear + 1}`
+      }
     },
     yearState () {
-      if (!this.addRowValidated) {
-        return null
+      return !this.addRowValidated || (+this.newRow.year >= +this.planStartYear && +this.newRow.year <= +this.planEndYear)
+    },
+    invalidYearFeedback () {
+      if (+this.newRow.year >= +this.planStartYear && +this.newRow.year <= +this.planEndYear) {
+        return ''
       } else {
-        return (parseInt(this.newRow.year) > 1999 && parseInt(this.newRow.year) < 2141)
+        return `Year must be between ${this.planStartYear} and ${this.planEndYear}`
       }
     },
     nameState () {
@@ -674,22 +692,30 @@ export default {
       }
       return arr
     },
-    recalculateChart: _.debounce(async (_this) => {
-      if (_this.expense.calculation_mode === 'auto') {
-        let data = {
-          start_year: _this.expense.start_year,
-          end_year: _this.expense.end_year,
-          amount: _this.expense.amount,
-          annual_increase_percentage: _this.expense.annual_increase_percentage,
-          calculation_mode: 'auto',
-          amount_recurrence: _this.expense.amount_recurrence,
-          inflation_rate: _this.expense.inflation_rate
+    async recalculateChart () {
+      if (this.expense.calculation_mode === 'auto') {
+        if (this.expense.start_year && +this.expense.start_year >= +this.planStartYear) {
+          if (this.expense.end_year && +this.expense.end_year <= +this.planEndYear) {
+            if (+this.expense.end_year > +this.expense.start_year) {
+              if (this.expense.amount && this.expense.annual_increase_percentage) {
+                let data = {
+                  start_year: this.expense.start_year,
+                  end_year: this.expense.end_year,
+                  amount: this.expense.amount,
+                  annual_increase_percentage: this.expense.annual_increase_percentage,
+                  calculation_mode: 'auto',
+                  amount_recurrence: this.expense.amount_recurrence,
+                  inflation_rate: this.expense.inflation_rate
+                }
+                let response = await axios.post(`${process.env.ROOT_API}/expenses/amounts/calculate`, data)
+                response.data.data.expense_amounts = this.convertToArray(response.data.data.expense_amounts)
+                this.plan = response.data.data
+              }
+            }
+          }
         }
-        let response = await axios.post(`${process.env.ROOT_API}/expenses/amounts/calculate`, data)
-        response.data.data.expense_amounts = _this.convertToArray(response.data.data.expense_amounts)
-        _this.cashflow = response.data.data
       }
-    }, 1000)
+    }
   },
   watch: {
     customDisabled: async function (val) {
@@ -723,24 +749,16 @@ export default {
       }
     },
     'expense.start_year': function (val) {
-      if (val !== undefined && this.cashflow.start_year !== undefined && val > 1999 && val < this.cashflow.end_year && val !== this.cashflow.start_year) {
-        this.recalculateChart(this)
-      }
+      this.recalculateChart(this)
     },
     'expense.end_year': function (val) {
-      if (val !== undefined && this.cashflow.end_year !== undefined && val < 2141 && val > this.cashflow.start_year && val !== this.cashflow.end_year) {
-        this.recalculateChart(this)
-      }
+      this.recalculateChart(this)
     },
     'expense.amount': function (val) {
-      if (val !== undefined && this.cashflow.amount !== undefined && val !== this.cashflow.amount) {
-        this.recalculateChart(this)
-      }
+      this.recalculateChart(this)
     },
     'expense.annual_increase_percentage': function (val) {
-      if (val !== undefined && this.cashflow.amount !== undefined && parseInt(val) !== parseInt(this.cashflow.annual_increase_percentage)) {
-        this.recalculateChart(this)
-      }
+      this.recalculateChart(this)
     }
   },
   components: {

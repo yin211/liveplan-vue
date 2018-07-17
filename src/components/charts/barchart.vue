@@ -12,7 +12,8 @@
                       :height="chartHeight - yScale(d.value)"
                       :data-year="d.year"
                       :fill="barColor"
-                      :opacity="calcOpacity(d, i)">
+                      :opacity="calcOpacity(d, i)"
+                      class="bar">
                 </rect>
                 <text v-if="debug"
                       v-for="(d,i) in bars"
@@ -145,8 +146,9 @@ export default {
                   .paddingOuter([0.1])
     },
     yScale () {
+      const max = this.$d3.max(this.computedData, d => d.value)
       return this.$d3.scaleLinear()
-              .domain([0, this.$d3.max(this.computedData, d => d.value)])
+              .domain([0, max + 10000])
               .range([this.chartHeight, 0])
     },
     chartHeight () {

@@ -1,7 +1,7 @@
 <template>
   <div class="login d-flex justify-content-between flex-column mx-auto">
-    <div class="main d-flex justify-content-center bg-light">
-        <ul class="d-flex flex-column justify-content-end align-items-end mb-5">
+    <div class="main d-flex flex-column flex-md-row justify-content-md-center bg-light">
+        <ul class="d-md-flex flex-md-column justify-content-md-end align-items-md-end mb-md-5">
           <li @click="loginWithEmail" :class="{'elem-active': isLoginWithEmail}">{{ $t('login.label.login_with_email') }}</li>
           <li @click="loginWithBankID" :class="{'elem-active': isLoginWithBankID}">{{ $t('login.label.login_width_mobile_bankid') }}</li>
           <li @click="signup" :class="{'elem-active': isSignup}">{{ $t('login.label.signup_for_livsplan') }}</li>
@@ -79,11 +79,11 @@
 
     </div>
     <div class="bottom mb-4">
-      <ul class="d-flex justify-content-center">
-        <li class="mx-2 text-gray">{{ $t('footer.footer_menu.about_us') }}</li>
-        <li class="mx-2 text-gray">{{ $t('footer.footer_menu.toc') }}</li>
-        <li class="mx-2 text-gray">{{ $t('footer.footer_menu.privacy_policy') }}</li>
-        <li class="mx-2 text-gray">{{ $t('footer.footer_menu.get_in_touch') }}</li>
+      <ul class="d-flex flex-column flex-md-row justify-content-center p-0">
+        <li class="mx-2 my-2 text-gray">{{ $t('footer.footer_menu.about_us') }}</li>
+        <li class="mx-2 my-2 text-gray">{{ $t('footer.footer_menu.toc') }}</li>
+        <li class="mx-2 my-2 text-gray">{{ $t('footer.footer_menu.privacy_policy') }}</li>
+        <li class="mx-2 my-2 text-gray">{{ $t('footer.footer_menu.get_in_touch') }}</li>
       </ul>
     </div>
   </div>

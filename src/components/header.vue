@@ -1,7 +1,7 @@
 <template>
   <div class="container-fluid vheader bg-dark">
     <b-navbar class="container px-5" toggleable="md" type="dark" variant="dark">
-      <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+      <b-navbar-toggle target="nav_collapse" v-if="isAuthenticated"></b-navbar-toggle>
 
       <b-navbar-brand href="#" class="depth-1">
         <svg width="77px" height="18px" viewBox="0 0 77 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">

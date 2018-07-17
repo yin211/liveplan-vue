@@ -91,6 +91,9 @@
           padding: 0px 0px 28px 0px;
 
           #autoCalcForm {
+            &.was-validated .form-control:valid {
+              border-color: #ced4da;
+            }
             &.custom-is-enabled {
               margin-top: 24px;
             }

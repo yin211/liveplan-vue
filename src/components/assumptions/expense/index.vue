@@ -49,7 +49,7 @@
                       <div class="d-flex">
                         <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-b-tooltip.hover.bottom title="The amount per period." v-model="expense.amount" class="form-control form-control-sm element-spacer text-regular amount-per-month" :min="0" :disabled="!customDisabled"></vue-numeric>
                         <b-input-group size="sm" class="element-spacer">
-                          <b-form-input v-model="expense.amount" min="0" max="10000" class="slider" type="range" :disabled="!customDisabled"></b-form-input>
+                          <b-form-input v-model="expense.amount" min="0" max="10000" step="500" class="slider" type="range" :disabled="!customDisabled"></b-form-input>
                         </b-input-group>
                       </div>
                     </b-col>

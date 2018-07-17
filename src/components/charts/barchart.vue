@@ -127,6 +127,16 @@ export default {
     endYear () {
       return this.dataObject.end_year
     },
+    sliderWidth () {
+      return this.width - 2 * this.sliderMarginLeft
+    },
+    sliderScale () {
+      let padding = 60
+      return this.$d3
+                .scaleBand()
+                .domain(this.staticDomain)
+                .range([0, this.sliderWidth - padding * 2])
+    },
     xScale () {
       return this.$d3.scaleBand()
                   .domain(this.domain)
@@ -438,16 +448,12 @@ export default {
     drawSlider (selection, width) {
       var padding = 60
       var self = this
-      var scale = this.$d3
-                  .scaleBand()
-                  .domain(this.staticDomain)
-                  .range([0, width - padding * 2])
 
       var currentSelectedArea
       if (this.zoomArea.length) {
         currentSelectedArea = this.zoomArea
       } else {
-        currentSelectedArea = [scale(this.domain[0]), scale(this.domain[0] + this.maximumSliderRange) + scale.bandwidth()]
+        currentSelectedArea = [this.sliderScale(this.domain[0]), this.sliderScale(this.domain[this.domain.length - 1]) + this.sliderScale.bandwidth()]
       }
 
       // append texts
@@ -581,15 +587,15 @@ export default {
       function dragged (d, flag) {
         var cx = getDragCoord()
         if (flag === 'first') {
-          if (cx > currentSelectedArea[1] - scale.bandwidth() * self.maximumSliderRange) {
-            cx = currentSelectedArea[1] - scale.bandwidth() * self.maximumSliderRange
+          if (cx > currentSelectedArea[1] - self.sliderScale.bandwidth() * self.maximumSliderRange) {
+            cx = currentSelectedArea[1] - self.sliderScale.bandwidth() * self.maximumSliderRange
           }
           currentSelectedArea[0] = cx
           firstCircleGroup.attr('transform', `translate(${currentSelectedArea[0]})`)
           foregroundLine.attr('x1', cx)
         } else {
-          if (cx < currentSelectedArea[0] + scale.bandwidth() * self.maximumSliderRange) {
-            cx = currentSelectedArea[0] + scale.bandwidth() * self.maximumSliderRange
+          if (cx < currentSelectedArea[0] + self.sliderScale.bandwidth() * self.maximumSliderRange) {
+            cx = currentSelectedArea[0] + self.sliderScale.bandwidth() * self.maximumSliderRange
           }
           currentSelectedArea[1] = cx
           secondCircleGroup.attr('transform', `translate(${currentSelectedArea[1]})`)
@@ -612,7 +618,7 @@ export default {
       }
 
       function getLiveDomain (coords) {
-        let sliderBandWidth = scale.bandwidth()
+        let sliderBandWidth = self.sliderScale.bandwidth()
         let f = Math.round(coords[0] / sliderBandWidth)
         let s = Math.round(coords[1] / sliderBandWidth)
         return self.$d3.range(self.staticDomain[f], self.staticDomain[s - 1] + 1)
@@ -682,8 +688,6 @@ export default {
               .attr('stroke-width', 3)
         }
       }
-
-      dragEnd()
     },
     setWidth () {
       this.width = this.$el.offsetWidth
@@ -691,14 +695,17 @@ export default {
     setDomain () {
       let min = this.$d3.min(this.computedData, d => d.year)
       let max = this.$d3.max(this.computedData, d => d.year)
-      this.domain = this.$d3.range(min, max + 1)
-      this.staticDomain = this.domain
+      this.staticDomain = this.$d3.range(min, max + 1)
+      if (!this.domain.length) {
+        this.domain = this.$d3.range(min, min + this.maximumSliderRange + 1)
+      }
     },
     onResize () {
       this.setWidth()
       this.drawAxis()
       this.adjustAxis()
-      this.drawSlider(this.$d3.select('g.slider-wrapper'), this.width - 2 * this.sliderMarginLeft)
+      this.zoomArea = [this.sliderScale(this.domain[0]), this.sliderScale(this.domain[this.domain.length - 1]) + this.sliderScale.bandwidth()]
+      this.drawSlider(this.$d3.select('g.slider-wrapper'), this.sliderWidth)
     }
   },
   watch: {
@@ -706,7 +713,7 @@ export default {
       this.setDomain()
       this.drawAxis()
       this.adjustAxis()
-      this.drawSlider(this.$d3.select('g.slider-wrapper'), this.width - 2 * this.sliderMarginLeft)
+      this.drawSlider(this.$d3.select('g.slider-wrapper'), this.sliderWidth)
     }
   },
   mounted () {

@@ -376,9 +376,9 @@ export default {
       EventBus.$emit('select-plan', {
         plan_id: this.expense.plan_id
       })
-      setTimeout(() => {
-        this.perPage = 10
-      }, 1000)
+      // setTimeout(() => {
+      //   this.perPage = 10
+      // }, 1000)
     } catch (err) {
       console.log(err)
     }
@@ -423,7 +423,7 @@ export default {
         { key: 'actions', 'class': 'd-flex justify-content-end' }
       ],
       currentPage: 1,
-      perPage: 0,
+      perPage: 10,
       filter: null,
       sortBy: null,
       sortDesc: false,

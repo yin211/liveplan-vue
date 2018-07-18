@@ -542,7 +542,8 @@ export default {
             amount: this.expense.amount,
             annual_increase_percentage: this.expense.annual_increase_percentage
           }
-          await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`, data)
+          let response = await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`, data)
+          this.expense.expense_amounts = this.convertToArray(response.data.data.expense_amounts)
           this.isSaving = false
           EventBus.$emit('notify-me', {
             title: 'Success!',

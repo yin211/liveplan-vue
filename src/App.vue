@@ -56,6 +56,9 @@ export default {
     -moz-osx-font-smoothing: grayscale;
     text-align: center;
     padding-top: 24px;
+    @media (max-width: 576px) {
+      padding-top: 12px;
+    }
   }
 
 </style>

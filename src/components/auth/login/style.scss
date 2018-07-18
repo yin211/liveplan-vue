@@ -1,16 +1,39 @@
 .login {
   height: calc(100vh - 102px);
   max-width: 1440px;
-  min-height: 900px;
   overflow: auto;
+  min-height: 900px;
+  @media (max-width: 767.98px) {
+    padding: 0 12px;
+    min-height: 1100px;
+  }
+
+  @media (min-width: 768px) and (max-width: 1440px) {
+    padding: 0 18px;
+  }
+
+
 
   .main {
     height: 446px;
 
     form {
-      width: 381px;
-      padding: 58px 30px 65px;
-      margin-top: 146px;
+      @media (max-width: 767.98px) {
+        width: calc(100% - 24px);
+        padding: 34px 20px 42px;
+        margin-left: 12px;
+        margin-right: 12px;
+      }
+      @media (min-width: 768px) and (max-width: 991.98px) {
+        width: 360px;
+        padding: 58px 20px 65px;
+        margin-top: 105px;
+      }
+      @media (min-width: 992px) {
+        width: 380px;
+        margin-top: 146px;
+        padding: 58px 30px 65px;
+      }
 
       button[type="submit"] {
         font-weight: 600;
@@ -34,7 +57,17 @@
 
     ul {
       list-style: none;
-      margin-right: 114px;
+      @media (max-width: 767.98px) {
+        margin-top: 70px;
+      }
+
+      @media (min-width: 768px) and (max-width: 991.98px) {
+        margin-right: 87px;
+      }
+
+      @media (min-width: 992px) {
+        margin-right: 114px;
+      }
 
       li {
         font-size: 13px;

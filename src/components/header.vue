@@ -1,7 +1,6 @@
 <template>
   <div class="container-fluid vheader bg-dark">
-    <b-navbar class="container px-5" toggleable="md" type="dark" variant="dark">
-      <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
+    <b-navbar class="container" toggleable="xl" type="dark" variant="dark">
 
       <b-navbar-brand href="#" class="depth-1">
         <svg width="77px" height="18px" viewBox="0 0 77 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -18,6 +17,8 @@
           </g>
         </svg>
       </b-navbar-brand>
+
+      <b-navbar-toggle target="nav_collapse" v-if="isAuthenticated"></b-navbar-toggle>
 
       <b-collapse is-nav id="nav_collapse" v-if="isAuthenticated">
 
@@ -117,6 +118,10 @@ export default {
 <style lang="scss">
   .vheader {
     height: 75px;
+    @media (max-width: 576px) {
+      height: 54px;
+    }
+
     nav {
       height: 100%;
       max-width: 1400px;
@@ -124,13 +129,18 @@ export default {
       .navbar-brand {
         min-width: 170px;
         min-height: 126px;
+        line-height: 126px;
         background-color: white;
         font-size: 24px;
         font-weight: bold;
         letter-spacing: 1.2px;
-        line-height: 126px;
         color: #2d2d2d;
         padding: 0;
+        @media (max-width: 576px) {
+          min-width: 140px;
+          min-height: 80px;
+          line-height: 80px;
+        }
 
         &:hover {
           color: #2d2d2d;
@@ -145,6 +155,9 @@ export default {
           letter-spacing: 0.5px;
           line-height: 24px;
           padding: 0px 16px !important;
+          @media (min-width: 1200px) and (max-width: 1320px) {
+            padding: 0px 6px !important;
+          }
 
 
           [aria-expanded="true"].dropdown-toggle::after {

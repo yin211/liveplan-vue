@@ -356,7 +356,7 @@ export default {
     try {
       let response = await axios.get(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`)
       this.expense = response.data.data
-      this.plan = JSON.parse(JSON.stringify(this.expense))
+      this.plan = this.expense
       response = await axios.get(`${process.env.ROOT_API}/plans/${this.$route.params.id}`)
       // debugger
       this.planStartYear = response.data.data.start_year
@@ -621,6 +621,7 @@ export default {
             this.expense.expense_amounts.unshift(response.data.data)
           }
           this.addRowModalShow = false
+          this.plan = this.expense
           EventBus.$emit('notify-me', {
             title: 'Success!',
             text: 'New Row has been added successfully!',

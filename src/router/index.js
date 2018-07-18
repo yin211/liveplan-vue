@@ -4,7 +4,8 @@ import login from '@/components/auth/login/index.vue'
 import notFound from '@/components/errors/404'
 import comingSoon from '@/components/errors/coming-soon'
 import assumptions from '@/components/assumptions'
-import expense from '@/components/assumptions/expense/index.vue'
+import expenses from '@/components/assumptions/expenses/index.vue'
+import viewExpense from '@/components/assumptions/expenses/view/index.vue'
 
 Vue.use(Router)
 
@@ -36,9 +37,14 @@ export default new Router({
       component: assumptions,
       children: [
         {
-          path: 'expenses/:id',
+          path: 'expenses',
           name: 'expenses',
-          component: expense
+          component: expenses
+        },
+        {
+          path: 'expenses/:id',
+          name: 'viewExpense',
+          component: viewExpense
         }
       ]
     }

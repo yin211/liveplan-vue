@@ -26,7 +26,7 @@
           <b-nav-item to="/overview">{{ $t('header.header_menu.overview') }}</b-nav-item>
           <b-nav-item-dropdown :text="$t('header.header_menu.assumptions')" right v-bind:class="{ active: isAssumptionActive }">
             <b-dropdown-item href="#">INCOMES</b-dropdown-item>
-            <b-dropdown-item to="/assumptions/expenses/1">EXPENSES</b-dropdown-item>
+            <b-dropdown-item to="/assumptions/expenses">EXPENSES</b-dropdown-item>
             <b-dropdown-item href="#">ASSETS</b-dropdown-item>
             <b-dropdown-item href="#">DEBTS</b-dropdown-item>
           </b-nav-item-dropdown>

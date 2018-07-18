@@ -1,5 +1,5 @@
 <template>
-  <div class="expense bg-light">
+  <div class="viewExpense bg-light">
     <div class="main-gradient">
       <div class="title-container mx-auto">
         <b-breadcrumb :items="items" class="p-0"/>
@@ -110,7 +110,7 @@
                   </template>
                   <template slot="amount" slot-scope="row">
                     <vue-numeric v-show="row.item.is_edit"  @keyup.native.enter.stop.prevent="saveRow(row.item)" currency="SEK" currency-symbol-position="suffix" thousand-separator=" "  v-model="row.item.edit_amount" class="form-control form-control-sm text-regular amount-per-month" :minus="true"></vue-numeric>
-                    <span v-show="!row.item.is_edit"  @dblclick="editRow(row.item)">{{row.item.amount ? row.item.amount.toLocaleString('sv-SE') : ''}} SEK </span>
+                    <span v-show="!row.item.is_edit"  @dblclick="editRow(row.item)">{{row.item.amount.toLocaleString('sv-SE')}} SEK </span>
                   </template>
                   <template slot="actions" slot-scope="row">
                     <button v-show="row.item.is_edit" class='btn plain-btn text-regular' @click.stop="saveRow(row.item)">
@@ -346,12 +346,12 @@
 
 <script>
 import axios from 'axios'
-import barchart from '../../charts/barchart'
 import Switches from 'vue-switches'
-import EventBus from '../../../event-bus.js'
+import barchart from '@/components/charts/barchart'
+import EventBus from '@/event-bus.js'
 
 export default {
-  name: 'expenses',
+  name: 'viewExpense',
   async mounted () {
     try {
       let response = await axios.get(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`)
@@ -375,9 +375,6 @@ export default {
       EventBus.$emit('select-plan', {
         plan_id: this.expense.plan_id
       })
-      // setTimeout(() => {
-      //   this.perPage = 10
-      // }, 1000)
     } catch (err) {
       console.log(err)
     }

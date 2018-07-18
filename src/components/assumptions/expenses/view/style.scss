@@ -1,4 +1,4 @@
-.expense {
+.viewExpense {
 
   .title-container {
     max-width: 1440px;
@@ -274,7 +274,7 @@
 
   .slider::-webkit-slider-thumb {
     -webkit-appearance: none;
-    background: url('../../../assets/img/slider.png');
+    background: url('../../../../assets/img/slider.png');
     border-radius: 50%;
     cursor: pointer;
     background-color: #FFFFFF;
@@ -284,7 +284,7 @@
   }
 
   .slider::-moz-range-thumb {
-    background: url('../../../assets/img/slider.png');
+    background: url('../../../../assets/img/slider.png');
     border-radius: 50%;
     cursor: pointer;
     background-color: #FFFFFF;
@@ -294,7 +294,7 @@
   }
 
   .slider::-ms-thumb {
-    background: url('../../../assets/img/slider.png');
+    background: url('../../../../assets/img/slider.png');
     border-radius: 50%;
     cursor: pointer;
     background-color: #FFFFFF;

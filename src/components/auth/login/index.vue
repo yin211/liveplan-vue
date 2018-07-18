@@ -96,7 +96,7 @@ export default {
   name: 'login',
   mounted () {
     if (this.$store.getters.isAuthenticated) {
-      this.$router.push('/assumptions/expenses/1')
+      this.$router.push('/assumptions/expenses')
     }
   },
   data () {
@@ -220,7 +220,7 @@ export default {
       if (this.validEmail(this.form.login.email) && this.form.login.password.length >= 4) {
         const { email, password } = this.form.login
         this.$store.dispatch(AUTH_REQUEST, { email, password }).then(() => {
-          this.$router.push('/assumptions/expenses/1')
+          this.$router.push('/assumptions/expenses')
         }, () => {
           EventBus.$emit('notify-me', {
             title: 'Authentication Failed!',

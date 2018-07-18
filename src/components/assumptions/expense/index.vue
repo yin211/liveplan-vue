@@ -642,7 +642,8 @@ export default {
     },
     editRow (item) {
       if (!this.customDisabled) {
-        item.is_edit = true
+        this.$set(item, 'is_edit', true)
+        // item.is_edit = true
         item.edit_amount = MAX_NUM
         item.edit_amount = item.amount
       }

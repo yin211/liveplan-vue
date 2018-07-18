@@ -64,7 +64,7 @@
                     </b-col>
                   </b-row>
                 </b-container>
-                <b-button type="submit" :size="'sm'" variant="primary" class="save-calc-btn" :disabled="isCalcSaveDisabled"  v-b-tooltip.hover.bottom title="You can save any changes for this expense by clicking here.">
+                <b-button type="submit" :size="'sm'" variant="primary" class="save-calc-btn" :disabled="isCalcSaveDisabled || !customDisabled"  v-b-tooltip.hover.bottom title="You can save any changes for this expense by clicking here.">
                   <i class="fa fa-spinner fa-spin" v-if="isSaving" style="margin-top: 2px" ></i>
                   <i class="flaticon stroke checkmark" v-else></i>
                   Save New Values
@@ -652,6 +652,7 @@ export default {
       await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}/amounts/${item.id}`, data)
       item.amount = item.edit_amount
       item.is_edit = false
+      this.plan = this.expense
     },
     deleteRow (item) {
       let message = {
@@ -662,6 +663,7 @@ export default {
       .then(async () => {
         await axios.delete(`${process.env.ROOT_API}/expenses/${this.$route.params.id}/amounts/${item.id}`)
         this.expense.expense_amounts = this.expense.expense_amounts.filter(amount => amount.id !== item.id)
+        this.plan = this.expense
       })
     },
     deleteExpense () {

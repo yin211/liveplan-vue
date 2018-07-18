@@ -349,7 +349,6 @@ import axios from 'axios'
 import barchart from '../../charts/barchart'
 import Switches from 'vue-switches'
 import EventBus from '../../../event-bus.js'
-const MAX_NUM = 999999999999
 
 export default {
   name: 'expenses',
@@ -643,14 +642,11 @@ export default {
     editRow (item) {
       if (!this.customDisabled) {
         this.$set(item, 'is_edit', true)
-        // item.is_edit = true
-        item.edit_amount = MAX_NUM
         item.edit_amount = item.amount
       }
     },
     cancelRow (item) {
       item.is_edit = false
-      item.edit_amount = MAX_NUM
     },
     async saveRow (item) {
       let data = {
@@ -658,7 +654,6 @@ export default {
       }
       await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}/amounts/${item.id}`, data)
       item.amount = item.edit_amount
-      item.edit_amount = MAX_NUM
       item.is_edit = false
     },
     deleteRow (item) {

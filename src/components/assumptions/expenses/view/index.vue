@@ -297,7 +297,7 @@
             </b-col>
           </b-row>
           <b-row>
-            <b-col sm="3" class="d-flex mt-3 justify-content-end"><label :for="'inflation-input'">Inflation</label></b-col>
+            <b-col sm="3" class="d-flex my-3 justify-content-end"><label :for="'inflation-input'">Inflation</label></b-col>
             <b-col sm="9" class="d-flex">
               <span class="mr-3" style="margin-top: 12px">{{+editExpense.inflation_rate}}%</span>
               <b-form-input v-model="editExpense.inflation_rate" min="0" max="10" class="slider" type="range"></b-form-input>

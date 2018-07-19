@@ -33,7 +33,7 @@
                 <b-container fluid>
                   <b-row class="text-left mx-auto">
                     <b-col lg="2">
-                      <span class="text-regular">Period (start - end year) (?)</span>
+                      <span class="text-regular">Period (start - end year)</span>
                       <div class="d-flex element-spacer">
                         <b-form-group label-for="startYearInput" :invalid-feedback="invalidStartYearFeedback" :state="startYearState">
                           <b-form-input id="startYearInput" required v-model="expense.start_year" type="number" size="sm" v-b-tooltip.hover.bottom title="The year when this expense first occurs." class="text-regular start_end_year start_year" style="width: 86px" placeholder="Start year" :min="planStartYear" :max="expense.end_year - 1" :disabled="!customDisabled"></b-form-input>
@@ -45,7 +45,7 @@
                       </div>
                     </b-col>
                     <b-col lg="5">
-                      <span class="text-regular">Amount Per Month (?)</span>
+                      <span class="text-regular">Amount per month</span>
                       <div class="d-flex">
                         <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-b-tooltip.hover.bottom title="The amount per period." v-model="expense.amount" class="form-control form-control-sm element-spacer text-regular amount-per-month" :min="0" :disabled="!customDisabled"></vue-numeric>
                         <b-input-group size="sm" class="element-spacer">
@@ -54,7 +54,7 @@
                       </div>
                     </b-col>
                     <b-col lg="5">
-                      <span class="text-regular">Annual Growth Rate (?)</span>
+                      <span class="text-regular">Annual growth rate</span>
                       <div class="d-flex">
                         <vue-numeric currency="%" currency-symbol-position="suffix" v-model="expense.annual_increase_percentage" v-b-tooltip.hover.bottom title="The expense grows with this percentage per year." class="form-control form-control-sm element-spacer text-regular annual-growth-rate" :min="0" :max="20" :disabled="!customDisabled"></vue-numeric>
                         <b-input-group size="sm" class="element-spacer">
@@ -410,8 +410,9 @@ export default {
         { value: '2', text: 'Caroline Bolmeson' }
       ],
       currencyOptions: [
-        { value: 'dollar', text: 'Dollar' },
-        { value: 'sek', text: 'SEK' }
+        { value: 'SEK', text: 'SEK' },
+        { value: 'USD', text: 'USD' },
+        { value: 'EUR', text: 'EUR' }
       ],
       fields: [
         { key: 'year', label: 'Year', sortable: true, sortDirection: 'desc' },

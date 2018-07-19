@@ -2,7 +2,7 @@
 
   .title-container {
     max-width: 1440px;
-    padding: 85px 34px 24px;
+    padding: 85px 34px 16px;
   }
 
   .chart-container {
@@ -60,7 +60,7 @@
       line-height: 20px;
     }
     &.expense-tabs-card {
-      top: -42px;
+      top: -52px;
 
       .card-header {
         padding: 34px 30px;
@@ -120,6 +120,8 @@
               border-radius: 40px;
               font-weight: 500;
               display: flex;
+              padding-left: 12px;
+              padding-right: 14px;
               i {
                 font-size: 1rem;
                 margin-right: 0.5rem;

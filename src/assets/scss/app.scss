@@ -236,7 +236,7 @@ form {
  // customize breadcrumb
  .breadcrumb {
   background: transparent;
-  margin-bottom: 24px;
+  margin-bottom: 14px;
   font-weight: 500;
 
   .breadcrumb-item {
@@ -276,6 +276,8 @@ form {
   background-color: white;
   display: flex;
   align-items: center;
+  padding-left: 12px;
+  padding-right: 16px;
 
   i {
     font-size: 1rem;

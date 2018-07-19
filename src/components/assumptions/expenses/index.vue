@@ -9,7 +9,12 @@
       </div>
       <!-- chart Wrapper -->
       <div class="chart-container">
-
+        <timeline v-if="timelineData && timelineData.data.length"
+                  :dataArray="timelineData.data"
+                  :label="`blah`"
+                  :planStartYear="2012"
+                  :planEndYear="2061"
+                  :birthYear="1981"></timeline>
       </div>
     </div>
     <div class="table-container">
@@ -20,9 +25,26 @@
 </template>
 
 <script>
+import axios from 'axios'
+import timeline from '../../charts/timeline'
+
 export default {
   name: 'expenses',
+  data () {
+    return {
+      timelineData: null
+    }
+  },
   async mounted () {
+    try {
+      let timelineData = await axios.get('https://api.livsplan.se/api/v1/expenses/')
+      this.timelineData = timelineData.data
+    } catch (error) {
+      console.error(error)
+    }
+  },
+  components: {
+    timeline
   }
 }
 </script>

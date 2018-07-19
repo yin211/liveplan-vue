@@ -14,6 +14,7 @@
       <!-- chart Wrapper -->
       <div class="chart-container">
         <barchart v-if="plan.expense_amounts && plan.expense_amounts.length && planStartYear && planEndYear"
+                  :label="expense.name"
                   :dataObject="plan"
                   :planStartYear="planStartYear"
                   :planEndYear="planEndYear"
@@ -45,7 +46,7 @@
                       </div>
                     </b-col>
                     <b-col lg="5">
-                      <span class="text-regular">Amount per month</span>
+                      <span class="text-regular">Amount per {{periodLabel}}</span>
                       <div class="d-flex">
                         <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-b-tooltip.hover.bottom title="The amount per period." v-model="expense.amount" class="form-control form-control-sm element-spacer text-regular amount-per-month" :min="0" :disabled="!customDisabled"></vue-numeric>
                         <b-input-group size="sm" class="element-spacer">
@@ -56,9 +57,9 @@
                     <b-col lg="5">
                       <span class="text-regular">Annual growth rate</span>
                       <div class="d-flex">
-                        <vue-numeric currency="%" currency-symbol-position="suffix" v-model="expense.annual_increase_percentage" v-b-tooltip.hover.bottom title="The expense grows with this percentage per year." class="form-control form-control-sm element-spacer text-regular annual-growth-rate" :min="0" :max="20" :disabled="!customDisabled"></vue-numeric>
+                        <vue-numeric currency="%" currency-symbol-position="suffix" v-model="expense.annual_increase_percentage" v-b-tooltip.hover.bottom title="The expense grows with this percentage per year." class="form-control form-control-sm element-spacer text-regular annual-growth-rate" :min="0" :max="10" :disabled="!customDisabled"></vue-numeric>
                         <b-input-group size="sm" class="element-spacer">
-                          <b-form-input v-model="expense.annual_increase_percentage" min="0" max="20" class="slider" type="range" :disabled="!customDisabled"></b-form-input>
+                          <b-form-input v-model="expense.annual_increase_percentage" min="0" max="10" class="slider" type="range" :disabled="!customDisabled"></b-form-input>
                         </b-input-group>
                       </div>
                     </b-col>
@@ -381,25 +382,18 @@ export default {
   },
   data () {
     return {
-      items: [{
-        text: 'Assumptions',
-        to: { name: 'assumptions' }
-      }, {
-        text: 'Expenses',
-        active: true
-      }],
       expense: {},
       editExpense: {},
       newRow: {},
       periodOptions: [
         { value: null, text: 'Please select an option', disabled: true },
-        { value: 'monthly', text: 'Monthly' },
-        { value: 'daily', text: 'Daily' },
-        { value: 'weekly', text: 'Weekly' },
-        { value: 'quarterly', text: 'Quarterly' },
-        { value: 'semiannually', text: 'Semiannually' },
-        { value: 'annually', text: 'Annually' },
-        { value: 'onetime', text: 'One time' }
+        { value: 'monthly', text: 'Monthly', display: 'month' },
+        { value: 'daily', text: 'Daily', display: 'day' },
+        { value: 'weekly', text: 'Weekly', display: 'week' },
+        { value: 'quarterly', text: 'Quarterly', dispaly: 'quarter' },
+        { value: 'semiannually', text: 'Semiannually', display: 'half-year' },
+        { value: 'annually', text: 'Annually', display: 'year' },
+        { value: 'onetime', text: 'One time', dispay: 'one time' }
       ],
       categoryOptions: [
         { value: null, text: 'Please select an option', disabled: true }
@@ -442,6 +436,18 @@ export default {
     }
   },
   computed: {
+    items () {
+      return [{
+        text: 'Assumptions',
+        to: { name: 'assumptions' }
+      }, {
+        text: 'Expenses',
+        to: { name: 'expenses' }
+      }, {
+        text: this.expense.name,
+        active: true
+      }]
+    },
     endRecord () {
       if (this.perPage * this.currentPage < this.totalRows) {
         return this.perPage * this.currentPage
@@ -513,6 +519,12 @@ export default {
         return null
       } else {
         return this.editExpense.person_id != null
+      }
+    },
+    periodLabel () {
+      if (this.expense.amount_recurrence) {
+        let f = this.periodOptions.filter(option => option.value === this.expense.amount_recurrence)
+        return f[0].display
       }
     }
   },

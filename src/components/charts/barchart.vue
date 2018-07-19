@@ -62,7 +62,12 @@
                     <strong><span id="tooltipyear"></span></strong> ( age of <strong><span id="tooltipage"></span></strong> )
                   </div>
                   <div>
-                    <span id="incomespan"></span>   Income <span class="tooltip-right"><strong><span id="tooltipincome"></span> SEK</strong></span>
+                    <div class="mb-2">
+                      <span id="incomespan"></span><span class="ml-1">{{label}}</span>
+                    </div>
+                    <div>
+                      <strong><span id="tooltipincome"></span> SEK</strong>
+                    </div>
                   </div>
                 </div>
             </foreignObject>
@@ -74,7 +79,7 @@
 import { patternify } from './helpers'
 export default {
   name: 'barchart',
-  props: ['dataObject', 'planStartYear', 'planEndYear', 'birthYear'],
+  props: ['label', 'dataObject', 'planStartYear', 'planEndYear', 'birthYear'],
   data () {
     return {
       width: 0,

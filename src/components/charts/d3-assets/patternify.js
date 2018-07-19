@@ -1,5 +1,5 @@
 // handles d3.js update, enter and exit selections
-export function patternify (params) {
+export default function patternify (params) {
   var container = params.container
   var selector = params.selector
   var elementTag = params.tag

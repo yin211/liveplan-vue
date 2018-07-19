@@ -52,31 +52,19 @@
             </line>
             <g :transform="`translate(${sliderMarginLeft}, ${margin.top + chartHeight + hoverrectMehrYBottom + 35})`" class="slider-wrapper">
             </g>
-            <foreignObject
-                    id="tooltipForeignObj"
-                    height="100"
-                    width="250"
-                    :visibility="this.tooltipVisible ? 'visible' : 'hidden'">
-                <div class="toolTip">
-                  <div>
-                    <strong><span id="tooltipyear"></span></strong> ( age of <strong><span id="tooltipage"></span></strong> )
-                  </div>
-                  <div>
-                    <div class="mb-2">
-                      <span id="incomespan"></span><span class="ml-1">{{label}}</span>
-                    </div>
-                    <div>
-                      <strong><span id="tooltipincome"></span> SEK</strong>
-                    </div>
-                  </div>
-                </div>
-            </foreignObject>
+            <Tooltip :obj="tooltipObj"
+                     :svgWidth="width"
+                     :svgHeight="height"
+                     :handleOverflow="true">
+            </Tooltip>
         </svg>
     </div>
 </template>
 
 <script>
-import { patternify } from './helpers'
+import patternify from './d3-assets/patternify'
+import Tooltip from './d3-assets/Tooltip'
+
 export default {
   name: 'barchart',
   props: ['label', 'dataObject', 'planStartYear', 'planEndYear', 'birthYear'],
@@ -85,7 +73,6 @@ export default {
       width: 0,
       height: 550,
       sliderHeight: 180,
-      tooltipVisible: false,
       hoverrectMehrYTop: 25,
       hoverrectMehrYBottom: 60,
       mehrHeight: 60,
@@ -100,6 +87,9 @@ export default {
       staticDomain: [],
       capacityPercentage: 0.2,
       zoomArea: [],
+      tooltipObj: {
+        visible: false
+      },
       margin: {
         top: 100,
         right: 15,
@@ -182,27 +172,39 @@ export default {
   },
   methods: {
     rectmouseover (d, i) {
-      let tf = this.$d3.select('#tooltipForeignObj')
+      let html = `<div class="toolTip">
+                    <div>
+                      <strong><span id="tooltipyear">${d.year}</span></strong> ( age of <strong><span id="tooltipage">${d.year - this.birthYear}</span></strong> )
+                    </div>
+                    <div>
+                      <div class="mb-2">
+                        <span id="incomespan"></span><span class="ml-1">${this.label}</span>
+                      </div>
+                      <div>
+                        <strong><span id="tooltipincome">${this.thousandsFormat(d.value)}</span> SEK</strong>
+                      </div>
+                    </div>
+                  </div>`
+
       let x = this.xScale(d.year) + this.xScale.bandwidth() / 2 + this.margin.left
-      if (d.year >= this.domain[this.domain.length - 6]) {
-        x -= 270
+      let y = this.margin.top * 1.5
+
+      this.tooltipObj = {
+        x: x,
+        y: y,
+        html: html,
+        visible: true
       }
+
       let xTick = this.chart.select(`#xTick-${d.year}`)
       let xTickCircle = xTick.select('circle')
       xTickCircle.attr('fill', '#fff')
                   .attr('stroke', '#1971ff')
       let xTickYear = xTick.select('.tick-year')
       xTickYear.attr('fill', '#fff')
-      tf.select('#tooltipyear').html(d.year)
-      tf.select('#tooltipage').html(d.year - this.birthYear)
-      tf.select('#tooltipincome').html(this.thousandsFormat(d.value))
-      tf.transition()
-        .duration(500)
-        .attr('transform', `translate(${x + 10}, ${this.margin.top * 1.5})`)
       let hoverrect = this.$d3.select('#hoverrect')
       hoverrect.attr('x', this.xScale(d.year))
                .style('display', 'block')
-      this.tooltipVisible = true
     },
     rectmouseout (d, i) {
       let xTick = this.chart.select(`#xTick-${d.year}`)
@@ -213,7 +215,7 @@ export default {
       xTickYear.attr('fill', this.darkColor)
       let hoverrect = this.$d3.select('#hoverrect')
       hoverrect.style('display', 'none')
-      this.tooltipVisible = false
+      this.tooltipObj.visible = false
     },
     calcOpacity (d, i) {
       const length = this.domain[this.domain.length - 1] - this.domain[0]
@@ -726,6 +728,9 @@ export default {
     this.setDomain()
     this.onResize()
     this.$d3.select(window).on('resize', this.onResize)
+  },
+  components: {
+    Tooltip
   }
 }
 </script>

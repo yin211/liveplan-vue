@@ -157,51 +157,41 @@
         <b-card class="depth-1 edit-info-card">
           <b-container fluid>
             <b-row class="text-left">
-              <b-col md="9" xl="7">
-                <b-row>
-                  <b-col lg="6" class="d-flex align-items-center justify-content-between">
-                    <div class="d-flex align-items-center">
-                      <i class="flaticon solid car-1 car-icon"></i>
-                      <div class="d-flex flex-column ml-3">
-                        <span class="text-gray">Name</span>
-                        <span class="text-regular font-weigth-medium">{{expense.name}}</span>
-                      </div>
-                    </div>
+              <b-col md="9" class="d-flex justify-content-between">
+                <div class="d-flex align-items-center">
+                  <i class="flaticon solid car-1 car-icon"></i>
+                  <div class="d-flex flex-column ml-3">
+                    <span class="text-gray">Name</span>
+                    <span class="text-regular font-weigth-medium">{{expense.name}}</span>
+                  </div>
+                </div>
 
-                    <div class="d-flex flex-column">
-                      <span class="text-gray">Category</span>
-                      <span class="text-regular font-weigth-medium" v-if="expense.category">{{expense.category.name}}</span>
-                    </div>
+                <div class="d-flex flex-column">
+                  <span class="text-gray">Category</span>
+                  <span class="text-regular font-weigth-medium" v-if="expense.category">{{expense.category.name}}</span>
+                </div>
 
-                    <div class="d-flex flex-column">
-                      <span class="text-gray">Typ / Subtype</span>
-                      <span class="text-regular font-weigth-medium" v-if="expense.expense_type">{{expense.expense_type.name}} :: {{expense.expense_subtype.name}}</span>
-                    </div>
-                  </b-col>
-                  <b-col lg="6" class="d-flex align-items-center justify-content-between">
-                    <div class="d-flex flex-column ml-lg-3">
-                      <span class="text-gray">Inflation</span>
-                      <span class="text-regular font-weigth-medium">{{expense.inflation_rate}} %</span>
-                    </div>
+                <div class="d-flex flex-column">
+                  <span class="text-gray">Typ / Subtype</span>
+                  <span class="text-regular font-weigth-medium" v-if="expense.expense_type">{{expense.expense_type.name}} :: {{expense.expense_subtype.name}}</span>
+                </div>
 
-                    <div class="d-flex flex-column">
-                      <span class="text-gray">Period</span>
-                      <span class="text-regular font-weigth-medium">{{expense.amount_recurrence}}</span>
-                    </div>
+                <div class="d-flex flex-column ml-lg-3">
+                  <span class="text-gray">Inflation</span>
+                  <span class="text-regular font-weigth-medium">{{expense.inflation_rate}} %</span>
+                </div>
 
-                    <div class="d-flex flex-column">
-                      <span class="text-gray">Person</span>
-                      <span class="text-regular font-weigth-medium">Job Bolmeson (me)</span>
-                    </div>
+                <div class="d-flex flex-column">
+                  <span class="text-gray">Period</span>
+                  <span class="text-regular font-weigth-medium">{{expense.amount_recurrence}}</span>
+                </div>
 
-                    <div class="d-flex flex-column">
-                      <span class="text-gray">Tax</span>
-                      <span class="text-regular">10%</span>
-                    </div>
-                  </b-col>
-                </b-row>
+                <div class="d-flex flex-column">
+                  <span class="text-gray">Person</span>
+                  <span class="text-regular font-weigth-medium">{{personName}}</span>
+                </div>
               </b-col>
-              <b-col md="3" xl="5" class="d-flex justify-content-center  justify-content-md-end align-items-center">
+              <b-col md="3" class="d-flex justify-content-center  justify-content-md-end align-items-center">
                   <button class='btn btn-sm icon-btn text-regular' style="border-color: #eaecef;" @click="openEditInfoModal">
                     <i class="flaticon solid edit-3 text-primary"></i>
                     Edit Info
@@ -269,7 +259,7 @@
             <b-col sm="3" class="d-flex mt-3 justify-content-end"><label :for="'subtype-select'">Subtype</label></b-col>
             <b-col sm="9">
               <b-form-group label-for="subtype-select" class="text-left">
-                <b-form-select v-model="editExpense.expense_subtype_id" :id="'subtype-select'" />
+                <b-form-select :options="subtypeOptions" :value-field="'subtype_id'" :text-field="'subtype'" v-model="editExpense.expense_subtype_id" :id="'subtype-select'" />
               </b-form-group>
             </b-col>
           </b-row>
@@ -288,7 +278,7 @@
             <b-col sm="3" class="d-flex mt-3 justify-content-end"><label :for="'category-select'">Category</label></b-col>
             <b-col sm="9">
               <b-form-group label-for="category-select" :state="categoryState" class="text-left">
-                <b-form-select :options="categoryOptions" v-model="editExpense.category_id" :id="'category-select'" :state="categoryState" aria-describedby="categorySelectFeedback" required/>
+                <b-form-select :options="categoryOptions" :value-field="'id'" :text-field="'name'" v-model="editExpense.category_id" :id="'category-select'" :state="categoryState" aria-describedby="categorySelectFeedback" required/>
                 <b-form-invalid-feedback id="categorySelectFeedback">
                     This field is required
                 </b-form-invalid-feedback>
@@ -299,7 +289,7 @@
             <b-col sm="3" class="d-flex mt-3 justify-content-end"><label :for="'person-select'">Person</label></b-col>
             <b-col sm="9">
               <b-form-group label-for="person-select" :state="personState" class="text-left">
-                <b-form-select :options="personOptions" v-model="editExpense.person_id" :id="'person-select'" :state="personState" aria-describedby="personSelectFeedback" required/>
+                <b-form-select :options="personOptions" :value-field="'id'" :text-field="'name'" v-model="editExpense.person_id" :id="'person-select'" :state="personState" aria-describedby="personSelectFeedback" required/>
                 <b-form-invalid-feedback id="personSelectFeedback">
                     This field is required
                 </b-form-invalid-feedback>
@@ -308,14 +298,9 @@
           </b-row>
           <b-row>
             <b-col sm="3" class="d-flex mt-3 justify-content-end"><label :for="'inflation-input'">Inflation</label></b-col>
-            <b-col sm="9">
-              <vue-numeric currency="%" currency-symbol-position="suffix" v-model="editExpense.inflation_rate" class="form-control text-regular mb-3" :min="0" :max="10"></vue-numeric>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col sm="3" class="d-flex mt-3 justify-content-end"><label :for="'tax-input'">Tax</label></b-col>
-            <b-col sm="9">
-              <vue-numeric currency="%" currency-symbol-position="suffix" v-model="editExpense.tax" class="form-control text-regular mb-3" :min="0" :max="30"></vue-numeric>
+            <b-col sm="9" class="d-flex">
+              <span class="mr-3" style="margin-top: 12px">{{+editExpense.inflation_rate}}%</span>
+              <b-form-input v-model="editExpense.inflation_rate" min="0" max="10" class="slider" type="range"></b-form-input>
             </b-col>
           </b-row>
           <b-row>
@@ -330,7 +315,7 @@
             <b-col sm="3" class="d-flex mt-3 justify-content-end"><label :for="'currency-select'">Currency</label></b-col>
             <b-col sm="9">
               <b-form-group label-for="currency-select" class="text-left">
-                <b-form-select :options="currencyOptions" v-model="editExpense.currency_id" :id="'currency-select'" />
+                <b-form-select :options="currencyOptions" :value-field="'id'" :text-field="'name'" v-model="editExpense.currency_id" :id="'currency-select'" />
               </b-form-group>
             </b-col>
           </b-row>
@@ -359,7 +344,6 @@ export default {
       this.expense = response.data.data
       this.plan = this.expense
       response = await axios.get(`${process.env.ROOT_API}/plans/${this.$route.params.id}`)
-      // debugger
       this.planStartYear = response.data.data.start_year
       this.planEndYear = response.data.data.end_year
       if (this.expense.calculation_mode === 'auto') {
@@ -370,9 +354,13 @@ export default {
         this.tabIndex = 1
       }
       response = await axios.get(`${process.env.ROOT_API}/categories`)
-      for (let item of response.data.data) {
-        this.categoryOptions.push({value: item.id, text: item.name})
-      }
+      this.categoryOptions = response.data.data
+      response = await axios.get(`${process.env.ROOT_API}/persons`)
+      this.personOptions = response.data.data
+      response = await axios.get(`${process.env.ROOT_API}/expenses/subtypes`)
+      this.subtypeOptions = response.data
+      response = await axios.get(`${process.env.ROOT_API}/currencies`)
+      this.currencyOptions = response.data.data
       EventBus.$emit('select-plan', {
         plan_id: this.expense.plan_id
       })
@@ -390,24 +378,15 @@ export default {
         { value: 'monthly', text: 'Monthly', display: 'month' },
         { value: 'daily', text: 'Daily', display: 'day' },
         { value: 'weekly', text: 'Weekly', display: 'week' },
-        { value: 'quarterly', text: 'Quarterly', dispaly: 'quarter' },
+        { value: 'quarterly', text: 'Quarterly', display: 'quarter' },
         { value: 'semiannually', text: 'Semiannually', display: 'half-year' },
         { value: 'annually', text: 'Annually', display: 'year' },
         { value: 'onetime', text: 'One time', dispay: 'one time' }
       ],
-      categoryOptions: [
-        { value: null, text: 'Please select an option', disabled: true }
-      ],
-      personOptions: [
-        { value: null, text: 'Please select an option', disabled: true },
-        { value: '1', text: 'Jan Bolmeson' },
-        { value: '2', text: 'Caroline Bolmeson' }
-      ],
-      currencyOptions: [
-        { value: 'SEK', text: 'SEK' },
-        { value: 'USD', text: 'USD' },
-        { value: 'EUR', text: 'EUR' }
-      ],
+      categoryOptions: [],
+      personOptions: [],
+      currencyOptions: [],
+      subtypeOptions: [],
       fields: [
         { key: 'year', label: 'Year', sortable: true, sortDirection: 'desc' },
         { key: 'amount', label: 'Amount', sortable: true },
@@ -526,6 +505,12 @@ export default {
         let f = this.periodOptions.filter(option => option.value === this.expense.amount_recurrence)
         return f[0].display
       }
+    },
+    personName () {
+      let f = this.personOptions.filter(option => option.id === this.expense.person_id)
+      if (f.length) {
+        return f[0].name
+      }
     }
   },
   methods: {
@@ -590,7 +575,8 @@ export default {
             category_id: this.editExpense.category_id,
             person_id: this.editExpense.person_id,
             expense_subtype_id: this.editExpense.expense_subtype_id,
-            inflation_rate: this.editExpense.inflation_rate
+            inflation_rate: this.editExpense.inflation_rate,
+            currency_id: this.editExpense.currency_id
           }
           await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`, data)
           EventBus.$emit('notify-me', {

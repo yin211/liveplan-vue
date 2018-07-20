@@ -48,7 +48,7 @@ export default {
       capacityPercentage: 0.2,
       domain: [],
       zoomArea: [],
-      tooltipData: {
+      tooltipObj: {
         visible: false
       },
       margin: {
@@ -235,10 +235,13 @@ export default {
 
       // append circles
       patternify({
-        container: ticks,
+        container: this.chart,
         tag: 'circle',
-        selector: 'tickCircle'
+        selector: 'tickCircle',
+        data: this.xDomain
       })
+      .attr('cx', d => this.xScale(d) + this.xScale.bandwidth() / 2)
+      .attr('cy', this.chartHeight)
       .attr('r', this.axisCircleSize)
       .attr('fill', this.circleColor)
       .attr('stroke', '#fff')
@@ -263,7 +266,7 @@ export default {
 
       // reposition lines
       yTicks.select('line')
-        .attr('stroke', this.darkColor)
+        .attr('stroke', '#727590')
         .attr('stroke-dasharray', '1.5px')
 
       yTicks.select('text')

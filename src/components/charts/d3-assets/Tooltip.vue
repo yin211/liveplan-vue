@@ -61,7 +61,7 @@ export default {
         this.width = width > 100 ? width : 100
         this.height = height > 50 ? height : 50
         if (x + width > this.svgWidth) {
-          x -= width + 60
+          x -= width
         }
         if (y + height > this.svgHeight) {
           y -= height

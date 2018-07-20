@@ -94,7 +94,7 @@ export default {
         top: 100,
         right: 15,
         bottom: 15,
-        left: 85
+        left: 110
       },
       chart: '',
       debug: false
@@ -173,21 +173,25 @@ export default {
   methods: {
     rectmouseover (d, i) {
       let html = `<div class="toolTip">
-                    <div>
-                      <strong><span id="tooltipyear">${d.year}</span></strong> ( age of <strong><span id="tooltipage">${d.year - this.birthYear}</span></strong> )
+                    <div class="mt-2 year">
+                      <strong><span>${d.year}</span></strong> ( age of <strong><span>${d.year - this.birthYear}</span></strong> )
                     </div>
-                    <div class="d-flex">
+                    <div class="d-flex mt-4">
                       <div class="mr-3">
-                        <span id="incomespan"></span><span class="ml-1">${this.label}</span>
+                        <span class="income-span"></span><span class="ml-2 label-span">${this.label}</span>
                       </div>
-                      <div>
-                        <strong><span id="tooltipincome">${this.thousandsFormat(d.value)}</span> SEK</strong>
+                      <div class="ml-5">
+                        <strong><span id="amount-span">${this.thousandsFormat(d.value)}</span> SEK</strong>
                       </div>
                     </div>
                   </div>`
 
       let x = this.xScale(d.year) + this.xScale.bandwidth() / 2 + this.margin.left
       let y = this.margin.top * 1.5
+
+      if (x + 340 > this.width) {
+        x -= 340
+      }
 
       this.tooltipObj = {
         x: x,
@@ -196,25 +200,39 @@ export default {
         visible: true
       }
 
+      // current tick selection
       let xTick = this.chart.select(`#xTick-${d.year}`)
+
+      // make circle bigger and filled white
       let xTickCircle = xTick.select('circle')
       xTickCircle.attr('fill', '#fff')
                   .attr('stroke', '#1971ff')
-      let xTickYear = xTick.select('.tick-year')
-      xTickYear.attr('fill', '#fff')
+                  .attr('r', 5)
+
+      // display hover rect
       let hoverrect = this.$d3.select('#hoverrect')
       hoverrect.attr('x', this.xScale(d.year))
                .style('display', 'block')
+
+      // make texts a little bit bigger
+      xTick.selectAll('text').attr('fill', '#fff').attr('font-weight', 600)
     },
     rectmouseout (d, i) {
+      // current tick selection
       let xTick = this.chart.select(`#xTick-${d.year}`)
+
+      // make circle smaller
       let xTickCircle = xTick.select('circle')
       xTickCircle.attr('fill', '#1971ff')
                   .attr('stroke', '#fff')
-      let xTickYear = xTick.select('.tick-year')
-      xTickYear.attr('fill', this.darkColor)
+                  .attr('r', 4)
+
+      // hide hover rect
       let hoverrect = this.$d3.select('#hoverrect')
       hoverrect.style('display', 'none')
+
+      // make texts smaller
+      xTick.selectAll('text').attr('fill', this.darkColor).attr('font-weight', 400)
       this.tooltipObj.visible = false
     },
     calcOpacity (d, i) {
@@ -329,9 +347,10 @@ export default {
           }
           return 0
         })
+        .attr('stroke-width', 2)
 
       yTicks.select('text')
-        .attr('x', -19)
+        .attr('x', -24)
 
       // append circles
       patternify({
@@ -341,8 +360,8 @@ export default {
       })
       .attr('r', this.axisCircleSize)
       .attr('cx', -10)
-      .attr('fill', this.darkColor)
-      .attr('stroke', '#fff')
+      .attr('fill', '#6D7290')
+      .attr('stroke', '#ffffff')
       .attr('stroke-width', 1)
 
       if (this.startYear >= this.domain[0]) {
@@ -747,6 +766,7 @@ export default {
         width: 100%;
         margin: 0px;
         padding: 0px;
+        font-family: Roboto;
         svg {
             // background: linear-gradient(193.11deg, #685B7A 0%, #445B7C 100%);
             box-shadow: 20px 22px 44px 0 rgba(82,86,112,0.55);
@@ -779,19 +799,32 @@ export default {
               background-color: #fff;
               padding: 20px;
               text-align: left;
-              div:first-child {
-                margin-bottom: 20px;
-              }
-              #incomespan {
-                width: 35px;
-                height: 13px;
+              font-family: Roboto;
+              min-width: 340px;
+              min-height: 132px;
+              .income-span {
+                width: 30px;
+                height: 8px;
                 display: inline-block;
-                background-color: #FEC600;
+                background-color: #FAC604;
                 border-radius: 4px;
               }
-              #tooltipincome {
-                position: relative;
-                right: 0px;
+              .year {
+                color: #737373;
+                font-size: 16px;
+                line-height: 24px;
+              }
+              .label-span {
+                	color: #84888F;
+                  font-size: 14px;
+                  line-height: 20px;
+              }
+              .amount-span {
+                color: #232B36;
+                font-family: Roboto;
+                font-size: 14px;
+                font-weight: 500;
+                line-height: 20px;
               }
               .tooltip-right {
                 float: right;

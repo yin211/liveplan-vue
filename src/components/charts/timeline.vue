@@ -581,6 +581,7 @@ export default {
         width: 100%;
         margin: 0px;
         padding: 0px;
+        font-family: Roboto;
         svg {
             // background: linear-gradient(193.11deg, #685B7A 0%, #445B7C 100%);
             box-shadow: 20px 22px 44px 0 rgba(82,86,112,0.55);
@@ -605,9 +606,6 @@ export default {
               .domain {
                 display: none;
               }
-            }
-            #tooltipForeignObj {
-              pointer-events: none;
             }
             .toolTip {
               background-color: #fff;

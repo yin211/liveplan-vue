@@ -39,7 +39,7 @@ export default {
       hoverrectMehrYBottom: 60,
       mehrHeight: 60,
       axisCircleSize: 3.5,
-      divisionLineColor: '#2c3468',
+      divisionLineColor: '#404A65',
       sliderBackColor: '#636e7f',
       circleColor: '#1971ff',
       darkColor: '#A5ADBA',
@@ -48,7 +48,7 @@ export default {
       capacityPercentage: 0.2,
       domain: [],
       zoomArea: [],
-      tooltipData: {
+      tooltipObj: {
         visible: false
       },
       margin: {
@@ -235,10 +235,13 @@ export default {
 
       // append circles
       patternify({
-        container: ticks,
+        container: this.chart,
         tag: 'circle',
-        selector: 'tickCircle'
+        selector: 'tickCircle',
+        data: this.xDomain
       })
+      .attr('cx', d => this.xScale(d) + this.xScale.bandwidth() / 2)
+      .attr('cy', this.chartHeight)
       .attr('r', this.axisCircleSize)
       .attr('fill', this.circleColor)
       .attr('stroke', '#fff')
@@ -263,7 +266,7 @@ export default {
 
       // reposition lines
       yTicks.select('line')
-        .attr('stroke', this.darkColor)
+        .attr('stroke', '#727590')
         .attr('stroke-dasharray', '1.5px')
 
       yTicks.select('text')
@@ -581,6 +584,7 @@ export default {
         width: 100%;
         margin: 0px;
         padding: 0px;
+        font-family: Roboto;
         svg {
             // background: linear-gradient(193.11deg, #685B7A 0%, #445B7C 100%);
             box-shadow: 20px 22px 44px 0 rgba(82,86,112,0.55);
@@ -605,9 +609,6 @@ export default {
               .domain {
                 display: none;
               }
-            }
-            #tooltipForeignObj {
-              pointer-events: none;
             }
             .toolTip {
               background-color: #fff;

@@ -16,6 +16,21 @@
       padding-left: 34px;
       padding-right: 34px;
       padding-bottom: 240px;
+
+      @media (max-width: 1200px) {
+        padding-bottom: 200px;
+        padding-left: 20px;
+        padding-right: 20px;
+        margin-right: 20px;
+        margin-left: 20px;
+      }
+
+      @media (max-width: 576px) {
+        padding-left: 12px;
+        padding-right: 12px;
+        margin-right: 12px;
+        margin-left: 12px;
+      }
     }
   }
 
@@ -37,9 +52,13 @@
   }
 
   .car-icon {
-    color: #A5ADBA;
-    width: 23px;
-    height: 19px;
+    color: #A5ADBA;;
+    margin-left: 16px;
+    margin-right: 8px;
+
+    @media (max-width: 576px) {
+      display: none;
+    }
   }
 
   .plain-btn {
@@ -173,6 +192,8 @@
 
       .card-body {
         padding: 30px 15px 33px;
+        display: flex;
+        align-items: center;
       }
     }
   }

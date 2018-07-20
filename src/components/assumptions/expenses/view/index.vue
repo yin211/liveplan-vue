@@ -3,7 +3,7 @@
     <div class="main-gradient">
       <div class="title-container mx-auto">
         <b-breadcrumb :items="items" class="p-0"/>
-        <div class="d-flex justify-content-between align-items-center">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
           <h1 class="text-white text-left">{{expense.name}} </h1>
           <button class='btn btn-sm icon-btn text-regular' @click="deleteExpense()">
             <i class="flaticon stroke trash-2 text-danger"></i>
@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="card-container">
-      <div class="mx-auto bg-light">
+      <div class="bg-light mx-xl-auto">
         <!-- Auto Calculation, Custom Values Tabs Card-->
         <b-card no-body class="expense-tabs-card depth-1">
           <b-tabs pills card v-model="tabIndex">
@@ -155,43 +155,45 @@
         </b-card>
         <!-- Expense Information Show Card -->
         <b-card class="depth-1 edit-info-card">
+          <div class="car-icon">
+            <i class="flaticon solid car-1"></i>
+          </div>
           <b-container fluid>
             <b-row class="text-left">
-              <b-col md="9" class="d-flex justify-content-between">
-                <div class="d-flex align-items-center">
-                  <i class="flaticon solid car-1 car-icon"></i>
-                  <div class="d-flex flex-column ml-3">
+              <b-col md="9">
+                <b-row>
+                  <b-col cols="6" md="4" xl="2" class="d-flex flex-column justify-content-center py-xl-0 py-2">
                     <span class="text-gray">Name</span>
                     <span class="text-regular font-weigth-medium">{{expense.name}}</span>
-                  </div>
-                </div>
+                  </b-col>
 
-                <div class="d-flex flex-column">
-                  <span class="text-gray">Category</span>
-                  <span class="text-regular font-weigth-medium" v-if="expense.category">{{expense.category.name}}</span>
-                </div>
+                  <b-col cols="6" md="4" xl="2" class="d-flex flex-column justify-content-center py-xl-0 py-2">
+                    <span class="text-gray">Category</span>
+                    <span class="text-regular font-weigth-medium" v-if="expense.category">{{expense.category.name}}</span>
+                  </b-col>
 
-                <div class="d-flex flex-column">
-                  <span class="text-gray">Typ / Subtype</span>
-                  <span class="text-regular font-weigth-medium" v-if="expense.expense_type">{{expense.expense_type.name}} :: {{expense.expense_subtype.name}}</span>
-                </div>
+                  <b-col cols="6" md="4" xl="2" class="d-flex flex-column justify-content-center py-xl-0 py-2">
+                    <span class="text-gray">Typ / Subtype</span>
+                    <span class="text-regular font-weigth-medium" v-if="expense.expense_type">{{expense.expense_type.name}} :: {{expense.expense_subtype.name}}</span>
+                  </b-col>
 
-                <div class="d-flex flex-column ml-lg-3">
-                  <span class="text-gray">Inflation</span>
-                  <span class="text-regular font-weigth-medium">{{expense.inflation_rate}} %</span>
-                </div>
+                  <b-col cols="6" md="4" xl="2" class="d-flex flex-column justify-content-center py-xl-0 py-2">
+                    <span class="text-gray">Inflation</span>
+                    <span class="text-regular font-weigth-medium">{{expense.inflation_rate}} %</span>
+                  </b-col>
 
-                <div class="d-flex flex-column">
-                  <span class="text-gray">Period</span>
-                  <span class="text-regular font-weigth-medium">{{expense.amount_recurrence}}</span>
-                </div>
+                  <b-col cols="6" md="4" xl="2" class="d-flex flex-column justify-content-center py-xl-0 py-2">
+                    <span class="text-gray">Period</span>
+                    <span class="text-regular font-weigth-medium">{{expense.amount_recurrence}}</span>
+                  </b-col>
 
-                <div class="d-flex flex-column">
-                  <span class="text-gray">Person</span>
-                  <span class="text-regular font-weigth-medium">{{personName}}</span>
-                </div>
+                  <b-col cols="6" md="4" xl="2" class="d-flex flex-column justify-content-center py-xl-0 py-2">
+                    <span class="text-gray">Person</span>
+                    <span class="text-regular font-weigth-medium">{{personName}}</span>
+                  </b-col>
+                </b-row>
               </b-col>
-              <b-col md="3" class="d-flex justify-content-center  justify-content-md-end align-items-center">
+              <b-col md="3" class="d-flex justify-content-center  justify-content-md-end align-items-center pt-5 py-md-0">
                   <button class='btn btn-sm icon-btn text-regular' style="border-color: #eaecef;" @click="openEditInfoModal">
                     <i class="flaticon solid edit-3 text-primary"></i>
                     Edit Info

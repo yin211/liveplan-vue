@@ -123,8 +123,8 @@ export default {
                     <div>
                       <strong><span id="tooltipyear">${d.year}</span></strong> ( age of <strong><span id="tooltipage">${d.year - this.birthYear}</span></strong> )
                     </div>
-                    <div>
-                      <div class="mb-2">
+                    <div class="d-flex">
+                      <div class="mr-3">
                         <span id="incomespan"></span><span class="ml-1">${this.label}</span>
                       </div>
                       <div>

@@ -76,11 +76,11 @@ export default {
       hoverrectMehrYTop: 25,
       hoverrectMehrYBottom: 60,
       mehrHeight: 60,
-      axisCircleSize: 3.5,
+      axisCircleSize: 4,
       divisionLineColor: '#2c3468',
       barColor: '#FEC600',
       sliderBackColor: '#636e7f',
-      circleColor: '#1971ff',
+      circleColor: '#0065FF',
       darkColor: '#A5ADBA',
       sliderHandlerRadius: 12,
       domain: [],
@@ -137,7 +137,7 @@ export default {
       return this.$d3.scaleBand()
                   .domain(this.domain)
                   .range([0, this.chartWidth])
-                  .paddingInner([0.05])
+                  .paddingInner([0.02])
                   .paddingOuter([0.1])
     },
     yScale () {
@@ -222,7 +222,7 @@ export default {
       const l = Math.round(length * this.capacityPercentage)
       const h = length - l
 
-      let sc = this.$d3.scaleLinear()
+      let sc = this.$d3.scaleLinear().clamp(true)
 
       if (i <= l) {
         sc.domain([0, l]).range([0.25, 1])
@@ -278,7 +278,8 @@ export default {
 
       ticks.select('line')
         .attr('stroke', this.darkColor)
-        .attr('stroke-dasharray', '1.5px')
+        .attr('stroke-width', 0.5)
+        .attr('stroke-dasharray', '3 1.5')
 
       // reposition texts within the axis
       ticks.select('text')
@@ -295,7 +296,7 @@ export default {
       .attr('r', this.axisCircleSize)
       .attr('fill', this.circleColor)
       .attr('stroke', '#fff')
-      .attr('stroke-width', 1.5)
+      .attr('stroke-width', 1)
 
       // append ages
       patternify({
@@ -353,6 +354,7 @@ export default {
           .select('line')
           .attr('y2', startEndTickSize)
           .attr('stroke', '#fff')
+          .style('opacity', 1)
 
         // append circle for the startYear tick
         patternify({
@@ -390,7 +392,8 @@ export default {
         })
         .text(this.startYear)
         .attr('fill', '#fff')
-        .attr('dy', 20)
+        .attr('font-size', '13px')
+        .attr('dy', 16)
       } else {
         this.chart.selectAll('g.startYear').remove()
       }
@@ -449,7 +452,8 @@ export default {
         })
         .text(this.endYear)
         .attr('fill', '#fff')
-        .attr('dy', 20)
+        .attr('font-size', '13px')
+        .attr('dy', 16)
       } else {
         this.chart.selectAll('g.endYear').remove()
       }
@@ -554,8 +558,8 @@ export default {
       .attr('cursor', 'pointer')
       .attr('r', this.sliderHandlerRadius)
       .attr('fill', this.circleColor)
-      .attr('stroke', '#fff')
-      .attr('stroke-width', 0.5)
+      .attr('stroke', this.darkColor)
+      .attr('stroke-width', 1.5)
 
       patternify({
         container: secondCircleGroup,
@@ -565,8 +569,8 @@ export default {
       .attr('cursor', 'pointer')
       .attr('r', this.sliderHandlerRadius)
       .attr('fill', this.circleColor)
-      .attr('stroke', '#fff')
-      .attr('stroke-width', 0.5)
+      .attr('stroke', this.darkColor)
+      .attr('stroke-width', 1.5)
 
       patternify({
         container: firstCircleGroup,
@@ -574,11 +578,12 @@ export default {
         selector: 'vBarFirst',
         data: [-1, 0, 1]
       })
-      .attr('x1', d => d * 3)
-      .attr('x2', d => d * 3)
+      .attr('x1', d => d * 2.5)
+      .attr('x2', d => d * 2.5)
       .attr('y1', -4)
       .attr('y2', 4)
       .attr('stroke', '#fff')
+      .attr('stroke-width', 0.8)
 
       patternify({
         container: secondCircleGroup,
@@ -586,11 +591,12 @@ export default {
         selector: 'vBarSecond',
         data: [-1, 0, 1]
       })
-      .attr('x1', d => d * 3)
-      .attr('x2', d => d * 3)
+      .attr('x1', d => d * 2.5)
+      .attr('x2', d => d * 2.5)
       .attr('y1', -4)
       .attr('y2', 4)
       .attr('stroke', '#fff')
+      .attr('stroke-width', 0.8)
 
       // drag handlers
       function dragged (d, flag) {

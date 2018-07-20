@@ -134,18 +134,23 @@
             }
 
             .save-calc-btn {
-              position: absolute;
-              right: 30px;
-              top: 42px;
               border-radius: 40px;
               font-weight: 500;
               display: flex;
               padding-left: 12px;
               padding-right: 14px;
+              margin-top: 40px;
               i {
                 font-size: 1rem;
                 margin-right: 0.5rem;
               }
+              @media (min-width: 768px) {
+                position: absolute;
+                right: 30px;
+                top: 42px;
+                margin-top: 0;
+              }
+
             }
           }
 

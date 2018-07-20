@@ -33,7 +33,7 @@
               <b-form id="autoCalcForm" ref="autoCalcForm" @change="autoCalcformChanged" novalidate :validated="autoCalcValidated" @submit.prevent="onAutoCalcSumbit" v-bind:class="{ 'custom-is-enabled': !customDisabled }">
                 <b-container fluid>
                   <b-row class="text-left mx-auto">
-                    <b-col lg="2">
+                    <b-col md="4" xl="2">
                       <span class="text-regular">Period (start - end year)</span>
                       <div class="d-flex element-spacer">
                         <b-form-group label-for="startYearInput" :invalid-feedback="invalidStartYearFeedback" :state="startYearState">
@@ -45,18 +45,18 @@
                         </b-form-group>
                       </div>
                     </b-col>
-                    <b-col lg="5">
+                    <b-col md="8" xl="5">
                       <span class="text-regular">Amount per {{periodLabel}}</span>
-                      <div class="d-flex">
+                      <div class="d-flex mb-3">
                         <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-b-tooltip.hover.bottom title="The amount per period." v-model="expense.amount" class="form-control form-control-sm element-spacer text-regular amount-per-month" :min="0" :disabled="!customDisabled"></vue-numeric>
                         <b-input-group size="sm" class="element-spacer">
                           <b-form-input v-model="expense.amount" min="0" max="10000" step="500" class="slider" type="range" :disabled="!customDisabled"></b-form-input>
                         </b-input-group>
                       </div>
                     </b-col>
-                    <b-col lg="5">
+                    <b-col xl="5">
                       <span class="text-regular">Annual growth rate</span>
-                      <div class="d-flex">
+                      <div class="d-flex mb-3">
                         <vue-numeric currency="%" currency-symbol-position="suffix" v-model="expense.annual_increase_percentage" v-b-tooltip.hover.bottom title="The expense grows with this percentage per year." class="form-control form-control-sm element-spacer text-regular annual-growth-rate" :min="0" :max="10" :disabled="!customDisabled"></vue-numeric>
                         <b-input-group size="sm" class="element-spacer">
                           <b-form-input v-model="expense.annual_increase_percentage" min="0" max="10" class="slider" type="range" :disabled="!customDisabled"></b-form-input>
@@ -65,7 +65,7 @@
                     </b-col>
                   </b-row>
                 </b-container>
-                <b-button type="submit" :size="'sm'" variant="primary" class="save-calc-btn" :disabled="isCalcSaveDisabled || !customDisabled"  v-b-tooltip.hover.bottom title="You can save any changes for this expense by clicking here.">
+                <b-button type="submit" :size="'sm'" variant="primary" class="save-calc-btn mx-auto" :disabled="isCalcSaveDisabled || !customDisabled"  v-b-tooltip.hover.bottom title="You can save any changes for this expense by clicking here.">
                   <i class="fa fa-spinner fa-spin" v-if="isSaving" style="margin-top: 2px" ></i>
                   <i class="flaticon stroke checkmark" v-else></i>
                   Save New Values
@@ -94,7 +94,7 @@
               </div>
               <div class="table-container text-regular text-left">
                 <b-table show-empty
-                        stacked="md"
+                        stacked="sm"
                         :items="expense.expense_amounts"
                         :fields="fields"
                         :current-page="currentPage"

@@ -77,7 +77,7 @@ export default {
       hoverrectMehrYBottom: 60,
       mehrHeight: 60,
       axisCircleSize: 4,
-      divisionLineColor: '#2c3468',
+      divisionLineColor: '#404A65',
       barColor: '#FEC600',
       sliderBackColor: '#636e7f',
       circleColor: '#0065FF',
@@ -180,7 +180,7 @@ export default {
                       <div class="mr-3">
                         <span class="income-span"></span><span class="ml-2 label-span">${this.label}</span>
                       </div>
-                      <div class="ml-5">
+                      <div class="ml-4">
                         <strong><span id="amount-span">${this.thousandsFormat(d.value)}</span> SEK</strong>
                       </div>
                     </div>
@@ -800,8 +800,7 @@ export default {
               padding: 20px;
               text-align: left;
               font-family: Roboto;
-              min-width: 340px;
-              min-height: 132px;
+              height: 132px;
               .income-span {
                 width: 30px;
                 height: 8px;

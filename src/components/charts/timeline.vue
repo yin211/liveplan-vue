@@ -39,7 +39,7 @@ export default {
       hoverrectMehrYBottom: 60,
       mehrHeight: 60,
       axisCircleSize: 3.5,
-      divisionLineColor: '#2c3468',
+      divisionLineColor: '#404A65',
       sliderBackColor: '#636e7f',
       circleColor: '#1971ff',
       darkColor: '#A5ADBA',

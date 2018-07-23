@@ -28,7 +28,7 @@
           <b-tabs pills card v-model="tabIndex">
             <b-tab title="Auto Calculation" :title-link-class="'expense-tab'">
               <div class="custom-values-bar" v-if="!customDisabled">
-                <b-alert show variant="warning" class="py-3">Values are disabled since expense is in custom mode</b-alert>
+                <b-alert show variant="warning" class="d-flex justify-content-center align-items-center">Values are disabled since expense is in custom mode</b-alert>
               </div>
               <b-form id="autoCalcForm" ref="autoCalcForm" @change="autoCalcformChanged" novalidate :validated="autoCalcValidated" @submit.prevent="onAutoCalcSumbit" v-bind:class="{ 'custom-is-enabled': !customDisabled }">
                 <b-container fluid>
@@ -94,7 +94,7 @@
               </div>
               <div class="table-container text-regular text-left">
                 <b-table show-empty
-                        stacked="sm"
+                        stacked="md"
                         :items="expense.expense_amounts"
                         :fields="fields"
                         :current-page="currentPage"
@@ -105,6 +105,7 @@
                         :sort-direction="sortDirection"
                         @filtered="onFiltered"
                         hover
+                        fixed
                 >
                   <template slot="top-row" slot-scope="data">
                     <td colspan="3"><b-form-input v-model="filter" size="sm" placeholder="Type to Search" /></td>
@@ -392,7 +393,7 @@ export default {
       fields: [
         { key: 'year', label: 'Year', sortable: true, sortDirection: 'desc' },
         { key: 'amount', label: 'Amount', sortable: true },
-        { key: 'actions', 'class': 'd-flex justify-content-end' }
+        { key: 'actions', 'class': 'd-lg-flex justify-content-lg-end align-items-center' }
       ],
       currentPage: 1,
       perPage: 10,

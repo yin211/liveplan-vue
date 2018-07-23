@@ -99,6 +99,10 @@
               font-weight: 600;
               background-color: transparent;
             }
+
+            &:first-child {
+              margin-right: 28px;
+            }
           }
         }
       }
@@ -171,6 +175,7 @@
               padding: 0px 20px;
               margin: 0px 10px;
               padding: 0 20px;
+              height: 46px;
               &.bar-disable-color {
                 background-color: #F8F8F8;
                 border: 1px dashed #D8D8D8;
@@ -209,6 +214,7 @@
     font-size: 14px;
 
     table {
+      background: white;
       th {
         padding-top: 18px;
         padding-bottom: 18px;
@@ -216,14 +222,48 @@
         box-shadow: 9px 8px 16px 0 rgba(0,0,0,0.07);
         outline: none;
         border: none;
+
+        &.sorting::before {
+          top: 26px;
+          content: '\E1BC';
+          font-family: 'Flaticons Solid';
+          font-style: normal;
+          font-weight: normal;
+          font-size: 20px;
+          line-height: 1;
+          -webkit-font-smoothing: antialiased;
+        }
+
+        &.sorting::after {
+          top: 38px;
+          content: '\e1bd';
+          font-family: 'Flaticons Solid';
+          font-style: normal;
+          font-weight: normal;
+          font-size: 20px;
+          line-height: 1;
+          -webkit-font-smoothing: antialiased;
+        }
+
+        &.sorting_desc::before, &.sorting_asc::after {
+          opacity: 1;
+          color: #36b37E;
+        }
+
+        &[aria-colindex="1"] {
+          &.sorting::before, &.sorting::after {
+            left: 48px;
+          }
+        }
+        &[aria-colindex="2"] {
+          &.sorting::before, &.sorting::after {
+            left: 74px;
+          }
+        }
       }
 
       tbody {
         tr {
-          border-bottom-style: dotted;
-          border-bottom-width: 2px;
-          border-bottom-color: #CACACA;
-
           // &:nth-of-type(odd) {
           //   background-color: #F1F2F8 !important;
           // }
@@ -237,6 +277,7 @@
             td {
               width: 100%;
               padding: 0;
+              border: none;
               input {
                 border: none;
               }
@@ -247,6 +288,7 @@
             vertical-align: middle;
             padding-top: 6px;
             padding-bottom: 6px;
+            border-top: 1px dashed #CACACA;
 
             .amount-per-month {
               width: 130px;

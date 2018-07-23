@@ -262,7 +262,7 @@ export default {
         container: this.chart,
         tag: 'circle',
         selector: 'tickCircleX',
-        data: this.xDomain
+        data: this.domain
       })
       .attr('class', 'tickCircleX')
       .attr('cx', d => this.xScale(d) + this.xScale.bandwidth() / 2)
@@ -271,6 +271,9 @@ export default {
       .attr('fill', this.circleColor)
       .attr('stroke', '#fff')
       .attr('stroke-width', 1.5)
+      .attr('opacity', (d, i) => {
+        return this.calcOpacity(d, i)
+      })
 
       // append ages
       patternify({
@@ -320,6 +323,9 @@ export default {
       .attr('x', d => this.xScale(d.start_year))
       .attr('y', d => this.yScale(d.name))
       .attr('width', d => {
+        if (d.end_year < this.domain[0]) {
+          return 0
+        }
         if (d.start_year < this.domain[0]) {
           return this.xScale(d.end_year) - 0
         }

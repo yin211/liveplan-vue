@@ -4,6 +4,17 @@
              :width="width"
              :height="height">
             <g :transform="`translate(${margin.left}, ${margin.top})`" class="chart">
+              <rect v-for="(d,i) in bars"
+                    :key="`hiddenrect-${i}`"
+                    :x="xScale(d.year)"
+                    :y="0"
+                    :width="xScale.bandwidth()"
+                    :height="chartHeight + hoverrectMehrYBottom"
+                    :data-year="d.year"
+                    class="hiddenrect"
+                    @mouseover="rectmouseover(d, i)"
+                    @mouseout="rectmouseout(d, i)">
+              </rect>
             </g>
             <line :x1="0"
                     :x2="width"
@@ -62,6 +73,11 @@ export default {
     }
   },
   computed: {
+    colorScale () {
+      return this.$d3.scaleOrdinal()
+                .domain(this.dataArray.map(x => x.name))
+                .range(this.colors)
+    },
     xDomain () {
       let minStartYear = this.$d3.min(this.dataArray, d => d.start_year)
       let maxEndYear = this.$d3.max(this.dataArray, d => d.end_year)
@@ -72,6 +88,11 @@ export default {
     },
     yDomain () {
       return this.dataArray.map(d => d.name)
+    },
+    bars () {
+      return this.domain.map(d => {
+        return this.findAmountsForYear(d)
+      })
     },
     chartHeight () {
       return this.height - this.margin.top - this.margin.bottom - this.sliderHeight
@@ -123,18 +144,21 @@ export default {
                     <div>
                       <strong><span id="tooltipyear">${d.year}</span></strong> ( age of <strong><span id="tooltipage">${d.year - this.birthYear}</span></strong> )
                     </div>
-                    <div class="d-flex">
-                      <div class="mr-3">
-                        <span id="incomespan"></span><span class="ml-1">${this.label}</span>
-                      </div>
-                      <div>
-                        <strong><span id="tooltipincome">${this.thousandsFormat(d.value)}</span> SEK</strong>
-                      </div>
-                    </div>
+                    ${d.amounts.map((d, i) => {
+                      return `<div class="d-flex">
+                              <div class="mr-3">
+                                <span class="tooltip-amount-span" style="background-color: ${this.colorScale(d.name)};"></span><span class="ml-1">${d.name}</span>
+                              </div>
+                              <div>
+                                <strong><span id="tooltipincome">${this.thousandsFormat(d.amount)}</span> SEK</strong>
+                              </div>
+                            </div>`
+                    }).toString().replace(/,/g, '')}
+
                   </div>`
 
       let x = this.xScale(d.year) + this.xScale.bandwidth() / 2 + this.margin.left
-      let y = this.margin.top * 1.5
+      let y = this.margin.top
 
       this.tooltipObj = {
         x: x,
@@ -305,7 +329,20 @@ export default {
         return this.xScale(d.end_year) - this.xScale(d.start_year)
       })
       .attr('height', this.yScale.bandwidth())
-      .attr('fill', (d, i) => this.colors[i])
+      .attr('fill', (d, i) => this.colorScale(d.name))
+
+      patternify({
+        tag: 'rect',
+        selector: 'hoverrect',
+        container: this.chart
+      })
+      .attr('id', 'hoverrect')
+      .attr('x', 0)
+      .attr('y', -this.hoverrectMehrYTop)
+      .attr('width', this.xScale.bandwidth())
+      .attr('height', this.chartHeight + this.hoverrectMehrYTop + this.hoverrectMehrYBottom)
+      .attr('fill', 'black')
+      .attr('opacity', 0.35)
     },
     drawSlider (selection, width) {
       var padding = 60
@@ -562,6 +599,26 @@ export default {
         this.domain = this.$d3.range(min, min + this.maximumSliderRange + 1)
       }
     },
+    findAmountsForYear (year) {
+      let items = this.dataArray.filter(x => x.start_year <= year && x.end_year >= year)
+      let amounts = []
+      let total = 0
+      items.forEach(d => {
+        let t = d.expense_amounts.filter(x => x.year === year)
+        if (t.length) {
+          total += t[0].amount
+          amounts.push({
+            amount: t[0].amount,
+            name: d.name
+          })
+        }
+      })
+      return {
+        year: year,
+        amounts: amounts,
+        total: total
+      }
+    },
     onResize () {
       this.setWidth()
       this.drawXAxis()
@@ -585,6 +642,7 @@ export default {
     this.setDomain()
     this.onResize()
     this.$d3.select(window).on('resize', this.onResize)
+    console.log(this.bars)
   },
   components: {
     Tooltip
@@ -631,11 +689,10 @@ export default {
               div:first-child {
                 margin-bottom: 20px;
               }
-              #incomespan {
-                width: 35px;
-                height: 13px;
+              .tooltip-amount-span {
+                width: 30px;
+                height: 8px;
                 display: inline-block;
-                background-color: #FEC600;
                 border-radius: 4px;
               }
               #tooltipincome {

@@ -37,7 +37,7 @@ export default {
   },
   async mounted () {
     try {
-      let timelineData = await axios.get('https://api.livsplan.se/api/v1/expenses/')
+      let timelineData = await axios.get('https://api.livsplan.se/api/v1/expenses/?w_e_amounts=1')
       this.timelineData = timelineData.data
     } catch (error) {
       console.error(error)

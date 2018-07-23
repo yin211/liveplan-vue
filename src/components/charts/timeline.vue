@@ -91,7 +91,7 @@ export default {
     },
     xScale () {
       return this.$d3.scaleBand()
-                  .domain(this.xDomain)
+                  .domain(this.domain)
                   .range([0, this.chartWidth])
                   .paddingInner([0.05])
                   .paddingOuter([0.1])
@@ -165,7 +165,7 @@ export default {
       this.tooltipObj.visible = false
     },
     calcOpacity (d, i) {
-      const length = this.xDomain[this.xDomain.length - 1] - this.xDomain[0]
+      const length = this.domain[this.domain.length - 1] - this.domain[0]
       const l = Math.round(length * this.capacityPercentage)
       const h = length - l
 
@@ -237,9 +237,10 @@ export default {
       patternify({
         container: this.chart,
         tag: 'circle',
-        selector: 'tickCircle',
+        selector: 'tickCircleX',
         data: this.xDomain
       })
+      .attr('class', 'tickCircleX')
       .attr('cx', d => this.xScale(d) + this.xScale.bandwidth() / 2)
       .attr('cy', this.chartHeight)
       .attr('r', this.axisCircleSize)
@@ -276,8 +277,9 @@ export default {
       patternify({
         container: yTicks,
         tag: 'circle',
-        selector: 'tickCircle'
+        selector: 'tickCircleY'
       })
+      .attr('class', 'tickCircleY')
       .attr('r', this.axisCircleSize)
       .attr('cx', -10)
       .attr('fill', this.darkColor)
@@ -293,7 +295,15 @@ export default {
       })
       .attr('x', d => this.xScale(d.start_year))
       .attr('y', d => this.yScale(d.name))
-      .attr('width', d => this.xScale(d.end_year) - this.xScale(d.start_year))
+      .attr('width', d => {
+        if (d.start_year < this.domain[0]) {
+          return this.xScale(d.end_year) - 0
+        }
+        if (d.end_year > this.domain[this.domain.length - 1]) {
+          return this.xScale(this.domain[this.domain.length - 1]) - this.xScale(d.start_year) + this.xScale.bandwidth()
+        }
+        return this.xScale(d.end_year) - this.xScale(d.start_year)
+      })
       .attr('height', this.yScale.bandwidth())
       .attr('fill', (d, i) => this.colors[i])
     },
@@ -461,8 +471,10 @@ export default {
         self.zoomArea = currentSelectedArea
         let newDomain = getNewDomain()
         self.domain = newDomain
-        self.drawAxis()
-        self.adjustAxis()
+        self.drawXAxis()
+        self.drawRects()
+        self.drawYAxis()
+        self.adjustAxes()
       }
 
       function getNewDomain () {
@@ -511,8 +523,10 @@ export default {
 
         let newDomain = getLiveDomain(coords)
         self.domain = newDomain
-        self.drawAxis()
-        self.adjustAxis()
+        self.drawXAxis()
+        self.drawRects()
+        self.drawYAxis()
+        self.adjustAxes()
       }
 
       function lineDragEnd () {

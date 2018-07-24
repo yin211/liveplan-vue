@@ -90,6 +90,38 @@
         .card-header-pills {
           outline: none;
 
+          @media (max-width: 480px) {
+            &::before {
+              content: '\E1BC';
+              font-family: 'Flaticons Solid';
+              font-style: normal;
+              font-weight: normal;
+              font-size: 20px;
+              line-height: 1;
+              -webkit-font-smoothing: antialiased;
+              position: absolute;
+              left: 218px;
+              top: 42px;
+            }
+
+            &::after {
+              content: '\E1BD';
+              font-family: 'Flaticons Solid';
+              font-style: normal;
+              font-weight: normal;
+              font-size: 20px;
+              line-height: 1;
+              -webkit-font-smoothing: antialiased;
+              position: absolute;
+              left: 218px;
+              top: 55px;
+            }
+
+            a[aria-selected="false"] {
+              display: none;
+            }
+          }
+
           .expense-tab {
             font-size: 24px;
             line-height: 32px;
@@ -101,7 +133,9 @@
             }
 
             &:first-child {
-              margin-right: 28px;
+              @media (min-width: 768px) {
+                margin-right: 28px;
+              }
             }
           }
         }
@@ -119,7 +153,11 @@
               border-color: #ced4da;
             }
             &.custom-is-enabled {
-              margin-top: 24px;
+              margin-top: 42px;
+
+              @media (max-width: 576px) {
+                margin-top: 82px;
+              }
             }
 
             .start_end_year
@@ -159,10 +197,21 @@
           }
 
           .upload-file-btn {
-            position: absolute;
-            right: 30px;
-            top: 42px;
-            border-color: #eaecef;
+            background: white;
+
+            @media (max-width: 767.98px) {
+              padding: 68px 0 10px 16px;
+            }
+
+            @media (min-width: 768px) {
+              position: absolute;
+              right: 30px;
+              top: 42px;
+            }
+
+            .btn {
+              border-color: #eaecef;
+            }
           }
 
           .custom-values-bar {
@@ -172,10 +221,24 @@
             background-color: white;
             padding: 10px 0;
             & > div {
-              padding: 0px 20px;
               margin: 0px 10px;
               padding: 0 20px;
               height: 46px;
+              @media (max-width: 575.98px) {
+                height: 110px;
+                margin: 0px 16px;
+                .label-text {
+                  font-size: 12px;
+                }
+              }
+
+              @media (min-width: 576px) and (max-width: 991.98px) {
+                height: 72px;
+                .label-text {
+                  margin-bottom: 12px;
+                }
+              }
+
               &.bar-disable-color {
                 background-color: #F8F8F8;
                 border: 1px dashed #D8D8D8;

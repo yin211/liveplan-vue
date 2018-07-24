@@ -73,21 +73,23 @@
               </b-form>
             </b-tab>
             <b-tab title="Custom Values" :title-link-class="'expense-tab'">
-              <button class='btn btn-sm icon-btn text-regular upload-file-btn' :disabled="customDisabled">
-                <i class="flaticon stroke upload text-primary"></i>
-                Upload Files
-              </button>
+              <div class="upload-file-btn">
+                <button class='btn btn-sm icon-btn text-regular' :disabled="customDisabled">
+                  <i class="flaticon stroke upload text-primary"></i>
+                  Upload Files
+                </button>
+              </div>
               <div class="custom-values-bar">
-                <div class="d-flex justify-content-between align-items-center" :class="[customDisabled ? 'bar-disable-color' :'bar-enable-color']">
+                <div class="d-flex flex-column flex-lg-row justify-content-lg-between align-items-lg-center" :class="[customDisabled ? 'bar-disable-color' :'bar-enable-color']">
                   <div class="d-flex align-items-center">
                     <span class="mr-3" :class="{ 'font-weight-bold': !customDisabled }">Enable</span>
                     <switches v-model="customDisabled" theme="bootstrap" type-bold="true" color="success"></switches>
                     <span class="ml-3" :class="{ 'font-weight-bold': customDisabled }">Disable</span>
                   </div>
-                  <span v-if="customDisabled" class="text-gray">
+                  <span v-if="customDisabled" class="text-gray text-left label-text">
                     Enabling "Custom Values" will disable "Auto Calculation". You can choose one of the two.
                   </span>
-                  <span v-else class="text-gray">
+                  <span v-else class="text-gray text-left label-text">
                     Enabling "Auto Calculation" will disable "Custom Values". You need to choose one of the two.
                   </span>
                 </div>

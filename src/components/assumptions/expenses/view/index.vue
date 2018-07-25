@@ -138,22 +138,28 @@
                   </template>
                 </b-table>
                 <div class="d-flex  flex-column flex-md-row justify-content-between">
-                  <div class="d-flex">
-                    <div v-if="totalRows > 0" class="d-flex align-items-center">
+                  <div class="d-flex flex-column flex-md-row mb-3 mb-md-0">
+                    <div v-if="totalRows > 0" class="d-flex align-items-center justify-content-center">
                       <span class="text-gray">Showing {{(currentPage - 1) * perPage + 1}} to {{endRecord}} of {{totalRows}}</span>
                     </div>
                     <div v-if="totalRows > 0" class="space-divider"></div>
-                    <div class="d-flex align-items-center">
+                    <div class="d-flex align-items-center justify-content-center">
                       <span> show per page: </span>
                       <b-form-select :options="pageOptions" v-model="perPage" class="selectPerPage" />
                     </div>
                   </div>
-                  <div class="d-flex align-items-center">
+                  <div class="d-flex align-items-center justify-content-center">
                     <b-pagination :total-rows="totalRows" :per-page="perPage" v-model="currentPage" class="my-0"/>
                   </div>
                 </div>
               </div>
             </b-tab>
+            <template slot="tabs">
+              <li class="nav-item select-tab-item">
+                <i class="flaticon solid up h-3" @click="tabIndex = 0"></i>
+                <i class="flaticon solid down h-3" @click="tabIndex = 1"></i>
+              </li>
+            </template>
           </b-tabs>
         </b-card>
         <!-- Expense Information Show Card -->

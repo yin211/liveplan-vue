@@ -90,33 +90,21 @@
         .card-header-pills {
           outline: none;
 
+          .select-tab-item {
+            display: none;
+            i {
+              height: 14px;
+              font-size: 20px;
+              opacity: 0.5;
+            }
+          }
+
           @media (max-width: 480px) {
-            &::before {
-              content: '\E1BC';
-              font-family: 'Flaticons Solid';
-              font-style: normal;
-              font-weight: normal;
-              font-size: 20px;
-              line-height: 1;
-              -webkit-font-smoothing: antialiased;
-              position: absolute;
-              left: 218px;
-              top: 42px;
+            .select-tab-item {
+              display: flex;
+              flex-direction: column;
+              margin-top: 4px;
             }
-
-            &::after {
-              content: '\E1BD';
-              font-family: 'Flaticons Solid';
-              font-style: normal;
-              font-weight: normal;
-              font-size: 20px;
-              line-height: 1;
-              -webkit-font-smoothing: antialiased;
-              position: absolute;
-              left: 218px;
-              top: 55px;
-            }
-
             a[aria-selected="false"] {
               display: none;
             }

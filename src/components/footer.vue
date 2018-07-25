@@ -1,19 +1,21 @@
 <template>
-  <div v-if="isAuthenticated" class="vfooter d-flex justify-content-between align-items-center bg-dark mx-auto">
+  <div v-if="isAuthenticated" class="vfooter d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center bg-dark mx-auto">
 
-      <div class="d-flex flex-column text-left left-container">
-        <div class="text-white logo-text">{{ $t('footer.logo') }}</div>
-        <div class="text-gray copyright-text">{{ $t('footer.copyright') }}</div>
+      <div class="d-flex flex-column flex-lg-row left-container">
+        <div class="d-flex flex-column text-left">
+          <div class="text-white logo-text">{{ $t('footer.logo') }}</div>
+          <div class="text-gray copyright-text">{{ $t('footer.copyright') }}</div>
+        </div>
+
+        <ul class="d-flex flex-column flex-sm-row justify-content-center align-items-start text-white m-sm-auto">
+          <li class="my-2 my-sm-0 mx-lg-2">{{ $t('footer.footer_menu.about_us') }}</li>
+          <li class="my-2 my-sm-0 mx-sm-2">{{ $t('footer.footer_menu.toc') }}</li>
+          <li class="my-2 my-sm-0 mx-sm-2">{{ $t('footer.footer_menu.privacy_policy') }}</li>
+          <li class="my-2 my-sm-0 mx-sm-2">{{ $t('footer.footer_menu.get_in_touch') }}</li>
+        </ul>
       </div>
 
-      <ul class="text-white m-auto">
-        <li class="mx-2">{{ $t('footer.footer_menu.about_us') }}</li>
-        <li class="mx-2">{{ $t('footer.footer_menu.toc') }}</li>
-        <li class="mx-2">{{ $t('footer.footer_menu.privacy_policy') }}</li>
-        <li class="mx-2">{{ $t('footer.footer_menu.get_in_touch') }}</li>
-      </ul>
-
-      <div class="right-container">
+      <div class="right-container align-self-start align-self-lg-center">
         <button class="fa fa-facebook facebook social-btn"></button>
         <button class="fa fa-twitter twitter social-btn"></button>
       </div>
@@ -34,16 +36,20 @@ export default {
 <style lang="scss" scoped>
   .vfooter {
     max-width: 1440px;
-    height: 150px;
-    margin-bottom: 24px;
-    padding: 0 2.25rem;
-    @media (max-width: 767.98px) {
-      padding: 0 1rem;
+    padding: 50px 36px;
+    @media (max-width: 575.98px) {
+      padding: 32px 36px;
     }
 
     .left-container {
-      @media (max-width: 767.98px) {
-        flex: 0 0 140px;
+      @media (min-width: 992px) {
+        width: 80%;
+      }
+
+      > div {
+        @media (max-width: 991.98px) {
+          margin-bottom: 40px;
+        }
       }
 
       .logo-text {
@@ -65,10 +71,6 @@ export default {
     }
 
     ul {
-      flex: 1;
-      display: flex !important;
-      justify-content: center;
-      flex-wrap: wrap;
       list-style: none;
       font-size: 14px;
       line-height: 20px;
@@ -77,12 +79,13 @@ export default {
     }
 
     .right-container {
-      flex: 0 0 80px;
 
       .social-btn {
         width: 30px;
         height: 30px;
         border-radius: 50%;
+        background: white;
+        font-size: 20px;
       }
     }
   }

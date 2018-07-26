@@ -83,19 +83,25 @@
       top: -52px;
 
       .card-header {
-        padding: 34px 30px;
         background: white;
         border-bottom: none;
+        padding: 34px 30px;
+        @media (max-width: 480px) {
+          padding: 20px 16px;
+        }
 
         .card-header-pills {
           outline: none;
 
           .select-tab-item {
             display: none;
-            i {
-              height: 14px;
-              font-size: 20px;
+            width: 40px;
+            margin-top: 6px;
+            a {
+              font-size: 24px;
+              line-height: 24px;
               opacity: 0.5;
+              height: 14px;
             }
           }
 
@@ -103,7 +109,6 @@
             .select-tab-item {
               display: flex;
               flex-direction: column;
-              margin-top: 4px;
             }
             a[aria-selected="false"] {
               display: none;
@@ -144,7 +149,7 @@
               margin-top: 42px;
 
               @media (max-width: 576px) {
-                margin-top: 82px;
+                margin-top: 104px;
               }
             }
 
@@ -188,7 +193,7 @@
             background: white;
 
             @media (max-width: 767.98px) {
-              padding: 68px 0 10px 16px;
+              padding: 94px 0 10px 16px;
             }
 
             @media (min-width: 768px) {
@@ -212,15 +217,15 @@
               margin: 0px 10px;
               padding: 0 20px;
               height: 46px;
-              @media (max-width: 575.98px) {
+              @media (max-width: 767.98px) {
                 height: 110px;
-                margin: 0px 16px;
+                margin: 0px 20px;
                 .label-text {
                   font-size: 12px;
                 }
               }
 
-              @media (min-width: 576px) and (max-width: 991.98px) {
+              @media (min-width: 768px) and (max-width: 991.98px) {
                 height: 72px;
                 .label-text {
                   margin-bottom: 12px;

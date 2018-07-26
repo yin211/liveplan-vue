@@ -155,9 +155,9 @@
               </div>
             </b-tab>
             <template slot="tabs">
-              <li class="nav-item select-tab-item">
-                <i class="flaticon solid up h-3" @click="tabIndex = 0"></i>
-                <i class="flaticon solid down h-3" @click="tabIndex = 1"></i>
+              <li class="nav-item select-tab-item" @click="tabIndex = tabIndex ? 0 : 1">
+                <a class="flaticon solid up h-3"></a>
+                <a class="flaticon solid down h-3"></a>
               </li>
             </template>
           </b-tabs>

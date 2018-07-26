@@ -15,9 +15,9 @@
         </ul>
       </div>
 
-      <div class="right-container align-self-start align-self-lg-center">
-        <button class="fa fa-facebook facebook social-btn"></button>
-        <button class="fa fa-twitter twitter social-btn"></button>
+      <div class="right-container d-flex align-self-start align-self-lg-center">
+        <a class="mr-2"><i class="fa fa-facebook facebook social-icon d-flex align-items-center justify-content-center"></i></a>
+        <a><i class="fa fa-twitter twitter social-icon d-flex align-items-center justify-content-center"></i></a>
       </div>
   </div>
 </template>
@@ -79,8 +79,7 @@ export default {
     }
 
     .right-container {
-
-      .social-btn {
+      .social-icon {
         width: 30px;
         height: 30px;
         border-radius: 50%;

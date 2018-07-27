@@ -18,13 +18,12 @@
           </svg>
         </div>
 
-        <a href="javascript:void(0);" class="ic menu" v-if="isAuthenticated">
+        <a href="javascript:void(0);" class="ic menu" v-bind:class="{ 'is-expand': isNavExpanded }" v-if="isAuthenticated" @click="toggle_nav()">
           <span class="line"></span>
           <span class="line"></span>
           <span class="line"></span>
         </a>
-        <a href="javascript:void(0);" class="ic close" v-if="isAuthenticated"></a>
-        <ul class="main-nav my-auto" v-if="isAuthenticated">
+        <ul class="main-nav my-auto" v-bind:class="{ 'is-expand': isNavExpanded }" v-if="isAuthenticated">
           <li>
             <a href="/overview"><span>OVERVIEW</span></a>
           </li>
@@ -92,7 +91,8 @@ export default {
     return {
       plans: [],
       selectedPlan: null,
-      isAssumptionActive: this.$router.history.current.path.indexOf('/assumptions/') === 0
+      isAssumptionActive: this.$router.history.current.path.indexOf('/assumptions/') === 0,
+      isNavExpanded: false
     }
   },
   async mounted () {
@@ -132,6 +132,9 @@ export default {
     },
     selectPlan (plan) {
       this.selectedPlan = plan
+    },
+    toggle_nav () {
+      this.isNavExpanded = !this.isNavExpanded
     }
 
   }
@@ -146,6 +149,12 @@ export default {
 
       @media (max-width: 575.98px) {
         height: 54px;
+
+        .ic.menu {
+          top: 16px;
+          position: absolute;
+          right: 25px;
+        }
       }
       max-width: 1400px;
       padding: .5rem 1rem;
@@ -277,12 +286,10 @@ export default {
     ul.main-nav {
       list-style-type: none;
       padding: 0px;
-      font-size: 0px;
       flex: 1;
     }
 
     ul.main-nav > li {
-      display: inline-block;
       padding: 0 16px;
     }
 
@@ -316,30 +323,18 @@ export default {
     }
 
     .ic {
-      position: fixed;
       cursor: pointer;
-      display: inline-block;
-      right: 25px;
       width: 32px;
       height: 24px;
       text-align: center;
-      top:0px;
-      outline: none;
-    }
-
-    .ic.close {
-      opacity: 0;
-      font-size: 0px;
-      font-weight: 300;
-      color: #fff;
-      top:8px;
-      height:40px;
-      display: block;
+      top: 0px;
       outline: none;
     }
 
     /* Menu Icons for Devices*/
-    .ic.menu { top:25px; z-index : 20; }
+    .ic.menu {
+      z-index : 20;
+    }
 
     .ic.menu .line {
       height: 4px;
@@ -347,13 +342,12 @@ export default {
       display: block;
       margin-bottom: 6px;
     }
-    .ic.menu .line-last-child { margin-bottom: 0px;  }
 
     .sub-menu-head { margin: 10px 0; }
     .banners-area { margin-top: 20px; padding-top: 15px; }
 
 
-    @media only screen and (max-width:768px) {
+    @media only screen and (max-width:1199.98px) {
       .sub-menu-head { color:orange; }
       .ic.menu { display: block; }
       header .ic.menu .line { background-color: #fff; }
@@ -369,16 +363,15 @@ export default {
         -ms-transform-origin: center center;
         transform-origin: center center;
       }
-      .ic.menu:focus .line { background-color: #fff !important; }
 
-      .ic.menu:focus .line:nth-child(1) {
+      .ic.menu.is-expand .line:nth-child(1) {
         -webkit-transform: rotate(45deg);
         -moz-transform: rotate(45deg);
         -ms-transform: rotate(45deg);
         transform: rotate(45deg);
       }
 
-      .ic.menu:focus .line:nth-child(2) {
+      .ic.menu.is-expand .line:nth-child(2) {
         -webkit-transform: rotate(-45deg);
         -moz-transform: rotate(-45deg);
         -ms-transform: rotate(-45deg);
@@ -386,22 +379,12 @@ export default {
         margin-top: -10px;
       }
 
-      .ic.menu:focus .line:nth-child(3) {
+      .ic.menu.is-expand .line:nth-child(3) {
         transform: translateY(15px);
         opacity: 0;
       }
 
       .ic.menu:focus{ outline: none; }
-      .ic.menu:focus ~ .ic.close { opacity: 1; z-index : 21;  outline: none;  }
-
-      /*
-
-      .ic.menu:focus ~ .ic.close { opacity: 1.0; z-index : 21;  }
-      .ic.close:focus { opacity: 0; }
-      */
-      .ic.menu:hover,
-      .ic.menu:focus { opacity: 1; }
-
 
       nav { background-color: transparent; }
 
@@ -417,7 +400,7 @@ export default {
         height: 100%;
         overflow: auto;
         /*CSS animation applied : Slide from Right*/
-      -webkit-transition-property: background, width;
+        -webkit-transition-property: background, width;
         -moz-transition-property: background, width;
         -o-transition-property: background, width;
         transition-property: background, width;
@@ -427,7 +410,12 @@ export default {
         transition-duration: 0.6s;
       }
 
-      .ic.menu:focus ~ .main-nav { width: 100vw; background-color:#535671; }
+      .main-nav.is-expand {
+        width: 100vw;
+        & > * {
+          opacity: 1;
+        }
+      }
 
       ul.main-nav > * {
         -webkit-transition-property: opacity;
@@ -440,13 +428,10 @@ export default {
         transition-duration: 0.4s;
         opacity: 0;
       }
-      .ic.menu:focus ~ .main-nav > * {opacity: 1;}
 
-      // ul.main-nav > li > a:after {display: none;}
       ul.main-nav > li:first-child { border-radius: 0px; }
       ul.main-nav > li {
         display: block;
-        // border-bottom: 1px solid #444;
       }
 
       ul.main-nav > li > a { font-weight: 600; }
@@ -455,7 +440,7 @@ export default {
       .sub-menu-head { font-size: 16px;}
       ul.main-nav > li:hover { background-color: transparent;  }
       ul.main-nav > li:hover > a {color: #fff; text-decoration: none; font-weight: 600;}
-    .ic.menu:focus ~ ul.main-nav > li > div.sub-menu-block {
+      .ic.menu:focus ~ ul.main-nav > li > div.sub-menu-block {
         border-left: 0px solid #ccc;
         border-right: 0px solid #ccc;
         border-bottom: 0px solid #ccc;
@@ -470,7 +455,7 @@ export default {
       .banners-area { border-top: 1px solid #444; }
     }
 
-    @media only screen and (min-width:769px) {
+    @media only screen and (min-width:1200px) {
       .ic.menu { display: none; }
       /* Main Menu for Desktop Devices  */
       ul.main-nav {
@@ -482,32 +467,32 @@ export default {
 
       /* Sub Menu */
       ul.main-nav > li > div.sub-menu-block {
-      visibility: hidden;
-      background-color: #f9f9f9;
-      position: absolute;
-      margin-top: 0px;
-      width: 100%;
-      color: #333;
-      left: 0;
-      box-sizing: border-box;
-      z-index : 3;
-      font-size: 16px;
-      border-left: 1px solid #ccc;
-      border-right: 1px solid #ccc;
-      border-bottom: 1px solid #ccc;
-      opacity: 0;
+        visibility: hidden;
+        background-color: #f9f9f9;
+        position: absolute;
+        margin-top: 0px;
+        width: 100%;
+        color: #333;
+        left: 0;
+        box-sizing: border-box;
+        z-index : 3;
+        font-size: 16px;
+        border-left: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+        opacity: 0;
 
-      /*CSS animation applied for sub menu : Slide from Top */
-      -webkit-transition: all 0.4s ease 0s;
-      -o-transition: all 0.4s ease 0s;
-      transition: all 0.4s ease 0s;
-      -webkit-transform: rotateX(90deg);
-      -moz-transform: rotateX(90deg);
-      -ms-transform: rotateX(90deg);
-      transform: rotateX(90deg);
-      -webkit-transform-origin: top center;
-      -ms-transform-origin: top center;
-      transform-origin: top center;
+        /*CSS animation applied for sub menu : Slide from Top */
+        -webkit-transition: all 0.4s ease 0s;
+        -o-transition: all 0.4s ease 0s;
+        transition: all 0.4s ease 0s;
+        -webkit-transform: rotateX(90deg);
+        -moz-transform: rotateX(90deg);
+        -ms-transform: rotateX(90deg);
+        transform: rotateX(90deg);
+        -webkit-transform-origin: top center;
+        -ms-transform-origin: top center;
+        transform-origin: top center;
 
       }
 
@@ -538,19 +523,6 @@ export default {
       }
 
       .sub-menu-head { font-size: 20px;}
-
-      // /* List Separator: Inner Border */
-      // ul.main-nav > li > a:after {
-      //   content: '';
-      //   width: 1px;
-      //   height: 62px;
-      //   position: absolute;
-      //   right:0px;
-      //   top: 0px;
-      //   z-index : 2;
-      // }
-      // header ul.main-nav > li > a:after { background-color: #777; }
-      // header.light ul.main-nav > li > a:after { background-color: #999; }
 
       /* Drop Down/Up Arrow for Mega Menu */
       ul.main-nav > li > a.mega-menu > span { display: block; vertical-align: middle; }

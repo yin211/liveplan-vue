@@ -27,12 +27,21 @@
           <li>
             <a href="/overview"><span>OVERVIEW</span></a>
           </li>
-          <b-nav-item-dropdown :text="$t('header.header_menu.assumptions')" right v-bind:class="{ active: isAssumptionActive }">
+          <b-nav-item-dropdown :text="$t('header.header_menu.assumptions')" right v-bind:class="{ active: isAssumptionActive }" class="left-link">
             <b-dropdown-item href="#">INCOMES</b-dropdown-item>
             <b-dropdown-item to="/assumptions/expenses">EXPENSES</b-dropdown-item>
             <b-dropdown-item href="#">ASSETS</b-dropdown-item>
             <b-dropdown-item href="#">DEBTS</b-dropdown-item>
           </b-nav-item-dropdown>
+          <li class="sub-left-link">
+            <a href="#"><span>ASSUMPTIONS</span></a>
+            <ul>
+              <li><a href="#">Incomes</a></li>
+              <li><a href="/assumptions/expenses">Expenses</a></li>
+              <li><a href="#">Assets</a></li>
+              <li><a href="#">Debts</a></li>
+            </ul>
+          </li>
           <li>
             <a href="/timeline"><span>TIMELINE</span></a>
           </li>
@@ -43,28 +52,14 @@
             <a href="/tools-and-insights"><span>TOOLS / INSIGHTS</span></a>
           </li>
 
-          <!-- <li>
-            <a class="mega-menu"><span>Products</span></a>
-            <div class="sub-menu-block">
-              <div class="row">
-                <div class="col-md-4 col-lg-4 col-sm-4">
-                  <h2 class="sub-menu-head">Clothing</h2>
-                  <ul class="sub-menu-lists">
-                    <li><a>Kids</a></li>
-                    <li><a>New Born</a></li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </li> -->
-          <li class="ml-auto">
+          <li class="ml-auto plan-selector right-link">
             <b-dropdown id="ddown1" right size="sm" :text="selectedPlanText">
               <b-dropdown-item-button v-for="plan in plans" :key="plan.id" @click="selectPlan(plan)" class="d-flex align-items-center pl-3" v-bind:class="{active: selectedPlan && plan.id === selectedPlan.id}">
                 <i class="flaticon stroke checkmark"></i>{{plan.description}}
               </b-dropdown-item-button>
             </b-dropdown>
           </li>
-          <li class="p-0">
+          <li class="p-0 right-link">
             <b-nav-item-dropdown right no-caret>
               <template slot="button-content">
                 <div class="d-flex align-items-center">
@@ -73,6 +68,9 @@
               </template>
               <b-dropdown-item @click="logout">Logout</b-dropdown-item>
             </b-nav-item-dropdown>
+          </li>
+          <li class="sub-right-link">
+            <a @click="logout"><span>Log Out</span></a>
           </li>
         </ul>
       </nav>
@@ -178,7 +176,7 @@ export default {
         }
       }
 
-      .b-nav-dropdown {
+      .left-link.b-nav-dropdown {
           [aria-expanded="true"].nav-link::after {
             border-top: 0 !important;
             border-bottom: .5em solid !important;
@@ -230,7 +228,8 @@ export default {
           }
       }
 
-      .b-dropdown {
+
+      .right-link {
         .dropdown-toggle {
           padding: 8px 8px 8px 16px;
           line-height: 24px;
@@ -307,21 +306,6 @@ export default {
       text-decoration: none;
     }
 
-    ul.main-nav > li ul.sub-menu-lists {
-      margin: 0px;
-      padding: 0px;
-      list-style-type : none;
-      display:block;
-    }
-
-    ul.main-nav > li ul.sub-menu-lists > li {
-      padding: 2px 0;
-    }
-
-    ul.main-nav > li ul.sub-menu-lists > li > a {
-      font-size: 14px;
-    }
-
     .ic {
       cursor: pointer;
       width: 32px;
@@ -343,12 +327,7 @@ export default {
       margin-bottom: 6px;
     }
 
-    .sub-menu-head { margin: 10px 0; }
-    .banners-area { margin-top: 20px; padding-top: 15px; }
-
-
     @media only screen and (max-width:1199.98px) {
-      .sub-menu-head { color:orange; }
       .ic.menu { display: block; }
       header .ic.menu .line { background-color: #fff; }
       .ic.menu .line {
@@ -362,6 +341,22 @@ export default {
         -webkit-transform-origin: center center;
         -ms-transform-origin: center center;
         transform-origin: center center;
+      }
+
+      @media (min-width: 576px) {
+        .ic.menu.is-expand {
+          position: fixed;
+          left: 38px;
+          top: 50px;
+        }
+      }
+
+      @media (max-width: 575.98px) {
+        .ic.menu.is-expand {
+          position: fixed;
+          right: 30px;
+          top: 30px
+        }
       }
 
       .ic.menu.is-expand .line:nth-child(1) {
@@ -388,7 +383,7 @@ export default {
 
       nav { background-color: transparent; }
 
-    /* Main Menu for Handheld Devices  */
+      /* Main Menu for Handheld Devices  */
       ul.main-nav {
         z-index:2;
         padding: 50px 0;
@@ -412,6 +407,26 @@ export default {
 
       .main-nav.is-expand {
         width: 100vw;
+        text-align: left;
+        @media (min-width: 576px) {
+          padding-left: 100px;
+          padding-top: 200px;
+
+          .plan-selector {
+            display: none;
+          }
+        }
+
+        @media (max-width: 575.98px) {
+          padding-left: 8px;
+          padding-top: 116px;
+
+          .plan-selector {
+            position: fixed;
+            top: 12px;
+            display: block !important;
+          }
+        }
         & > * {
           opacity: 1;
         }
@@ -432,27 +447,57 @@ export default {
       ul.main-nav > li:first-child { border-radius: 0px; }
       ul.main-nav > li {
         display: block;
+        margin-bottom: 38px;
+        a {
+          font-size: 24px;
+          line-height: 32px;
+          color: white;
+          font-weight: 400;
+          letter-spacing: 0
+        }
+        @media (max-width: 575.98px) {
+          margin-bottom: 18px;
+
+          a {
+            font-size: 20px;
+          }
+        }
       }
 
-      ul.main-nav > li > a { font-weight: 600; }
+      .left-link {
+        display: none !important;
+      }
+      .right-link {
+        display: none !important;
+      }
 
-      ul.main-nav > li ul.sub-menu-lists > li a { color: #eee; font-size: 14px; }
-      .sub-menu-head { font-size: 16px;}
+      .sub-left-link {
+        & > a {
+          opacity: .39;
+          font-weight: 500;
+        }
+        ul {
+          display: flex;
+          list-style-type: none;
+          padding-left: 20px;
+          padding-bottom: 10px;
+          li {
+            margin-right: 14px;
+          }
+          @media (max-width: 575.98px) {
+            display: block;
+          }
+        }
+      }
+
+      .sub-right-link {
+        a {
+          font-size: 18px !important;
+        }
+      }
+
       ul.main-nav > li:hover { background-color: transparent;  }
       ul.main-nav > li:hover > a {color: #fff; text-decoration: none; font-weight: 600;}
-      .ic.menu:focus ~ ul.main-nav > li > div.sub-menu-block {
-        border-left: 0px solid #ccc;
-        border-right: 0px solid #ccc;
-        border-bottom: 0px solid #ccc;
-        position: relative;
-        visibility: visible;
-        opacity: 1.0;
-      }
-
-      .sub-menu-block { padding: 0 30px; }
-      .banners-area { padding-bottom: 0px;  }
-      .banners-area div { margin-bottom: 15px;  }
-      .banners-area { border-top: 1px solid #444; }
     }
 
     @media only screen and (min-width:1200px) {
@@ -463,89 +508,15 @@ export default {
         position: relative;
         align-items: center
       }
-      .sub-menu-block { padding: 15px; }
 
-      /* Sub Menu */
-      ul.main-nav > li > div.sub-menu-block {
-        visibility: hidden;
-        background-color: #f9f9f9;
-        position: absolute;
-        margin-top: 0px;
-        width: 100%;
-        color: #333;
-        left: 0;
-        box-sizing: border-box;
-        z-index : 3;
-        font-size: 16px;
-        border-left: 1px solid #ccc;
-        border-right: 1px solid #ccc;
-        border-bottom: 1px solid #ccc;
-        opacity: 0;
-
-        /*CSS animation applied for sub menu : Slide from Top */
-        -webkit-transition: all 0.4s ease 0s;
-        -o-transition: all 0.4s ease 0s;
-        transition: all 0.4s ease 0s;
-        -webkit-transform: rotateX(90deg);
-        -moz-transform: rotateX(90deg);
-        -ms-transform: rotateX(90deg);
-        transform: rotateX(90deg);
-        -webkit-transform-origin: top center;
-        -ms-transform-origin: top center;
-        transform-origin: top center;
-
+      .sub-left-link {
+        display: none !important;
       }
 
-      ul.main-nav > li:hover > div.sub-menu-block{
-        background-color: #f9f9f9;
-        visibility: visible;
-        opacity: 1;
-        -webkit-transform: rotateX(0deg);
-        -moz-transform: rotateX(0deg);
-        -ms-transform: rotateX(0deg);
-        transform: rotateX(0deg);
+      .sub-right-link {
+        display: none !important;
       }
 
-      ul.main-nav > li > div.sub-menu-block > * {
-        -webkit-transition-property: opacity;
-        -moz-transition-property: opacity;
-        -o-transition-property: opacity;
-        transition-property: opacity;
-        -webkit-transition-duration: 0.4s;
-          -moz-transition-duration: 0.4s;
-          -o-transition-duration: 0.4s;
-        transition-duration: 0.4s;
-        opacity: 0;
-      }
-
-      ul.main-nav > li:hover > div.sub-menu-block > * {
-        opacity: 1;
-      }
-
-      .sub-menu-head { font-size: 20px;}
-
-      /* Drop Down/Up Arrow for Mega Menu */
-      ul.main-nav > li > a.mega-menu > span { display: block; vertical-align: middle; }
-      ul.main-nav > li > a.mega-menu > span:after {
-        width: 0;
-        height: 0;
-        border-left: 5px solid transparent;
-        border-right: 5px solid transparent;
-        border-top: 5px solid #fff;
-        content: '';
-        background-color: transparent;
-        display: inline-block;
-        margin-left: 10px;
-        vertical-align: middle;
-      }
-
-      ul.main-nav > li:hover > a.mega-menu span:after{
-        border-left: 5px solid transparent;
-        border-right: 5px solid transparent;
-        border-top: 0px solid transparent;
-        border-bottom: 5px solid #666;
-      }
-      .banners-area { border-top: 1px solid #ccc; }
     }
   }
 </style>

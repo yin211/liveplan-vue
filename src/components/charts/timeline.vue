@@ -56,7 +56,7 @@ export default {
       darkColor: '#A5ADBA',
       colors: ['#00DEFB', '#EE00F7', '#FEC600'],
       sliderHandlerRadius: 12,
-      capacityPercentage: 0.2,
+      opacityPercentage: 0.2,
       domain: [],
       zoomArea: [],
       tooltipObj: {
@@ -190,7 +190,7 @@ export default {
     },
     calcOpacity (d, i) {
       const length = this.domain[this.domain.length - 1] - this.domain[0]
-      const l = Math.round(length * this.capacityPercentage)
+      const l = Math.round(length * this.opacityPercentage)
       const h = length - l
 
       let sc = this.$d3.scaleLinear()
@@ -314,6 +314,70 @@ export default {
       .attr('stroke-width', 1)
     },
     drawRects () {
+      let svg = this.$d3.select(this.$el).select('svg')
+
+      this.dataArray.forEach(function (d) {
+        let name = d.name.replace(/ /g, '-').toLowerCase()
+        let rectWidth
+        let rectX = d.start_year < this.domain[0] ? 0 : this.xScale(d.start_year)
+        if (d.end_year < this.domain[0]) {
+          rectWidth = 0
+        } else if (d.start_year < this.domain[0]) {
+          rectWidth = this.xScale(d.end_year) - 0
+        } else if (d.end_year > this.domain[this.domain.length - 1]) {
+          rectWidth = this.xScale(this.domain[this.domain.length - 1]) - this.xScale(d.start_year) + this.xScale.bandwidth()
+        } else {
+          rectWidth = this.xScale(d.end_year) - this.xScale(d.start_year)
+        }
+
+        let firstStopX = Math.round(this.chartWidth * this.opacityPercentage)
+        let lastStopX = this.chartWidth - firstStopX
+        let stops = []
+        let opacityCase = 0
+        if (rectX < firstStopX && rectX + rectWidth > lastStopX) {
+          let percent = ((firstStopX - rectX) / rectWidth) * 100
+          let percent2 = ((lastStopX - rectX) / rectWidth) * 100
+          stops = [0, percent, percent2, 100]
+          opacityCase = 1
+        } else if (rectX < firstStopX) {
+          let percent = ((firstStopX - rectX) / rectWidth) * 100
+          stops = [0, percent, 100]
+          opacityCase = 2
+        } else {
+          let percent = ((lastStopX - rectX) / rectWidth) * 100
+          stops = [0, percent, 100]
+          opacityCase = 3
+        }
+        let linearGradient = patternify({
+          tag: 'linearGradient',
+          selector: `linear-gradient-${name}`,
+          container: svg
+        })
+        .attr('id', `opacity-gradient-${name}`)
+        .attr('x1', '0%')
+        .attr('x2', '100%')
+        .attr('y1', '0%')
+        .attr('y2', '0%')
+
+        patternify({
+          tag: 'stop',
+          selector: `gradient-stop-${name}`,
+          container: linearGradient,
+          data: stops
+        })
+        .attr('offset', d => d + '%')
+        .attr('stop-color', this.colorScale(d.name))
+        .attr('stop-opacity', (d, i) => {
+          if (opacityCase === 1) {
+            return d === 0 || d === 100 ? 0 : 1
+          } else if (opacityCase === 2) {
+            return d === 0 ? 0 : 1
+          } else {
+            return d === 100 ? 0 : 1
+          }
+        })
+      }.bind(this))
+
       patternify({
         container: this.chart,
         selector: 'timeline-rect',
@@ -335,7 +399,7 @@ export default {
         return this.xScale(d.end_year) - this.xScale(d.start_year)
       })
       .attr('height', this.yScale.bandwidth())
-      .attr('fill', (d, i) => this.colorScale(d.name))
+      .attr('fill', d => `url(#opacity-gradient-${d.name.replace(/ /g, '-').toLowerCase()})`)
 
       patternify({
         tag: 'rect',

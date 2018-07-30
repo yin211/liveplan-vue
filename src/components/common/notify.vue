@@ -48,6 +48,10 @@ export default {
     color: #fff;
     text-align: left;
 
+    @media (max-width: 575.98px) {
+      width: 270px !important;
+    }
+
     &.is-success {
       background-color: #23d160;
     }

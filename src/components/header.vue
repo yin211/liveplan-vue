@@ -18,7 +18,7 @@
           </svg>
         </div>
 
-        <a href="javascript:void(0);" class="ic menu" v-bind:class="{ 'is-expand': isNavExpanded }" v-if="isAuthenticated" @click="toggle_nav()">
+        <a href="javascript:void(0);" class="collapse-menu" v-bind:class="{ 'is-expand': isNavExpanded }" v-if="isAuthenticated" @click="toggle_nav()">
           <span class="line"></span>
           <span class="line"></span>
           <span class="line"></span>
@@ -48,18 +48,18 @@
           <li>
             <a href="/whatif"><span>WHAT IF?</span></a>
           </li>
-          <li>
+          <li class="tools-insights-link">
             <a href="/tools-and-insights"><span>TOOLS / INSIGHTS</span></a>
           </li>
 
           <li class="ml-auto plan-selector right-link">
             <b-dropdown id="ddown1" right size="sm" :text="selectedPlanText">
-              <b-dropdown-item-button v-for="plan in plans" :key="plan.id" @click="selectPlan(plan)" class="d-flex align-items-center pl-2" v-bind:class="{active: selectedPlan && plan.id === selectedPlan.id}">
+              <b-dropdown-item-button v-for="plan in plans" :key="plan.id" @click="selectPlan(plan)" class="d-flex align-items-center pl-2 py-0" v-bind:class="{active: selectedPlan && plan.id === selectedPlan.id}">
                 <i class="flaticon stroke checkmark"></i>{{plan.description}}
               </b-dropdown-item-button>
             </b-dropdown>
           </li>
-          <li class="p-0 right-link">
+          <li class="p-0 right-link logout-dropdown">
             <b-nav-item-dropdown right no-caret>
               <template slot="button-content">
                 <div class="d-flex align-items-center">
@@ -68,6 +68,12 @@
               </template>
               <b-dropdown-item @click="logout">Logout</b-dropdown-item>
             </b-nav-item-dropdown>
+          </li>
+          <li class="sub-right-link profile-settings-link">
+            <a href="#"><span>Profile Settings</span></a>
+          </li>
+          <li class="sub-right-link">
+            <a href="#"><span>Plan & Subscription</span></a>
           </li>
           <li class="sub-right-link">
             <a @click="logout"><span>Log Out</span></a>
@@ -144,18 +150,19 @@ export default {
     nav {
       position: relative;
       height: 75px;
+      max-width: 1400px;
+      padding: .5rem 1rem;
 
       @media (max-width: 575.98px) {
         height: 54px;
 
-        .ic.menu {
+        .collapse-menu {
           top: 18px;
           position: absolute;
           right: 25px;
         }
       }
-      max-width: 1400px;
-      padding: .5rem 1rem;
+
 
       .livsplan-navbar-brand {
         min-width: 170px;
@@ -169,6 +176,10 @@ export default {
         padding: 0;
         flex: 0;
         margin-right: 34px;
+        @media (max-width: 1199.98px) {
+          margin-right: 20px;
+        }
+
         @media (max-width: 576px) {
           min-width: 140px;
           height: 80px;
@@ -287,17 +298,17 @@ export default {
       }
     }
 
-    ul.main-nav {
+    .main-nav {
       list-style-type: none;
       padding: 0px;
       flex: 1;
     }
 
-    ul.main-nav > li {
+    .main-nav > li {
       padding: 0 16px;
     }
 
-    ul.main-nav > li > a {
+    .main-nav > li > a {
       color: #ACAEBA;
       font-size: 13px;
       font-weight: 500;
@@ -305,27 +316,23 @@ export default {
       line-height: 24px;
     }
 
-    ul.main-nav > li:hover > a {
+    .main-nav > li:hover > a {
       color: white;
       cursor: pointer;
       text-decoration: none;
     }
 
-    .ic {
+    .collapse-menu {
       cursor: pointer;
       width: 30px;
       height: 18px;
       text-align: center;
       top: 0px;
       outline: none;
-    }
-
-    /* Menu Icons for Devices*/
-    .ic.menu {
       z-index : 20;
     }
 
-    .ic.menu .line {
+    .collapse-menu .line {
       height: 2px;
       width: 100%;
       display: block;
@@ -333,9 +340,9 @@ export default {
     }
 
     @media only screen and (max-width:1199.98px) {
-      .ic.menu { display: block; }
-      header .ic.menu .line { background-color: #fff; }
-      .ic.menu .line {
+      .collapse-menu { display: block; }
+      .collapse-menu .line {
+        background-color: #fff;
         -webkit-transition: all 0.4s ease 0s;
         -o-transition: all 0.4s ease 0s;
         transition: all 0.4s ease 0s;
@@ -349,7 +356,7 @@ export default {
       }
 
       @media (min-width: 576px) {
-        .ic.menu.is-expand {
+        .collapse-menu.is-expand {
           position: fixed;
           left: 38px;
           top: 50px;
@@ -357,21 +364,21 @@ export default {
       }
 
       @media (max-width: 575.98px) {
-        .ic.menu.is-expand {
+        .collapse-menu.is-expand {
           position: fixed;
           right: 30px;
           top: 30px
         }
       }
 
-      .ic.menu.is-expand .line:nth-child(1) {
+      .collapse-menu.is-expand .line:nth-child(1) {
         -webkit-transform: rotate(45deg);
         -moz-transform: rotate(45deg);
         -ms-transform: rotate(45deg);
         transform: rotate(45deg);
       }
 
-      .ic.menu.is-expand .line:nth-child(2) {
+      .collapse-menu.is-expand .line:nth-child(2) {
         -webkit-transform: rotate(-45deg);
         -moz-transform: rotate(-45deg);
         -ms-transform: rotate(-45deg);
@@ -379,17 +386,17 @@ export default {
         margin-top: -8px;
       }
 
-      .ic.menu.is-expand .line:nth-child(3) {
+      .collapse-menu.is-expand .line:nth-child(3) {
         transform: translateY(15px);
         opacity: 0;
       }
 
-      .ic.menu:focus{ outline: none; }
+      .collapse-menu:focus{ outline: none; }
 
       nav { background-color: transparent; }
 
       /* Main Menu for Handheld Devices  */
-      ul.main-nav {
+      .main-nav {
         z-index:2;
         padding: 50px 0;
         position: fixed;
@@ -414,8 +421,7 @@ export default {
         width: 100vw;
         text-align: left;
         @media (min-width: 576px) {
-          padding-left: 100px;
-          padding-top: 200px;
+          padding: 200px 100px 100px;
 
           .plan-selector {
             display: none;
@@ -423,11 +429,10 @@ export default {
         }
 
         @media (max-width: 575.98px) {
-          padding-left: 8px;
-          padding-top: 116px;
+          padding: 116px 24px 24px;
 
           .plan-selector {
-            position: fixed;
+            position: absolute;
             top: 12px;
             display: block !important;
           }
@@ -437,7 +442,7 @@ export default {
         }
       }
 
-      ul.main-nav > * {
+      .main-nav > * {
         -webkit-transition-property: opacity;
         -moz-transition-property: opacity;
         -o-transition-property: opacity;
@@ -449,10 +454,11 @@ export default {
         opacity: 0;
       }
 
-      ul.main-nav > li:first-child { border-radius: 0px; }
-      ul.main-nav > li {
+      .main-nav > li:first-child { border-radius: 0px; }
+      .main-nav > li {
         display: block;
         margin-bottom: 38px;
+        padding: 0;
         a {
           font-size: 24px;
           line-height: 32px;
@@ -466,6 +472,14 @@ export default {
           a {
             font-size: 20px;
           }
+        }
+      }
+
+      .tools-insights-link {
+        margin-bottom: 52px !important;
+
+        @media (min-width: 576px) {
+          margin-bottom: 152px !important;
         }
       }
 
@@ -485,7 +499,7 @@ export default {
           display: flex;
           list-style-type: none;
           padding-left: 20px;
-          padding-bottom: 10px;
+          padding-top: 8px;
           li {
             margin-right: 14px;
           }
@@ -499,16 +513,22 @@ export default {
         a {
           font-size: 18px !important;
         }
-      }
 
-      ul.main-nav > li:hover { background-color: transparent;  }
-      ul.main-nav > li:hover > a {color: #fff; text-decoration: none; font-weight: 600;}
+        &.profile-settings-link {
+          padding-top: 44px;
+          border-top: 1px dashed #979797;
+        }
+
+        @media (min-width: 576px) {
+          margin-bottom: 8px !important;
+        }
+      }
     }
 
     @media only screen and (min-width:1200px) {
-      .ic.menu { display: none; }
+      .collapse-menu { display: none; }
       /* Main Menu for Desktop Devices  */
-      ul.main-nav {
+      .main-nav {
         display: flex;
         position: relative;
         align-items: center
@@ -520,6 +540,15 @@ export default {
 
       .sub-right-link {
         display: none !important;
+      }
+
+      .plan-selector {
+        padding-right: 28px !important;
+        border-right: 1px solid rgba(255, 255, 255, .13);
+      }
+
+      .logout-dropdown {
+        margin-left: 12px;
       }
 
     }

@@ -182,8 +182,8 @@
                   </b-col>
 
                   <b-col cols="6" md="4" xl="2" class="d-flex flex-column justify-content-center py-xl-0 py-2">
-                    <span class="text-gray">Typ / Subtype</span>
-                    <span class="text-regular font-weigth-medium" v-if="expense.expense_type">{{expense.expense_type.name}} :: {{expense.expense_subtype.name}}</span>
+                    <span class="text-gray">Type / Subtype</span>
+                    <span class="text-regular font-weigth-medium" v-if="expense.expense_type">{{expense.expense_subtype.name}}</span>
                   </b-col>
 
                   <b-col cols="6" md="4" xl="2" class="d-flex flex-column justify-content-center py-xl-0 py-2">

@@ -2,7 +2,7 @@
   <div class="container-fluid vheader bg-dark">
     <header>
       <nav role="navigation" class="d-flex align-items-center mx-auto">
-        <div href="#" class="depth-1 livsplan-navbar-brand">
+        <div href="#" class="depth-3 livsplan-navbar-brand">
           <svg width="77px" height="18px" viewBox="0 0 77 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
             <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
             <title>LOGO</title>
@@ -54,7 +54,7 @@
 
           <li class="ml-auto plan-selector right-link">
             <b-dropdown id="ddown1" right size="sm" :text="selectedPlanText">
-              <b-dropdown-item-button v-for="plan in plans" :key="plan.id" @click="selectPlan(plan)" class="d-flex align-items-center pl-3" v-bind:class="{active: selectedPlan && plan.id === selectedPlan.id}">
+              <b-dropdown-item-button v-for="plan in plans" :key="plan.id" @click="selectPlan(plan)" class="d-flex align-items-center pl-2" v-bind:class="{active: selectedPlan && plan.id === selectedPlan.id}">
                 <i class="flaticon stroke checkmark"></i>{{plan.description}}
               </b-dropdown-item-button>
             </b-dropdown>
@@ -149,7 +149,7 @@ export default {
         height: 54px;
 
         .ic.menu {
-          top: 16px;
+          top: 18px;
           position: absolute;
           right: 25px;
         }
@@ -236,7 +236,7 @@ export default {
           background-color: #74778d;
 
           &:after {
-            margin-left: .5em;
+            margin-left: 1em;
             margin-right: .5rem;
             vertical-align: .055em;
             font-size: 20px;
@@ -245,12 +245,17 @@ export default {
 
         .dropdown-menu {
           background-color: #74788D;
+          margin-top: 0;
+          border: 0;
+          border-radius: 0;
+          width: 100%;
 
           .dropdown-item {
             color: white;
             opacity: 0.7;
             outline: none;
             font-size: 14px;
+            line-height: 24px;
             background-color: transparent;
 
             &:hover, &:focus {
@@ -268,7 +273,7 @@ export default {
 
             i {
               font-size: 20px;
-              padding-right: 0.25rem;
+              padding: 0.5rem 0.25rem 0.25rem;
               visibility: hidden;
             }
           }
@@ -308,8 +313,8 @@ export default {
 
     .ic {
       cursor: pointer;
-      width: 32px;
-      height: 24px;
+      width: 30px;
+      height: 18px;
       text-align: center;
       top: 0px;
       outline: none;
@@ -321,7 +326,7 @@ export default {
     }
 
     .ic.menu .line {
-      height: 4px;
+      height: 2px;
       width: 100%;
       display: block;
       margin-bottom: 6px;
@@ -371,7 +376,7 @@ export default {
         -moz-transform: rotate(-45deg);
         -ms-transform: rotate(-45deg);
         transform: rotate(-45deg);
-        margin-top: -10px;
+        margin-top: -8px;
       }
 
       .ic.menu.is-expand .line:nth-child(3) {

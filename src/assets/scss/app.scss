@@ -245,7 +245,7 @@ form {
     color: white;
     opacity: 0.5;
 
-    &.active::after {
+    &.active {
       display: none;
     }
 

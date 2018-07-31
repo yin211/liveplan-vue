@@ -279,8 +279,12 @@
         outline: none;
         border: none;
 
+        &.sorting {
+          padding-bottom: 24px;
+        }
+
         &.sorting::before {
-          top: 26px;
+          top: 21px;
           content: '\E1BC';
           font-family: 'Flaticons Solid';
           font-style: normal;
@@ -291,7 +295,7 @@
         }
 
         &.sorting::after {
-          top: 38px;
+          top: 33px;
           content: '\e1bd';
           font-family: 'Flaticons Solid';
           font-style: normal;

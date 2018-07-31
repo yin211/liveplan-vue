@@ -23,6 +23,9 @@
           <span class="line"></span>
           <span class="line"></span>
         </a>
+        <div class="active-link">
+          ASSUMPTIONS
+        </div>
         <ul class="main-nav my-auto" v-bind:class="{ 'is-expand': isNavExpanded }" v-if="isAuthenticated">
           <li>
             <a href="/overview"><span>OVERVIEW</span></a>
@@ -79,6 +82,11 @@
             <a @click="logout"><span>Log Out</span></a>
           </li>
         </ul>
+        <b-dropdown id="ddown2" class="plan-tablet" right size="sm" :text="selectedPlanText">
+          <b-dropdown-item-button v-for="plan in plans" :key="plan.id" @click="selectPlan(plan)" class="d-flex align-items-center pl-2 py-0" v-bind:class="{active: selectedPlan && plan.id === selectedPlan.id}">
+            <i class="flaticon stroke checkmark"></i>{{plan.description}}
+          </b-dropdown-item-button>
+        </b-dropdown>
       </nav>
     </header>
   </div>
@@ -239,12 +247,13 @@ export default {
           }
       }
 
-
+      .plan-tablet,
       .right-link {
         .dropdown-toggle {
           padding: 8px 8px 8px 16px;
           line-height: 24px;
           background-color: #74778d;
+          border-radius: 0;
 
           &:after {
             margin-left: 1em;
@@ -295,6 +304,14 @@ export default {
         color: white;
         font-size: 14px;
         line-height: 20px;
+      }
+
+      .plan-tablet {
+        display: none;
+      }
+
+      .active-link {
+        display: none;
       }
     }
 
@@ -360,6 +377,21 @@ export default {
           position: fixed;
           left: 38px;
           top: 50px;
+        }
+        .plan-tablet {
+          display: block !important;
+          position: absolute;
+          right: 34px;
+        }
+
+        .active-link {
+          display: block !important;
+          color: #FFFFFF;
+          font-size: 13px;
+          font-weight: 500;
+          letter-spacing: 0.5px;
+          line-height: 24px;
+          margin-left: 20px;
         }
       }
 

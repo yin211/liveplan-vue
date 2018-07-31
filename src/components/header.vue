@@ -23,7 +23,7 @@
           <span class="line"></span>
           <span class="line"></span>
         </a>
-        <div class="active-link">
+        <div class="active-link" v-if="isAuthenticated">
           ASSUMPTIONS
         </div>
         <ul class="main-nav my-auto" v-bind:class="{ 'is-expand': isNavExpanded }" v-if="isAuthenticated">
@@ -82,7 +82,7 @@
             <a @click="logout"><span>Log Out</span></a>
           </li>
         </ul>
-        <b-dropdown id="ddown2" class="plan-tablet" right size="sm" :text="selectedPlanText">
+        <b-dropdown id="ddown2" class="plan-tablet ml-auto" right size="sm" :text="selectedPlanText" v-if="isAuthenticated">
           <b-dropdown-item-button v-for="plan in plans" :key="plan.id" @click="selectPlan(plan)" class="d-flex align-items-center pl-2 py-0" v-bind:class="{active: selectedPlan && plan.id === selectedPlan.id}">
             <i class="flaticon stroke checkmark"></i>{{plan.description}}
           </b-dropdown-item-button>
@@ -380,8 +380,6 @@ export default {
         }
         .plan-tablet {
           display: block !important;
-          position: absolute;
-          right: 34px;
         }
 
         .active-link {

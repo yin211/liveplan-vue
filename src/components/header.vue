@@ -36,7 +36,7 @@
             <b-dropdown-item href="#">assets</b-dropdown-item>
             <b-dropdown-item href="#">debts</b-dropdown-item>
           </b-nav-item-dropdown>
-          <li class="sub-left-link">
+          <li class="sub-left-link" v-bind:class="{ active: isAssumptionActive }">
             <a href="#"><span>assumptions</span></a>
             <ul>
               <li><a href="#">incomes</a></li>
@@ -183,7 +183,7 @@ export default {
         color: #2d2d2d;
         padding: 0;
         flex: 0;
-        margin-right: 34px;
+        margin-right: 26px;
         @media (max-width: 1199.98px) {
           margin-right: 20px;
         }
@@ -321,16 +321,14 @@ export default {
       flex: 1;
     }
 
-    .main-nav > li {
-      padding: 0 16px;
-    }
-
     .main-nav > li > a {
       color: #ACAEBA;
       font-size: 13px;
       font-weight: 500;
       letter-spacing: 0.5px;
       line-height: 24px;
+      margin-left: 24px;
+      margin-right: 24px;
     }
 
     .main-nav > li:hover > a {
@@ -465,6 +463,7 @@ export default {
           .plan-selector {
             position: absolute;
             top: 18px;
+            left: 32px;
             display: block !important;
           }
         }
@@ -485,11 +484,9 @@ export default {
         opacity: 0;
       }
 
-      .main-nav > li:first-child { border-radius: 0px; }
       .main-nav > li {
         display: block;
         margin-bottom: 38px;
-        padding: 0;
         text-transform: capitalize;
         a {
           font-size: 24px;
@@ -497,6 +494,10 @@ export default {
           color: white;
           font-weight: 400;
           letter-spacing: 0;
+          margin-right: 0px;
+          margin-left: 0px;
+          padding-left: 8px;
+          padding-right: 8px;
         }
         @media (max-width: 575.98px) {
           margin-bottom: 18px;
@@ -538,6 +539,14 @@ export default {
           @media (max-width: 575.98px) {
             display: block;
             padding-left: 20px;
+          }
+        }
+
+        &.active {
+          > a {
+            border-bottom: 4px solid #36b37e;
+            padding-bottom: 3px;
+            color: #fff;
           }
         }
       }

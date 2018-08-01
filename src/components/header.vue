@@ -28,31 +28,31 @@
         </div>
         <ul class="main-nav my-auto" v-bind:class="{ 'is-expand': isNavExpanded }" v-if="isAuthenticated">
           <li>
-            <a href="/overview"><span>OVERVIEW</span></a>
+            <a href="/overview"><span>overview</span></a>
           </li>
           <b-nav-item-dropdown :text="$t('header.header_menu.assumptions')" right v-bind:class="{ active: isAssumptionActive }" class="left-link">
-            <b-dropdown-item href="#">INCOMES</b-dropdown-item>
-            <b-dropdown-item to="/assumptions/expenses">EXPENSES</b-dropdown-item>
-            <b-dropdown-item href="#">ASSETS</b-dropdown-item>
-            <b-dropdown-item href="#">DEBTS</b-dropdown-item>
+            <b-dropdown-item href="#">incomes</b-dropdown-item>
+            <b-dropdown-item to="/assumptions/expenses">expenses</b-dropdown-item>
+            <b-dropdown-item href="#">assets</b-dropdown-item>
+            <b-dropdown-item href="#">debts</b-dropdown-item>
           </b-nav-item-dropdown>
           <li class="sub-left-link">
-            <a href="#"><span>ASSUMPTIONS</span></a>
+            <a href="#"><span>assumptions</span></a>
             <ul>
-              <li><a href="#">Incomes</a></li>
-              <li><a href="/assumptions/expenses">Expenses</a></li>
-              <li><a href="#">Assets</a></li>
-              <li><a href="#">Debts</a></li>
+              <li><a href="#">incomes</a></li>
+              <li><a href="/assumptions/expenses">expenses</a></li>
+              <li><a href="#">assets</a></li>
+              <li><a href="#">debts</a></li>
             </ul>
           </li>
           <li>
-            <a href="/timeline"><span>TIMELINE</span></a>
+            <a href="/timeline"><span>timeline</span></a>
           </li>
           <li>
-            <a href="/whatif"><span>WHAT IF?</span></a>
+            <a href="/whatif"><span>what if ?</span></a>
           </li>
           <li class="tools-insights-link">
-            <a href="/tools-and-insights"><span>TOOLS / INSIGHTS</span></a>
+            <a href="/tools-and-insights"><span>tools / insights</span></a>
           </li>
 
           <li class="ml-auto plan-selector right-link">
@@ -66,20 +66,20 @@
             <b-nav-item-dropdown right no-caret>
               <template slot="button-content">
                 <div class="d-flex align-items-center">
-                  <i class="fa fa-user pr-2 text-secondary" style="font-size: 20px"></i> <span>Jan Bolmeson</span> <i class="fa fa-ellipsis-v ml-4" style="font-size: 24px;"></i>
+                  <i class="fa fa-user pr-2 text-secondary" style="font-size: 20px"></i> <span class="text-capitalize">Jan Bolmeson</span> <i class="fa fa-ellipsis-v ml-4" style="font-size: 24px;"></i>
                 </div>
               </template>
               <b-dropdown-item @click="logout">Logout</b-dropdown-item>
             </b-nav-item-dropdown>
           </li>
           <li class="sub-right-link profile-settings-link">
-            <a href="#"><span>Profile Settings</span></a>
+            <a href="#"><span>profile settings</span></a>
           </li>
           <li class="sub-right-link">
-            <a href="#"><span>Plan & Subscription</span></a>
+            <a href="#"><span>plan & subscription</span></a>
           </li>
           <li class="sub-right-link">
-            <a @click="logout"><span>Log Out</span></a>
+            <a @click="logout"><span>log out</span></a>
           </li>
         </ul>
         <b-dropdown id="ddown2" class="plan-tablet ml-auto" right size="sm" :text="selectedPlanText" v-if="isAuthenticated">
@@ -397,7 +397,7 @@ export default {
         .collapse-menu.is-expand {
           position: fixed;
           right: 30px;
-          top: 30px
+          top: 38px
         }
       }
 
@@ -427,6 +427,7 @@ export default {
 
       /* Main Menu for Handheld Devices  */
       .main-nav {
+        opacity: 0.96;
         z-index:2;
         padding: 50px 0;
         position: fixed;
@@ -459,11 +460,11 @@ export default {
         }
 
         @media (max-width: 575.98px) {
-          padding: 116px 24px 24px;
+          padding: 120px 24px 24px;
 
           .plan-selector {
             position: absolute;
-            top: 12px;
+            top: 18px;
             display: block !important;
           }
         }
@@ -489,12 +490,13 @@ export default {
         display: block;
         margin-bottom: 38px;
         padding: 0;
+        text-transform: capitalize;
         a {
           font-size: 24px;
           line-height: 32px;
           color: white;
           font-weight: 400;
-          letter-spacing: 0
+          letter-spacing: 0;
         }
         @media (max-width: 575.98px) {
           margin-bottom: 18px;
@@ -523,18 +525,19 @@ export default {
       .sub-left-link {
         & > a {
           opacity: .39;
-          font-weight: 500;
+          font-weight: 500 !important;
         }
         ul {
           display: flex;
           list-style-type: none;
-          padding-left: 20px;
+          padding-left: 0px;
           padding-top: 8px;
           li {
             margin-right: 14px;
           }
           @media (max-width: 575.98px) {
             display: block;
+            padding-left: 20px;
           }
         }
       }
@@ -561,7 +564,8 @@ export default {
       .main-nav {
         display: flex;
         position: relative;
-        align-items: center
+        align-items: center;
+        text-transform: uppercase;
       }
 
       .sub-left-link {

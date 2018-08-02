@@ -56,7 +56,11 @@
           </li>
 
           <li class="ml-auto plan-selector right-link">
-            <b-dropdown id="ddown1" right size="sm" :text="selectedPlanText">
+            <b-dropdown id="ddown1" right size="sm">
+              <template slot="button-content">
+                <span class="font-weight-bold" v-if="selectedPlanText !== ''">Plan : </span>{{selectedPlanText}}
+                <span v-if="selectedPlanText === ''">Select plan</span>
+              </template>
               <b-dropdown-item-button v-for="plan in plans" :key="plan.id" @click="selectPlan(plan)" class="d-flex align-items-center pl-2 py-0" v-bind:class="{active: selectedPlan && plan.id === selectedPlan.id}">
                 <i class="flaticon stroke checkmark"></i>{{plan.description}}
               </b-dropdown-item-button>
@@ -82,7 +86,11 @@
             <a @click="logout"><span>log out</span></a>
           </li>
         </ul>
-        <b-dropdown id="ddown2" class="plan-tablet ml-auto" right size="sm" :text="selectedPlanText" v-if="isAuthenticated">
+        <b-dropdown id="ddown2" class="plan-tablet ml-auto" right size="sm" v-if="isAuthenticated">
+          <template slot="button-content">
+            <span class="font-weight-bold" v-if="selectedPlanText !== ''">Plan : </span>{{selectedPlanText}}
+            <span v-if="selectedPlanText === ''">Select plan</span>
+          </template>
           <b-dropdown-item-button v-for="plan in plans" :key="plan.id" @click="selectPlan(plan)" class="d-flex align-items-center pl-2 py-0" v-bind:class="{active: selectedPlan && plan.id === selectedPlan.id}">
             <i class="flaticon stroke checkmark"></i>{{plan.description}}
           </b-dropdown-item-button>
@@ -125,9 +133,9 @@ export default {
     },
     selectedPlanText () {
       if (this.selectedPlan) {
-        return 'Plan : ' + this.selectedPlan.description
+        return this.selectedPlan.description
       } else {
-        return 'Select Plan'
+        return ''
       }
     }
   },
@@ -525,8 +533,8 @@ export default {
 
       .sub-left-link {
         & > a {
-          opacity: .39;
           font-weight: 500 !important;
+          color: #9598a8 !important;
         }
         ul {
           display: flex;

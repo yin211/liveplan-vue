@@ -70,7 +70,7 @@
             <b-nav-item-dropdown right no-caret>
               <template slot="button-content">
                 <div class="d-flex align-items-center">
-                  <i class="fa fa-user pr-2 text-secondary" style="font-size: 20px"></i> <span class="text-capitalize">Jan Bolmeson</span> <i class="fa fa-ellipsis-v ml-4" style="font-size: 24px;"></i>
+                  <i class="fa fa-user pr-2 text-secondary" style="font-size: 20px"></i> <span class="text-capitalize">Jan Bolmeson</span> <i class="fa fa-ellipsis-v ml-4"></i>
                 </div>
               </template>
               <b-dropdown-item @click="logout">Logout</b-dropdown-item>
@@ -600,6 +600,16 @@ export default {
 
       .logout-dropdown {
         margin-left: 12px;
+        .fa.fa-ellipsis-v::before {
+          content: '•••';
+          position: absolute;
+          left: 50%;
+          transform: translate(-50%, -50%) rotate(90deg);
+          font-size: 15px;
+          letter-spacing: 2px;
+          margin-top: 2px;
+          margin-left: 70px;
+        }
       }
 
     }

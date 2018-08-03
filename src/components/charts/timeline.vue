@@ -322,31 +322,42 @@ export default {
         let rectX = d.start_year < this.domain[0] ? 0 : this.xScale(d.start_year)
         if (d.end_year < this.domain[0]) {
           rectWidth = 0
-        } else if (d.start_year < this.domain[0]) {
+        } else if (d.start_year < this.domain[0] && d.end_year <= this.domain[this.domain.length - 1]) {
           rectWidth = this.xScale(d.end_year) - 0
-        } else if (d.end_year > this.domain[this.domain.length - 1]) {
+        } else if (d.end_year > this.domain[this.domain.length - 1] && d.start_year >= this.domain[0]) {
           rectWidth = this.xScale(this.domain[this.domain.length - 1]) - this.xScale(d.start_year) + this.xScale.bandwidth()
-        } else {
+        } else if (d.start_year >= this.domain[0] && d.end_year <= this.domain[this.domain.length - 1]) {
           rectWidth = this.xScale(d.end_year) - this.xScale(d.start_year)
+        } else {
+          rectWidth = this.xScale(this.domain[this.domain.length - 1]) - this.xScale(this.domain[0]) + this.xScale.bandwidth()
         }
 
         let firstStopX = Math.round(this.chartWidth * this.opacityPercentage)
         let lastStopX = this.chartWidth - firstStopX
         let stops = []
         let opacityCase = 0
-        if (rectX < firstStopX && rectX + rectWidth > lastStopX) {
-          let percent = ((firstStopX - rectX) / rectWidth) * 100
-          let percent2 = ((lastStopX - rectX) / rectWidth) * 100
-          stops = [0, percent, percent2, 100]
-          opacityCase = 1
-        } else if (rectX < firstStopX) {
-          let percent = ((firstStopX - rectX) / rectWidth) * 100
-          stops = [0, percent, 100]
-          opacityCase = 2
+
+        // avoid division by 0
+        if (rectWidth > 0) {
+          if (rectX < firstStopX && rectX + rectWidth > lastStopX) {
+            let percent = ((firstStopX - rectX) / rectWidth) * 100
+            let percent2 = ((lastStopX - rectX) / rectWidth) * 100
+            stops = [0, percent, percent2, 100]
+            opacityCase = 1
+          } else if (rectX < firstStopX) {
+            let percent = ((firstStopX - rectX) / rectWidth) * 100
+            stops = [0, percent, 100]
+            opacityCase = 2
+          } else {
+            let percent = ((lastStopX - rectX) / rectWidth) * 100
+            stops = [0, percent, 100]
+            opacityCase = 3
+          }
         } else {
-          let percent = ((lastStopX - rectX) / rectWidth) * 100
-          stops = [0, percent, 100]
-          opacityCase = 3
+          stops = [0, 100]
+        }
+        if (isNaN(rectWidth)) {
+          debugger
         }
         let linearGradient = patternify({
           tag: 'linearGradient',
@@ -369,11 +380,38 @@ export default {
         .attr('stop-color', this.colorScale(d.name))
         .attr('stop-opacity', (d, i) => {
           if (opacityCase === 1) {
-            return d === 0 || d === 100 ? 0 : 1
+            if (i === 0) {
+              return rectX / firstStopX
+            } else if (i === 3) {
+              return 1 - (rectX + rectWidth - lastStopX) / (this.chartWidth - lastStopX)
+            }
+            return 1
           } else if (opacityCase === 2) {
-            return d === 0 ? 0 : 1
+            if (rectX + rectWidth > firstStopX) {
+              if (i === 0) {
+                return rectX / firstStopX
+              }
+              return 1
+            } else {
+              if (i === 0) {
+                return rectX / firstStopX
+              } else {
+                return (rectX + rectWidth) / firstStopX
+              }
+            }
           } else {
-            return d === 100 ? 0 : 1
+            if (rectX < lastStopX) {
+              if (i === 2) {
+                return 1 - (rectX + rectWidth - lastStopX) / (this.chartWidth - lastStopX)
+              }
+              return 1
+            } else {
+              if (i === 0) {
+                return 1 - (rectX - lastStopX) / (this.chartWidth - lastStopX)
+              } else {
+                return 1 - (rectX + rectWidth - lastStopX) / (this.chartWidth - lastStopX)
+              }
+            }
           }
         })
       }.bind(this))
@@ -390,13 +428,16 @@ export default {
         if (d.end_year < this.domain[0]) {
           return 0
         }
-        if (d.start_year < this.domain[0]) {
+        if (d.start_year < this.domain[0] && d.end_year <= this.domain[this.domain.length - 1]) {
           return this.xScale(d.end_year) - 0
         }
-        if (d.end_year > this.domain[this.domain.length - 1]) {
+        if (d.end_year > this.domain[this.domain.length - 1] && d.start_year >= this.domain[0]) {
           return this.xScale(this.domain[this.domain.length - 1]) - this.xScale(d.start_year) + this.xScale.bandwidth()
         }
-        return this.xScale(d.end_year) - this.xScale(d.start_year)
+        if (d.start_year >= this.domain[0] && d.end_year <= this.domain[this.domain.length - 1]) {
+          return this.xScale(d.end_year) - this.xScale(d.start_year)
+        }
+        return this.xScale(this.domain[this.domain.length - 1]) - this.xScale(this.domain[0]) + this.xScale.bandwidth()
       })
       .attr('height', this.yScale.bandwidth())
       .attr('fill', d => `url(#opacity-gradient-${d.name.replace(/ /g, '-').toLowerCase()})`)

@@ -27,7 +27,61 @@
     > div {
       max-width: 1440px;
       padding: 80px 36px 240px;
-      height: 800px;
+      font-size: 14px;
+
+      table {
+        background: white;
+
+        thead {
+          th {
+            border: none;
+          }
+        }
+
+        tbody {
+          background: linear-gradient(0deg, #FFFFFF 0%, #F8F8F8 100%);
+
+          :first-child {
+            td {
+              border: none;
+            }
+          }
+
+          tr {
+            td {
+              vertical-align: middle;
+              border-top: 1px dashed #CACACA;
+            }
+          }
+
+        }
+      }
+
+      ul[aria-label="Pagination"] {
+        display: flex;
+        align-items: center;
+
+        .page-link {
+          background: transparent;
+          font-size: 13px;
+          line-height: 13px;
+          border: none;
+          color: #4A4A4A;
+          display: inline;
+        }
+
+        .page-item.active .page-link {
+          border-radius: 50%;
+          background: #525670;
+          color: white;
+        }
+      }
+
+      .selectPerPage {
+        width: 60px;
+        background-color: transparent;
+        border: none;
+      }
     }
   }
 

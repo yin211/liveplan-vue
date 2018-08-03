@@ -44,13 +44,6 @@
     text-align: center;
   }
 
-  .space-divider {
-    background-color: #C8C8C8;
-    height: 60%;
-    width: 1px;
-    margin: auto 24px;
-  }
-
   .car-icon {
     color: #A5ADBA;;
     margin-left: 16px;
@@ -58,16 +51,6 @@
 
     @media (max-width: 576px) {
       display: none;
-    }
-  }
-
-  .plain-btn {
-    background-color:transparent;
-    font-size: 12px;
-    line-height: 24px;
-
-    i {
-      margin-right: 4px;
     }
   }
 
@@ -369,6 +352,13 @@
           }
         }
 
+      }
+
+      @media (max-width: 767.99px) {
+        &.b-table.b-table-stacked-md > tbody > tr > :first-child {
+          border-top-style: solid;
+          border-top-width: 0.3rem;
+        }
       }
     }
 

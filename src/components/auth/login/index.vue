@@ -18,12 +18,11 @@
             </b-form-input>
           </b-form-group>
 
-          <b-form-group class="rememberGroup mt-2 mb-4">
-            <b-form-checkbox-group v-model="form.login.checked" class="rememberCheck">
-              <b-form-checkbox class="text-gray">{{ $t('login.label.remember_me') }}</b-form-checkbox>
-            </b-form-checkbox-group>
-          </b-form-group>
           <b-button type="submit" variant="primary" class="w-100 text-uppercase">{{ $t('login.label.login') }}</b-button>
+          <div class="d-flex align-items-center justify-content-between mt-1">
+            <span class="text-gray">{{ $t('login.label.remember_me') }}</span>
+            <switches v-model="form.login.checked" theme="bootstrap" type-bold="true" color="success" class="mb-0"></switches>
+          </div>
         </b-form>
 
 
@@ -37,12 +36,11 @@
               </div>
           </b-form-group>
 
-          <b-form-group class="rememberGroup mt-2 mb-4">
-            <b-form-checkbox-group v-model="form.login.checked" class="rememberCheck">
-              <b-form-checkbox class="text-gray">{{ $t('login.label.remember_me') }}</b-form-checkbox>
-            </b-form-checkbox-group>
-          </b-form-group>
           <b-button type="submit" variant="primary" class="w-100 text-uppercase">{{ $t("login.label.login") }}</b-button>
+          <div class="d-flex align-items-center justify-content-between mt-1">
+            <span class="text-gray">{{ $t('login.label.remember_me') }}</span>
+            <switches v-model="form.login.checked" theme="bootstrap" type-bold="true" color="success" class="mb-0"></switches>
+          </div>
         </b-form>
 
 
@@ -64,16 +62,16 @@
             <b-form-input class="passwordInput" type="password" v-model="form.signup.password" required v-bind:placeholder="$t('login.placeholder.password')">
             </b-form-input>
           </b-form-group>
-          <b-form-group class="tocGroup mt-2 mb-4">
-            <b-form-checkbox-group v-model="form.signup.checkTos" class="tocCheckbox">
-              <b-form-checkbox class="text-gray">{{ $t('login.label.accept_toc') }}</b-form-checkbox>
-            </b-form-checkbox-group>
-            <b-form-checkbox-group v-model="form.signup.checked" class="newsletterCheckbox">
-              <b-form-checkbox class="text-gray">{{ $t('login.label.send_me_newsletter') }}</b-form-checkbox>
-            </b-form-checkbox-group>
-          </b-form-group>
 
           <b-button type="submit" variant="primary" class="w-100 text-uppercase">{{ $t('login.label.signup') }}</b-button>
+          <div class="d-flex align-items-center justify-content-between mt-1">
+            <span class="text-gray">{{ $t('login.label.accept_toc') }}</span>
+            <switches v-model="form.signup.checkTos" theme="bootstrap" type-bold="true" color="success" class="mb-0"></switches>
+          </div>
+          <div class="d-flex align-items-center justify-content-between">
+            <span class="text-gray">{{ $t('login.label.send_me_newsletter') }}</span>
+            <switches v-model="form.signup.checked" theme="bootstrap" type-bold="true" color="success" class="mb-0"></switches>
+          </div>
         </b-form>
 
 
@@ -92,6 +90,8 @@
 <script>
 import {AUTH_REQUEST} from '@/store/actions/auth'
 import EventBus from '../../../event-bus.js'
+import Switches from 'vue-switches'
+
 export default {
   name: 'login',
   mounted () {
@@ -240,6 +240,9 @@ export default {
       evt.preventDefault()
       this.validated = true
     }
+  },
+  components: {
+    Switches
   }
 }
 </script>

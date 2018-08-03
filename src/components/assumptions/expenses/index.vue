@@ -50,8 +50,9 @@
           </div>
         </template>
         <template slot="HEAD_name" slot-scope="row">
-          <div>
-            <span class="table-title-label"><i class="flaticon solid up-4 text-danger"></i></span>
+          <div class="d-flex align-items-center">
+            <div class="table-title-label"></div>
+            <i class="flaticon solid up-4 text-danger table-title-label-icon"></i>
             <span class="table-title">Expenses</span>
           </div>
         </template>

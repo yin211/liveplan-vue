@@ -149,7 +149,7 @@
                     </div>
                   </div>
                   <div class="d-flex align-items-center justify-content-center">
-                    <b-pagination :total-rows="totalRows" :per-page="perPage" v-model="currentPage" class="my-0"/>
+                    <b-pagination :total-rows="totalRows" :per-page="perPage" :prev-text="'Prev'" :next-text="'Next'" v-model="currentPage" class="my-0"/>
                   </div>
                 </div>
               </div>

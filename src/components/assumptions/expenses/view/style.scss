@@ -6,7 +6,7 @@
   }
 
   .chart-container {
-    border-top: 2px solid #404A65;
+    border-top: 1px solid #404A65;
   }
 
   .card-container {
@@ -44,13 +44,6 @@
     text-align: center;
   }
 
-  .space-divider {
-    background-color: #C8C8C8;
-    height: 60%;
-    width: 1px;
-    margin: auto 24px;
-  }
-
   .car-icon {
     color: #A5ADBA;;
     margin-left: 16px;
@@ -58,16 +51,6 @@
 
     @media (max-width: 576px) {
       display: none;
-    }
-  }
-
-  .plain-btn {
-    background-color:transparent;
-    font-size: 12px;
-    line-height: 24px;
-
-    i {
-      margin-right: 4px;
     }
   }
 
@@ -284,25 +267,32 @@
         }
 
         &.sorting::before {
-          top: 21px;
-          content: '\E1BC';
-          font-family: 'Flaticons Solid';
-          font-style: normal;
-          font-weight: normal;
-          font-size: 20px;
-          line-height: 1;
-          -webkit-font-smoothing: antialiased;
+          top: 3px;
+          margin-left: 0.4em;
+          vertical-align: 0.1em;
+          border-right: 0.5em solid transparent;
+          border-left: 0.5em solid transparent;
+          border-top: 0;
+          border-bottom: .5em solid;
+          content: "";
+          width: 0;
+          height: 0;
+          border-radius: 15%;
         }
 
         &.sorting::after {
-          top: 33px;
-          content: '\e1bd';
-          font-family: 'Flaticons Solid';
-          font-style: normal;
-          font-weight: normal;
-          font-size: 20px;
-          line-height: 1;
-          -webkit-font-smoothing: antialiased;
+          top: 38px;
+          font-size: 24px;
+          margin-left: 0.255em;
+          vertical-align: 0.255em;
+          border-top: 0.3em solid;
+          border-right: 0.3em solid transparent;
+          border-bottom: 0;
+          border-left: 0.3em solid transparent;
+          content: "";
+          width: 0;
+          height: 0;
+          border-radius: 15%;
         }
 
         &.sorting_desc::before, &.sorting_asc::after {
@@ -362,6 +352,13 @@
           }
         }
 
+      }
+
+      @media (max-width: 767.99px) {
+        &.b-table.b-table-stacked-md > tbody > tr > :first-child {
+          border-top-style: solid;
+          border-top-width: 0.3rem;
+        }
       }
     }
 

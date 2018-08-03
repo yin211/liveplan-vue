@@ -63,7 +63,7 @@
 
           :first-child {
             td {
-              border: none;
+              border: none !important;
             }
           }
 
@@ -74,6 +74,13 @@
             }
           }
 
+        }
+
+        @media (max-width: 767.99px) {
+          &.b-table.b-table-stacked-md > tbody > tr > :first-child {
+            border-top-style: solid;
+            border-top-width: 0.3rem;
+          }
         }
       }
 

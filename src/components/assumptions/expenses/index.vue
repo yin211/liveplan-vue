@@ -29,6 +29,10 @@
                 :sort-desc.sync="sortDesc"
                 :sort-direction="sortDirection"
         >
+        <template slot="name" slot-scope="row">
+          <i class="flaticon solid star-2" style="color: #c1c7D0; margin-left: 24px; margin-right: 12px;"></i>
+          <span class="font-weight-medium">{{row.item.name}}</span>
+        </template>
         <template slot="amount" slot-scope="row">
           <span>{{row.item.amount.toLocaleString('sv-SE')}} SEK </span>
         </template>
@@ -36,11 +40,25 @@
           <span>{{row.item.start_year}} - {{row.item.end_year}}</span>
         </template>
         <template slot="actions" slot-scope="row">
-          <button class='btn plain-btn text-regular'>
-            <i class="flaticon stroke up-2 text-primary"></i> Show On Graph
-          </button>
-          <button class='btn plain-btn text-regular'>
-            <i class="flaticon stroke right-circle-2 text-primary"></i> Open
+          <div class="d-flex flex-column flex-md-row align-items-start">
+            <button class='btn plain-btn text-regular'>
+              <i class="flaticon solid up-2 text-primary"></i> Show On Graph
+            </button>
+            <button class='btn plain-btn text-regular' @click.stop="gotoDetail(row.item.id)">
+              <i class="flaticon solid right-circle-2 text-primary"></i> Open
+            </button>
+          </div>
+        </template>
+        <template slot="HEAD_name" slot-scope="row">
+          <div>
+            <span class="table-title-label"><i class="flaticon solid up-4 text-danger"></i></span>
+            <span class="table-title">Expenses</span>
+          </div>
+        </template>
+        <template slot="HEAD_actions" slot-scope="row">
+          <button class='btn btn-sm btn-primary font-weight-bold' style="border-radius: 30px; margin: 30px;">
+            <i class="flaticon stroke plus"></i>
+            Add New Expense
           </button>
         </template>
         </b-table>
@@ -78,7 +96,7 @@ export default {
         { key: 'name', label: 'Expenses' },
         { key: 'period', label: 'Period' },
         { key: 'amount', label: 'Amount' },
-        { key: 'annual_increase_percentage', label: 'Growth Rate', formatter: (value) => { return value ? value + ' %' : '' } },
+        { key: 'annual_increase_percentage', label: 'Growth Rate', formatter: (value) => { return value ? Math.floor(value) + ' %' : '' } },
         { key: 'person_id',
           label: 'Person',
           formatter: (value) => {
@@ -121,6 +139,11 @@ export default {
       } else {
         return this.totalRows
       }
+    }
+  },
+  methods: {
+    gotoDetail (id) {
+      this.$router.push(`/assumptions/expenses/${id}`)
     }
   },
   components: {

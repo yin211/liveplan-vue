@@ -35,6 +35,26 @@
         thead {
           th {
             border: none;
+            vertical-align: middle;
+
+            .table-title {
+              font-size: 24px;
+              line-height: 32px;
+              color: #434343;
+            }
+
+            .table-title-label {
+              font-size: 18px;
+              border: 3px solid #D8D8D8;
+              border-radius: 20px;
+              margin-left: 24px;
+              margin-right: 6px;
+
+              i {
+                font-size: 20px;
+              }
+
+            }
           }
         }
 

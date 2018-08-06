@@ -31,7 +31,7 @@
             <a href="/overview"><span>overview</span></a>
           </li>
           <b-nav-item-dropdown :text="$t('header.header_menu.assumptions')" right v-bind:class="{ active: isAssumptionActive }" class="left-link">
-            <b-dropdown-item href="#">incomes</b-dropdown-item>
+            <b-dropdown-item to="/assumptions/incomes">incomes</b-dropdown-item>
             <b-dropdown-item to="/assumptions/expenses">expenses</b-dropdown-item>
             <b-dropdown-item href="#">assets</b-dropdown-item>
             <b-dropdown-item href="#">debts</b-dropdown-item>

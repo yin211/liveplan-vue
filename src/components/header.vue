@@ -39,7 +39,7 @@
           <li class="sub-left-link" v-bind:class="{ active: isAssumptionActive }">
             <a href="#"><span>assumptions</span></a>
             <ul>
-              <li><a href="#">incomes</a></li>
+              <li><a href="/assumptions/incomes">incomes</a></li>
               <li><a href="/assumptions/expenses">expenses</a></li>
               <li><a href="#">assets</a></li>
               <li><a href="#">debts</a></li>

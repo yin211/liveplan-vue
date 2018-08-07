@@ -30,8 +30,10 @@
                 :sort-direction="sortDirection"
         >
         <template slot="name" slot-scope="row">
-          <i class="flaticon solid star-2" style="color: #c1c7D0; margin-left: 24px; margin-right: 12px;"></i>
-          <span class="font-weight-medium">{{row.item.name}}</span>
+          <div class="d-flex">
+            <i class="flaticon solid star-2"></i>
+            <span class="font-weight-medium">{{row.item.name}}</span>
+          </div>
         </template>
         <template slot="amount_per_period" slot-scope="row">
           <span>{{row.item.amount_per_period.toLocaleString('sv-SE')}} SEK </span>
@@ -57,9 +59,12 @@
           </div>
         </template>
         <template slot="HEAD_actions" slot-scope="row">
-          <button class='btn btn-sm btn-primary font-weight-bold' style="border-radius: 30px; margin: 30px;">
+          <button class='btn btn-sm btn-primary font-weight-bold add-new-row d-none d-sm-block'>
             <i class="flaticon stroke plus"></i>
             Add New Income
+          </button>
+          <button class='btn btn-sm btn-primary font-weight-bold add-new-row d-block d-sm-none'>
+            <i class="flaticon stroke plus"></i>
           </button>
         </template>
         </b-table>

@@ -29,8 +29,79 @@
       padding: 80px 36px 240px;
       font-size: 14px;
 
+      @media (max-width: 575.98px) {
+        margin: auto 14px !important;
+        padding: 80px 12px 200px !important;
+      }
+
+      @media (min-width: 576px) and (max-width: 1440px) {
+        margin: auto 20px !important;
+        padding: 80px 20px 200px !important;
+      }
+
       table {
         background: white;
+
+        @media (max-width: 767.99px) {
+          thead {
+            display: block !important;
+
+            tr {
+
+              display: flex;
+              justify-content: space-between;
+
+              > :nth-child(2) {
+                display: none;
+              }
+
+              > :nth-child(3) {
+                display: none;
+              }
+
+              > :nth-child(4) {
+                display: none;
+              }
+
+              > :nth-child(5) {
+                display: none;
+              }
+            }
+          }
+
+          .add-new-row {
+            margin: 5px 8px !important;
+          }
+
+          .table-title-label {
+            margin-left: 2px !important;
+            margin-right: 10px !important;
+          }
+
+          .table-title-label-icon {
+            left: 16px !important;
+            top: 14px !important;
+          }
+        }
+
+        @media (max-width: 575.98px) {
+          .add-new-row {
+            margin: 10px 8px !important;
+          }
+
+          .table-title {
+            margin-top: 8px;
+          }
+
+          .table-title-label {
+            margin-top: 16px !important;
+          }
+
+          .table-title-label-icon {
+            top: 18px !important;
+          }
+        }
+
 
         thead {
           th {
@@ -57,7 +128,12 @@
               font-size: 20px;
               position: absolute;
               left: 38px;
-              top: 36px;
+              top: 38px;
+            }
+
+            .add-new-row {
+              border-radius: 30px;
+              margin: 30px;
             }
           }
         }
@@ -66,8 +142,10 @@
           background: linear-gradient(0deg, #FFFFFF 0%, #F8F8F8 100%);
 
           :first-child {
-            td {
-              border: none !important;
+            @media (min-width: 769px) {
+              td {
+                border: none !important;
+              }
             }
           }
 
@@ -77,6 +155,15 @@
               border-top: 1px dashed #CACACA;
             }
           }
+
+          .star-2 {
+            color: #c1c7D0;
+            margin-right: 12px;
+            @media (min-width: 769px) {
+              margin-left: 24px;
+            }
+          }
+
 
         }
 

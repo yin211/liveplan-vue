@@ -93,7 +93,11 @@ export default {
           year: i
         }
         this.dataArray.forEach(d => {
-          dt[d.object_name] = d[i]
+          if (d.hasOwnProperty(i)) {
+            dt[d.object_name] = d[i]
+          } else {
+            dt[d.object_name] = 0
+          }
         })
         cont.push(dt)
       }
@@ -401,6 +405,7 @@ export default {
       }
     },
     drawRects () {
+      console.log(this.bars)
       let stacks = patternify({
         tag: 'g',
         selector: 'stack-group',
@@ -417,7 +422,9 @@ export default {
         container: stacks,
         data: d => d
       })
-      .attr('height', d => Math.abs(this.yScale(d[0]) - this.yScale(d[1])))
+      .attr('height', function (d) {
+        return this.yScale(Math.min(d[0], d[1])) - this.yScale(Math.max(d[0], d[1]))
+      }.bind(this))
       .attr('width', this.xScale.bandwidth())
       .attr('x', d => this.xScale(d.data.year))
       .attr('y', function (d) {

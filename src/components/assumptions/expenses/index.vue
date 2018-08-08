@@ -9,12 +9,12 @@
       </div>
       <!-- chart Wrapper -->
       <div class="chart-container">
-        <timeline v-if="timelineData && timelineData.data.length"
+        <stackedBarChart v-if="timelineData && timelineData.data.length"
                   :dataArray="timelineData.data"
                   :label="`blah`"
                   :planStartYear="2012"
                   :planEndYear="2061"
-                  :birthYear="1981"></timeline>
+                  :birthYear="1981"></stackedBarChart>
       </div>
     </div>
     <div class="table-container">
@@ -66,7 +66,7 @@
 
 <script>
 import axios from 'axios'
-import timeline from '../../charts/timeline'
+import stackedBarChart from '../../charts/stackedBarChart'
 
 export default {
   name: 'expenses',
@@ -124,7 +124,7 @@ export default {
     }
   },
   components: {
-    timeline
+    stackedBarChart
   }
 }
 </script>

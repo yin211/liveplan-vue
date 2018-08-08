@@ -9,8 +9,8 @@
       </div>
       <!-- chart Wrapper -->
       <div class="chart-container">
-        <stackedBarChart v-if="timelineData && timelineData.data.length && planStartYear && planEndYear"
-                  :dataArray="timelineData.data"
+        <stackedBarChart v-if="timelineData && timelineData.length && planStartYear && planEndYear"
+                  :dataArray="timelineData"
                   :label="`blah`"
                   :planStartYear="planStartYear"
                   :planEndYear="planEndYear"
@@ -134,7 +134,7 @@ export default {
       response = await axios.get(`${process.env.ROOT_API}/persons`)
       this.personOptions = response.data.data
 
-      let timelineData = await axios.get('https://api.livsplan.se/api/v1/expenses/?w_e_amounts=1')
+      let timelineData = await axios.get('https://api.livsplan.se/api/v1/cashflow/sums?plan_id=1&object_class=expense&aggregated=0')
       this.timelineData = timelineData.data
       let plansResponse = await axios.get(`${process.env.ROOT_API}/plans/1`)
       this.planStartYear = plansResponse.data.data.start_year

@@ -3,8 +3,10 @@
         <svg id="barChartStacked"
              :width="width"
              :height="height">
+            <g :transform="`translate(${margin.left}, ${margin.top})`" class="chart-stack">
+            </g>
             <g :transform="`translate(${margin.left}, ${margin.top})`" class="chart">
-              <rect v-for="(d,i) in bars"
+              <!-- <rect v-for="(d,i) in bars"
                     :key="`hiddenrect-${i}`"
                     :x="xScale(d.year)"
                     :y="0"
@@ -14,7 +16,7 @@
                     class="hiddenrect"
                     @mouseover="rectmouseover(d, i)"
                     @mouseout="rectmouseout(d, i)">
-              </rect>
+              </rect> -->
             </g>
             <line :x1="0"
                   :x2="width"
@@ -54,7 +56,6 @@ export default {
       sliderBackColor: '#636e7f',
       circleColor: '#1971ff',
       darkColor: '#A5ADBA',
-      colors: ['#00DEFB', '#EE00F7', '#FEC600'],
       sliderHandlerRadius: 12,
       opacityPercentage: 0.2,
       domain: [],
@@ -69,30 +70,37 @@ export default {
         left: 110
       },
       chart: '',
+      chartStack: '',
       debug: false
     }
   },
   computed: {
+    dataKeys () {
+      return this.dataArray.map(x => x.object_name)
+    },
     colorScale () {
-      return this.$d3.scaleOrdinal()
-                .domain(this.dataArray.map(x => x.name))
-                .range(this.colors)
+      return this.$d3.scaleOrdinal(this.$d3.schemeCategory20)
+                .domain(this.dataKeys)
     },
     xDomain () {
-      let minStartYear = this.$d3.min(this.dataArray, d => d.start_year)
-      let maxEndYear = this.$d3.max(this.dataArray, d => d.end_year)
-      let startYear = minStartYear < this.planStartYear ? minStartYear : this.planStartYear
-      let endYear = maxEndYear > this.planEndYear ? maxEndYear : this.planEndYear
-
-      return this.$d3.range(startYear, endYear + 1)
+      return this.$d3.range(this.planStartYear, this.planEndYear + 1)
     },
-    yDomain () {
-      return this.dataArray.map(d => d.name)
+    computedData () {
+      let cont = []
+
+      for (let i = this.domain[0]; i <= this.domain[this.domain.length - 1]; i++) {
+        let dt = {
+          year: i
+        }
+        this.dataArray.forEach(d => {
+          dt[d.object_name] = d[i]
+        })
+        cont.push(dt)
+      }
+      return cont
     },
     bars () {
-      return this.domain.map(d => {
-        return this.findAmountsForYear(d)
-      })
+      return this.$d3.stack().keys(this.dataKeys)(this.computedData)
     },
     chartHeight () {
       return this.height - this.margin.top - this.margin.bottom - this.sliderHeight
@@ -118,10 +126,20 @@ export default {
                   .paddingOuter([0.1])
     },
     yScale () {
-      return this.$d3.scaleBand()
-                  .domain(this.yDomain)
-                  .range([0, this.chartHeight])
-                  .paddingInner([0.05])
+      const min = this.$d3.min(this.dataArray, d => this.$d3.min(this.$d3.keys(d), k => {
+        if (!isNaN(k)) {
+          return +d[k]
+        }
+      }))
+      const max = this.$d3.max(this.dataArray, d => this.$d3.max(this.$d3.keys(d), k => {
+        if (!isNaN(k)) {
+          return +d[k]
+        }
+      }))
+
+      return this.$d3.scaleLinear()
+              .domain([min, max])
+              .range([this.chartHeight, 0])
     },
     sliderMarginLeft () {
       return 50
@@ -139,55 +157,6 @@ export default {
     }
   },
   methods: {
-    rectmouseover (d, i) {
-      let html = `<div class="toolTip">
-                    <div>
-                      <strong><span id="tooltipyear">${d.year}</span></strong> ( age of <strong><span id="tooltipage">${d.year - this.birthYear}</span></strong> )
-                    </div>
-                    ${d.amounts.map((d, i) => {
-                      return `<div class="d-flex">
-                              <div class="mr-3">
-                                <span class="tooltip-amount-span" style="background-color: ${this.colorScale(d.name)};"></span><span class="ml-1">${d.name}</span>
-                              </div>
-                              <div>
-                                <strong><span id="tooltipincome">${this.thousandsFormat(d.amount)}</span> SEK</strong>
-                              </div>
-                            </div>`
-                    }).toString().replace(/,/g, '')}
-
-                  </div>`
-
-      let x = this.xScale(d.year) + this.xScale.bandwidth() / 2 + this.margin.left
-      let y = this.margin.top
-
-      this.tooltipObj = {
-        x: x,
-        y: y,
-        html: html,
-        visible: true
-      }
-
-      let xTick = this.chart.select(`#xTick-${d.year}`)
-      let xTickCircle = xTick.select('circle')
-      xTickCircle.attr('fill', '#fff')
-                  .attr('stroke', '#1971ff')
-      let xTickYear = xTick.select('.tick-year')
-      xTickYear.attr('fill', '#fff')
-      let hoverrect = this.$d3.select('#hoverrect')
-      hoverrect.attr('x', this.xScale(d.year))
-               .style('display', 'block')
-    },
-    rectmouseout (d, i) {
-      let xTick = this.chart.select(`#xTick-${d.year}`)
-      let xTickCircle = xTick.select('circle')
-      xTickCircle.attr('fill', '#1971ff')
-                  .attr('stroke', '#fff')
-      let xTickYear = xTick.select('.tick-year')
-      xTickYear.attr('fill', this.darkColor)
-      let hoverrect = this.$d3.select('#hoverrect')
-      hoverrect.style('display', 'none')
-      this.tooltipObj.visible = false
-    },
     calcOpacity (d, i) {
       const length = this.domain[this.domain.length - 1] - this.domain[0]
       const l = Math.round(length * this.opacityPercentage)
@@ -205,7 +174,7 @@ export default {
       }
       return 1
     },
-    drawXAxis () {
+    drawAxes () {
       let tickSize = this.chartHeight
       let xAxis = this.$d3.axisBottom(this.xScale).tickSize(-(tickSize))
 
@@ -218,8 +187,7 @@ export default {
       .attr('class', 'xAxis axis')
       .attr('transform', `translate(${0}, ${this.chartHeight})`)
       .call(xAxis)
-    },
-    drawYAxis () {
+
       let yAxis = this.$d3.axisLeft(this.yScale).tickSize(-(this.chartWidth))
 
       // append yAxis
@@ -433,6 +401,28 @@ export default {
       }
     },
     drawRects () {
+      let stacks = patternify({
+        tag: 'g',
+        selector: 'stack-group',
+        container: this.chartStack,
+        data: this.bars
+      })
+      .attr('fill', d => {
+        return this.colorScale(d.key)
+      })
+
+      patternify({
+        tag: 'rect',
+        selector: 'stack-rect',
+        container: stacks,
+        data: d => d
+      })
+      .attr('height', d => Math.abs(this.yScale(d[0]) - this.yScale(d[1])))
+      .attr('width', this.xScale.bandwidth())
+      .attr('x', d => this.xScale(d.data.year))
+      .attr('y', function (d) {
+        return this.yScale(Math.max(d[0], d[1]))
+      }.bind(this))
     },
     drawSlider (selection, width) {
       var padding = 60
@@ -598,9 +588,8 @@ export default {
         self.zoomArea = currentSelectedArea
         let newDomain = getNewDomain()
         self.domain = newDomain
-        self.drawXAxis()
+        self.drawAxes()
         self.drawRects()
-        self.drawYAxis()
         self.adjustAxes()
       }
 
@@ -650,9 +639,8 @@ export default {
 
         let newDomain = getLiveDomain(coords)
         self.domain = newDomain
-        self.drawXAxis()
+        self.drawAxes()
         self.drawRects()
-        self.drawYAxis()
         self.adjustAxes()
       }
 
@@ -689,31 +677,10 @@ export default {
         this.domain = this.$d3.range(min, min + this.maximumSliderRange + 1)
       }
     },
-    findAmountsForYear (year) {
-      let items = this.dataArray.filter(x => x.start_year <= year && x.end_year >= year)
-      let amounts = []
-      let total = 0
-      items.forEach(d => {
-        let t = d.expense_amounts.filter(x => x.year === year)
-        if (t.length) {
-          total += t[0].amount
-          amounts.push({
-            amount: t[0].amount,
-            name: d.name
-          })
-        }
-      })
-      return {
-        year: year,
-        amounts: amounts,
-        total: total
-      }
-    },
     onResize () {
       this.setWidth()
-      this.drawXAxis()
+      this.drawAxes()
       this.drawRects()
-      this.drawYAxis()
       this.adjustAxes()
       this.zoomArea = [this.sliderScale(this.domain[0]), this.sliderScale(this.domain[this.domain.length - 1]) + this.sliderScale.bandwidth()]
       this.drawSlider(this.$d3.select(this.$el).select('g.slider-wrapper'), this.sliderWidth)
@@ -722,17 +689,17 @@ export default {
   watch: {
     xDomain () {
       this.setDomain()
-      this.drawAxis()
+      this.drawAxes()
       this.adjustAxes()
       this.drawSlider(this.$d3.select('g.slider-wrapper'), this.sliderWidth)
     }
   },
   mounted () {
-    this.chart = this.$d3.select(this.$el).select('svg g')
+    this.chart = this.$d3.select(this.$el).select('svg .chart')
+    this.chartStack = this.$d3.select(this.$el).select('svg .chart-stack')
     this.setDomain()
     this.onResize()
     this.$d3.select(window).on('resize', this.onResize)
-    console.log(this.bars)
   },
   components: {
     Tooltip

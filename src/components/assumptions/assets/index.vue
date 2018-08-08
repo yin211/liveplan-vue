@@ -1,27 +1,27 @@
 <template>
-  <div class="expenses bg-light">
+  <div class="assets bg-light">
     <div class="main-gradient">
       <div class="title-container mx-auto">
         <b-link to="/assumptions/incomes">Incomes</b-link>
-        <b-link disabled>Expenses</b-link>
+        <b-link to="/assumptions/expenses">Expenses</b-link>
         <b-link>Debts</b-link>
-        <b-link to="/assumptions/assets">Assets</b-link>
+        <b-link disabled>Assets</b-link>
       </div>
       <!-- chart Wrapper -->
       <div class="chart-container">
-        <stackedBarChart v-if="timelineData && timelineData.data.length"
+        <timeline v-if="timelineData && timelineData.data.length"
                   :dataArray="timelineData.data"
                   :label="`blah`"
                   :planStartYear="2012"
                   :planEndYear="2061"
-                  :birthYear="1981"></stackedBarChart>
+                  :birthYear="1981"></timeline>
       </div>
     </div>
     <div class="table-container">
       <div class="mx-auto bg-light text-regular text-left">
         <b-table show-empty
                 stacked="md"
-                :items="expenses"
+                :items="assets"
                 :fields="fields"
                 :current-page="currentPage"
                 :per-page="perPage"
@@ -35,8 +35,8 @@
             <span class="font-weight-medium">{{row.item.name}}</span>
           </div>
         </template>
-        <template slot="amount" slot-scope="row">
-          <span>{{row.item.amount.toLocaleString('sv-SE')}} SEK </span>
+        <template slot="initial_amount" slot-scope="row">
+          <span>{{Math.floor(row.item.initial_amount).toLocaleString('sv-SE')}} SEK </span>
         </template>
         <template slot="period" slot-scope="row">
           <span>{{row.item.start_year}} - {{row.item.end_year}}</span>
@@ -54,14 +54,14 @@
         <template slot="HEAD_name" slot-scope="row">
           <div class="d-flex align-items-center">
             <div class="table-title-label"></div>
-            <i class="flaticon solid up-4 text-danger table-title-label-icon"></i>
-            <span class="table-title">Expenses</span>
+            <i class="flaticon solid house-3 text-success table-title-label-icon"></i>
+            <span class="table-title">Assets</span>
           </div>
         </template>
         <template slot="HEAD_actions" slot-scope="row">
           <button class='btn btn-sm btn-primary font-weight-bold add-new-row d-none d-sm-block'>
             <i class="flaticon stroke plus"></i>
-            Add New Expense
+            Add New Asset
           </button>
           <button class='btn btn-sm btn-primary font-weight-bold add-new-row d-block d-sm-none'>
             <i class="flaticon stroke plus"></i>
@@ -90,19 +90,18 @@
 
 <script>
 import axios from 'axios'
-import stackedBarChart from '../../charts/stackedBarChart'
+import timeline from '../../charts/timeline'
 
 export default {
-  name: 'expenses',
+  name: 'assets',
   data () {
     return {
       timelineData: null,
-      expenses: [],
+      assets: [],
       fields: [
-        { key: 'name', label: 'Expenses' },
+        { key: 'name', label: 'Assets' },
+        { key: 'initial_amount', label: 'Initial Amount' },
         { key: 'period', label: 'Period' },
-        { key: 'amount', label: 'Amount' },
-        { key: 'annual_increase_percentage', label: 'Growth Rate', formatter: (value) => { return value ? Math.floor(value) + ' %' : '' } },
         { key: 'person_id',
           label: 'Person',
           formatter: (value) => {
@@ -126,13 +125,13 @@ export default {
   },
   async mounted () {
     try {
-      let response = await axios.get(`${process.env.ROOT_API}/expenses`)
-      this.expenses = response.data.data
-      this.totalRows = this.expenses.length
+      let response = await axios.get(`${process.env.ROOT_API}/assets`)
+      this.assets = response.data.data
+      this.totalRows = this.assets.length
       response = await axios.get(`${process.env.ROOT_API}/persons`)
       this.personOptions = response.data.data
 
-      let timelineData = await axios.get('https://api.livsplan.se/api/v1/expenses/?w_e_amounts=1')
+      let timelineData = await axios.get('https://api.livsplan.se/api/v1/assets/?w_e_amounts=1')
       this.timelineData = timelineData.data
     } catch (error) {
       console.error(error)
@@ -149,11 +148,11 @@ export default {
   },
   methods: {
     gotoDetail (id) {
-      this.$router.push(`/assumptions/expenses/${id}`)
+      this.$router.push(`/assumptions/assets/${id}`)
     }
   },
   components: {
-    stackedBarChart
+    timeline
   }
 }
 </script>

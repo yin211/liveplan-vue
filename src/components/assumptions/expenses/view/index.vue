@@ -117,18 +117,20 @@
                     <span v-show="!row.item.is_edit"  @dblclick="editRow(row.item)">{{row.item.amount.toLocaleString('sv-SE')}} SEK </span>
                   </template>
                   <template slot="actions" slot-scope="row">
-                    <button v-show="row.item.is_edit" class='btn plain-btn text-regular' @click.stop="saveRow(row.item)">
-                      <i class="flaticon stroke checkmark text-success"></i> Save
-                    </button>
-                    <button v-show="row.item.is_edit" class='btn plain-btn text-regular' @click.stop="cancelRow(row.item)">
-                      <i class="fa fa-times text-warning"></i> Cancel
-                    </button>
-                    <button v-show="!row.item.is_edit" class='btn plain-btn text-regular' :disabled="customDisabled" @click.stop="editRow(row.item)">
-                      <i class="flaticon solid edit-3 text-primary"></i> Edit
-                    </button>
-                    <button class='btn plain-btn text-regular' :disabled="customDisabled" @click.stop="deleteRow(row.item)">
-                      <i class="flaticon stroke trash-2 text-danger"></i> Delete
-                    </button>
+                    <div class="d-flex flex-column flex-md-row align-items-start">
+                      <button v-show="row.item.is_edit" class='btn plain-btn text-regular' @click.stop="saveRow(row.item)">
+                        <i class="flaticon stroke checkmark text-success"></i> Save
+                      </button>
+                      <button v-show="row.item.is_edit" class='btn plain-btn text-regular' @click.stop="cancelRow(row.item)">
+                        <i class="fa fa-times text-warning"></i> Cancel
+                      </button>
+                      <button v-show="!row.item.is_edit" class='btn plain-btn text-regular' :disabled="customDisabled" @click.stop="editRow(row.item)">
+                        <i class="flaticon solid edit-3 text-primary"></i> Edit
+                      </button>
+                      <button class='btn plain-btn text-regular' :disabled="customDisabled" @click.stop="deleteRow(row.item)">
+                        <i class="flaticon stroke trash-2 text-danger"></i> Delete
+                      </button>
+                    </div>
                   </template>
                   <template slot="HEAD_actions" slot-scope="row">
                     <button class='btn btn-sm icon-btn text-regular add-row-btn' :disabled="customDisabled"  style="border-color: #eaecef;" @click.stop="openAddRowModal">
@@ -173,32 +175,32 @@
                 <b-row>
                   <b-col cols="6" md="4" xl="2" class="d-flex flex-column justify-content-center py-xl-0 py-2">
                     <span class="text-gray">Name</span>
-                    <span class="text-regular font-weigth-medium">{{expense.name}}</span>
+                    <span class="text-regular font-weight-medium">{{expense.name}}</span>
                   </b-col>
 
                   <b-col cols="6" md="4" xl="2" class="d-flex flex-column justify-content-center py-xl-0 py-2">
                     <span class="text-gray">Category</span>
-                    <span class="text-regular font-weigth-medium" v-if="expense.category">{{expense.category.name}}</span>
+                    <span class="text-regular font-weight-medium" v-if="expense.category">{{expense.category.name}}</span>
                   </b-col>
 
                   <b-col cols="6" md="4" xl="2" class="d-flex flex-column justify-content-center py-xl-0 py-2">
                     <span class="text-gray">Type / Subtype</span>
-                    <span class="text-regular font-weigth-medium" v-if="expense.expense_type">{{expense.expense_subtype.name}}</span>
+                    <span class="text-regular font-weight-medium" v-if="expense.expense_type">{{expense.expense_subtype.name}}</span>
                   </b-col>
 
                   <b-col cols="6" md="4" xl="2" class="d-flex flex-column justify-content-center py-xl-0 py-2">
                     <span class="text-gray">Inflation</span>
-                    <span class="text-regular font-weigth-medium">{{expense.inflation_rate}} %</span>
+                    <span class="text-regular font-weight-medium">{{expense.inflation_rate}} %</span>
                   </b-col>
 
                   <b-col cols="6" md="4" xl="2" class="d-flex flex-column justify-content-center py-xl-0 py-2">
                     <span class="text-gray">Period</span>
-                    <span class="text-regular font-weigth-medium">{{expense.amount_recurrence}}</span>
+                    <span class="text-regular font-weight-medium">{{expense.amount_recurrence}}</span>
                   </b-col>
 
                   <b-col cols="6" md="4" xl="2" class="d-flex flex-column justify-content-center py-xl-0 py-2">
                     <span class="text-gray">Person</span>
-                    <span class="text-regular font-weigth-medium">{{personName}}</span>
+                    <span class="text-regular font-weight-medium">{{personName}}</span>
                   </b-col>
                 </b-row>
               </b-col>

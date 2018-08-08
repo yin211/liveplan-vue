@@ -6,6 +6,8 @@ import comingSoon from '@/components/errors/coming-soon'
 import assumptions from '@/components/assumptions'
 import expenses from '@/components/assumptions/expenses/index.vue'
 import viewExpense from '@/components/assumptions/expenses/view/index.vue'
+import incomes from '@/components/assumptions/incomes/index.vue'
+import assets from '@/components/assumptions/assets/index.vue'
 
 Vue.use(Router)
 
@@ -45,6 +47,16 @@ export default new Router({
           path: 'expenses/:id',
           name: 'viewExpense',
           component: viewExpense
+        },
+        {
+          path: 'incomes',
+          name: 'incomes',
+          component: incomes
+        },
+        {
+          path: 'assets',
+          name: 'assets',
+          component: assets
         }
       ]
     }

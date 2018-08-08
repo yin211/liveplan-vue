@@ -1,4 +1,4 @@
-.incomes {
+.assets {
   .title-container {
     max-width: 1440px;
     padding-top: 120px;
@@ -63,9 +63,6 @@
                 display: none;
               }
 
-              > :nth-child(5) {
-                display: none;
-              }
             }
           }
 
@@ -128,7 +125,7 @@
               font-size: 20px;
               position: absolute;
               left: 38px;
-              top: 42px;
+              top: 38px;
             }
 
             .add-new-row {

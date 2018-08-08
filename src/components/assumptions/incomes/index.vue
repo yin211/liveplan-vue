@@ -5,7 +5,7 @@
         <b-link disabled>Incomes</b-link>
         <b-link to="/assumptions/expenses">Expenses</b-link>
         <b-link>Debts</b-link>
-        <b-link>Assets</b-link>
+        <b-link to="/assumptions/assets">Assets</b-link>
       </div>
       <!-- chart Wrapper -->
       <div class="chart-container">

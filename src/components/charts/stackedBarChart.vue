@@ -66,7 +66,7 @@ export default {
         top: 100,
         right: 15,
         bottom: 15,
-        left: 100
+        left: 110
       },
       chart: '',
       debug: false
@@ -319,11 +319,11 @@ export default {
       .attr('stroke', '#ffffff')
       .attr('stroke-width', 1)
 
-      if (this.startYear >= this.domain[0]) {
+      if (this.planStartYear >= this.domain[0]) {
         this.chart.selectAll('circle.startYearCircle')
             .remove()
         // start year tick selection
-        let startYearTick = this.chart.select(`#xTick-${this.startYear}`)
+        let startYearTick = this.chart.select(`#xTick-${this.planStartYear}`)
         startYearTick
           .select('line')
           .attr('y2', startEndTickSize)
@@ -348,7 +348,7 @@ export default {
           tag: 'g',
           selector: 'startYear'
         })
-        .attr('transform', `translate(${this.xScale(this.startYear) + this.xScale.bandwidth() / 2 + 10}, ${this.mehrHeight - this.margin.top - 15})`)
+        .attr('transform', `translate(${this.xScale(this.planStartYear) + this.xScale.bandwidth() / 2 + 10}, ${this.mehrHeight - this.margin.top - 15})`)
 
         patternify({
           container: startYearGroup,
@@ -364,7 +364,7 @@ export default {
           tag: 'text',
           selector: 'startYearY'
         })
-        .text(this.startYear)
+        .text(this.planStartYear)
         .attr('fill', '#fff')
         .attr('font-size', '13px')
         .attr('dy', 16)
@@ -372,11 +372,11 @@ export default {
         this.chart.selectAll('g.startYear').remove()
       }
 
-      if (this.endYear <= this.domain[this.domain.length - 1]) {
+      if (this.planEndYear <= this.domain[this.domain.length - 1]) {
         this.chart.selectAll('circle.endYearCircle')
             .remove()
         // end year tick selection
-        let endYeartTick = this.chart.select(`#xTick-${this.endYear}`)
+        let endYeartTick = this.chart.select(`#xTick-${this.planEndYear}`)
         endYeartTick
           .select('line')
           .attr('y2', startEndTickSize)
@@ -395,7 +395,7 @@ export default {
         .attr('stroke-width', 1.5)
         .attr('transform', `translate(0, ${startEndTickSize})`)
 
-        let translateX = this.xScale(this.endYear) + this.xScale.bandwidth() / 2 + 10
+        let translateX = this.xScale(this.planEndYear) + this.xScale.bandwidth() / 2 + 10
         let translateY = this.mehrHeight - this.margin.top - 15
 
         if (this.endYear >= this.domain[this.domain.length - 2]) {
@@ -424,7 +424,7 @@ export default {
           tag: 'text',
           selector: 'endYearY'
         })
-        .text(this.endYear)
+        .text(this.planEndYear)
         .attr('fill', '#fff')
         .attr('font-size', '13px')
         .attr('dy', 16)

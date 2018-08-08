@@ -9,11 +9,11 @@
       </div>
       <!-- chart Wrapper -->
       <div class="chart-container">
-        <stackedBarChart v-if="timelineData && timelineData.data.length"
+        <stackedBarChart v-if="timelineData && timelineData.data.length && planStartYear && planEndYear"
                   :dataArray="timelineData.data"
                   :label="`blah`"
-                  :planStartYear="2012"
-                  :planEndYear="2061"
+                  :planStartYear="planStartYear"
+                  :planEndYear="planEndYear"
                   :birthYear="1981"></stackedBarChart>
       </div>
     </div>
@@ -97,6 +97,8 @@ export default {
   data () {
     return {
       timelineData: null,
+      planStartYear: null,
+      planEndYear: null,
       expenses: [],
       fields: [
         { key: 'name', label: 'Expenses' },
@@ -134,6 +136,9 @@ export default {
 
       let timelineData = await axios.get('https://api.livsplan.se/api/v1/expenses/?w_e_amounts=1')
       this.timelineData = timelineData.data
+      let plansResponse = await axios.get(`${process.env.ROOT_API}/plans/1`)
+      this.planStartYear = plansResponse.data.data.start_year
+      this.planEndYear = plansResponse.data.data.end_year
     } catch (error) {
       console.error(error)
     }

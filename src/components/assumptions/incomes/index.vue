@@ -32,7 +32,7 @@
         <template slot="name" slot-scope="row">
           <div class="d-flex">
             <i class="flaticon solid star-2"></i>
-            <span class="font-weight-medium">{{row.item.name}}</span>
+            <span class="font-weight-bold">{{row.item.name}}</span>
           </div>
         </template>
         <template slot="amount_per_period" slot-scope="row">
@@ -54,7 +54,7 @@
         <template slot="HEAD_name" slot-scope="row">
           <div class="d-flex align-items-center">
             <div class="table-title-label"></div>
-            <i class="flaticon solid down-4 text-success table-title-label-icon"></i>
+            <i class="fa fa-long-arrow-down text-success table-title-label-icon"></i>
             <span class="table-title">Incomes</span>
           </div>
         </template>

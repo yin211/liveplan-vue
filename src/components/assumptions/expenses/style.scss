@@ -1,5 +1,14 @@
 .expenses {
   table {
+
+    .table-title-label-icon {
+      font-size: 18px;
+      font-weight: bold;
+      position: absolute;
+      left: 32px;
+      top: 42px;
+    }
+
     @media (max-width: 767.99px) {
       thead {
         tr {
@@ -19,6 +28,18 @@
             display: none;
           }
         }
+      }
+
+      .table-title-label-icon {
+        left: 22px !important;
+        top: 15px !important;
+      }
+    }
+
+    @media (max-width: 575.98px) {
+
+      .table-title-label-icon {
+        top: 21px !important;
       }
     }
   }

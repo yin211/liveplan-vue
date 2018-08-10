@@ -9,6 +9,34 @@
       top: 42px;
     }
 
+    th {
+      &[aria-colindex="1"] {
+        &.sorting::before, &.sorting::after {
+          left: 174px;
+        }
+      }
+      &[aria-colindex="2"] {
+        &.sorting::before, &.sorting::after {
+          left: 62px;
+        }
+      }
+      &[aria-colindex="3"] {
+        &.sorting::before, &.sorting::after {
+          left: 70px;
+        }
+      }
+      &[aria-colindex="4"] {
+        &.sorting::before, &.sorting::after {
+          left: 100px;
+        }
+      }
+      &[aria-colindex="5"] {
+        &.sorting::before, &.sorting::after {
+          left: 62px;
+        }
+      }
+    }
+
     @media (max-width: 767.99px) {
       thead {
         tr {

@@ -28,7 +28,17 @@
                 :sort-by.sync="sortBy"
                 :sort-desc.sync="sortDesc"
                 :sort-direction="sortDirection"
+                :filter="filter"
+                @filtered="onFiltered"
         >
+        <template slot="top-row" slot-scope="data">
+          <td colspan="5">
+            <div class="d-flex align-items-center">
+              <i class="fa fa-search"></i>
+              <b-form-input v-model="filter" size="sm" placeholder="Type to Search" />
+            </div>
+          </td>
+        </template>
         <template slot="name" slot-scope="row">
           <div class="d-flex">
             <i class="flaticon solid star-2"></i>
@@ -99,9 +109,9 @@ export default {
       timelineData: null,
       assets: [],
       fields: [
-        { key: 'name', label: 'Assets' },
-        { key: 'initial_amount', label: 'Initial Amount' },
-        { key: 'period', label: 'Period' },
+        { key: 'name', label: 'Assets', sortable: true },
+        { key: 'initial_amount', label: 'Initial Amount', sortable: true },
+        { key: 'period', label: 'Period', sortable: true },
         { key: 'person_id',
           label: 'Person',
           formatter: (value) => {
@@ -109,7 +119,8 @@ export default {
             if (f.length) {
               return f[0].name
             }
-          }
+          },
+          sortable: true
         },
         { key: 'actions', 'class': 'd-lg-flex justify-content-lg-end align-items-center' }
       ],
@@ -120,6 +131,7 @@ export default {
       sortDirection: 'asc',
       pageOptions: [ 5, 10, 15, 25 ],
       totalRows: 0,
+      filter: null,
       personOptions: []
     }
   },
@@ -149,6 +161,11 @@ export default {
   methods: {
     gotoDetail (id) {
       this.$router.push(`/assumptions/assets/${id}`)
+    },
+    onFiltered (filteredItems) {
+      // Trigger pagination to update the number of buttons/pages due to filtering
+      this.totalRows = filteredItems.length
+      this.currentPage = 1
     }
   },
   components: {

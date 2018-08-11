@@ -104,7 +104,8 @@ export default {
       return cont
     },
     bars () {
-      return this.$d3.stack().keys(this.dataKeys)(this.computedData)
+      return this.$d3.stack().keys(this.dataKeys)
+                             .order(this.$d3.stackOrderDescending)(this.computedData)
     },
     chartHeight () {
       return this.height - this.margin.top - this.margin.bottom - this.sliderHeight
@@ -130,16 +131,8 @@ export default {
                   .paddingOuter([0.1])
     },
     yScale () {
-      const min = this.$d3.min(this.dataArray, d => this.$d3.min(this.$d3.keys(d), k => {
-        if (!isNaN(k)) {
-          return +d[k]
-        }
-      }))
-      const max = this.$d3.max(this.dataArray, d => this.$d3.max(this.$d3.keys(d), k => {
-        if (!isNaN(k)) {
-          return +d[k]
-        }
-      }))
+      const min = this.$d3.min(this.bars[0], d => (Array.isArray(d) && d.length === 2) ? d[0] : 0)
+      const max = this.$d3.max(this.bars[this.bars.length - 1], d => (Array.isArray(d) && d.length === 2) ? d[1] : 0)
 
       return this.$d3.scaleLinear()
               .domain([min, max])

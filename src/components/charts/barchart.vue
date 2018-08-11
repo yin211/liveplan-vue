@@ -304,6 +304,7 @@ export default {
            .attr('class', 'tick-year')
            .attr('dy', '4em')
            .attr('fill', this.darkColor)
+           .attr('font-family', 'Roboto')
 
       // append circles
       patternify({
@@ -324,6 +325,7 @@ export default {
       })
       .attr('class', 'secondaryAxisText')
       .attr('dy', '2.5em')
+      .attr('font-family', 'Roboto')
       .text(function (d, i) {
         let tick = self.$d3.select(this.parentElement)
         return tick.attr('data-age')
@@ -351,6 +353,7 @@ export default {
 
       yTicks.select('text')
         .attr('x', -24)
+        .attr('font-family', 'Roboto')
 
       // append circles
       patternify({
@@ -403,6 +406,7 @@ export default {
         .text('Start Year')
         .attr('fill', this.darkColor)
         .attr('font-size', '0.8rem')
+        .attr('font-family', 'Roboto')
 
         patternify({
           container: startYearGroup,
@@ -413,6 +417,7 @@ export default {
         .attr('fill', '#fff')
         .attr('font-size', '13px')
         .attr('dy', 16)
+        .attr('font-family', 'Roboto')
       } else {
         this.chart.selectAll('g.startYear').remove()
       }
@@ -463,6 +468,7 @@ export default {
         .text('End Year')
         .attr('fill', this.darkColor)
         .attr('font-size', '0.8rem')
+        .attr('font-family', 'Roboto')
 
         patternify({
           container: endYearGroup,
@@ -473,6 +479,7 @@ export default {
         .attr('fill', '#fff')
         .attr('font-size', '13px')
         .attr('dy', 16)
+        .attr('font-family', 'Roboto')
       } else {
         this.chart.selectAll('g.endYear').remove()
       }
@@ -496,6 +503,7 @@ export default {
       })
       .text(this.staticDomain[0])
       .attr('fill', '#fff')
+      .attr('font-family', 'Roboto')
 
       patternify({
         container: selection,
@@ -505,6 +513,7 @@ export default {
       .text(this.staticDomain[this.staticDomain.length - 1])
       .attr('fill', '#fff')
       .attr('x', width - 35)
+      .attr('font-family', 'Roboto')
 
       // slider group
       var slider = patternify({
@@ -770,6 +779,9 @@ export default {
         svg {
             // background: linear-gradient(193.11deg, #685B7A 0%, #445B7C 100%);
             box-shadow: 20px 22px 44px 0 rgba(82,86,112,0.55);
+            text {
+              font-family: Roboto;
+            }
             #hoverrect {
               display: none;
               pointer-events: none;

@@ -32,7 +32,7 @@
                 @filtered="onFiltered"
         >
         <template slot="top-row" slot-scope="data">
-          <td colspan="5">
+          <td colspan="6">
             <div class="d-flex align-items-center">
               <i class="fa fa-search"></i>
               <b-form-input v-model="filter" size="sm" placeholder="Type to Search" />
@@ -110,8 +110,9 @@ export default {
       assets: [],
       fields: [
         { key: 'name', label: 'Assets', sortable: true },
-        { key: 'initial_amount', label: 'Initial Amount', sortable: true },
         { key: 'period', label: 'Period', sortable: true },
+        { key: 'initial_amount', label: 'Initial Amount', sortable: true },
+        { key: 'annual_growth_rate', label: 'Annual Growth Rate', sortable: true },
         { key: 'person_id',
           label: 'Person',
           formatter: (value) => {

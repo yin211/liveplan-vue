@@ -22,17 +22,22 @@
       }
       &[aria-colindex="2"] {
         &.sorting::before, &.sorting::after {
-          left: 110px;
+          left: 60px;
         }
       }
       &[aria-colindex="3"] {
         &.sorting::before, &.sorting::after {
-          left: 60px;
+          left: 110px;
         }
       }
       &[aria-colindex="4"] {
         &.sorting::before, &.sorting::after {
-          left: 62px;
+          left: 154px;
+        }
+      }
+      &[aria-colindex="5"] {
+        &.sorting::before, &.sorting::after {
+          left: 64px;
         }
       }
     }
@@ -50,6 +55,10 @@
           }
 
           > :nth-child(4) {
+            display: none;
+          }
+
+          > :nth-child(5) {
             display: none;
           }
         }

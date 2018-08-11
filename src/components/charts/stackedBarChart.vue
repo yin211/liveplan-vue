@@ -6,9 +6,10 @@
             <g :transform="`translate(${margin.left}, ${margin.top})`" class="chart-stack">
             </g>
             <g :transform="`translate(${margin.left}, ${margin.top})`" class="chart">
-              <!-- <rect v-for="(d,i) in bars"
+              <rect v-if="bars && bars.length"
+                    v-for="(d,i) in bars[0]"
                     :key="`hiddenrect-${i}`"
-                    :x="xScale(d.year)"
+                    :x="xScale(d.data.year)"
                     :y="0"
                     :width="xScale.bandwidth()"
                     :height="chartHeight + hoverrectMehrYBottom"
@@ -16,7 +17,7 @@
                     class="hiddenrect"
                     @mouseover="rectmouseover(d, i)"
                     @mouseout="rectmouseout(d, i)">
-              </rect> -->
+              </rect>
             </g>
             <line :x1="0"
                   :x2="width"
@@ -159,6 +160,70 @@ export default {
     }
   },
   methods: {
+    rectmouseover (d, i) {
+      let html = `<div class="toolTip">
+                    <div class="mt-2 year">
+                      <strong><span>${d.data.year}</span></strong> ( age of <strong><span>${d.data.year - this.birthYear}</span></strong> )
+                    </div>
+                    <div class="d-flex mt-4">
+                      <div class="mr-3">
+                        <span class="income-span"></span><span class="ml-2 label-span">${this.label}</span>
+                      </div>
+                      <div class="ml-4">
+                        <strong><span id="amount-span">${this.thousandsFormat(d.value)}</span> SEK</strong>
+                      </div>
+                    </div>
+                  </div>`
+
+      let x = this.xScale(d.data.year) + this.xScale.bandwidth() / 2 + this.margin.left
+      let y = this.margin.top * 1.5
+
+      if (x + 340 > this.width) {
+        x -= 340
+      }
+
+      this.tooltipObj = {
+        x: x,
+        y: y,
+        html: html,
+        visible: true
+      }
+
+      // current tick selection
+      let xTick = this.chart.select(`#xTick-${d.data.year}`)
+
+      // make circle bigger and filled white
+      let xTickCircle = xTick.select('circle')
+      xTickCircle.attr('fill', '#fff')
+                  .attr('stroke', '#1971ff')
+                  .attr('r', 5)
+
+      // display hover rect
+      let hoverrect = this.$d3.select('#hoverrect')
+      hoverrect.attr('x', this.xScale(d.data.year))
+               .style('display', 'block')
+
+      // make texts a little bit bigger
+      xTick.selectAll('text').attr('fill', '#fff').attr('font-weight', 600)
+    },
+    rectmouseout (d, i) {
+      // current tick selection
+      let xTick = this.chart.select(`#xTick-${d.data.year}`)
+
+      // make circle smaller
+      let xTickCircle = xTick.select('circle')
+      xTickCircle.attr('fill', '#1971ff')
+                  .attr('stroke', '#fff')
+                  .attr('r', 4)
+
+      // hide hover rect
+      let hoverrect = this.$d3.select('#hoverrect')
+      hoverrect.style('display', 'none')
+
+      // make texts smaller
+      xTick.selectAll('text').attr('fill', this.darkColor).attr('font-weight', 400)
+      this.tooltipObj.visible = false
+    },
     colorScale (i) {
       return this.barColors[i % this.barColors.length]
     },

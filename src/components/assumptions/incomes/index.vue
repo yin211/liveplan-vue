@@ -4,7 +4,7 @@
       <div class="title-container mx-auto">
         <b-link disabled>Incomes</b-link>
         <b-link to="/assumptions/expenses">Expenses</b-link>
-        <b-link>Debts</b-link>
+        <b-link to="/assumptions/debts">Debts</b-link>
         <b-link to="/assumptions/assets">Assets</b-link>
       </div>
       <!-- chart Wrapper -->

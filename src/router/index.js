@@ -8,6 +8,7 @@ import expenses from '@/components/assumptions/expenses/index.vue'
 import viewExpense from '@/components/assumptions/expenses/view/index.vue'
 import incomes from '@/components/assumptions/incomes/index.vue'
 import assets from '@/components/assumptions/assets/index.vue'
+import debts from '@/components/assumptions/debts/index.vue'
 
 Vue.use(Router)
 
@@ -57,6 +58,11 @@ export default new Router({
           path: 'assets',
           name: 'assets',
           component: assets
+        },
+        {
+          path: 'debts',
+          name: 'debts',
+          component: debts
         }
       ]
     }

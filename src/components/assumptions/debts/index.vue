@@ -1,27 +1,27 @@
 <template>
-  <div class="assets bg-light">
+  <div class="debts bg-light">
     <div class="main-gradient">
       <div class="title-container mx-auto">
         <b-link to="/assumptions/incomes">Incomes</b-link>
         <b-link to="/assumptions/expenses">Expenses</b-link>
-        <b-link to="/assumptions/debts">Debts</b-link>
-        <b-link disabled>Assets</b-link>
+        <b-link disabled>Debts</b-link>
+        <b-link to="/assumptions/assets">Assets</b-link>
       </div>
       <!-- chart Wrapper -->
       <div class="chart-container">
         <stackedBarChart v-if="timelineData && timelineData.length && planStartYear && planEndYear"
-          :dataArray="timelineData"
-          :label="`blah`"
-          :planStartYear="planStartYear"
-          :planEndYear="planEndYear"
-          :birthYear="1981"></stackedBarChart>
+                  :dataArray="timelineData"
+                  :label="`blah`"
+                  :planStartYear="planStartYear"
+                  :planEndYear="planEndYear"
+                  :birthYear="1981"></stackedBarChart>
       </div>
     </div>
     <div class="table-container">
       <div class="mx-auto bg-light text-regular text-left">
         <b-table show-empty
                 stacked="md"
-                :items="assets"
+                :items="debts"
                 :fields="fields"
                 :current-page="currentPage"
                 :per-page="perPage"
@@ -46,10 +46,13 @@
           </div>
         </template>
         <template slot="initial_amount" slot-scope="row">
-          <span>{{Math.floor(row.item.initial_amount).toLocaleString('sv-SE')}} SEK </span>
+          <span>{{row.item.initial_amount.toLocaleString('sv-SE')}} SEK </span>
         </template>
         <template slot="period" slot-scope="row">
           <span>{{row.item.start_year}} - {{row.item.end_year}}</span>
+        </template>
+         <template slot="amortization_amount" slot-scope="row">
+          <span>{{row.item.amortization_amount.toLocaleString('sv-SE')}} SEK </span>
         </template>
         <template slot="actions" slot-scope="row">
           <div class="d-flex flex-column flex-md-row align-items-start">
@@ -63,15 +66,15 @@
         </template>
         <template slot="HEAD_name" slot-scope="row">
           <div class="d-flex align-items-center">
-            <i class="flaticon stroke home-3"></i>
-            <div class="home-rect"></div>
-            <span class="table-title">Assets</span>
+            <div class="table-title-label"></div>
+            <i class="flaticon stroke document text-danger table-title-label-icon"></i>
+            <span class="table-title">Debts</span>
           </div>
         </template>
         <template slot="HEAD_actions" slot-scope="row">
           <button class='btn btn-sm btn-primary font-weight-bold add-new-row d-none d-sm-block'>
             <i class="flaticon stroke plus"></i>
-            Add New Asset
+            Add New Debt
           </button>
           <button class='btn btn-sm btn-primary font-weight-bold add-new-row d-block d-sm-none'>
             <i class="flaticon stroke plus"></i>
@@ -103,28 +106,19 @@ import axios from 'axios'
 import stackedBarChart from '../../charts/stackedBarChart'
 
 export default {
-  name: 'assets',
+  name: 'debts',
   data () {
     return {
       timelineData: null,
       planStartYear: null,
       planEndYear: null,
-      assets: [],
+      debts: [],
       fields: [
-        { key: 'name', label: 'Assets', sortable: true },
+        { key: 'name', label: 'Debts', sortable: true },
         { key: 'period', label: 'Period', sortable: true },
         { key: 'initial_amount', label: 'Initial Amount', sortable: true },
-        { key: 'annual_growth_rate', label: 'Annual Growth Rate', sortable: true },
-        { key: 'person_id',
-          label: 'Person',
-          formatter: (value) => {
-            let f = this.personOptions.filter(option => option.id === value)
-            if (f.length) {
-              return f[0].name
-            }
-          },
-          sortable: true
-        },
+        { key: 'interest_rate', label: 'Interest Rate', sortable: true },
+        { key: 'amortization_amount', label: 'Amortization Amount', sortable: true },
         { key: 'actions', 'class': 'd-lg-flex justify-content-lg-end align-items-center' }
       ],
       currentPage: 1,
@@ -134,19 +128,16 @@ export default {
       sortDirection: 'asc',
       pageOptions: [ 5, 10, 15, 25 ],
       totalRows: 0,
-      filter: null,
-      personOptions: []
+      filter: null
     }
   },
   async mounted () {
     try {
-      let response = await axios.get(`${process.env.ROOT_API}/assets`)
-      this.assets = response.data.data
-      this.totalRows = this.assets.length
-      response = await axios.get(`${process.env.ROOT_API}/persons`)
-      this.personOptions = response.data.data
+      let response = await axios.get(`${process.env.ROOT_API}/debts`)
+      this.debts = response.data.data
+      this.totalRows = this.debts.length
 
-      let timelineData = await axios.get('https://api.livsplan.se/api/v1/cashflow/sums?plan_id=1&object_class=asset&aggregated=0')
+      let timelineData = await axios.get('https://api.livsplan.se/api/v1/cashflow/sums?plan_id=1&object_class=debt&aggregated=0')
       this.timelineData = timelineData.data
       let plansResponse = await axios.get(`${process.env.ROOT_API}/plans/1`)
       this.planStartYear = plansResponse.data.data.start_year
@@ -166,7 +157,7 @@ export default {
   },
   methods: {
     gotoDetail (id) {
-      this.$router.push(`/assumptions/assets/${id}`)
+      this.$router.push(`/assumptions/debts/${id}`)
     },
     onFiltered (filteredItems) {
       // Trigger pagination to update the number of buttons/pages due to filtering

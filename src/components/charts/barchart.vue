@@ -812,7 +812,6 @@ export default {
               padding: 20px;
               text-align: left;
               font-family: Roboto;
-              height: 132px;
               .income-span {
                 width: 30px;
                 height: 8px;

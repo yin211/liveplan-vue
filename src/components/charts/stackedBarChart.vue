@@ -164,13 +164,14 @@ export default {
       return this.barColors[i % this.barColors.length]
     },
     rectmouseover (d, i) {
-      let amounts = Object.keys(d.data).filter(x => x !== 'value').map((name, i) => {
+      let amounts = Object.keys(d.data).filter(x => x !== 'year').map((name, i) => {
         return {
           name: name,
           amount: +d.data[name],
           color: this.colorScale(i)
         }
       })
+
       let html = `<div class="toolTip">
                     <div class="tooltip-title">
                       <strong><span id="tooltipyear">${d.data.year}</span></strong> ( age of <strong><span id="tooltipage">${d.data.year - this.birthYear}</span></strong> )
@@ -178,10 +179,10 @@ export default {
                     ${amounts.map((d, i) => {
                       return `<div class="d-flex">
                               <div class="mr-3">
-                                <span class="tooltip-amount-span" style="background-color: ${d.color};"></span><span class="ml-1">${d.name}</span>
+                                <span class="tooltip-amount-span" style="background-color:${d.color};"></span><span class="ml-1">${d.name}</span>
                               </div>
-                              <div>
-                                <strong><span id="tooltipincome">${this.thousandsFormat(d.amount)}</span> SEK</strong>
+                              <div class="value-float-right">
+                                <strong><span>${this.thousandsFormat(d.amount)}</span> SEK</strong>
                               </div>
                             </div>`
                     }).toString().replace(/,/g, '')}
@@ -839,7 +840,19 @@ export default {
               padding: 20px;
               text-align: left;
               font-family: Roboto;
-              height: 132px;
+
+              .tooltip-title {
+                margin-bottom: 20px;
+              }
+              .d-flex {
+                margin-bottom: 8px;
+              } 
+              .tooltip-amount-span {
+                width: 30px;
+                height:  8px;
+                display: inline-block;
+                border-radius: 4px;
+              }
               .income-span {
                 width: 30px;
                 height: 8px;

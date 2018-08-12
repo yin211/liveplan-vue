@@ -49,7 +49,7 @@ export default {
       el = el.enter()
               .append('div')
               .attr('class', 'hiddentooltip')
-              .style('visibility', 'hidden')
+              .style('display', 'none')
               .style('position', 'absolute')
               .merge(el)
 
@@ -90,7 +90,7 @@ export default {
         .tooltip-container {
             position: absolute;
             min-width: 100px;
-            white-space: nowrap; 
+            white-space: nowrap;
             height: auto;
             border-radius: 2px;
             text-align: center;

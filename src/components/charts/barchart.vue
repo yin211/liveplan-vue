@@ -55,7 +55,7 @@
             <Tooltip :obj="tooltipObj"
                      :svgWidth="width"
                      :svgHeight="height"
-                     :handleOverflow="true">
+                     :handleOverflow="false">
             </Tooltip>
         </svg>
     </div>

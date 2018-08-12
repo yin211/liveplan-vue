@@ -141,7 +141,7 @@ export default {
   methods: {
     rectmouseover (d, i) {
       let html = `<div class="toolTip">
-                    <div>
+                    <div class="tooltip-title">
                       <strong><span id="tooltipyear">${d.year}</span></strong> ( age of <strong><span id="tooltipage">${d.year - this.birthYear}</span></strong> )
                     </div>
                     ${d.amounts.map((d, i) => {
@@ -793,28 +793,32 @@ export default {
                 display: none;
               }
             }
-            .toolTip {
-              background-color: #fff;
-              padding: 20px;
-              text-align: left;
-              div:first-child {
-                margin-bottom: 20px;
-              }
-              .tooltip-amount-span {
-                width: 30px;
-                height: 8px;
-                display: inline-block;
-                border-radius: 4px;
-              }
-              #tooltipincome {
-                position: relative;
-                right: 0px;
-              }
-              .tooltip-right {
-                float: right;
-              }
-            }
         }
+    }
+
+    .toolTip {
+      background-color: #fff;
+      padding: 20px;
+      text-align: left;
+      .tooltip-title {
+        margin-bottom: 20px;
+      }
+      .d-flex {
+        margin-bottom: 8px;
+      }
+      .tooltip-amount-span {
+        width: 30px;
+        height:  8px;
+        display: inline-block;
+        border-radius: 4px;
+      }
+      #tooltipincome {
+        position: relative;
+        right: 0px;
+      }
+      .tooltip-right {
+        float: right;
+      }
     }
 
 </style>

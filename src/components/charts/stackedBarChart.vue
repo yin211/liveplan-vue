@@ -160,23 +160,36 @@ export default {
     }
   },
   methods: {
+    colorScale (i) {
+      return this.barColors[i % this.barColors.length]
+    },
     rectmouseover (d, i) {
+      let amounts = Object.keys(d.data).filter(x => x !== 'value').map((name, i) => {
+        return {
+          name: name,
+          amount: +d.data[name],
+          color: this.colorScale(i)
+        }
+      })
       let html = `<div class="toolTip">
-                    <div class="mt-2 year">
-                      <strong><span>${d.data.year}</span></strong> ( age of <strong><span>${d.data.year - this.birthYear}</span></strong> )
+                    <div class="tooltip-title">
+                      <strong><span id="tooltipyear">${d.data.year}</span></strong> ( age of <strong><span id="tooltipage">${d.data.year - this.birthYear}</span></strong> )
                     </div>
-                    <div class="d-flex mt-4">
-                      <div class="mr-3">
-                        <span class="income-span"></span><span class="ml-2 label-span">${this.label}</span>
-                      </div>
-                      <div class="ml-4">
-                        <strong><span id="amount-span">${this.thousandsFormat(d.value)}</span> SEK</strong>
-                      </div>
-                    </div>
+                    ${amounts.map((d, i) => {
+                      return `<div class="d-flex">
+                              <div class="mr-3">
+                                <span class="tooltip-amount-span" style="background-color: ${d.color};"></span><span class="ml-1">${d.name}</span>
+                              </div>
+                              <div>
+                                <strong><span id="tooltipincome">${this.thousandsFormat(d.amount)}</span> SEK</strong>
+                              </div>
+                            </div>`
+                    }).toString().replace(/,/g, '')}
+
                   </div>`
 
       let x = this.xScale(d.data.year) + this.xScale.bandwidth() / 2 + this.margin.left
-      let y = this.margin.top * 1.5
+      let y = this.margin.top + 10
 
       if (x + 340 > this.width) {
         x -= 340
@@ -223,9 +236,6 @@ export default {
       // make texts smaller
       xTick.selectAll('text').attr('fill', this.darkColor).attr('font-weight', 400)
       this.tooltipObj.visible = false
-    },
-    colorScale (i) {
-      return this.barColors[i % this.barColors.length]
     },
     calcOpacity (d, i) {
       const length = this.domain[this.domain.length - 1] - this.domain[0]

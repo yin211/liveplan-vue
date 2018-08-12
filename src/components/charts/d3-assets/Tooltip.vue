@@ -42,24 +42,24 @@ export default {
       let tooltip = this.$d3.select(this.$el)
       let x = this.obj.x
       let y = this.obj.y
-      if (this.handleOverflow) {
-        let el = this.$d3.select('body')
+      let el = this.$d3.select('body')
                     .selectAll('div.hiddentooltip')
                     .data(['hiddentooltip'])
 
-        el = el.enter()
-               .append('div')
-               .attr('class', 'hiddentooltip')
-               .style('visibility', 'hidden')
-               .style('position', 'absolute')
-               .merge(el)
+      el = el.enter()
+              .append('div')
+              .attr('class', 'hiddentooltip')
+              .style('visibility', 'hidden')
+              .style('position', 'absolute')
+              .merge(el)
 
-        el.html(this.obj.html)
-        let bound = el.select('div').node().getBoundingClientRect()
-        let width = bound.width
-        let height = bound.height
-        this.width = width > 100 ? width : 100
-        this.height = height > 50 ? height : 50
+      el.html(this.obj.html)
+      let bound = el.select('div.toolTip').node().getBoundingClientRect()
+      let width = bound.width
+      let height = bound.height
+      this.width = width > 100 ? width : 100
+      this.height = height > 50 ? height : 50
+      if (this.handleOverflow) {
         if (x + width > this.svgWidth) {
           x -= width
         }
@@ -102,4 +102,14 @@ export default {
             cursor: pointer;
         }
     }
+    // .hiddentooltip {
+    //   .toolTip {
+    //     .tooltip-title {
+    //       margin-bottom: 20px;
+    //     }
+    //     .d-flex {
+    //       margin-bottom: 8px;
+    //     }
+    //   }
+    // }
 </style>

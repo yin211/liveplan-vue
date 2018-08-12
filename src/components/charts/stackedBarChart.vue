@@ -185,7 +185,6 @@ export default {
                               </div>
                             </div>`
                     }).toString().replace(/,/g, '')}
-
                   </div>`
 
       let x = this.xScale(d.data.year) + this.xScale.bandwidth() / 2 + this.margin.left

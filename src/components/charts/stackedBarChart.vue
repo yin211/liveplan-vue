@@ -177,11 +177,11 @@ export default {
                       <strong><span id="tooltipyear">${d.data.year}</span></strong> ( age of <strong><span id="tooltipage">${d.data.year - this.birthYear}</span></strong> )
                     </div>
                     ${amounts.map((d, i) => {
-                      return `<div class="d-flex">
-                              <div class="amount-name">
+                      return `<div class="d-flex justify-content-between">
+                              <div class="mr-3">
                                 <span class="tooltip-amount-span" style="background-color:${d.color};"></span><span class="ml-1">${d.name}</span>
                               </div>
-                              <div class="value-float-right">
+                              <div>
                                 <strong><span>${this.thousandsFormat(d.amount)}</span> SEK</strong>
                               </div>
                             </div>`
@@ -846,7 +846,7 @@ export default {
               }
               .d-flex {
                 margin-bottom: 8px;
-              } 
+              }
               .tooltip-amount-span {
                 width: 30px;
                 height:  8px;
@@ -879,13 +879,6 @@ export default {
               }
               .tooltip-right {
                 float: right;
-              }
-              .value-float-right {
-                width: 25%;
-                text-align: right;
-              }
-              .amount-name {
-                width: 75%;
               }
             }
         }

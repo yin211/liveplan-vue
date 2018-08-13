@@ -233,6 +233,37 @@ form {
   }
 }
 
+.vue-switcher-theme--chart {
+  input {
+    position: relative !important;
+  }
+  &.vue-switcher-color--black {
+    div {
+        background-color: #525670 !important;
+        width: 40px !important;
+        height: 22px !important;
+        border: 1px solid #74788D;
+
+        &:after {
+            // for the circle on the switch
+            height: 14px !important;
+            width: 14px !important;
+            top: 3px !important;
+            margin-left: -20px !important;
+            background-color: white;
+        }
+    }
+
+    &.vue-switcher--unchecked {
+        div {
+            &:after {
+              margin-left: -25px !important;
+            }
+        }
+    }
+  }
+}
+
  // customize breadcrumb
  .breadcrumb {
   background: transparent;

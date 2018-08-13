@@ -7,14 +7,27 @@
         <b-link to="/assumptions/debts">Debts</b-link>
         <b-link to="/assumptions/assets">Assets</b-link>
       </div>
+      <div class="chart-switcher" v-if="timelineData && timelineData.length && planStartYear && planEndYear">
+        <div class="d-flex align-items-center">
+          <span class="mr-3" :class="{ 'selected': !isStackedBarChart }">Timeline</span>
+          <switches v-model="isStackedBarChart" theme="chart" type-bold="false" color="black"></switches>
+          <span class="ml-3" :class="{ 'selected': isStackedBarChart }">Barchart</span>
+        </div>
+      </div>
       <!-- chart Wrapper -->
       <div class="chart-container">
-        <stackedBarChart v-if="timelineData && timelineData.length && planStartYear && planEndYear"
+        <stackedBarChart v-if="isStackedBarChart && timelineData && timelineData.length && planStartYear && planEndYear"
                   :dataArray="timelineData"
                   :label="`blah`"
                   :planStartYear="planStartYear"
                   :planEndYear="planEndYear"
                   :birthYear="1981"></stackedBarChart>
+        <timeline v-if="!isStackedBarChart && timelineData && timelineData.length && planStartYear && planEndYear"
+                  :dataArray="timelineData"
+                  :label="`blah`"
+                  :planStartYear="planStartYear"
+                  :planEndYear="planEndYear"
+                  :birthYear="1981"></timeline>
       </div>
     </div>
     <div class="table-container">
@@ -101,6 +114,8 @@
 <script>
 import axios from 'axios'
 import stackedBarChart from '../../charts/stackedBarChart'
+import timeline from '../../charts/timeline'
+import Switches from 'vue-switches'
 
 export default {
   name: 'expenses',
@@ -135,7 +150,8 @@ export default {
       pageOptions: [ 5, 10, 15, 25 ],
       totalRows: 0,
       filter: null,
-      personOptions: []
+      personOptions: [],
+      isStackedBarChart: true
     }
   },
   async mounted () {
@@ -175,7 +191,9 @@ export default {
     }
   },
   components: {
-    stackedBarChart
+    stackedBarChart,
+    timeline,
+    Switches
   }
 }
 </script>

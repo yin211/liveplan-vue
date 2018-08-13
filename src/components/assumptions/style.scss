@@ -19,6 +19,31 @@
     }
   }
 
+  .chart-switcher {
+    position: absolute;
+    right: 12%;
+
+    span {
+      height: 20px;
+      width: 63px;
+      opacity: 0.59;
+      color: #FFFFFF;
+      font-size: 14px;
+      line-height: 20px;
+
+      &.selected {
+        opacity: 1;
+        font-weight: 500;
+      }
+    }
+  }
+
+  @media (max-width: 1440px) {
+    .chart-switcher {
+      right: 5%;
+    }
+  }
+
   .chart-container {
     border-top: 2px solid #404A65;
   }

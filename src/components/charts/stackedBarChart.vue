@@ -178,7 +178,7 @@ export default {
                     </div>
                     ${amounts.map((d, i) => {
                       return `<div class="d-flex">
-                              <div class="mr-3">
+                              <div class="amount-name">
                                 <span class="tooltip-amount-span" style="background-color:${d.color};"></span><span class="ml-1">${d.name}</span>
                               </div>
                               <div class="value-float-right">
@@ -879,6 +879,13 @@ export default {
               }
               .tooltip-right {
                 float: right;
+              }
+              .value-float-right {
+                width: 25%;
+                text-align: right;
+              }
+              .amount-name {
+                width: 75%;
               }
             }
         }

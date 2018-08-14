@@ -7,14 +7,27 @@
         <b-link to="/assumptions/debts">Debts</b-link>
         <b-link disabled>Assets</b-link>
       </div>
+      <div class="chart-switcher" v-if="planStartYear && planEndYear">
+        <div class="d-flex align-items-center">
+          <span class="mr-3" :class="{ 'selected': !isStackedBarChart }">Timeline</span>
+          <switches v-model="isStackedBarChart" theme="chart" type-bold="false" color="black"></switches>
+          <span class="ml-3" :class="{ 'selected': isStackedBarChart }">Barchart</span>
+        </div>
+      </div>
       <!-- chart Wrapper -->
       <div class="chart-container">
-        <stackedBarChart v-if="timelineData && timelineData.length && planStartYear && planEndYear"
-          :dataArray="timelineData"
+        <stackedBarChart v-if="isStackedBarChart && stackBarData && stackBarData.length && planStartYear && planEndYear"
+          :dataArray="stackBarData"
           :label="`blah`"
           :planStartYear="planStartYear"
           :planEndYear="planEndYear"
           :birthYear="1981"></stackedBarChart>
+        <timeline v-if="!isStackedBarChart && timelineData && timelineData.data.length && planStartYear && planEndYear"
+            :dataArray="timelineData.data"
+            :label="`blah`"
+            :planStartYear="planStartYear"
+            :planEndYear="planEndYear"
+            :birthYear="1981"></timeline>
       </div>
     </div>
     <div class="table-container">
@@ -101,11 +114,14 @@
 <script>
 import axios from 'axios'
 import stackedBarChart from '../../charts/stackedBarChart'
+import timeline from '../../charts/timeline'
+import Switches from 'vue-switches'
 
 export default {
   name: 'assets',
   data () {
     return {
+      stackBarData: null,
       timelineData: null,
       planStartYear: null,
       planEndYear: null,
@@ -135,7 +151,8 @@ export default {
       pageOptions: [ 5, 10, 15, 25 ],
       totalRows: 0,
       filter: null,
-      personOptions: []
+      personOptions: [],
+      isStackedBarChart: true
     }
   },
   async mounted () {
@@ -146,7 +163,9 @@ export default {
       response = await axios.get(`${process.env.ROOT_API}/persons`)
       this.personOptions = response.data.data
 
-      let timelineData = await axios.get('https://api.livsplan.se/api/v1/cashflow/sums?plan_id=1&object_class=asset&aggregated=0')
+      let stackBarData = await axios.get(`${process.env.ROOT_API}/cashflow/sums?plan_id=1&object_class=asset&aggregated=0`)
+      this.stackBarData = stackBarData.data
+      let timelineData = await axios.get(`${process.env.ROOT_API}/assets/?w_e_amounts=1`)
       this.timelineData = timelineData.data
       let plansResponse = await axios.get(`${process.env.ROOT_API}/plans/1`)
       this.planStartYear = plansResponse.data.data.start_year
@@ -175,7 +194,9 @@ export default {
     }
   },
   components: {
-    stackedBarChart
+    stackedBarChart,
+    timeline,
+    Switches
   }
 }
 </script>

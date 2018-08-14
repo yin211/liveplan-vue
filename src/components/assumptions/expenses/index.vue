@@ -7,7 +7,7 @@
         <b-link to="/assumptions/debts">Debts</b-link>
         <b-link to="/assumptions/assets">Assets</b-link>
       </div>
-      <div class="chart-switcher" v-if="timelineData && timelineData.length && planStartYear && planEndYear">
+      <div class="chart-switcher" v-if="planStartYear && planEndYear">
         <div class="d-flex align-items-center">
           <span class="mr-3" :class="{ 'selected': !isStackedBarChart }">Timeline</span>
           <switches v-model="isStackedBarChart" theme="chart" type-bold="false" color="black"></switches>
@@ -16,14 +16,14 @@
       </div>
       <!-- chart Wrapper -->
       <div class="chart-container">
-        <stackedBarChart v-if="isStackedBarChart && timelineData && timelineData.length && planStartYear && planEndYear"
-                  :dataArray="timelineData"
+        <stackedBarChart v-if="isStackedBarChart && stackBarData && stackBarData.length && planStartYear && planEndYear"
+                  :dataArray="stackBarData"
                   :label="`blah`"
                   :planStartYear="planStartYear"
                   :planEndYear="planEndYear"
                   :birthYear="1981"></stackedBarChart>
-        <timeline v-if="!isStackedBarChart && timelineData && timelineData.length && planStartYear && planEndYear"
-                  :dataArray="timelineData"
+        <timeline v-if="!isStackedBarChart && timelineData && timelineData.data.length && planStartYear && planEndYear"
+                  :dataArray="timelineData.data"
                   :label="`blah`"
                   :planStartYear="planStartYear"
                   :planEndYear="planEndYear"
@@ -121,6 +121,7 @@ export default {
   name: 'expenses',
   data () {
     return {
+      stackBarData: null,
       timelineData: null,
       planStartYear: null,
       planEndYear: null,
@@ -162,7 +163,9 @@ export default {
       response = await axios.get(`${process.env.ROOT_API}/persons`)
       this.personOptions = response.data.data
 
-      let timelineData = await axios.get('https://api.livsplan.se/api/v1/cashflow/sums?plan_id=1&object_class=expense&aggregated=0')
+      let stackBarData = await axios.get(`${process.env.ROOT_API}/cashflow/sums?plan_id=1&object_class=expense&aggregated=0`)
+      this.stackBarData = stackBarData.data
+      let timelineData = await axios.get(`${process.env.ROOT_API}/expenses/?w_e_amounts=1`)
       this.timelineData = timelineData.data
       let plansResponse = await axios.get(`${process.env.ROOT_API}/plans/1`)
       this.planStartYear = plansResponse.data.data.start_year

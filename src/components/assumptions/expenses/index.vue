@@ -7,7 +7,7 @@
         <b-link to="/assumptions/debts">Debts</b-link>
         <b-link to="/assumptions/assets">Assets</b-link>
       </div>
-      <div class="chart-switcher" v-if="timelineData && timelineData.length && planStartYear && planEndYear">
+      <div class="chart-switcher" v-if="planStartYear && planEndYear">
         <div class="d-flex align-items-center">
           <span class="mr-3" :class="{ 'selected': !isStackedBarChart }">Timeline</span>
           <switches v-model="isStackedBarChart" theme="chart" type-bold="false" color="black"></switches>
@@ -16,14 +16,19 @@
       </div>
       <!-- chart Wrapper -->
       <div class="chart-container">
+<<<<<<< HEAD
         <stackedBarChart v-if="isStackedBarChart && stackedData && stackedData.length && planStartYear && planEndYear"
                   :dataArray="stackedData"
+=======
+        <stackedBarChart v-if="isStackedBarChart && stackBarData && stackBarData.length && planStartYear && planEndYear"
+                  :dataArray="stackBarData"
+>>>>>>> 07ba88cb1e137e99733b0f3879f432ecad68c9c5
                   :label="`blah`"
                   :planStartYear="planStartYear"
                   :planEndYear="planEndYear"
                   :birthYear="1981"></stackedBarChart>
-        <timeline v-if="!isStackedBarChart && timelineData && timelineData.length && planStartYear && planEndYear"
-                  :dataArray="timelineData"
+        <timeline v-if="!isStackedBarChart && timelineData && timelineData.data.length && planStartYear && planEndYear"
+                  :dataArray="timelineData.data"
                   :label="`blah`"
                   :planStartYear="planStartYear"
                   :planEndYear="planEndYear"
@@ -121,7 +126,11 @@ export default {
   name: 'expenses',
   data () {
     return {
+<<<<<<< HEAD
       stackedData: null,
+=======
+      stackBarData: null,
+>>>>>>> 07ba88cb1e137e99733b0f3879f432ecad68c9c5
       timelineData: null,
       planStartYear: null,
       planEndYear: null,
@@ -163,8 +172,13 @@ export default {
       response = await axios.get(`${process.env.ROOT_API}/persons`)
       this.personOptions = response.data.data
 
+<<<<<<< HEAD
       let stackedData = await axios.get(`${process.env.ROOT_API}/cashflow/sums?plan_id=1&object_class=expense&aggregated=0`)
       this.stackedData = stackedData.data
+=======
+      let stackBarData = await axios.get(`${process.env.ROOT_API}/cashflow/sums?plan_id=1&object_class=expense&aggregated=0`)
+      this.stackBarData = stackBarData.data
+>>>>>>> 07ba88cb1e137e99733b0f3879f432ecad68c9c5
       let timelineData = await axios.get(`${process.env.ROOT_API}/expenses/?w_e_amounts=1`)
       this.timelineData = timelineData.data
       let plansResponse = await axios.get(`${process.env.ROOT_API}/plans/1`)

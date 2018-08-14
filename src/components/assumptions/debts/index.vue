@@ -58,8 +58,8 @@
             <span class="font-weight-bold">{{row.item.name}}</span>
           </div>
         </template>
-        <template slot="initial_amount" slot-scope="row">
-          <span>{{row.item.initial_amount.toLocaleString('sv-SE')}} SEK </span>
+        <template slot="amount" slot-scope="row">
+          <span>{{row.item.amount.toLocaleString('sv-SE')}} SEK </span>
         </template>
         <template slot="period" slot-scope="row">
           <span>{{row.item.start_year}} - {{row.item.end_year}}</span>
@@ -132,7 +132,7 @@ export default {
       fields: [
         { key: 'name', label: 'Debts', sortable: true },
         { key: 'period', label: 'Period', sortable: true },
-        { key: 'initial_amount', label: 'Initial Amount', sortable: true },
+        { key: 'amount', label: 'Amount', sortable: true },
         { key: 'interest_rate', label: 'Interest Rate', sortable: true },
         { key: 'amortization_amount', label: 'Amortization Amount', sortable: true },
         { key: 'actions', 'class': 'd-lg-flex justify-content-lg-end align-items-center' }

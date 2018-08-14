@@ -58,11 +58,11 @@
             <span class="font-weight-bold">{{row.item.name}}</span>
           </div>
         </template>
-        <template slot="amount_per_period" slot-scope="row">
-          <span>{{row.item.amount_per_period.toLocaleString('sv-SE')}} SEK </span>
+        <template slot="amount" slot-scope="row">
+          <span>{{row.item.amount.toLocaleString('sv-SE')}} SEK </span>
         </template>
         <template slot="period" slot-scope="row">
-          <span>{{row.item.starts_at_year}} - {{row.item.ends_at_year}}</span>
+          <span>{{row.item.start_year}} - {{row.item.end_year}}</span>
         </template>
         <template slot="actions" slot-scope="row">
           <div class="d-flex flex-column flex-md-row align-items-start">
@@ -128,9 +128,9 @@ export default {
       incomes: [],
       fields: [
         { key: 'name', label: 'Incomes', sortable: true },
-        { key: 'amount_per_period', label: 'Amount', sortable: true },
+        { key: 'amount', label: 'Amount', sortable: true },
         { key: 'period', label: 'Period', sortable: true },
-        { key: 'growth_rate', label: 'Growth Rate', formatter: (value) => { return value ? Math.floor(value) + ' %' : '' }, sortable: true },
+        { key: 'annual_growth_rate', label: 'Annual Growth Rate', formatter: (value) => { return value ? Math.floor(value) + ' %' : '' }, sortable: true },
         { key: 'person_id',
           label: 'Person',
           formatter: (value) => {

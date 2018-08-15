@@ -45,7 +45,7 @@
                 @filtered="onFiltered"
         >
         <template slot="top-row" slot-scope="data">
-          <td colspan="6">
+          <td colspan="7">
             <div class="d-flex align-items-center">
               <i class="fa fa-search"></i>
               <b-form-input v-model="filter" size="sm" placeholder="Type to Search" />
@@ -135,6 +135,16 @@ export default {
         { key: 'amount', label: 'Amount', sortable: true },
         { key: 'interest_rate', label: 'Interest Rate', sortable: true },
         { key: 'amortization_amount', label: 'Amortization Amount', sortable: true },
+        { key: 'person_id',
+          label: 'Person',
+          formatter: (value) => {
+            let f = this.personOptions.filter(option => option.id === value)
+            if (f.length) {
+              return f[0].name
+            }
+          },
+          sortable: true
+        },
         { key: 'actions', 'class': 'd-lg-flex justify-content-lg-end align-items-center' }
       ],
       currentPage: 1,
@@ -145,7 +155,8 @@ export default {
       pageOptions: [ 5, 10, 15, 25 ],
       totalRows: 0,
       filter: null,
-      isStackedBarChart: true
+      isStackedBarChart: true,
+      personOptions: []
     }
   },
   async mounted () {
@@ -153,6 +164,8 @@ export default {
       let response = await axios.get(`${process.env.ROOT_API}/debts`)
       this.debts = response.data.data
       this.totalRows = this.debts.length
+      response = await axios.get(`${process.env.ROOT_API}/persons`)
+      this.personOptions = response.data.data
 
       let stackBarData = await axios.get(`${process.env.ROOT_API}/cashflow/sums?plan_id=1&object_class=debt&aggregated=0`)
       this.stackBarData = stackBarData.data

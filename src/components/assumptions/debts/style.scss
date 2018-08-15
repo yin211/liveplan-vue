@@ -27,6 +27,11 @@
           left: 162px;
         }
       }
+      &[aria-colindex="6"] {
+        &.sorting::before, &.sorting::after {
+          left: 62px;
+        }
+      }
 
       .table-title-label {
         border-radius: 0 !important;

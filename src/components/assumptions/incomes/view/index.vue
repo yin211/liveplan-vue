@@ -4,10 +4,10 @@
       <div class="title-container mx-auto">
         <b-breadcrumb :items="items" class="p-0"/>
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
-          <h1 class="text-white text-left">{{expense.name}} </h1>
-          <button class='btn btn-sm icon-btn text-regular' @click="deleteExpense()">
+          <h1 class="text-white text-left">{{income.name}} </h1>
+          <button class='btn btn-sm icon-btn text-regular' @click="deleteIncome()">
             <i class="flaticon stroke trash-2 text-danger"></i>
-            Delete Expense
+            Delete Income
           </button>
         </div>
       </div>
@@ -679,7 +679,7 @@ export default {
         this.plan = this.expense
       })
     },
-    deleteExpense () {
+    deleteIncome () {
       let message = {
         title: 'Confirm',
         body: 'Are you sure you want to delete this expense?'

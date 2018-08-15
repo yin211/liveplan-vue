@@ -1,0 +1,476 @@
+.viewIncome {
+
+  .title-container {
+    max-width: 1440px;
+    padding: 85px 34px 16px;
+  }
+
+  .chart-container {
+    border-top: 1px solid #404A65;
+  }
+
+  .card-container {
+    background: #d9dae7;
+    > div {
+      max-width: 1440px;
+      padding-left: 34px;
+      padding-right: 34px;
+      padding-bottom: 240px;
+
+      @media (max-width: 1200px) {
+        padding-bottom: 200px;
+        padding-left: 20px;
+        padding-right: 20px;
+        margin-right: 20px;
+        margin-left: 20px;
+      }
+
+      @media (max-width: 576px) {
+        padding-left: 12px;
+        padding-right: 12px;
+        margin-right: 12px;
+        margin-left: 12px;
+      }
+    }
+  }
+
+  .element-spacer {
+    margin-top: 6px;
+  }
+
+  .date-spacer {
+    min-width: 20px;
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  .car-icon {
+    color: #A5ADBA;;
+    margin-left: 16px;
+    margin-right: 8px;
+
+    @media (max-width: 576px) {
+      display: none;
+    }
+  }
+
+  // customize card
+  .card {
+    border-radius: 0;
+    border: none;
+    span {
+      font-size: 14px;
+      line-height: 20px;
+    }
+    &.income-tabs-card {
+      top: -52px;
+
+      .card-header {
+        background: white;
+        border-bottom: none;
+        padding: 34px 30px;
+        @media (max-width: 480px) {
+          padding: 20px 16px;
+        }
+
+        .card-header-pills {
+          outline: none;
+
+          .select-tab-item {
+            display: none;
+            width: 40px;
+            margin-top: 6px;
+            a {
+              font-size: 24px;
+              line-height: 24px;
+              opacity: 0.5;
+              height: 14px;
+            }
+          }
+
+          @media (max-width: 480px) {
+            .select-tab-item {
+              display: flex;
+              flex-direction: column;
+            }
+            a[aria-selected="false"] {
+              display: none;
+            }
+          }
+
+          .income-tab {
+            font-size: 24px;
+            line-height: 32px;
+            color: #84888F;
+            &.active {
+              color: #434343;
+              font-weight: 600;
+              background-color: transparent;
+            }
+
+            &:first-child {
+              @media (min-width: 768px) {
+                margin-right: 28px;
+              }
+            }
+          }
+        }
+      }
+
+      .tab-content {
+        padding-top: 28px;
+        background: linear-gradient(0deg, #FFFFFF 0%, #F8F8F8 100%);
+
+        .card-body {
+          padding: 0px 0px 28px 0px;
+
+          #autoCalcForm {
+            &.was-validated .form-control:valid {
+              border-color: #ced4da;
+            }
+            &.custom-is-enabled {
+              margin-top: 42px;
+
+              @media (max-width: 576px) {
+                margin-top: 104px;
+              }
+            }
+
+            .start_end_year
+            {
+              text-align:center;
+            }
+            .amount-per-month {
+              width: 130px;
+              margin-right: 20px;
+              text-align:right;
+            }
+            .annual-growth-rate {
+              width: 54px;
+              margin-right: 20px;
+              text-align:right;
+            }
+
+            .save-calc-btn {
+              border-radius: 40px;
+              font-weight: 500;
+              display: flex;
+              padding-left: 12px;
+              padding-right: 14px;
+              margin-top: 40px;
+              i {
+                font-size: 1rem;
+                margin-right: 0.5rem;
+              }
+              @media (min-width: 768px) {
+                position: absolute;
+                right: 30px;
+                top: 42px;
+                margin-top: 0;
+              }
+
+            }
+          }
+
+          .upload-file-btn {
+            background: white;
+
+            @media (max-width: 767.98px) {
+              padding: 94px 0 10px 16px;
+            }
+
+            @media (min-width: 768px) {
+              position: absolute;
+              right: 30px;
+              top: 42px;
+            }
+
+            .btn {
+              border-color: #eaecef;
+            }
+          }
+
+          .custom-values-bar {
+            position: absolute;
+            top: 80px;
+            width: 100%;
+            background-color: white;
+            padding: 10px 0;
+            & > div {
+              margin: 0px 10px;
+              padding: 0 20px;
+              height: 46px;
+              @media (max-width: 767.98px) {
+                height: 110px;
+                margin: 0px 20px;
+                .label-text {
+                  font-size: 12px;
+                }
+              }
+
+              @media (min-width: 768px) and (max-width: 991.98px) {
+                height: 72px;
+                .label-text {
+                  margin-bottom: 12px;
+                }
+              }
+
+              &.bar-disable-color {
+                background-color: #F8F8F8;
+                border: 1px dashed #D8D8D8;
+              }
+              &.bar-enable-color {
+                background-color: rgba(54,179,126,0.1);
+                border: 1px dashed #36B37E;
+              }
+            }
+
+            .alert {
+              border: 1px dashed;
+              border-radius: unset;
+              font-size: 14px;
+              line-height: 20px;
+            }
+          }
+        }
+
+      }
+    }
+
+    &.edit-info-card {
+
+      .card-body {
+        padding: 30px 15px 33px;
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+
+  // customize table
+  .table-container {
+    padding: 30px 20px;
+    font-size: 14px;
+
+    table {
+      background: white;
+      th {
+        padding-top: 18px;
+        padding-bottom: 18px;
+        background: white;
+        box-shadow: 9px 8px 16px 0 rgba(0,0,0,0.07);
+        outline: none;
+        border: none;
+
+        &.sorting {
+          padding-bottom: 24px;
+        }
+
+        &.sorting::before {
+          top: 3px;
+          margin-left: 0.4em;
+          vertical-align: 0.1em;
+          border-right: 0.5em solid transparent;
+          border-left: 0.5em solid transparent;
+          border-top: 0;
+          border-bottom: .5em solid;
+          content: "";
+          width: 0;
+          height: 0;
+          border-radius: 15%;
+        }
+
+        &.sorting::after {
+          top: 38px;
+          font-size: 24px;
+          margin-left: 0.255em;
+          vertical-align: 0.255em;
+          border-top: 0.3em solid;
+          border-right: 0.3em solid transparent;
+          border-bottom: 0;
+          border-left: 0.3em solid transparent;
+          content: "";
+          width: 0;
+          height: 0;
+          border-radius: 15%;
+        }
+
+        &.sorting_desc::before, &.sorting_asc::after {
+          opacity: 1;
+          color: #36b37E;
+        }
+
+        &[aria-colindex="1"] {
+          &.sorting::before, &.sorting::after {
+            left: 48px;
+          }
+        }
+        &[aria-colindex="2"] {
+          &.sorting::before, &.sorting::after {
+            left: 74px;
+          }
+        }
+      }
+
+      tbody {
+        tr {
+          // &:nth-of-type(odd) {
+          //   background-color: #F1F2F8 !important;
+          // }
+
+          &:hover {
+            background: #FAFBFC !important;
+          }
+
+          &.b-table-top-row {
+            border: none;
+            td {
+              width: 100%;
+              padding: 0;
+              border: none;
+              input {
+                border: none;
+              }
+            }
+          }
+
+          td {
+            vertical-align: middle;
+            padding-top: 6px;
+            padding-bottom: 6px;
+            border-top: 1px dashed #CACACA;
+
+            .amount-per-month {
+              width: 130px;
+              margin-right: 20px;
+              text-align:right;
+            }
+
+            .hide-element {
+              display: none
+            }
+          }
+        }
+
+      }
+
+      @media (max-width: 767.99px) {
+        &.b-table.b-table-stacked-md > tbody > tr > :first-child {
+          border-top-style: solid;
+          border-top-width: 0.3rem;
+        }
+      }
+    }
+
+    ul[aria-label="Pagination"] {
+      display: flex;
+      align-items: center;
+
+      .page-link {
+        background: transparent;
+        font-size: 13px;
+        line-height: 13px;
+        border: none;
+        color: #4A4A4A;
+        display: inline;
+      }
+
+      .page-item.active .page-link {
+        border-radius: 50%;
+        background: #525670;
+        color: white;
+      }
+    }
+
+    .selectPerPage {
+      width: 60px;
+      background-color: transparent;
+      border: none;
+    }
+  }
+
+  // customize slider
+  .slider {
+    -webkit-appearance: none;
+    width: 100%;
+    background: #C1C7D0;
+    outline: none;
+    height: 1px !important;
+    padding: 0;
+    margin-top: 23px;
+  }
+
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    background: url('../../../../assets/img/slider.png');
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: #FFFFFF;
+    height: 16px;
+    width: 16px;
+    background-size: 16px;
+  }
+
+  .slider::-moz-range-thumb {
+    background: url('../../../../assets/img/slider.png');
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: #FFFFFF;
+    height: 16px;
+    width: 16px;
+    background-size: 16px;
+  }
+
+  .slider::-ms-thumb {
+    background: url('../../../../assets/img/slider.png');
+    border-radius: 50%;
+    cursor: pointer;
+    background-color: #FFFFFF;
+    height: 16px;
+    width: 16px;
+    background-size: 16px;
+  }
+
+  .slider:focus::-ms-fill-lower {
+    background: #888;
+  }
+  .slider:focus::-ms-fill-upper {
+    background: #ccc;
+  }
+
+  // customize csv download button
+  .csvdownload {
+    > button {
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 24px;
+      border-radius: 30px;
+      outline: none;
+      padding: .25rem .5rem;
+      cursor: pointer;
+      border: 1px solid #eaecef;
+
+      &::before {
+        font-family: Flaticons Stroke;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 1;
+        -webkit-font-smoothing: antialiased;
+        content: "\E55E";
+        margin-right: .5rem;
+        color: #0065ff;
+      }
+    }
+
+    &[disabled="disabled"] {
+      > button {
+        pointer-events:none;
+      }
+    }
+
+    .csvoption {
+      display: none
+    }
+  }
+
+}

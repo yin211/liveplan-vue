@@ -15,7 +15,9 @@
       <div class="chart-container">
         <barchart v-if="plan.expense_amounts && plan.expense_amounts.length && planStartYear && planEndYear"
                   :label="expense.name"
-                  :dataObject="plan"
+                  :dataObject="plan.expense_amounts"
+                  :startYear="plan.start_year"
+                  :endYear="plan.end_year"
                   :planStartYear="planStartYear"
                   :planEndYear="planEndYear"
                   :birthYear="1981"></barchart>

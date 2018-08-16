@@ -67,7 +67,7 @@ import Tooltip from './d3-assets/Tooltip'
 
 export default {
   name: 'barchart',
-  props: ['label', 'dataObject', 'planStartYear', 'planEndYear', 'birthYear'],
+  props: ['label', 'dataObject', 'startYear', 'endYear', 'planStartYear', 'planEndYear', 'birthYear'],
   data () {
     return {
       width: 0,
@@ -102,11 +102,11 @@ export default {
   },
   computed: {
     computedData () {
-      let startYear = this.dataObject.start_year < this.planStartYear ? this.dataObject.start_year : this.planStartYear
-      let endYear = this.dataObject.end_year > this.planEndYear ? this.dataObject.end_year : this.planEndYear
+      let startYear = this.startYear < this.planStartYear ? this.startYear : this.planStartYear
+      let endYear = this.endYear > this.planEndYear ? this.endYear : this.planEndYear
       let range = this.$d3.range(startYear, endYear + 1)
       return range.map(d => {
-        let f = this.dataObject.expense_amounts.filter(x => +x.year === d)
+        let f = this.dataObject.filter(x => +x.year === d)
         let amount = 0
         if (f.length) {
           amount = Math.abs(f[0].amount)
@@ -116,12 +116,6 @@ export default {
           value: amount
         }
       })
-    },
-    startYear () {
-      return this.dataObject.start_year
-    },
-    endYear () {
-      return this.dataObject.end_year
     },
     sliderWidth () {
       return this.width - 2 * this.sliderMarginLeft

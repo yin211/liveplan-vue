@@ -180,7 +180,7 @@
                     <span class="text-regular font-weight-medium">{{income.name}}</span>
                   </b-col>
 
-                  <b-col cols="6" md="4" xl="2" class="d-flex flex-column justify-content-center py-xl-0 py-2">
+                  <!-- <b-col cols="6" md="4" xl="2" class="d-flex flex-column justify-content-center py-xl-0 py-2">
                     <span class="text-gray">Category</span>
                     <span class="text-regular font-weight-medium" v-if="income.category">{{income.category.name}}</span>
                   </b-col>
@@ -188,7 +188,7 @@
                   <b-col cols="6" md="4" xl="2" class="d-flex flex-column justify-content-center py-xl-0 py-2">
                     <span class="text-gray">Type / Subtype</span>
                     <span class="text-regular font-weight-medium" v-if="income.income_type">{{income.income_subtype.name}}</span>
-                  </b-col>
+                  </b-col> -->
 
                   <b-col cols="6" md="4" xl="2" class="d-flex flex-column justify-content-center py-xl-0 py-2">
                     <span class="text-gray">Period</span>
@@ -360,8 +360,8 @@ export default {
       this.categoryOptions = response.data.data
       response = await axios.get(`${process.env.ROOT_API}/persons`)
       this.personOptions = response.data.data
-      response = await axios.get(`${process.env.ROOT_API}/incomes/subtypes`)
-      this.subtypeOptions = response.data
+      // response = await axios.get(`${process.env.ROOT_API}/incomes/subtypes`)
+      // this.subtypeOptions = response.data
       response = await axios.get(`${process.env.ROOT_API}/currencies`)
       this.currencyOptions = response.data.data
       EventBus.$emit('select-plan', {
@@ -537,7 +537,7 @@ export default {
             start_year: this.income.start_year,
             end_year: this.income.end_year,
             amount: this.income.amount,
-            annual_increase_percentage: this.income.annual_increase_percentage
+            annual_growth_rate: this.income.annual_growth_rate
           }
           let response = await axios.put(`${process.env.ROOT_API}/incomes/${this.$route.params.id}`, data)
           this.income.income_amounts = this.convertToArray(response.data.data.income_amounts)
@@ -696,15 +696,13 @@ export default {
         if (this.income.start_year && +this.income.start_year >= +this.planStartYear) {
           if (this.income.end_year && +this.income.end_year <= +this.planEndYear) {
             if (+this.income.end_year > +this.income.start_year) {
-              if (this.income.amount && this.income.annual_increase_percentage) {
+              if (this.income.amount && this.income.annual_growth_rate) {
                 let data = {
                   start_year: this.income.start_year,
                   end_year: this.income.end_year,
                   amount: this.income.amount,
-                  annual_increase_percentage: this.income.annual_increase_percentage,
-                  calculation_mode: 'auto',
-                  amount_recurrence: this.income.amount_recurrence,
-                  inflation_rate: this.income.inflation_rate
+                  annual_growth_rate: this.income.annual_growth_rate,
+                  calculation_mode: 'auto'
                 }
                 let response = await axios.post(`${process.env.ROOT_API}/incomes/amounts/calculate`, data)
                 response.data.data.income_amounts = this.convertToArray(response.data.data.income_amounts)
@@ -756,7 +754,7 @@ export default {
     'income.amount': function (val) {
       this.recalculateChart(this)
     },
-    'income.annual_increase_percentage': function (val) {
+    'income.annual_growth_rate': function (val) {
       this.recalculateChart(this)
     }
   },

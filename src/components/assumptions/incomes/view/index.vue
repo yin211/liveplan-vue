@@ -112,11 +112,15 @@
                         fixed
                 >
                   <template slot="top-row" slot-scope="data">
-                    <td colspan="3"><b-form-input v-model="filter" size="sm" placeholder="Type to Search" /></td>
+                    <td colspan="4"><b-form-input v-model="filter" size="sm" placeholder="Type to Search" /></td>
                   </template>
                   <template slot="amount" slot-scope="row">
                     <vue-numeric v-show="row.item.is_edit"  @keyup.native.enter.stop.prevent="saveRow(row.item)" currency="SEK" currency-symbol-position="suffix" thousand-separator=" "  v-model="row.item.edit_amount" class="form-control form-control-sm text-regular amount-per-month" :minus="true"></vue-numeric>
                     <span v-show="!row.item.is_edit"  @dblclick="editRow(row.item)">{{row.item.amount.toLocaleString('sv-SE')}} SEK </span>
+                  </template>
+                  <template slot="taxes_paid" slot-scope="row">
+                    <vue-numeric v-show="row.item.is_edit"  @keyup.native.enter.stop.prevent="saveRow(row.item)" currency="SEK" currency-symbol-position="suffix" thousand-separator=" "  v-model="row.item.edit_taxes_paid" class="form-control form-control-sm text-regular taxes-paid" :minus="true"></vue-numeric>
+                    <span v-show="!row.item.is_edit"  @dblclick="editRow(row.item)">{{row.item.taxes_paid.toLocaleString('sv-SE')}} SEK </span>
                   </template>
                   <template slot="actions" slot-scope="row">
                     <div class="d-flex flex-column flex-md-row align-items-start">
@@ -393,6 +397,7 @@ export default {
       fields: [
         { key: 'year', label: 'Year', sortable: true, sortDirection: 'desc' },
         { key: 'amount', label: 'Amount', sortable: true },
+        { key: 'taxes_paid', label: 'Taxes Paid', sortable: true },
         { key: 'actions', 'class': 'd-lg-flex justify-content-lg-end align-items-center' }
       ],
       currentPage: 1,
@@ -644,6 +649,7 @@ export default {
       if (!this.customDisabled) {
         this.$set(item, 'is_edit', true)
         item.edit_amount = item.amount
+        item.edit_taxes_paid = item.taxes_paid
       }
     },
     cancelRow (item) {
@@ -651,10 +657,12 @@ export default {
     },
     async saveRow (item) {
       let data = {
-        amount: item.edit_amount
+        amount: item.edit_amount,
+        taxes_paid: item.edit_taxes_paid
       }
       await axios.put(`${process.env.ROOT_API}/incomes/${this.$route.params.id}/amounts/${item.id}`, data)
       item.amount = item.edit_amount
+      item.taxes_paid = item.edit_taxes_paid
       item.is_edit = false
       this.plan = this.income
     },

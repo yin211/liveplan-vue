@@ -283,7 +283,7 @@
         &.sorting::after {
           top: 38px;
           font-size: 24px;
-          margin-left: 0.255em;
+          margin-left: 0.225em;
           vertical-align: 0.255em;
           border-top: 0.3em solid;
           border-right: 0.3em solid transparent;
@@ -308,6 +308,11 @@
         &[aria-colindex="2"] {
           &.sorting::before, &.sorting::after {
             left: 74px;
+          }
+        }
+        &[aria-colindex="3"] {
+          &.sorting::before, &.sorting::after {
+            left: 90px;
           }
         }
       }
@@ -340,7 +345,7 @@
             padding-bottom: 6px;
             border-top: 1px dashed #CACACA;
 
-            .amount-per-month {
+            .amount-per-month, .taxes-paid {
               width: 130px;
               margin-right: 20px;
               text-align:right;

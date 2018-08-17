@@ -579,7 +579,8 @@ export default {
             person_id: this.editIncome.person_id,
             income_subtype_id: this.editIncome.income_subtype_id,
             inflation_rate: this.editIncome.inflation_rate,
-            currency_id: this.editIncome.currency_id
+            currency_id: this.editIncome.currency_id,
+            plan_id: this.editIncome.plan_id
           }
           await axios.put(`${process.env.ROOT_API}/incomes/${this.$route.params.id}`, data)
           EventBus.$emit('notify-me', {
@@ -677,6 +678,7 @@ export default {
       this.$dialog.confirm(message)
       .then(async () => {
         await axios.delete(`${process.env.ROOT_API}/incomes/${this.$route.params.id}`)
+        this.$router.push('/assumptions/incomes')
         EventBus.$emit('notify-me', {
           title: 'Success!',
           text: 'This income has been deleted successfully!',

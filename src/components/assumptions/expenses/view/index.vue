@@ -689,6 +689,7 @@ export default {
       this.$dialog.confirm(message)
       .then(async () => {
         await axios.delete(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`)
+        this.$router.push('/assumptions/expenses')
         EventBus.$emit('notify-me', {
           title: 'Success!',
           text: 'This expense has been deleted successfully!',

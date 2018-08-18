@@ -1,4 +1,8 @@
 
+.chart-container {
+  border-top: 1px solid #404A65;
+}
+
 .incomes, .expenses, .assets, .debts {
   .title-container {
     max-width: 1440px;
@@ -42,10 +46,6 @@
     .chart-switcher {
       right: 5%;
     }
-  }
-
-  .chart-container {
-    border-top: 2px solid #404A65;
   }
 
   .table-container {
@@ -223,35 +223,61 @@
           }
         }
       }
+    }
+  }
 
-      ul[aria-label="Pagination"] {
-        display: flex;
-        align-items: center;
+}
 
-        .page-link {
-          background: transparent;
-          font-size: 13px;
-          line-height: 13px;
-          border: none;
-          color: #4A4A4A;
-          display: inline;
-        }
+.viewExpense, .viewIncome {
+  .title-container {
+    max-width: 1440px;
+    padding: 85px 34px 16px;
+  }
 
-        .page-item.active .page-link {
-          border-radius: 50%;
-          background: #525670;
-          color: white;
-        }
+  .card-container {
+    background: #d9dae7;
+    > div {
+      max-width: 1440px;
+      padding-left: 34px;
+      padding-right: 34px;
+      padding-bottom: 240px;
+
+      @media (max-width: 1200px) {
+        padding-bottom: 200px;
+        padding-left: 20px;
+        padding-right: 20px;
+        margin-right: 20px;
+        margin-left: 20px;
       }
 
-      .selectPerPage {
-        width: 60px;
-        background-color: transparent;
-        border: none;
+      @media (max-width: 576px) {
+        padding-left: 12px;
+        padding-right: 12px;
+        margin-right: 12px;
+        margin-left: 12px;
       }
     }
   }
 
+  .element-spacer {
+    margin-top: 6px;
+  }
+
+  .date-spacer {
+    min-width: 20px;
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  .car-icon {
+    color: #A5ADBA;;
+    margin-left: 16px;
+    margin-right: 8px;
+
+    @media (max-width: 576px) {
+      display: none;
+    }
+  }
 }
 
 

@@ -6,6 +6,7 @@ import comingSoon from '@/components/errors/coming-soon'
 import assumptions from '@/components/assumptions'
 import expenses from '@/components/assumptions/expenses/index.vue'
 import viewExpense from '@/components/assumptions/expenses/view/index.vue'
+import addExpense from '@/components/assumptions/expenses/stepper/index.vue'
 import incomes from '@/components/assumptions/incomes/index.vue'
 import viewIncome from '@/components/assumptions/incomes/view/index.vue'
 import assets from '@/components/assumptions/assets/index.vue'
@@ -44,6 +45,11 @@ export default new Router({
           path: 'expenses',
           name: 'expenses',
           component: expenses
+        },
+        {
+          path: 'expenses/add-expense',
+          name: 'addExpense',
+          component: addExpense
         },
         {
           path: 'expenses/:id',

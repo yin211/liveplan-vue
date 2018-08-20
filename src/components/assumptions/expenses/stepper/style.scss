@@ -1,0 +1,72 @@
+.addExpense {
+  .step-container {
+    background: #d9dae7;
+
+    .stepper {
+      max-width: 1440px;
+      padding: 112px 34px 242px;
+      font-size: 14px;
+
+      .vue-form-wizard {
+        .wizard-header {
+          padding: 0 !important;
+
+          .wizard-title {
+            color: #232B36;
+            font-size: 36px;
+            line-height: 48px;
+            font-weight: 400;
+            text-align: left;
+            margin-bottom: 38px;
+          }
+        }
+
+        .wizard-navigation {
+          .wizard-progress-with-circle {
+            top: 48px;
+            padding: 0 114px;
+            z-index: 1;
+
+            .wizard-progress-bar {
+              border: 1px solid #525670;
+              height: 0;
+            }
+          }
+
+          .wizard-nav.wizard-nav-pills {
+            background: white;
+            padding: 22px 140px;
+
+            .wizard-icon-circle {
+              z-index: 2;
+
+              &.checked {
+                background-color: #36b373;
+                border-color: #36b373 !important;
+
+                .wizard-icon {
+                  color: white;
+                }
+
+                &[aria-selected="true"] {
+                  border-color: #525670 !important;
+                }
+              }
+            }
+
+            .stepTitle {
+              color: #232B36 !important;
+              line-height: 20px;
+              text-align: center;
+
+              &.active {
+                font-weight: bold;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+}

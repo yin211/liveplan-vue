@@ -13,6 +13,9 @@ import VueD3 from 'vue-d3'
 import VueNumeric from 'vue-numeric'
 import Lodash from 'lodash'
 import VuejsDialog from 'vuejs-dialog'
+import VueFormWizard from 'vue-form-wizard'
+import 'vue-form-wizard/dist/vue-form-wizard.min.css'
+Vue.use(VueFormWizard)
 Vue.use(VuejsDialog, {
   okText: 'OK',
   cancelText: 'Cancel',

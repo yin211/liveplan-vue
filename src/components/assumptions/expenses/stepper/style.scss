@@ -28,7 +28,7 @@
             z-index: 1;
 
             .wizard-progress-bar {
-              border: 1px solid #525670;
+              border: .5px solid #525670;
               height: 0;
             }
           }
@@ -52,11 +52,16 @@
                   border-color: #525670 !important;
                 }
               }
+
+              &:focus {
+                outline: none;
+              }
             }
 
             .stepTitle {
               color: #232B36 !important;
               line-height: 20px;
+              margin-top: 4px;
               text-align: center;
 
               &.active {

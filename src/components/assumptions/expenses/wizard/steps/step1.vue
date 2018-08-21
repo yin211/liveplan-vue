@@ -7,7 +7,7 @@
           <p class="card-text">
             Housing costs
           </p>
-          <b-button :size="'sm'" variant="primary" class="mt-3">Choose</b-button>
+          <b-button :size="'sm'" variant="primary" class="mt-3"  @click="choose_type()">Choose</b-button>
         </div>
       </b-card>
       <b-card class="depth-2">
@@ -16,7 +16,7 @@
           <p class="card-text">
             Living costs
           </p>
-          <b-button :size="'sm'" variant="primary" class="mt-3">Choose</b-button>
+          <b-button :size="'sm'" variant="primary" class="mt-3" @click="choose_type()">Choose</b-button>
         </div>
       </b-card>
       <b-card class="depth-1">
@@ -25,14 +25,14 @@
           <p class="card-text">
             Custom
           </p>
-          <b-button :size="'sm'" variant="primary" class="mt-3">Choose</b-button>
+          <b-button :size="'sm'" variant="primary" class="mt-3" @click="choose_type()">Choose</b-button>
         </div>
       </b-card>
       <b-card class="depth-1">
         <div class="card-body-top"></div>
         <div class="card-body-bottom">
           <b-form-select v-model="selected" :options="options" size="sm" style="margin-top: -10px; margin-bottom: 10px;"/>
-          <b-button :size="'sm'" variant="primary" class="mt-3">Choose</b-button>
+          <b-button :size="'sm'" variant="primary" class="mt-3" @click="choose_type()">Choose</b-button>
         </div>
       </b-card>
     </b-card-group>
@@ -46,13 +46,16 @@ export default {
   data () {
     return {
       selected: null,
+      type: null,
       options: [
         { value: null, text: 'Other: Please select' }
       ]
     }
   },
   methods: {
-
+    choose_type () {
+      this.$emit('on-validate', this.type, true)
+    }
   }
 }
 </script>

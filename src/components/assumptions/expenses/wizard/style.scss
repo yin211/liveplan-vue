@@ -7,6 +7,7 @@
       padding: 112px 34px 242px;
       font-size: 14px;
 
+      // customize form wizard
       .vue-form-wizard {
         .wizard-header {
           padding: 0 !important;
@@ -69,7 +70,12 @@
               }
             }
           }
+
         }
+      }
+
+      .step1 {
+        margin-top: 42px;
       }
     }
   }

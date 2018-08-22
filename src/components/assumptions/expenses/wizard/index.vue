@@ -7,7 +7,7 @@
             <step1 @on-validate="mergePartialModels"></step1>
           </tab-content>
           <tab-content title="Timing" icon="fa fa-check">
-            My third tab content
+            <step2 @on-validate="mergePartialModels"></step2>
           </tab-content>
           <tab-content title="Advanced" icon="fa fa-check">
             My fourth tab content
@@ -34,6 +34,7 @@
 <script>
 // import { required, minLength, between } from 'vuelidate/lib/validators'
 import step1 from './steps/step1'
+import step2 from './steps/step2'
 
 export default {
   name: 'addExpense',
@@ -56,7 +57,8 @@ export default {
     }
   },
   components: {
-    step1
+    step1,
+    step2
   }
 }
 </script>

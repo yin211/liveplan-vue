@@ -25,7 +25,7 @@
         .wizard-navigation {
           .wizard-progress-with-circle {
             top: 48px;
-            padding: 0 114px;
+            padding: 0 24px;
             z-index: 1;
 
             .wizard-progress-bar {
@@ -36,7 +36,7 @@
 
           .wizard-nav.wizard-nav-pills {
             background: white;
-            padding: 22px 140px;
+            padding: 22px 0px;
             box-shadow: 9px 8px 16px 0 rgba(0,0,0,0.07);
 
             .wizard-icon-circle {
@@ -73,14 +73,65 @@
           }
 
         }
+
+        .wizard-card-footer {
+          padding: 0 130px !important;
+
+          .wizard-footer-right {
+            .wizard-btn {
+              height: 48px;
+              width: 204px;
+              border-radius: 24px;
+              border: none;
+              background-color: #A5ADBA !important;
+
+              &::after {
+                font-family: "FontAwesome";
+                content: "\f0da";
+                font-size: 16px;
+                float: right;
+                padding-right: 6px
+              }
+            }
+          }
+
+          .wizard-footer-left {
+            .wizard-btn {
+              height: 48px;
+              width: 204px;
+              border-radius: 24px;
+              border: none;
+              color: #232B36 !important;
+              background-color: white !important;
+
+              &::after {
+                font-family: "FontAwesome";
+                content: "\f0d9";
+                font-size: 16px;
+                float: left;
+                padding-left: 6px
+              }
+            }
+          }
+
+          .line {
+            box-sizing: border-box;
+            height: 2px;
+            width: 687.64px;
+            border: 1px solid #D7D7D7;
+            margin-left: 20px;
+            margin-right: 20px;
+          }
+
+          .hasSpace {
+            display: flex;
+            align-items: center;
+          }
+        }
       }
 
       .step1 {
-        margin-top: 42px;
-      }
-
-      .step2 {
-        margin: 42px 98px;
+        margin: 52px 98px;
       }
     }
   }

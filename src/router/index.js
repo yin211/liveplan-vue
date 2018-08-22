@@ -6,7 +6,9 @@ import comingSoon from '@/components/errors/coming-soon'
 import assumptions from '@/components/assumptions'
 import expenses from '@/components/assumptions/expenses/index.vue'
 import viewExpense from '@/components/assumptions/expenses/view/index.vue'
+import addExpense from '@/components/assumptions/expenses/wizard/index.vue'
 import incomes from '@/components/assumptions/incomes/index.vue'
+import viewIncome from '@/components/assumptions/incomes/view/index.vue'
 import assets from '@/components/assumptions/assets/index.vue'
 import debts from '@/components/assumptions/debts/index.vue'
 
@@ -45,6 +47,11 @@ export default new Router({
           component: expenses
         },
         {
+          path: 'expenses/add-expense',
+          name: 'addExpense',
+          component: addExpense
+        },
+        {
           path: 'expenses/:id',
           name: 'viewExpense',
           component: viewExpense
@@ -53,6 +60,11 @@ export default new Router({
           path: 'incomes',
           name: 'incomes',
           component: incomes
+        },
+        {
+          path: 'incomes/:id',
+          name: 'viewIncome',
+          component: viewIncome
         },
         {
           path: 'assets',

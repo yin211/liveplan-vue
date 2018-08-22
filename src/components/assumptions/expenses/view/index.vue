@@ -15,7 +15,9 @@
       <div class="chart-container">
         <barchart v-if="plan.expense_amounts && plan.expense_amounts.length && planStartYear && planEndYear"
                   :label="expense.name"
-                  :dataObject="plan"
+                  :dataObject="plan.expense_amounts"
+                  :startYear="plan.start_year"
+                  :endYear="plan.end_year"
                   :planStartYear="planStartYear"
                   :planEndYear="planEndYear"
                   :birthYear="1981"></barchart>
@@ -687,6 +689,7 @@ export default {
       this.$dialog.confirm(message)
       .then(async () => {
         await axios.delete(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`)
+        this.$router.push('/assumptions/expenses')
         EventBus.$emit('notify-me', {
           title: 'Success!',
           text: 'This expense has been deleted successfully!',

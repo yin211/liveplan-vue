@@ -3,8 +3,8 @@
     <div class="step-container">
       <div v-if="!isCompleted" class="stepper mx-auto bg-light text-regular">
         <form-wizard :title="'Create New Expense'" :subtitle="''" :stepSize="'xs'" :color="'#525670'" ref="step">
-          <tab-content title="Basic Details" icon="fa fa-check">
-            <step1 @on-validate="mergePartialModels"></step1>
+          <tab-content title="Basic Details" icon="fa fa-check" :before-change="()=>validateStep('step1')">
+            <step1 ref="step1" @on-validate="mergePartialModels"></step1>
           </tab-content>
           <tab-content title="Timing" icon="fa fa-check">
             <step2 @on-validate="mergePartialModels"></step2>
@@ -39,7 +39,6 @@
 </template>
 
 <script>
-// import { required, minLength, between } from 'vuelidate/lib/validators'
 import step1 from './steps/step1'
 import step2 from './steps/step2'
 import step3 from './steps/step3'
@@ -53,7 +52,11 @@ export default {
     }
   },
   methods: {
-    onComplete: function () {
+    validateStep (name) {
+      var refToValidate = this.$refs[name]
+      return refToValidate.validate()
+    },
+    onComplete () {
       this.isCompleted = true
     },
     mergePartialModels (model, isValid) {

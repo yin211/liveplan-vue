@@ -60,6 +60,7 @@
 
 <script>
 import axios from 'axios'
+import { required } from 'vuelidate/lib/validators'
 
 export default {
   data () {
@@ -100,6 +101,38 @@ export default {
       this.personOptions = [...this.personOptions, ...response.data.data]
     } catch (err) {
       console.log(err)
+    }
+  },
+  validations: {
+    name: {
+      required
+    },
+    subtype_id: {
+      required
+    },
+    description: {
+      required
+    },
+    amount: {
+      required
+    },
+    amount_recurrence: {
+      required
+    },
+    category_id: {
+      required
+    },
+    person_id: {
+      required
+    },
+    form: ['name', 'description', 'subtype_id', 'amount', 'amount_recurrence', 'category_id', 'person_id']
+  },
+  methods: {
+    validate () {
+      this.$v.form.$touch()
+      var isValid = !this.$v.form.$invalid
+      this.$emit('on-validate', this.$data, isValid)
+      return isValid
     }
   }
 }

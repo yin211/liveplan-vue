@@ -1,7 +1,7 @@
 <template>
   <div class="step1 d-flex">
     <div class="detail-text text-left">
-      <p class="font-weight-medium">Setting up the Basic Details</p>
+      <span class="d-flex mb-2 font-weight-medium">Setting up the Basic Details</span>
       <span class="text-gray">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
         Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.

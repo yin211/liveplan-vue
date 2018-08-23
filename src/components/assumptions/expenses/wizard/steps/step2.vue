@@ -1,7 +1,7 @@
 <template>
   <div class="step2 d-flex">
     <div class="detail-text text-left">
-      <p class="font-weight-medium">Time of your income</p>
+      <span class="d-flex mb-2 font-weight-medium">Time of your income</span>
       <span class="text-gray">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
         Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
@@ -61,7 +61,7 @@ export default {
     }
 
     .space-line {
-      height: 533px;
+      height: 175px;
       width: 0;
       border: 1px solid #D7D7D7;
       margin-left: 130px;

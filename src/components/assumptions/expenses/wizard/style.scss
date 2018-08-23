@@ -134,6 +134,37 @@
         margin: 52px 98px;
       }
     }
+
+    .complete {
+      max-width: 1440px;
+      padding: 112px 34px 242px;
+
+      .title {
+        font-size: 36px;
+        line-height: 48px;
+        margin-bottom: 40px;
+        display: flex;
+        text-align: left;
+      }
+
+      .mark {
+        background-color: white;
+        padding-top: 94px;
+        padding-bottom: 84px;
+
+        i {
+          font-size: 36px;
+        }
+
+        p {
+          margin-top: 8px;
+          font-size: 24px;
+          line-height: 32px;
+        }
+      }
+    }
+
+
   }
 
 }

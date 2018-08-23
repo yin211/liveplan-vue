@@ -1,7 +1,7 @@
 <template>
   <div class="addExpense bg-light">
     <div class="step-container">
-      <div class="stepper mx-auto bg-light text-regular">
+      <div v-if="!isCompleted" class="stepper mx-auto bg-light text-regular">
         <form-wizard :title="'Create New Expense'" :subtitle="''" :stepSize="'xs'" :color="'#525670'" ref="step">
           <tab-content title="Basic Details" icon="fa fa-check">
             <step1 @on-validate="mergePartialModels"></step1>
@@ -26,6 +26,13 @@
           </template>
         </form-wizard>
       </div>
+      <div v-else class="complete mx-auto bg-light text-regular">
+        <span class="title">Create New Expense</span>
+        <div class="mark">
+          <i class="flaticon stroke checkmark-2 text-success"></i>
+          <p>Expense Added</p>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -41,12 +48,13 @@ export default {
   name: 'addExpense',
   data () {
     return {
-      finalModel: {}
+      finalModel: {},
+      isCompleted: false
     }
   },
   methods: {
     onComplete: function () {
-      alert('Yay. Done!')
+      this.isCompleted = true
     },
     mergePartialModels (model, isValid) {
       console.log(model, isValid)

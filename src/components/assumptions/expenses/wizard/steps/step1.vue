@@ -9,51 +9,85 @@
     </div>
     <div class="space-line"></div>
     <b-container>
-      <b-row class="mb-3">
-        <b-col sm="3" class="d-flex justify-content-end mt-3"><label :for="'nameInput'">Name</label></b-col>
-        <b-col sm="9">
-          <b-form-input id="nameInput"  v-model="name" :placeholder="'Write here'" class="border-0"></b-form-input>
-        </b-col>
-      </b-row>
-      <b-row class="mb-3">
-        <b-col sm="3" class="d-flex mt-3 justify-content-end"><label :for="'subtype-select'">Subtype</label></b-col>
-        <b-col sm="9">
-          <b-form-select :options="subtypeOptions" :value-field="'subtype_id'" :text-field="'subtype'" v-model="subtype_id" :id="'subtype-select'" class="border-0"/>
-        </b-col>
-      </b-row>
-      <b-row class="mb-3">
-        <b-col sm="3" class="d-flex justify-content-end mt-3"><label :for="'descriptionInput'">Description</label></b-col>
-        <b-col sm="9">
-          <b-form-textarea id="descriptionInput"  v-model="description" :placeholder="'Write here'" class="border-0" :rows="3" :max-rows="6"></b-form-textarea>
-        </b-col>
-      </b-row>
-      <b-row class="mb-3">
-        <b-col sm="3" class="d-flex justify-content-end mt-3"><label :for="'amountInput'">Amount</label></b-col>
-        <b-col sm="9" class="d-flex">
+      <b-form-group id="nameInputHorizontal"
+                horizontal
+                breakpoint="md"
+                label="Name"
+                label-for="nameInput"
+                label-text-align="right"
+                label-class="pr-4"
+                :invalid-feedback="invalidNameFeedback"
+                :state="!$v.name.$error">
+        <b-form-input id="nameInput" v-model="name" :placeholder="'Write here'" :state="!$v.name.$error" @input="$v.name.$touch()"></b-form-input>
+      </b-form-group>
+      <b-form-group id="subtypeHorizontal"
+                horizontal
+                breakpoint="md"
+                label="Subtype"
+                label-for="subtypeSelect"
+                label-text-align="right"
+                label-class="pr-4"
+                :invalid-feedback="invalidSubtypeFeedback"
+                :state="!$v.subtype_id.$error">
+        <b-form-select :options="subtypeOptions" :value-field="'subtype_id'" :text-field="'subtype'" v-model="subtype_id" id="subtypeSelect" :state="!$v.subtype_id.$error" @input="$v.subtype_id.$touch()"/>
+      </b-form-group>
+      <b-form-group id="descriptionHorizontal"
+                horizontal
+                breakpoint="md"
+                label="Description"
+                label-for="descriptionInput"
+                label-text-align="right"
+                label-class="pr-4"
+                :invalid-feedback="invalidDescriptionFeedback"
+                :state="!$v.description.$error">
+        <b-form-textarea id="descriptionInput"  v-model="description" :placeholder="'Write here'" :state="!$v.description.$error" @input="$v.description.$touch()" :rows="3" :max-rows="6"></b-form-textarea>
+      </b-form-group>
+      <b-form-group id="amountHorizontal"
+                horizontal
+                breakpoint="md"
+                label="Amount"
+                label-for="amountInput"
+                label-text-align="right"
+                label-class="pr-4">
+        <div class="d-flex">
           <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-model="amount" id="amountInput" class="form-control border-0 mr-3" :min="0"></vue-numeric>
           <b-form-input v-model="amount" min="0" max="10000" step="500" class="slider" type="range"></b-form-input>
-        </b-col>
-      </b-row>
-      <b-row class="mb-3">
-        <b-col sm="3" class="d-flex mt-3 justify-content-end"><label :for="'period-select'">Period</label></b-col>
-        <b-col sm="9">
-          <b-form-select :options="periodOptions" v-model="amount_recurrence" :id="'period-select'" class="border-0"/>
-        </b-col>
-      </b-row>
-      <b-row class="mb-3">
-        <b-col sm="3" class="d-flex mt-3 justify-content-end"><label :for="'category-select'">Category</label></b-col>
-        <b-col sm="9">
-          <b-form-select :options="categoryOptions" :value-field="'id'" :text-field="'name'" v-model="category_id" :id="'category-select'" class="border-0" />
-        </b-col>
-      </b-row>
-      <b-row class="mb-3">
-        <b-col sm="3" class="d-flex mt-3 justify-content-end"><label :for="'person-select'">Person</label></b-col>
-        <b-col sm="9">
-          <b-form-select :options="personOptions" :value-field="'id'" :text-field="'name'" v-model="person_id" :id="'person-select'" class="border-0" />
-        </b-col>
-      </b-row>
+        </div>
+      </b-form-group>
+      <b-form-group id="periodHorizontal"
+                horizontal
+                breakpoint="md"
+                label="Period"
+                label-for="periodSelect"
+                label-text-align="right"
+                label-class="pr-4"
+                :invalid-feedback="invalidPeriodFeedback"
+                :state="!$v.amount_recurrence.$error">
+        <b-form-select :options="periodOptions" v-model="amount_recurrence" id="periodSelect" :state="!$v.amount_recurrence.$error" @input="$v.amount_recurrence.$touch()"/>
+      </b-form-group>
+      <b-form-group id="categoryHorizontal"
+                horizontal
+                breakpoint="md"
+                label="Category"
+                label-for="categorySelect"
+                label-text-align="right"
+                label-class="pr-4"
+                :invalid-feedback="invalidCategoryFeedback"
+                :state="!$v.category_id.$error">
+        <b-form-select :options="categoryOptions" :value-field="'id'" :text-field="'name'" v-model="category_id" id="categorySelect" :state="!$v.category_id.$error" @input="$v.category_id.$touch()"/>
+      </b-form-group>
+      <b-form-group id="personHorizontal"
+                horizontal
+                breakpoint="md"
+                label="Person"
+                label-for="personSelect"
+                label-text-align="right"
+                label-class="pr-4"
+                :invalid-feedback="invalidPersonFeedback"
+                :state="!$v.person_id.$error">
+        <b-form-select :options="personOptions" :value-field="'id'" :text-field="'name'" v-model="person_id" id="personSelect" :state="!$v.person_id.$error" @input="$v.person_id.$touch()"/>
+      </b-form-group>
     </b-container>
-
   </div>
 
 </template>
@@ -130,10 +164,66 @@ export default {
   methods: {
     validate () {
       this.$v.form.$touch()
-      var isValid = !this.$v.form.$invalid
-      this.$emit('on-validate', this.$data, isValid)
+      let isValid = !this.$v.form.$invalid
+      if (isValid) {
+        let data = {
+          name: this.name,
+          subtype_id: this.subtype_id,
+          description: this.description,
+          amount: this.amount,
+          amount_recurrence: this.amount_recurrence,
+          category_id: this.category_id,
+          person_id: this.person_id
+        }
+        this.$emit('validate-success', data)
+      }
       return isValid
     }
+  },
+  computed: {
+    invalidNameFeedback () {
+      if (this.$v.name.$error) {
+        return 'Name is required'
+      } else {
+        return ''
+      }
+    },
+    invalidSubtypeFeedback () {
+      if (this.$v.subtype_id.$error) {
+        return 'Subtype is required'
+      } else {
+        return ''
+      }
+    },
+    invalidDescriptionFeedback () {
+      if (this.$v.description.$error) {
+        return 'Description is required'
+      } else {
+        return ''
+      }
+    },
+    invalidPeriodFeedback () {
+      if (this.$v.amount_recurrence.$error) {
+        return 'Period is required'
+      } else {
+        return ''
+      }
+    },
+    invalidCategoryFeedback () {
+      if (this.$v.category_id.$error) {
+        return 'Category is required'
+      } else {
+        return ''
+      }
+    },
+    invalidPersonFeedback () {
+      if (this.$v.person_id.$error) {
+        return 'Person is required'
+      } else {
+        return ''
+      }
+    }
+
   }
 }
 </script>
@@ -153,6 +243,19 @@ export default {
       border: 1px solid #D7D7D7;
       margin-left: 130px;
       margin-right: 130px;
+    }
+
+    .b-form-group.form-group {
+      margin-bottom: 1.5rem !important;
+    }
+
+    .form-control.is-valid {
+      border: none;
+    }
+
+    .invalid-feedback {
+      text-align: left;
+      position: absolute;
     }
   }
 </style>

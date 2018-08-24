@@ -2,15 +2,15 @@
   <div class="addExpense bg-light">
     <div class="step-container">
       <div v-if="!isCompleted" class="stepper mx-auto bg-light text-regular">
-        <form-wizard :title="'Create New Expense'" :subtitle="''" :stepSize="'xs'" :color="'#525670'" ref="step">
+        <form-wizard :title="'Create New Expense'" :subtitle="''" :stepSize="'xs'" :color="'#525670'"  :errorColor="'#525670'" ref="step">
           <tab-content title="Basic Details" icon="fa fa-check" :before-change="()=>validateStep('step1')">
-            <step1 ref="step1" @on-validate="mergePartialModels"></step1>
+            <step1 ref="step1" @validate-success="mergePartialModels"></step1>
           </tab-content>
           <tab-content title="Timing" icon="fa fa-check">
-            <step2 @on-validate="mergePartialModels"></step2>
+            <step2 ref="step2" @validate-success="mergePartialModels"></step2>
           </tab-content>
           <tab-content title="Advanced" icon="fa fa-check">
-            <step3 @on-validate="mergePartialModels"></step3>
+            <step3 ref="step3" @validate-success="mergePartialModels"></step3>
           </tab-content>
           <template slot="footer" slot-scope="props">
             <div :class="{ hasSpace: props.activeTabIndex != 0 }">
@@ -59,13 +59,10 @@ export default {
     onComplete () {
       this.isCompleted = true
     },
-    mergePartialModels (model, isValid) {
-      console.log(model, isValid)
-      if (isValid) {
-        // merging each step model into the final model
-        this.finalModel = Object.assign({}, this.finalModel, model)
-        this.$refs['step'].nextTab()
-      }
+    mergePartialModels (model) {
+      // merging each step model into the final model
+      this.finalModel = Object.assign({}, this.finalModel, model)
+      console.log(this.finalModel)
     }
   },
   components: {

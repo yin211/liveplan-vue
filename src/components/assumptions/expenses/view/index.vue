@@ -358,7 +358,7 @@ export default {
       let response = await axios.get(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`)
       this.expense = response.data.data
       this.plan = this.expense
-      response = await axios.get(`${process.env.ROOT_API}/plans/${this.$route.params.id}`)
+      response = await axios.get(`${process.env.ROOT_API}/plans/${this.expense.plan_id}`)
       this.planStartYear = response.data.data.start_year
       this.planEndYear = response.data.data.end_year
       if (this.expense.calculation_mode === 'auto') {

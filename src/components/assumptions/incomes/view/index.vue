@@ -350,7 +350,7 @@ export default {
       let response = await axios.get(`${process.env.ROOT_API}/incomes/${this.$route.params.id}`)
       this.income = response.data.data
       this.plan = this.income
-      response = await axios.get(`${process.env.ROOT_API}/plans/${this.$route.params.id}`)
+      response = await axios.get(`${process.env.ROOT_API}/plans/${this.income.plan_id}`)
       this.planStartYear = response.data.data.start_year
       this.planEndYear = response.data.data.end_year
       if (this.income.calculation_mode === 'auto') {
@@ -364,8 +364,8 @@ export default {
       this.categoryOptions = response.data.data
       response = await axios.get(`${process.env.ROOT_API}/persons`)
       this.personOptions = response.data.data
-      // response = await axios.get(`${process.env.ROOT_API}/incomes/subtypes`)
-      // this.subtypeOptions = response.data
+      response = await axios.get(`${process.env.ROOT_API}/incomes/subtypes`)
+      this.subtypeOptions = response.data
       response = await axios.get(`${process.env.ROOT_API}/currencies`)
       this.currencyOptions = response.data.data
       EventBus.$emit('select-plan', {

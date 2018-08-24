@@ -72,8 +72,8 @@ export default {
       let isValid = !this.$v.form.$invalid
       if (isValid) {
         let data = {
-          start_year: this.start_year,
-          end_year: this.end_year
+          start_year: this.start_year.getFullYear(),
+          end_year: this.end_year.getFullYear()
         }
         this.$emit('validate-success', data)
       }
@@ -118,6 +118,17 @@ export default {
     #startYearHorizontal, #endYearHorizontal {
       .col-md-9 {
         text-align: left;
+      }
+
+      &.is-invalid {
+        .mx-datepicker {
+          border: 1px solid #EF5350;
+
+          .mx-input {
+            border-radius: 0;
+            border-right: 1px solid #EF5350;
+          }
+        }
       }
     }
 

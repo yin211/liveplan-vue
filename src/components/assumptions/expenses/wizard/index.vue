@@ -42,6 +42,8 @@
 import step1 from './steps/step1'
 import step2 from './steps/step2'
 import step3 from './steps/step3'
+import axios from 'axios'
+import EventBus from '@/event-bus.js'
 
 export default {
   name: 'addExpense',
@@ -56,13 +58,24 @@ export default {
       var refToValidate = this.$refs[name]
       return refToValidate.validate()
     },
-    onComplete () {
-      this.isCompleted = true
+    async onComplete () {
+      if (this.validateStep('step3')) {
+        try {
+          await axios.post(`${process.env.ROOT_API}/expenses`, this.finalModel)
+          this.isCompleted = true
+        } catch (err) {
+          console.log(err)
+          EventBus.$emit('notify-me', {
+            title: 'Failed!',
+            text: err.message,
+            status: 'is-danger'
+          })
+        }
+      }
     },
     mergePartialModels (model) {
       // merging each step model into the final model
       this.finalModel = Object.assign({}, this.finalModel, model)
-      console.log(this.finalModel)
     }
   },
   components: {

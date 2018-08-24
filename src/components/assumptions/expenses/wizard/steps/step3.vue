@@ -9,34 +9,48 @@
     </div>
     <div class="space-line"></div>
     <b-container class="p-0">
-      <b-row class="mb-3">
-        <b-col sm="3" class="d-flex justify-content-end mt-3"><label :for="'annual-growth-rate'">Growth Rate</label></b-col>
-        <b-col sm="9" class="d-flex">
+      <b-form-group id="growthRateHorizontal"
+                horizontal
+                breakpoint="md"
+                label="Growth Rate"
+                label-for="annual-growth-rate"
+                label-text-align="right"
+                label-class="pr-4">
+        <div class="d-flex">
           <vue-numeric currency="%" currency-symbol-position="suffix" v-model="annual_increase_percentage" class="form-control border-0 mr-3" id="annual-growth-rate" :min="0" :max="10" style="width: 100px;"></vue-numeric>
           <b-form-input v-model="annual_increase_percentage" min="0" max="10" class="slider" type="range"></b-form-input>
-        </b-col>
-      </b-row>
-      <b-row class="mb-3">
-        <b-col sm="3" class="d-flex justify-content-end mt-3"><label :for="'inflation-input'">Inflation</label></b-col>
-        <b-col sm="9" class="d-flex">
+        </div>
+      </b-form-group>
+      <b-form-group id="inflationHorizontal"
+                horizontal
+                breakpoint="md"
+                label="Inflation"
+                label-for="inflation-input"
+                label-text-align="right"
+                label-class="pr-4">
+        <div class="d-flex">
           <vue-numeric currency="%" currency-symbol-position="suffix" v-model="inflation_rate" class="form-control border-0 mr-3" id="inflation-input" :min="0" :max="10" style="width: 100px;"></vue-numeric>
           <b-form-input v-model="inflation_rate" min="0" max="10" class="slider" type="range"></b-form-input>
-        </b-col>
-      </b-row>
-      <b-row>
-        <b-col sm="3" class="d-flex mt-3 justify-content-end"><label :for="'currency-select'">Currency</label></b-col>
-        <b-col sm="9">
-          <b-form-select :options="currencyOptions" :value-field="'id'" :text-field="'name'" v-model="currency_id" :id="'currency-select'" class="border-0"/>
-        </b-col>
-      </b-row>
+        </div>
+      </b-form-group>
+      <b-form-group id="currencyHorizontal"
+                horizontal
+                breakpoint="md"
+                label="Currency"
+                label-for="currency-select"
+                label-text-align="right"
+                label-class="pr-4"
+                :invalid-feedback="invalidCurrencyFeedback"
+                :state="!$v.currency_id.$error">
+        <b-form-select :options="currencyOptions" :value-field="'id'" :text-field="'name'" v-model="currency_id" id="currency-select" :state="!$v.currency_id.$error" @input="$v.currency_id.$touch()"/>
+      </b-form-group>
     </b-container>
-
   </div>
-
 </template>
 
 <script>
 import axios from 'axios'
+import { required } from 'vuelidate/lib/validators'
 
 export default {
   data () {
@@ -53,6 +67,36 @@ export default {
       this.currencyOptions = response.data.data
     } catch (err) {
       console.log(err)
+    }
+  },
+  validations: {
+    currency_id: {
+      required
+    },
+    form: ['currency_id']
+  },
+  methods: {
+    validate () {
+      this.$v.form.$touch()
+      let isValid = !this.$v.form.$invalid
+      if (isValid) {
+        let data = {
+          currency_id: this.currency_id,
+          annual_increase_percentage: this.annual_increase_percentage,
+          inflation_rate: this.inflation_rate
+        }
+        this.$emit('validate-success', data)
+      }
+      return isValid
+    }
+  },
+  computed: {
+    invalidCurrencyFeedback () {
+      if (this.$v.currency_id.$error) {
+        return 'Currency is required'
+      } else {
+        return ''
+      }
     }
   }
 }

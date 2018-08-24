@@ -9,26 +9,36 @@
     </div>
     <div class="space-line"></div>
     <b-container>
-      <b-row class="mb-3">
-        <b-col sm="3" class="d-flex justify-content-end mt-3 pr-0"><label :for="'start_year'">Starts at</label></b-col>
-        <b-col sm="9">
-          <date-picker id="start_year" v-model="start_year" lang="en" type="year" format="YYYY" >
+      <b-form-group id="startYearHorizontal"
+                horizontal
+                breakpoint="md"
+                label="Starts at"
+                label-for="start_year"
+                label-text-align="right"
+                label-class="pr-4"
+                :invalid-feedback="invalidStartYearFeedback"
+                :state="!$v.start_year.$error">
+          <date-picker id="start_year" v-model="start_year" lang="en" type="year" format="YYYY" :state="!$v.start_year.$error" @input="$v.start_year.$touch()">
             <template slot="calendar-icon">
               <i class="flaticon stroke calendar-2 text-primary"></i>
             </template>
           </date-picker>
-        </b-col>
-      </b-row>
-      <b-row class="mb-3">
-        <b-col sm="3" class="d-flex justify-content-end mt-3 pr-0"><label :for="'end_year'">Ends at</label></b-col>
-        <b-col sm="9">
-          <date-picker id="end_year" v-model="end_year" lang="en" type="year" format="YYYY" >
+      </b-form-group>
+      <b-form-group id="endYearHorizontal"
+                horizontal
+                breakpoint="md"
+                label="Ends at"
+                label-for="end_year"
+                label-text-align="right"
+                label-class="pr-4"
+                :invalid-feedback="invalidEndYearFeedback"
+                :state="!$v.end_year.$error">
+          <date-picker id="end_year" v-model="end_year" lang="en" type="year" format="YYYY" :state="!$v.end_year.$error" @input="$v.end_year.$touch()">
             <template slot="calendar-icon">
               <i class="flaticon stroke calendar-2 text-primary"></i>
             </template>
           </date-picker>
-        </b-col>
-      </b-row>
+      </b-form-group>
     </b-container>
 
   </div>
@@ -37,6 +47,7 @@
 
 <script>
 import DatePicker from 'vue2-datepicker'
+import { required } from 'vuelidate/lib/validators'
 
 export default {
   components: { DatePicker },
@@ -46,8 +57,44 @@ export default {
       end_year: null
     }
   },
-  async mounted () {
-
+  validations: {
+    start_year: {
+      required
+    },
+    end_year: {
+      required
+    },
+    form: ['start_year', 'end_year']
+  },
+  methods: {
+    validate () {
+      this.$v.form.$touch()
+      let isValid = !this.$v.form.$invalid
+      if (isValid) {
+        let data = {
+          start_year: this.start_year,
+          end_year: this.end_year
+        }
+        this.$emit('validate-success', data)
+      }
+      return isValid
+    }
+  },
+  computed: {
+    invalidStartYearFeedback () {
+      if (this.$v.start_year.$error) {
+        return 'Start year is required'
+      } else {
+        return ''
+      }
+    },
+    invalidEndYearFeedback () {
+      if (this.$v.end_year.$error) {
+        return 'End year is required'
+      } else {
+        return ''
+      }
+    }
   }
 }
 </script>
@@ -66,6 +113,12 @@ export default {
       border: 1px solid #D7D7D7;
       margin-left: 130px;
       margin-right: 130px;
+    }
+
+    #startYearHorizontal, #endYearHorizontal {
+      .col-md-9 {
+        text-align: left;
+      }
     }
 
   }

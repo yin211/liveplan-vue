@@ -244,18 +244,5 @@ export default {
       margin-left: 130px;
       margin-right: 130px;
     }
-
-    .b-form-group.form-group {
-      margin-bottom: 1.5rem !important;
-    }
-
-    .form-control.is-valid {
-      border: none;
-    }
-
-    .invalid-feedback {
-      text-align: left;
-      position: absolute;
-    }
   }
 </style>

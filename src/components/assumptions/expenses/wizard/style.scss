@@ -132,6 +132,19 @@
 
       .step1, .step2, .step3 {
         margin: 52px 98px;
+
+        .b-form-group.form-group {
+          margin-bottom: 1.5rem !important;
+        }
+
+        .form-control.is-valid {
+          border: none;
+        }
+
+        .invalid-feedback {
+          text-align: left;
+          position: absolute;
+        }
       }
     }
 

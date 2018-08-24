@@ -6,7 +6,7 @@
           <tab-content title="Basic Details" icon="fa fa-check" :before-change="()=>validateStep('step1')">
             <step1 ref="step1" @validate-success="mergePartialModels"></step1>
           </tab-content>
-          <tab-content title="Timing" icon="fa fa-check">
+          <tab-content title="Timing" icon="fa fa-check" :before-change="()=>validateStep('step2')">
             <step2 ref="step2" @validate-success="mergePartialModels"></step2>
           </tab-content>
           <tab-content title="Advanced" icon="fa fa-check">

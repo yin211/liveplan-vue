@@ -39,6 +39,10 @@
   background: linear-gradient(193.11deg, #685B7A 0%, #445B7C 100%);
 }
 
+.circle-check-mark {
+  background-image: url('assets/img/circle-check.svg');
+}
+
 // customize input form control
 input {
   &.form-control {

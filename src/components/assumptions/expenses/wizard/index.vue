@@ -28,10 +28,11 @@
       </div>
       <div v-else class="complete mx-auto bg-light text-regular">
         <span class="title">Create New Expense</span>
-        <div class="mark">
-          <i class="flaticon stroke checkmark-2 text-success"></i>
+        <div class="mark depth-1">
+          <div class="circle-check-mark"></div>
           <p>Expense Added</p>
         </div>
+         <b-button class="go-expenses-link pull-right mt-5" to="/assumptions/expenses">Go to expenses</b-button>
       </div>
     </div>
   </div>

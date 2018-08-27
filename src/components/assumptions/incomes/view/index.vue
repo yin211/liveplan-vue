@@ -184,15 +184,15 @@
                     <span class="text-regular font-weight-medium">{{income.name}}</span>
                   </b-col>
 
-                  <!-- <b-col cols="6" md="4" xl="2" class="d-flex flex-column justify-content-center py-xl-0 py-2">
+                  <b-col cols="6" md="4" xl="2" class="d-flex flex-column justify-content-center py-xl-0 py-2">
                     <span class="text-gray">Category</span>
-                    <span class="text-regular font-weight-medium" v-if="income.category">{{income.category.name}}</span>
+                    <span class="text-regular font-weight-medium" v-if="income.category_id">{{categoryName}}</span>
                   </b-col>
 
                   <b-col cols="6" md="4" xl="2" class="d-flex flex-column justify-content-center py-xl-0 py-2">
                     <span class="text-gray">Type / Subtype</span>
-                    <span class="text-regular font-weight-medium" v-if="income.income_type">{{income.income_subtype.name}}</span>
-                  </b-col> -->
+                    <span class="text-regular font-weight-medium" v-if="income.income_subtype_id">{{subtypeName}}</span>
+                  </b-col>
 
                   <b-col cols="6" md="4" xl="2" class="d-flex flex-column justify-content-center py-xl-0 py-2">
                     <span class="text-gray">Period</span>
@@ -525,7 +525,20 @@ export default {
       if (f.length) {
         return f[0].name
       }
+    },
+    categoryName () {
+      let f = this.categoryOptions.filter(option => option.id === this.income.category_id)
+      if (f.length) {
+        return f[0].name
+      }
+    },
+    subtypeName () {
+      let f = this.subtypeOptions.filter(option => option.subtype_id === this.income.income_subtype_id)
+      if (f.length) {
+        return f[0].subtype
+      }
     }
+
   },
   methods: {
     onFiltered (filteredItems) {

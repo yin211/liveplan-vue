@@ -120,7 +120,7 @@
                   </template>
                   <template slot="taxes_paid" slot-scope="row">
                     <vue-numeric v-show="row.item.is_edit"  @keyup.native.enter.stop.prevent="saveRow(row.item)" currency="SEK" currency-symbol-position="suffix" thousand-separator=" "  v-model="row.item.edit_taxes_paid" class="form-control form-control-sm text-regular taxes-paid" :minus="true"></vue-numeric>
-                    <span v-show="!row.item.is_edit"  @dblclick="editRow(row.item)">{{row.item.taxes_paid.toLocaleString('sv-SE')}} SEK </span>
+                    <span v-show="!row.item.is_edit"  v-if="row.item.taxes_paid != null" @dblclick="editRow(row.item)">{{row.item.taxes_paid.toLocaleString('sv-SE')}} SEK </span>
                   </template>
                   <template slot="actions" slot-scope="row">
                     <div class="d-flex flex-column flex-md-row align-items-start">
@@ -235,9 +235,15 @@
             </b-col>
           </b-row>
           <b-row>
-            <b-col sm="3" class="d-flex justify-content-end mt-3"><label :for="'amount-input'">Amount</label></b-col>
+            <b-col sm="3" class="d-flex justify-content-end mt-3"><label>Amount</label></b-col>
             <b-col sm="9">
               <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-model="newRow.amount" class="form-control text-regular mb-3" :minus="true"></vue-numeric>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col sm="3" class="d-flex justify-content-end mt-3"><label>Taxes Paid</label></b-col>
+            <b-col sm="9">
+              <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-model="newRow.taxes_paid" class="form-control text-regular mb-3" :minus="true"></vue-numeric>
             </b-col>
           </b-row>
           <div class="w-100 mx-auto">
@@ -583,7 +589,6 @@ export default {
             category_id: this.editIncome.category_id,
             person_id: this.editIncome.person_id,
             income_subtype_id: this.editIncome.income_subtype_id,
-            inflation_rate: this.editIncome.inflation_rate,
             currency_id: this.editIncome.currency_id,
             plan_id: this.editIncome.plan_id
           }
@@ -619,12 +624,14 @@ export default {
             income_id: this.income.id,
             plan_id: this.income.plan_id,
             year: this.newRow.year,
-            amount: this.newRow.amount ? this.newRow.amount : 0
+            amount: this.newRow.amount ? this.newRow.amount : 0,
+            taxes_paid: this.newRow.taxes_paid ? this.newRow.taxes_paid : 0
           }
           let response = await axios.post(`${process.env.ROOT_API}/incomes/${this.$route.params.id}/amounts`, data)
           let found = this.income.income_amounts.find(element => parseInt(element.year) === parseInt(response.data.data.year))
           if (found) {
             found.amount = response.data.data.amount
+            found.taxes_paid = response.data.data.taxes_paid
           } else {
             this.income.income_amounts.unshift(response.data.data)
           }
@@ -650,6 +657,9 @@ export default {
         this.$set(item, 'is_edit', true)
         item.edit_amount = item.amount
         item.edit_taxes_paid = item.taxes_paid
+        if (item.edit_taxes_paid == null) {
+          item.edit_taxes_paid = 0
+        }
       }
     },
     cancelRow (item) {

@@ -563,7 +563,8 @@ export default {
             amount: this.income.amount,
             annual_growth_rate: this.income.annual_growth_rate
           }
-          await axios.put(`${process.env.ROOT_API}/incomes/${this.$route.params.id}`, data)
+          let response = await axios.put(`${process.env.ROOT_API}/incomes/${this.$route.params.id}`, data)
+          this.income.income_amounts = this.convertToArray(response.data.data.income_amounts)
           this.isSaving = false
           EventBus.$emit('notify-me', {
             title: 'Success!',

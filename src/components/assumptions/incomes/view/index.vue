@@ -735,7 +735,8 @@ export default {
                   end_year: this.income.end_year,
                   amount: this.income.amount,
                   annual_growth_rate: this.income.annual_growth_rate,
-                  calculation_mode: 'auto'
+                  calculation_mode: 'auto',
+                  amount_recurrence: this.income.amount_recurrence
                 }
                 let response = await axios.post(`${process.env.ROOT_API}/incomes/amounts/calculate`, data)
                 response.data.data.income_amounts = this.convertToArray(response.data.data.income_amounts)

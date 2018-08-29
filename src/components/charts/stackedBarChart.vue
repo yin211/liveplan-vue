@@ -164,14 +164,15 @@ export default {
       return this.barColors[i % this.barColors.length]
     },
     rectmouseover (d, i) {
+      let sum = 0
       let amounts = Object.keys(d.data).filter(x => x !== 'year').map((name, i) => {
+        sum += +d.data[name]
         return {
           name: name,
           amount: +d.data[name],
           color: this.colorScale(i)
         }
       })
-
       let html = `<div class="toolTip">
                     <div class="tooltip-title">
                       <strong><span id="tooltipyear">${d.data.year}</span></strong> ( age of <strong><span id="tooltipage">${d.data.year - this.birthYear}</span></strong> )
@@ -186,6 +187,15 @@ export default {
                               </div>
                             </div>`
                     }).toString().replace(/,/g, '')}
+                    <hr class="tooltip-hr">
+                    <div class="d-flex justify-content-between">
+                      <div class="mr-3">
+                        <span class="tooltip-amount-span" style="background-color:${this.colorScale(0)};"></span><span class="ml-1">${this.label}</span>
+                      </div>
+                      <div>
+                        <strong><span>${this.thousandsFormat(sum)}</span> SEK</strong>
+                      </div>
+                    </div>
                   </div>`
 
       let x = this.xScale(d.data.year) + this.xScale.bandwidth() / 2 + this.margin.left
@@ -840,6 +850,11 @@ export default {
               padding: 20px;
               text-align: left;
               font-family: Roboto;
+
+              .tooltip-hr {
+                margin-bottom: 8px;
+                margin-top:  4px;
+              }
 
               .tooltip-title {
                 margin-bottom: 20px;

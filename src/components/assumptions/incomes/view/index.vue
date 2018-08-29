@@ -563,8 +563,7 @@ export default {
             amount: this.income.amount,
             annual_growth_rate: this.income.annual_growth_rate
           }
-          let response = await axios.put(`${process.env.ROOT_API}/incomes/${this.$route.params.id}`, data)
-          this.income.income_amounts = this.convertToArray(response.data.data.income_amounts)
+          await axios.put(`${process.env.ROOT_API}/incomes/${this.$route.params.id}`, data)
           this.isSaving = false
           EventBus.$emit('notify-me', {
             title: 'Success!',
@@ -739,7 +738,6 @@ export default {
                   amount_recurrence: this.income.amount_recurrence
                 }
                 let response = await axios.post(`${process.env.ROOT_API}/incomes/amounts/calculate`, data)
-                console.log(response.data.data.income_amounts)
                 response.data.data.income_amounts = this.convertToArray(response.data.data.income_amounts)
                 this.plan = response.data.data
               }

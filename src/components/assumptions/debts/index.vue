@@ -18,13 +18,13 @@
       <div class="chart-container">
         <stackedBarChart v-if="isStackedBarChart && stackBarData && stackBarData.length && planStartYear && planEndYear"
           :dataArray="stackBarData"
-          :label="`blah`"
+          :label="`debts`"
           :planStartYear="planStartYear"
           :planEndYear="planEndYear"
           :birthYear="1981"></stackedBarChart>
         <timeline v-if="!isStackedBarChart && timelineData && timelineData.data.length && planStartYear && planEndYear"
           :dataArray="timelineData.data"
-          :label="`blah`"
+          :label="`debts`"
           :planStartYear="planStartYear"
           :planEndYear="planEndYear"
           :birthYear="1981"></timeline>

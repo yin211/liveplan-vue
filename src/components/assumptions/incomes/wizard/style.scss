@@ -1,0 +1,208 @@
+.addIncome {
+  .step-container {
+    background: #d9dae7;
+
+    .stepper {
+      max-width: 1440px;
+      padding: 112px 34px 242px;
+      font-size: 14px;
+
+      // customize form wizard
+      .vue-form-wizard {
+        .wizard-header {
+          padding: 0 !important;
+
+          .wizard-title {
+            color: #232B36;
+            font-size: 36px;
+            line-height: 48px;
+            font-weight: 400;
+            text-align: left;
+            margin-bottom: 38px;
+          }
+        }
+
+        .wizard-navigation {
+          .wizard-progress-with-circle {
+            top: 48px;
+            padding: 0 24px;
+            z-index: 1;
+
+            .wizard-progress-bar {
+              border: .5px solid #525670;
+              height: 0;
+            }
+          }
+
+          .wizard-nav.wizard-nav-pills {
+            background: white;
+            padding: 22px 0px;
+            box-shadow: 9px 8px 16px 0 rgba(0,0,0,0.07);
+
+            .wizard-icon-circle {
+              z-index: 2;
+
+              &.checked {
+                background-color: #36b373;
+                border-color: #36b373 !important;
+
+                .wizard-icon {
+                  color: white;
+                }
+
+                &[aria-selected="true"] {
+                  border-color: #525670 !important;
+                }
+              }
+
+              &:focus {
+                outline: none;
+              }
+            }
+
+            .stepTitle {
+              color: #232B36 !important;
+              line-height: 20px;
+              margin-top: 4px;
+              text-align: center;
+
+              &.active {
+                font-weight: bold;
+              }
+            }
+          }
+
+        }
+
+        .wizard-card-footer {
+          padding: 0 130px !important;
+
+          .wizard-footer-right {
+            .wizard-btn {
+              height: 48px;
+              width: 204px;
+              border-radius: 24px;
+              border: none;
+              background-color: #A5ADBA !important;
+
+              &::after {
+                font-family: "FontAwesome";
+                content: "\f0da";
+                font-size: 16px;
+                float: right;
+                padding-right: 6px
+              }
+            }
+          }
+
+          .wizard-footer-left {
+            .wizard-btn {
+              height: 48px;
+              width: 204px;
+              border-radius: 24px;
+              border: none;
+              color: #232B36 !important;
+              background-color: white !important;
+
+              &::after {
+                font-family: "FontAwesome";
+                content: "\f0d9";
+                font-size: 16px;
+                float: left;
+                padding-left: 6px
+              }
+            }
+          }
+
+          .line {
+            box-sizing: border-box;
+            height: 2px;
+            width: 687.64px;
+            border: 1px solid #D7D7D7;
+            margin-left: 20px;
+            margin-right: 20px;
+          }
+
+          .hasSpace {
+            display: flex;
+            align-items: center;
+          }
+        }
+      }
+
+      .step1, .step2, .step3 {
+        margin: 52px 98px;
+
+        .b-form-group.form-group {
+          margin-bottom: 1.5rem !important;
+        }
+
+        .form-control.is-valid {
+          border: none;
+        }
+
+        .invalid-feedback {
+          text-align: left;
+          position: absolute;
+        }
+      }
+    }
+
+    .complete {
+      max-width: 1440px;
+      padding: 112px 34px 242px;
+
+      .title {
+        font-size: 36px;
+        line-height: 48px;
+        margin-bottom: 40px;
+        display: flex;
+        text-align: left;
+      }
+
+      .mark {
+        background-color: white;
+        padding-top: 94px;
+        padding-bottom: 84px;
+
+        .circle-check-mark {
+          width: 40px;
+          height: 40px;
+          background-repeat: no-repeat;
+          background-size: 40px;
+          border: none;
+          text-align: center;
+          margin-left: 50%;
+          transform: translate(-50%, -20%);
+        }
+
+        p {
+          margin-top: 8px;
+          font-size: 24px;
+          line-height: 32px;
+        }
+      }
+
+      .go-incomes-link {
+        height: 48px;
+        width: 204px;
+        border-radius: 24px;
+        border: none;
+        background-color: #A5ADBA !important;
+        color: white;
+        line-height: 36px;
+
+        &::after {
+          font-family: "FontAwesome";
+          content: "\f0da";
+          font-size: 16px;
+          float: right;
+          padding-right: 6px
+        }
+      }
+    }
+
+
+  }
+
+}

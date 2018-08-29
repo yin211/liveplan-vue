@@ -9,6 +9,7 @@ import viewExpense from '@/components/assumptions/expenses/view/index.vue'
 import addExpense from '@/components/assumptions/expenses/wizard/index.vue'
 import incomes from '@/components/assumptions/incomes/index.vue'
 import viewIncome from '@/components/assumptions/incomes/view/index.vue'
+import addIncome from '@/components/assumptions/incomes/wizard/index.vue'
 import assets from '@/components/assumptions/assets/index.vue'
 import debts from '@/components/assumptions/debts/index.vue'
 
@@ -60,6 +61,11 @@ export default new Router({
           path: 'incomes',
           name: 'incomes',
           component: incomes
+        },
+        {
+          path: 'incomes/add-income',
+          name: 'addIncome',
+          component: addIncome
         },
         {
           path: 'incomes/:id',

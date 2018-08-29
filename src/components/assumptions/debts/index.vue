@@ -169,7 +169,7 @@ export default {
 
       let stackBarData = await axios.get(`${process.env.ROOT_API}/cashflow/sums?plan_id=1&object_class=debt&aggregated=0`)
       this.stackBarData = stackBarData.data
-      let timelineData = await axios.get(`${process.env.ROOT_API}/debts/?w_e_amounts=1`)
+      let timelineData = await axios.get(`${process.env.ROOT_API}/debts/?with_amounts=1`)
       this.timelineData = timelineData.data
       let plansResponse = await axios.get(`${process.env.ROOT_API}/plans/1`)
       this.planStartYear = plansResponse.data.data.start_year

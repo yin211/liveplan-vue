@@ -28,8 +28,8 @@
                 label-text-align="right"
                 label-class="pr-4"
                 :invalid-feedback="invalidSubtypeFeedback"
-                :state="!$v.subtype_id.$error">
-        <b-form-select :options="subtypeOptions" :value-field="'subtype_id'" :text-field="'subtype'" v-model="subtype_id" id="subtypeSelect" :state="!$v.subtype_id.$error" @input="$v.subtype_id.$touch()"/>
+                :state="!$v.expense_subtype_id.$error">
+        <b-form-select :options="subtypeOptions" :value-field="'subtype_id'" :text-field="'subtype'" v-model="expense_subtype_id" id="subtypeSelect" :state="!$v.expense_subtype_id.$error" @input="$v.expense_subtype_id.$touch()"/>
       </b-form-group>
       <b-form-group id="descriptionHorizontal"
                 horizontal
@@ -101,7 +101,7 @@ export default {
     return {
       name: null,
       subtypeOptions: [],
-      subtype_id: null,
+      expense_subtype_id: null,
       description: null,
       periodOptions: [
         { value: null, text: 'Please select', disabled: true },
@@ -141,7 +141,7 @@ export default {
     name: {
       required
     },
-    subtype_id: {
+    expense_subtype_id: {
       required
     },
     description: {
@@ -159,7 +159,7 @@ export default {
     person_id: {
       required
     },
-    form: ['name', 'description', 'subtype_id', 'amount', 'amount_recurrence', 'category_id', 'person_id']
+    form: ['name', 'description', 'expense_subtype_id', 'amount', 'amount_recurrence', 'category_id', 'person_id']
   },
   methods: {
     validate () {
@@ -168,7 +168,7 @@ export default {
       if (isValid) {
         let data = {
           name: this.name,
-          subtype_id: this.subtype_id,
+          expense_subtype_id: this.expense_subtype_id,
           description: this.description,
           amount: this.amount,
           amount_recurrence: this.amount_recurrence,
@@ -189,7 +189,7 @@ export default {
       }
     },
     invalidSubtypeFeedback () {
-      if (this.$v.subtype_id.$error) {
+      if (this.$v.expense_subtype_id.$error) {
         return 'Subtype is required'
       } else {
         return ''

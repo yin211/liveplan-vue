@@ -14,8 +14,7 @@
                 breakpoint="md"
                 label="Growth Rate"
                 label-for="annual-growth-rate"
-                label-text-align="right"
-                label-class="pr-4">
+                label-class="d-flex align-items-center justify-content-end pr-4">
         <div class="d-flex">
           <vue-numeric currency="%" currency-symbol-position="suffix" v-model="annual_increase_percentage" class="form-control border-0 mr-3" id="annual-growth-rate" :min="0" :max="10" style="width: 100px;"></vue-numeric>
           <b-form-input v-model="annual_increase_percentage" min="0" max="10" class="slider" type="range"></b-form-input>
@@ -26,8 +25,7 @@
                 breakpoint="md"
                 label="Inflation"
                 label-for="inflation-input"
-                label-text-align="right"
-                label-class="pr-4">
+                label-class="d-flex align-items-center justify-content-end pr-4">
         <div class="d-flex">
           <vue-numeric currency="%" currency-symbol-position="suffix" v-model="inflation_rate" class="form-control border-0 mr-3" id="inflation-input" :min="0" :max="10" style="width: 100px;"></vue-numeric>
           <b-form-input v-model="inflation_rate" min="0" max="10" class="slider" type="range"></b-form-input>
@@ -38,8 +36,7 @@
                 breakpoint="md"
                 label="Currency"
                 label-for="currency-select"
-                label-text-align="right"
-                label-class="pr-4"
+                label-class="d-flex align-items-center justify-content-end pr-4"
                 :invalid-feedback="invalidCurrencyFeedback"
                 :state="!$v.currency_id.$error">
         <b-form-select :options="currencyOptions" :value-field="'id'" :text-field="'name'" v-model="currency_id" id="currency-select" :state="!$v.currency_id.$error" @input="$v.currency_id.$touch()"/>

@@ -14,8 +14,7 @@
                 breakpoint="md"
                 label="Name"
                 label-for="nameInput"
-                label-text-align="right"
-                label-class="pr-4"
+                label-class="d-flex align-items-center justify-content-end pr-4"
                 :invalid-feedback="invalidNameFeedback"
                 :state="!$v.name.$error">
         <b-form-input id="nameInput" v-model="name" :placeholder="'Write here'" :state="!$v.name.$error" @input="$v.name.$touch()"></b-form-input>
@@ -25,8 +24,7 @@
                 breakpoint="md"
                 label="Subtype"
                 label-for="subtypeSelect"
-                label-text-align="right"
-                label-class="pr-4"
+                label-class="d-flex align-items-center justify-content-end pr-4"
                 :invalid-feedback="invalidSubtypeFeedback"
                 :state="!$v.income_subtype_id.$error">
         <b-form-select :options="subtypeOptions" :value-field="'subtype_id'" :text-field="'subtype'" v-model="income_subtype_id" id="subtypeSelect" :state="!$v.income_subtype_id.$error" @input="$v.income_subtype_id.$touch()"/>
@@ -36,8 +34,7 @@
                 breakpoint="md"
                 label="Description"
                 label-for="descriptionInput"
-                label-text-align="right"
-                label-class="pr-4"
+                label-class="d-flex justify-content-end pr-4"
                 :invalid-feedback="invalidDescriptionFeedback"
                 :state="!$v.description.$error">
         <b-form-textarea id="descriptionInput"  v-model="description" :placeholder="'Write here'" :state="!$v.description.$error" @input="$v.description.$touch()" :rows="3" :max-rows="6"></b-form-textarea>
@@ -47,8 +44,7 @@
                 breakpoint="md"
                 label="Amount"
                 label-for="amountInput"
-                label-text-align="right"
-                label-class="pr-4">
+                label-class="d-flex align-items-center justify-content-end pr-4">
         <div class="d-flex">
           <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-model="amount" id="amountInput" class="form-control border-0 mr-3" :min="0"></vue-numeric>
           <b-form-input v-model="amount" min="0" max="10000" step="500" class="slider" type="range"></b-form-input>
@@ -59,8 +55,7 @@
                 breakpoint="md"
                 label="Period"
                 label-for="periodSelect"
-                label-text-align="right"
-                label-class="pr-4"
+                label-class="d-flex align-items-center justify-content-end pr-4"
                 :invalid-feedback="invalidPeriodFeedback"
                 :state="!$v.amount_recurrence.$error">
         <b-form-select :options="periodOptions" v-model="amount_recurrence" id="periodSelect" :state="!$v.amount_recurrence.$error" @input="$v.amount_recurrence.$touch()"/>
@@ -70,8 +65,7 @@
                 breakpoint="md"
                 label="Category"
                 label-for="categorySelect"
-                label-text-align="right"
-                label-class="pr-4"
+                label-class="d-flex align-items-center justify-content-end pr-4"
                 :invalid-feedback="invalidCategoryFeedback"
                 :state="!$v.category_id.$error">
         <b-form-select :options="categoryOptions" :value-field="'id'" :text-field="'name'" v-model="category_id" id="categorySelect" :state="!$v.category_id.$error" @input="$v.category_id.$touch()"/>
@@ -81,8 +75,7 @@
                 breakpoint="md"
                 label="Person"
                 label-for="personSelect"
-                label-text-align="right"
-                label-class="pr-4"
+                label-class="d-flex align-items-center justify-content-end pr-4"
                 :invalid-feedback="invalidPersonFeedback"
                 :state="!$v.person_id.$error">
         <b-form-select :options="personOptions" :value-field="'id'" :text-field="'name'" v-model="person_id" id="personSelect" :state="!$v.person_id.$error" @input="$v.person_id.$touch()"/>

@@ -85,7 +85,7 @@
           </div>
         </template>
         <template slot="HEAD_actions" slot-scope="row">
-          <button class='btn btn-sm btn-primary font-weight-bold add-new-row d-none d-sm-block'>
+          <button class='btn btn-sm btn-primary font-weight-bold add-new-row d-none d-sm-block' @click.stop="$router.push('/assumptions/debts/add-debt')">
             <i class="flaticon stroke plus"></i>
             Add New Debt
           </button>

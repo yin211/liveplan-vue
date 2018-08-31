@@ -13,6 +13,7 @@ import addIncome from '@/components/assumptions/incomes/wizard/index.vue'
 import assets from '@/components/assumptions/assets/index.vue'
 import addAsset from '@/components/assumptions/assets/wizard/index.vue'
 import debts from '@/components/assumptions/debts/index.vue'
+import addDebt from '@/components/assumptions/debts/wizard/index.vue'
 
 Vue.use(Router)
 
@@ -87,6 +88,11 @@ export default new Router({
           path: 'debts',
           name: 'debts',
           component: debts
+        },
+        {
+          path: 'debts/add-debt',
+          name: 'addDebt',
+          component: addDebt
         }
       ]
     }

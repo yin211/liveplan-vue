@@ -1,5 +1,4 @@
 /* eslint-disable promise/param-names */
-import { app } from '@/main'
 import { SET_LANG } from '../actions/lang'
 
 const state = {
@@ -9,7 +8,7 @@ const state = {
 const mutations = {
   [SET_LANG]: (state, payload) => {
     state.lang = payload
-    app.$i18n.locale = payload
+    this.$i18n.locale = payload
   }
 }
 

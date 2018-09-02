@@ -50,15 +50,15 @@
           <b-form-input v-model="amount" min="0" max="10000" step="500" class="slider" type="range"></b-form-input>
         </div>
       </b-form-group>
-      <b-form-group id="periodHorizontal"
+      <b-form-group id="planHorizontal"
                 horizontal
                 breakpoint="md"
-                label="Period"
-                label-for="periodSelect"
+                label="Plan"
+                label-for="PlanSelect"
                 label-class="d-flex align-items-center justify-content-end pr-4"
-                :invalid-feedback="invalidPeriodFeedback"
-                :state="!$v.amount_recurrence.$error">
-        <b-form-select :options="periodOptions" v-model="amount_recurrence" id="periodSelect" :state="!$v.amount_recurrence.$error" @input="$v.amount_recurrence.$touch()"/>
+                :invalid-feedback="invalidPlanFeedback"
+                :state="!$v.plan_id.$error">
+        <b-form-select :options="planOptions" :value-field="'id'" :text-field="'name'" v-model="plan_id" id="planSelect" :state="!$v.plan_id.$error" @input="$v.plan_id.$touch()"/>
       </b-form-group>
       <b-form-group id="categoryHorizontal"
                 horizontal
@@ -96,17 +96,10 @@ export default {
       subtypeOptions: [],
       asset_subtype_id: null,
       description: null,
-      periodOptions: [
-        { value: null, text: 'Please select', disabled: true },
-        { value: 'monthly', text: 'Monthly', display: 'month' },
-        { value: 'daily', text: 'Daily', display: 'day' },
-        { value: 'weekly', text: 'Weekly', display: 'week' },
-        { value: 'quarterly', text: 'Quarterly', display: 'quarter' },
-        { value: 'semiannually', text: 'Semiannually', display: 'half-year' },
-        { value: 'annually', text: 'Annually', display: 'year' },
-        { value: 'onetime', text: 'One time', dispay: 'one time' }
+      planOptions: [
+        { id: null, name: 'Please select', disabled: true }
       ],
-      amount_recurrence: null,
+      plan_id: null,
       category_id: null,
       categoryOptions: [
         { id: null, name: 'Please select', disabled: true }
@@ -126,6 +119,8 @@ export default {
       this.categoryOptions = [...this.categoryOptions, ...response.data.data]
       response = await axios.get(`${process.env.ROOT_API}/persons`)
       this.personOptions = [...this.personOptions, ...response.data.data]
+      response = await axios.get(`${process.env.ROOT_API}/plans`)
+      this.planOptions = [...this.planOptions, ...response.data.data]
     } catch (err) {
       console.log(err)
     }
@@ -143,7 +138,7 @@ export default {
     amount: {
       required
     },
-    amount_recurrence: {
+    plan_id: {
       required
     },
     category_id: {
@@ -152,7 +147,7 @@ export default {
     person_id: {
       required
     },
-    form: ['name', 'description', 'asset_subtype_id', 'amount', 'amount_recurrence', 'category_id', 'person_id']
+    form: ['name', 'description', 'asset_subtype_id', 'amount', 'plan_id', 'category_id', 'person_id']
   },
   methods: {
     validate () {
@@ -164,7 +159,7 @@ export default {
           asset_subtype_id: this.asset_subtype_id,
           description: this.description,
           amount: this.amount,
-          amount_recurrence: this.amount_recurrence,
+          plan_id: this.plan_id,
           category_id: this.category_id,
           person_id: this.person_id
         }
@@ -195,9 +190,9 @@ export default {
         return ''
       }
     },
-    invalidPeriodFeedback () {
-      if (this.$v.amount_recurrence.$error) {
-        return 'Period is required'
+    invalidPlanFeedback () {
+      if (this.$v.plan_id.$error) {
+        return 'Plan is required'
       } else {
         return ''
       }

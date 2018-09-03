@@ -18,6 +18,14 @@
                     @mouseover="rectmouseover(d, i)"
                     @mouseout="rectmouseout(d, i)">
               </rect>
+              <rect :x="0"
+                    :y="-hoverrectMehrYTop"
+                    :width="xScale.bandwidth()"
+                    :height="chartHeight + hoverrectMehrYTop + hoverrectMehrYBottom"
+                    fill="black"
+                    opacity="0.35"
+                    id="hoverrect">
+              </rect>
             </g>
             <line :x1="0"
                   :x2="width"
@@ -110,8 +118,7 @@ export default {
       return cont
     },
     bars () {
-      return this.$d3.stack().keys(this.dataKeys)
-                             .order(this.$d3.stackOrderDescending)(this.computedData)
+      return this.$d3.stack().keys(this.dataKeys)(this.computedData)
     },
     chartHeight () {
       return this.height - this.margin.top - this.margin.bottom - this.sliderHeight
@@ -160,6 +167,14 @@ export default {
     }
   },
   methods: {
+    thousandsFormat () {
+      let locale = this.$d3.formatLocale({
+        decimal: ',',
+        thousands: ' ',
+        grouping: [3]
+      })
+      return locale.format(',')
+    },
     colorScale (i) {
       return this.barColors[i % this.barColors.length]
     },
@@ -199,7 +214,7 @@ export default {
                   </div>`
 
       let x = this.xScale(d.data.year) + this.xScale.bandwidth() / 2 + this.margin.left
-      let y = this.margin.top + 10
+      let y = this.margin.top / 2
 
       if (x + 340 > this.width) {
         x -= 340
@@ -278,7 +293,7 @@ export default {
       .attr('transform', `translate(${0}, ${this.chartHeight})`)
       .call(xAxis)
 
-      let yAxis = this.$d3.axisLeft(this.yScale).tickSize(-(this.chartWidth))
+      let yAxis = this.$d3.axisLeft(this.yScale).ticks(5).tickFormat(d => this.thousandsFormat(d) + ' Kr')
 
       // append yAxis
       patternify({
@@ -498,7 +513,6 @@ export default {
       }
     },
     drawRects () {
-      console.log(this.bars)
       let stacks = patternify({
         tag: 'g',
         selector: 'stack-group',

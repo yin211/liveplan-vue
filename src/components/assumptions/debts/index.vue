@@ -55,7 +55,7 @@
         <template slot="name" slot-scope="row">
           <div class="d-flex">
             <i class="flaticon solid star-2"></i>
-            <span class="font-weight-bold">{{row.item.name}}</span>
+            <b-link class="font-weight-bold text-regular" @click.stop="gotoDetail(row.item.id)">{{row.item.name}}</b-link>
           </div>
         </template>
         <template slot="amount" slot-scope="row">
@@ -68,14 +68,9 @@
           <span>{{row.item.amortization_amount.toLocaleString('sv-SE')}} SEK </span>
         </template>
         <template slot="actions" slot-scope="row">
-          <div class="d-flex flex-column flex-md-row align-items-start">
-            <button class='btn plain-btn text-regular'>
-              <i class="flaticon solid up-2 text-primary"></i> Show On Graph
-            </button>
-            <button class='btn plain-btn text-regular' @click.stop="gotoDetail(row.item.id)">
-              <i class="flaticon solid right-circle-2 text-primary"></i> Open
-            </button>
-          </div>
+          <button class='btn plain-btn text-regular mr-3' @click.stop="gotoDetail(row.item.id)">
+            <i class="flaticon solid right-circle-2 text-primary"></i> Open
+          </button>
         </template>
         <template slot="HEAD_name" slot-scope="row">
           <div class="d-flex align-items-center">

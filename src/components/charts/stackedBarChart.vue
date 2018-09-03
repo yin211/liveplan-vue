@@ -112,6 +112,7 @@ export default {
           } else {
             dt[d.object_name] = 0
           }
+          dt.plan_id = d.plan_id
         })
         cont.push(dt)
       }
@@ -180,7 +181,7 @@ export default {
     },
     rectmouseover (d, i) {
       let sum = 0
-      let amounts = Object.keys(d.data).filter(x => x !== 'year').map((name, i) => {
+      let amounts = Object.keys(d.data).filter(x => x !== 'year' && x !== 'plan_id').map((name, i) => {
         sum += +d.data[name]
         return {
           name: name,
@@ -188,6 +189,12 @@ export default {
           color: this.colorScale(i)
         }
       })
+      let linkHref = window.location.href
+      if (linkHref[linkHref.length - 1] === '/') {
+        linkHref += d.data.plan_id
+      } else {
+        linkHref += '/' + d.data.plan_id
+      }
       let html = `<div class="toolTip">
                     <div class="tooltip-title">
                       <strong><span id="tooltipyear">${d.data.year}</span></strong> ( age of <strong><span id="tooltipage">${d.data.year - this.birthYear}</span></strong> )
@@ -195,7 +202,7 @@ export default {
                     ${amounts.map((d, i) => {
                       return `<div class="d-flex justify-content-between">
                               <div class="mr-3">
-                                <span class="tooltip-amount-span" style="background-color:${d.color};"></span><span class="ml-1">${d.name}</span>
+                                <span class="tooltip-amount-span" style="background-color:${d.color};"></span><span class="ml-1"><a href="${linkHref}" target="_blank">${d.name}</a></span>
                               </div>
                               <div>
                                 <strong><span>${this.thousandsFormat(d.amount)}</span> SEK</strong>

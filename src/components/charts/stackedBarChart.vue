@@ -18,6 +18,14 @@
                     @mouseover="rectmouseover(d, i)"
                     @mouseout="rectmouseout(d, i)">
               </rect>
+              <rect :x="0"
+                    :y="-hoverrectMehrYTop"
+                    :width="xScale.bandwidth()"
+                    :height="chartHeight + hoverrectMehrYTop + hoverrectMehrYBottom"
+                    fill="black"
+                    opacity="0.35"
+                    id="hoverrect">
+              </rect>
             </g>
             <line :x1="0"
                   :x2="width"

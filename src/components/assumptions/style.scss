@@ -92,6 +92,8 @@
         @media (max-width: 575.98px) {
           .add-new-row {
             margin: 10px 8px !important;
+            padding-left: 7px !important;
+            padding-right: 7px !important;
           }
 
           .table-title {
@@ -129,6 +131,8 @@
             .add-new-row {
               border-radius: 30px;
               margin: 30px;
+              padding-left: 12px;
+              padding-right: 16px;
             }
 
             &.sorting::before {

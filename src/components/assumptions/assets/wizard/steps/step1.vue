@@ -47,7 +47,7 @@
                 label-class="d-flex align-items-center justify-content-end pr-4">
         <div class="d-flex">
           <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-model="amount" id="amountInput" class="form-control border-0 mr-3" :min="0"></vue-numeric>
-          <b-form-input v-model="amount" min="0" max="10000" step="500" class="slider" type="range"></b-form-input>
+          <b-form-input v-model="amount" min="0" max="10000000" step="5000" class="slider" type="range"></b-form-input>
         </div>
       </b-form-group>
       <b-form-group id="planHorizontal"

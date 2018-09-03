@@ -12,12 +12,12 @@
       <b-form-group id="growthRateHorizontal"
                 horizontal
                 breakpoint="md"
-                label="Growth Rate"
-                label-for="annual-growth-rate"
+                label="Interest Rate"
+                label-for="interest-rate"
                 label-class="d-flex align-items-center justify-content-end pr-4">
         <div class="d-flex">
-          <vue-numeric currency="%" currency-symbol-position="suffix" v-model="annual_growth_rate" class="form-control border-0 mr-3" id="annual-growth-rate" :min="0" :max="10" style="width: 100px;"></vue-numeric>
-          <b-form-input v-model="annual_growth_rate" min="0" max="10" class="slider" type="range"></b-form-input>
+          <vue-numeric currency="%" currency-symbol-position="suffix" v-model="interest_rate" class="form-control border-0 mr-3" id="interest-rate" :min="0" :max="25" style="width: 100px;"></vue-numeric>
+          <b-form-input v-model="interest_rate" min="0" max="25" class="slider" type="range"></b-form-input>
         </div>
       </b-form-group>
       <b-form-group id="currencyHorizontal"
@@ -42,8 +42,8 @@ export default {
   data () {
     return {
       currencyOptions: [],
-      currency_id: null,
-      annual_growth_rate: 0
+      currency_id: 1,
+      interest_rate: 0
     }
   },
   async mounted () {
@@ -67,7 +67,7 @@ export default {
       if (isValid) {
         let data = {
           currency_id: this.currency_id,
-          annual_growth_rate: this.annual_growth_rate
+          interest_rate: this.interest_rate
         }
         this.$emit('validate-success', data)
       }

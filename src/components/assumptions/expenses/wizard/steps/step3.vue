@@ -53,7 +53,7 @@ export default {
   data () {
     return {
       currencyOptions: [],
-      currency_id: null,
+      currency_id: 1,
       annual_increase_percentage: 0,
       inflation_rate: 0
     }

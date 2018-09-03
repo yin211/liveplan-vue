@@ -47,18 +47,8 @@
                 label-class="d-flex align-items-center justify-content-end pr-4">
         <div class="d-flex">
           <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-model="amount" id="amountInput" class="form-control border-0 mr-3" :min="0"></vue-numeric>
-          <b-form-input v-model="amount" min="0" max="10000" step="500" class="slider" type="range"></b-form-input>
+          <b-form-input v-model="amount" min="0" max="10000000" step="500" class="slider" type="range"></b-form-input>
         </div>
-      </b-form-group>
-      <b-form-group id="periodHorizontal"
-                horizontal
-                breakpoint="md"
-                label="Period"
-                label-for="periodSelect"
-                label-class="d-flex align-items-center justify-content-end pr-4"
-                :invalid-feedback="invalidPeriodFeedback"
-                :state="!$v.amount_recurrence.$error">
-        <b-form-select :options="periodOptions" v-model="amount_recurrence" id="periodSelect" :state="!$v.amount_recurrence.$error" @input="$v.amount_recurrence.$touch()"/>
       </b-form-group>
       <b-form-group id="categoryHorizontal"
                 horizontal
@@ -96,17 +86,6 @@ export default {
       subtypeOptions: [],
       debt_subtype_id: null,
       description: null,
-      periodOptions: [
-        { value: null, text: 'Please select', disabled: true },
-        { value: 'monthly', text: 'Monthly', display: 'month' },
-        { value: 'daily', text: 'Daily', display: 'day' },
-        { value: 'weekly', text: 'Weekly', display: 'week' },
-        { value: 'quarterly', text: 'Quarterly', display: 'quarter' },
-        { value: 'semiannually', text: 'Semiannually', display: 'half-year' },
-        { value: 'annually', text: 'Annually', display: 'year' },
-        { value: 'onetime', text: 'One time', dispay: 'one time' }
-      ],
-      amount_recurrence: null,
       category_id: null,
       categoryOptions: [
         { id: null, name: 'Please select', disabled: true }
@@ -143,16 +122,13 @@ export default {
     amount: {
       required
     },
-    amount_recurrence: {
-      required
-    },
     category_id: {
       required
     },
     person_id: {
       required
     },
-    form: ['name', 'description', 'debt_subtype_id', 'amount', 'amount_recurrence', 'category_id', 'person_id']
+    form: ['name', 'description', 'debt_subtype_id', 'amount', 'category_id', 'person_id']
   },
   methods: {
     validate () {
@@ -164,7 +140,6 @@ export default {
           debt_subtype_id: this.debt_subtype_id,
           description: this.description,
           amount: this.amount,
-          amount_recurrence: this.amount_recurrence,
           category_id: this.category_id,
           person_id: this.person_id
         }
@@ -191,13 +166,6 @@ export default {
     invalidDescriptionFeedback () {
       if (this.$v.description.$error) {
         return 'Description is required'
-      } else {
-        return ''
-      }
-    },
-    invalidPeriodFeedback () {
-      if (this.$v.amount_recurrence.$error) {
-        return 'Period is required'
       } else {
         return ''
       }

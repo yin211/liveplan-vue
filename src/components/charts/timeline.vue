@@ -44,7 +44,7 @@ export default {
   data () {
     return {
       width: 0,
-      height: 450,
+      height: 550,
       sliderHeight: 180,
       hoverrectMehrYTop: 15,
       hoverrectMehrYBottom: 60,
@@ -73,6 +73,9 @@ export default {
     }
   },
   computed: {
+    amountsProperty () {
+      return `${this.label}_amounts`
+    },
     colorScale () {
       return this.$d3.scaleOrdinal()
                 .domain(this.dataArray.map(x => x.name))
@@ -145,7 +148,7 @@ export default {
                       <strong><span id="tooltipyear">${d.year}</span></strong> ( age of <strong><span id="tooltipage">${d.year - this.birthYear}</span></strong> )
                     </div>
                     ${d.amounts.map((d, i) => {
-                      return `<div class="d-flex">
+                      return `<div class="d-flex justify-content-between">
                               <div class="mr-3">
                                 <span class="tooltip-amount-span" style="background-color: ${this.colorScale(d.name)};"></span><span class="ml-1">${d.name}</span>
                               </div>
@@ -715,7 +718,7 @@ export default {
       let amounts = []
       let total = 0
       items.forEach(d => {
-        let t = d.expense_amounts.filter(x => x.year === year)
+        let t = d[this.amountsProperty].filter(x => x.year === year)
         if (t.length) {
           total += t[0].amount
           amounts.push({

@@ -91,6 +91,7 @@
 import {AUTH_REQUEST} from '@/store/actions/auth'
 import EventBus from '../../../event-bus.js'
 import Switches from 'vue-switches'
+import axios from 'axios'
 
 export default {
   name: 'login',
@@ -236,9 +237,26 @@ export default {
       this.validated = true
     },
 
-    onSignup (evt) {
+    async onSignup (evt) {
       evt.preventDefault()
       this.validated = true
+      if (this.validEmail(this.form.signup.email) && this.form.signup.password.length >= 4 && this.form.signup.lastname.length > 0 && this.form.signup.firstname.length > 0) {
+        try {
+          await axios.post(`${process.env.ROOT_API}/users`, this.form.signup)
+          EventBus.$emit('notify-me', {
+            title: 'Success!',
+            text: 'User Registration success!',
+            status: 'is-success'
+          })
+          this.loginWithEmail()
+        } catch (err) {
+          EventBus.$emit('notify-me', {
+            title: 'User Registration Failed!',
+            text: 'Server Error!',
+            status: 'is-danger'
+          })
+        }
+      }
     }
   },
   components: {

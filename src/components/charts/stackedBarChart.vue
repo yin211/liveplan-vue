@@ -157,24 +157,16 @@ export default {
     },
     maximumSliderRange () {
       return Math.round(this.xDomain.length / 2.5)
-    },
-    thousandsFormat () {
-      let locale = this.$d3.formatLocale({
-        decimal: ',',
-        thousands: ' ',
-        grouping: [3]
-      })
-      return locale.format(',')
     }
   },
   methods: {
-    thousandsFormat () {
+    thousandsFormat (value) {
       let locale = this.$d3.formatLocale({
         decimal: ',',
         thousands: ' ',
         grouping: [3]
       })
-      return locale.format(',')
+      return locale.format(',')(value)
     },
     colorScale (i) {
       return this.barColors[i % this.barColors.length]
@@ -195,6 +187,7 @@ export default {
       } else {
         linkHref += '/' + d.data.plan_id
       }
+      let pluralize = amounts.length > 1 ? 's' : ''
       let html = `<div class="toolTip">
                     <div class="tooltip-title">
                       <strong><span id="tooltipyear">${d.data.year}</span></strong> ( age of <strong><span id="tooltipage">${d.data.year - this.birthYear}</span></strong> )
@@ -212,7 +205,7 @@ export default {
                     <hr class="tooltip-hr">
                     <div class="d-flex justify-content-between">
                       <div class="mr-3">
-                        <span class="tooltip-amount-span" style="background-color:${this.colorScale(0)};"></span><span class="ml-1">${this.label}</span>
+                        <span class="tooltip-amount-span" style="background-color:${this.colorScale(0)};"></span><span class="ml-1">${this.label + pluralize}</span>
                       </div>
                       <div>
                         <strong><span>${this.thousandsFormat(sum)}</span> SEK</strong>

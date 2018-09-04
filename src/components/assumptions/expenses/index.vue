@@ -18,13 +18,13 @@
       <div class="chart-container">
         <stackedBarChart v-if="isStackedBarChart && stackedData && stackedData.length && planStartYear && planEndYear"
                   :dataArray="stackedData"
-                  :label="`expenses`"
+                  :label="`expense`"
                   :planStartYear="planStartYear"
                   :planEndYear="planEndYear"
                   :birthYear="1981"></stackedBarChart>
         <timeline v-if="!isStackedBarChart && timelineData && timelineData.data.length && planStartYear && planEndYear"
                   :dataArray="timelineData.data"
-                  :label="`expenses`"
+                  :label="`expense`"
                   :planStartYear="planStartYear"
                   :planEndYear="planEndYear"
                   :birthYear="1981"></timeline>
@@ -158,7 +158,7 @@ export default {
       response = await axios.get(`${process.env.ROOT_API}/persons`)
       this.personOptions = response.data.data
 
-      let stackedData = await axios.get(`${process.env.ROOT_API}/cashflow/sums?plan_id=1&object_class=expense&aggregated=0`)
+      let stackedData = await axios.get(`${process.env.ROOT_API}/cashflow/sums?plan_id=1&object_class=expense&aggregated=0&with_derived_objects=0`)
       this.stackedData = stackedData.data
       let timelineData = await axios.get(`${process.env.ROOT_API}/expenses/?with_amounts=1`)
       this.timelineData = timelineData.data

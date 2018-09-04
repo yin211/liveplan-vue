@@ -154,17 +154,17 @@ export default {
     },
     maximumSliderRange () {
       return Math.round(this.computedData.length / 2.5)
-    },
-    thousandsFormat () {
+    }
+  },
+  methods: {
+    thousandsFormat (value) {
       let locale = this.$d3.formatLocale({
         decimal: ',',
         thousands: ' ',
         grouping: [3]
       })
-      return locale.format(',')
-    }
-  },
-  methods: {
+      return locale.format(',')(value)
+    },
     rectmouseover (d, i) {
       let html = `<div class="toolTip">
                     <div class="mt-2 year">

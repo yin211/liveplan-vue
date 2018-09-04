@@ -17,7 +17,7 @@
                 label-class="d-flex align-items-center justify-content-end pr-4"
                 :invalid-feedback="invalidStartYearFeedback"
                 :state="!$v.start_year.$error">
-          <date-picker id="start_year" v-model="start_year" lang="en" type="year" format="YYYY" :clearable="false" :state="!$v.start_year.$error" @input="$v.start_year.$touch()">
+          <date-picker id="start_year" v-model="start_year" :not-before="new Date(new Date().getFullYear(), 0, 1)" lang="en" type="year" format="YYYY" :clearable="false" :state="!$v.start_year.$error" @input="$v.start_year.$touch()">
             <template slot="calendar-icon">
               <i class="flaticon stroke calendar-2 text-primary"></i>
             </template>
@@ -31,7 +31,7 @@
                 label-class="d-flex align-items-center justify-content-end pr-4"
                 :invalid-feedback="invalidEndYearFeedback"
                 :state="!$v.end_year.$error">
-          <date-picker id="end_year" v-model="end_year" lang="en" type="year" format="YYYY" :clearable="false" :state="!$v.end_year.$error" @input="$v.end_year.$touch()">
+          <date-picker id="end_year" v-model="end_year" :not-before="new Date(new Date().getFullYear(), 0, 1)" lang="en" type="year" format="YYYY" :clearable="false" :state="!$v.end_year.$error" @input="$v.end_year.$touch()">
             <template slot="calendar-icon">
               <i class="flaticon stroke calendar-2 text-primary"></i>
             </template>

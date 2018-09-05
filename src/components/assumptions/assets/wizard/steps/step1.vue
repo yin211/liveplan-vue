@@ -50,16 +50,6 @@
           <b-form-input v-model="amount" min="0" max="10000000" step="5000" class="slider" type="range"></b-form-input>
         </div>
       </b-form-group>
-      <b-form-group id="planHorizontal"
-                horizontal
-                breakpoint="md"
-                label="Plan"
-                label-for="PlanSelect"
-                label-class="d-flex align-items-center justify-content-end pr-4"
-                :invalid-feedback="invalidPlanFeedback"
-                :state="!$v.plan_id.$error">
-        <b-form-select :options="planOptions" :value-field="'id'" :text-field="'name'" v-model="plan_id" id="planSelect" :state="!$v.plan_id.$error" @input="$v.plan_id.$touch()"/>
-      </b-form-group>
       <b-form-group id="categoryHorizontal"
                 horizontal
                 breakpoint="md"
@@ -96,10 +86,6 @@ export default {
       subtypeOptions: [],
       asset_subtype_id: null,
       description: null,
-      planOptions: [
-        { id: null, name: 'Please select', disabled: true }
-      ],
-      plan_id: null,
       category_id: null,
       categoryOptions: [
         { id: null, name: 'Please select', disabled: true }
@@ -119,8 +105,6 @@ export default {
       this.categoryOptions = [...this.categoryOptions, ...response.data.data]
       response = await axios.get(`${process.env.ROOT_API}/persons`)
       this.personOptions = [...this.personOptions, ...response.data.data]
-      response = await axios.get(`${process.env.ROOT_API}/plans`)
-      this.planOptions = [...this.planOptions, ...response.data.data]
     } catch (err) {
       console.log(err)
     }
@@ -138,16 +122,13 @@ export default {
     amount: {
       required
     },
-    plan_id: {
-      required
-    },
     category_id: {
       required
     },
     person_id: {
       required
     },
-    form: ['name', 'description', 'asset_subtype_id', 'amount', 'plan_id', 'category_id', 'person_id']
+    form: ['name', 'description', 'asset_subtype_id', 'amount', 'category_id', 'person_id']
   },
   methods: {
     validate () {
@@ -159,7 +140,6 @@ export default {
           asset_subtype_id: this.asset_subtype_id,
           description: this.description,
           amount: this.amount,
-          plan_id: this.plan_id,
           category_id: this.category_id,
           person_id: this.person_id
         }
@@ -186,13 +166,6 @@ export default {
     invalidDescriptionFeedback () {
       if (this.$v.description.$error) {
         return 'Description is required'
-      } else {
-        return ''
-      }
-    },
-    invalidPlanFeedback () {
-      if (this.$v.plan_id.$error) {
-        return 'Plan is required'
       } else {
         return ''
       }

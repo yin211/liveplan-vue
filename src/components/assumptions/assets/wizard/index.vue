@@ -9,8 +9,14 @@
           <tab-content title="Timing" icon="fa fa-check" :before-change="()=>validateStep('step2')">
             <step2 ref="step2" @validate-success="mergePartialModels"></step2>
           </tab-content>
-          <tab-content title="Advanced" icon="fa fa-check">
+          <tab-content title="Deposit" icon="fa fa-check" :before-change="()=>validateStep('step3')">
             <step3 ref="step3" @validate-success="mergePartialModels"></step3>
+          </tab-content>
+          <tab-content title="Withdrawal" icon="fa fa-check" :before-change="()=>validateStep('step4')">
+            <step4 ref="step4" @validate-success="mergePartialModels"></step4>
+          </tab-content>
+          <tab-content title="Advanced" icon="fa fa-check">
+            <step5 ref="step5" @validate-success="mergePartialModels"></step5>
           </tab-content>
           <template slot="footer" slot-scope="props">
             <div :class="{ hasSpace: props.activeTabIndex != 0 }">
@@ -43,6 +49,8 @@
 import step1 from './steps/step1'
 import step2 from './steps/step2'
 import step3 from './steps/step3'
+import step4 from './steps/step4'
+import step5 from './steps/step5'
 import axios from 'axios'
 import EventBus from '@/event-bus.js'
 
@@ -60,7 +68,7 @@ export default {
       return refToValidate.validate()
     },
     async onComplete () {
-      if (this.validateStep('step3')) {
+      if (this.validateStep('step5')) {
         try {
           await axios.post(`${process.env.ROOT_API}/assets`, this.finalModel)
           this.isCompleted = true
@@ -82,7 +90,9 @@ export default {
   components: {
     step1,
     step2,
-    step3
+    step3,
+    step4,
+    step5
   }
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
-  <div class="step3 d-flex">
+  <div class="step4 d-flex">
     <div class="detail-text text-left">
-      <span class="d-flex mb-2 font-weight-medium">Setting up the Deposit Details</span>
+      <span class="d-flex mb-2 font-weight-medium">Setting up the withdrawal Details</span>
       <span class="text-gray">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
         Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
@@ -9,36 +9,38 @@
     </div>
     <div class="space-line"></div>
     <b-container>
-      <b-form-group id="depositTypeHorizontal"
+      <b-form-group id="withdrawalTypeHorizontal"
                 horizontal
                 breakpoint="md"
                 label="Type"
-                label-for="depositTypeSelect"
+                label-for="withdrawalTypeSelect"
                 label-class="d-flex align-items-center justify-content-end pr-4"
-                :invalid-feedback="invalidDepositTypeFeedback"
-                :state="!$v.deposit_type.$error">
-        <b-form-select :options="depositTypeOptions" v-model="deposit_type" id="depositTypeSelect" :state="!$v.deposit_type.$error" @input="$v.deposit_type.$touch()"/>
+                :invalid-feedback="invalidwithdrawalTypeFeedback"
+                :state="!$v.withdrawal_type.$error">
+        <b-form-select :options="withdrawalTypeOptions" v-model="withdrawal_type" id="withdrawalTypeSelect" :state="!$v.withdrawal_type.$error" @input="$v.withdrawal_type.$touch()"/>
       </b-form-group>
-      <b-form-group id="depositAmountHorizontal"
+      <b-form-group id="withdrawalAmountHorizontal"
                 horizontal
                 breakpoint="md"
                 label="Amount"
-                label-for="depositAmountInput"
+                label-for="withdrawalAmountInput"
                 label-class="d-flex align-items-center justify-content-end pr-4">
         <div class="d-flex">
-          <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-model="deposit_amount" id="depositAmountInput" class="form-control border-0 mr-3" :min="0"></vue-numeric>
-          <b-form-input v-model="deposit_amount" min="0" max="10000" step="500" class="slider" type="range"></b-form-input>
+          <vue-numeric v-if="withdrawal_type === 'fixed_amount'" currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-model="withdrawal_amount" id="withdrawalAmountInput" class="form-control border-0 mr-3" :min="0"></vue-numeric>
+          <vue-numeric v-else currency="%" currency-symbol-position="suffix" v-model="withdrawal_amount" :min="0" :max="25" class="form-control border-0 mr-3"></vue-numeric>
+          <b-form-input v-if="withdrawal_type === 'fixed_amount'" v-model="withdrawal_amount" min="0" max="100000" step="5000" class="slider" type="range"></b-form-input>
+          <b-form-input v-else v-model="withdrawal_amount" min="0" max="25" class="slider" type="range"></b-form-input>
         </div>
       </b-form-group>
-       <b-form-group id="recurrenceHorizontal"
+       <b-form-group id="periodHorizontal"
                 horizontal
                 breakpoint="md"
-                label="Recurrence"
-                label-for="recurrenceSelect"
+                label="Period"
+                label-for="periodSelect"
                 label-class="d-flex align-items-center justify-content-end pr-4"
-                :invalid-feedback="invalidRecurrenceFeedback"
-                :state="!$v.deposit_recurrence.$error">
-        <b-form-select :options="deposit_recurrence_options" v-model="deposit_recurrence" id="recurrenceSelect" :state="!$v.deposit_recurrence.$error" @input="$v.deposit_recurrence.$touch()"/>
+                :invalid-feedback="invalidPeriodFeedback"
+                :state="!$v.withdrawal_period.$error">
+        <b-form-select :options="withdrawal_period_options" v-model="withdrawal_period" id="periodSelect" :state="!$v.withdrawal_period.$error" @input="$v.withdrawal_period.$touch()"/>
       </b-form-group>
       <b-form-group id="startYearHorizontal"
                 horizontal
@@ -47,8 +49,8 @@
                 label-for="start_year"
                 label-class="d-flex align-items-center justify-content-end pr-4"
                 :invalid-feedback="invalidStartYearFeedback"
-                :state="!$v.deposit_start_year.$error">
-          <date-picker id="start_year" v-model="deposit_start_year" :not-before="new Date(new Date().getFullYear(), 0, 1)" lang="en" type="year" format="YYYY" :clearable="false" :state="!$v.deposit_start_year.$error" @input="$v.deposit_start_year.$touch()">
+                :state="!$v.withdrawal_start_year.$error">
+          <date-picker id="start_year" v-model="withdrawal_start_year" :not-before="new Date(new Date().getFullYear(), 0, 1)" lang="en" type="year" format="YYYY" :clearable="false" :state="!$v.withdrawal_start_year.$error" @input="$v.withdrawal_start_year.$touch()">
             <template slot="calendar-icon">
               <i class="flaticon stroke calendar-2 text-primary"></i>
             </template>
@@ -61,8 +63,8 @@
                 label-for="end_year"
                 label-class="d-flex align-items-center justify-content-end pr-4"
                 :invalid-feedback="invalidEndYearFeedback"
-                :state="!$v.deposit_end_year.$error">
-          <date-picker id="end_year" v-model="deposit_end_year" :not-before="new Date(new Date().getFullYear(), 0, 1)" lang="en" type="year" format="YYYY" :clearable="false" :state="!$v.deposit_end_year.$error" @input="$v.deposit_end_year.$touch()">
+                :state="!$v.withdrawal_end_year.$error">
+          <date-picker id="end_year" v-model="withdrawal_end_year" :not-before="new Date(new Date().getFullYear(), 0, 1)" lang="en" type="year" format="YYYY" :clearable="false" :state="!$v.withdrawal_end_year.$error" @input="$v.withdrawal_end_year.$touch()">
             <template slot="calendar-icon">
               <i class="flaticon stroke calendar-2 text-primary"></i>
             </template>
@@ -81,46 +83,43 @@ export default {
   components: { DatePicker },
   data () {
     return {
-      deposit_type: null,
-      deposit_amount: 0,
-      depositTypeOptions: [
+      withdrawal_type: null,
+      withdrawal_amount: 0,
+      withdrawalTypeOptions: [
         { value: null, text: 'Please select', disabled: true },
         { value: 'none', text: 'None' },
         { value: 'fixed_amount', text: 'Fixed amount' },
-        { value: 'percentage_amount_of_income', text: 'Percentage amount of income' }
+        { value: 'percentage_amount', text: 'Percentage amount' }
       ],
-      deposit_recurrence: null,
-      deposit_recurrence_options: [
+      withdrawal_period: null,
+      withdrawal_period_options: [
         { value: null, text: 'Please select', disabled: true },
-        { value: 'monthly', text: 'Monthly', display: 'month' },
-        { value: 'daily', text: 'Daily', display: 'day' },
-        { value: 'weekly', text: 'Weekly', display: 'week' },
-        { value: 'quarterly', text: 'Quarterly', display: 'quarter' },
-        { value: 'semiannually', text: 'Semiannually', display: 'half-year' },
-        { value: 'annually', text: 'Annually', display: 'year' },
-        { value: 'onetime', text: 'One time', dispay: 'one time' }
+        { value: 'one_time', text: 'One time', dispay: 'one time' },
+        { value: 'month', text: 'Month', display: 'month' },
+        { value: 'year', text: 'Year', display: 'year' },
+        { value: 'none', text: 'None', display: 'none' }
       ],
-      deposit_start_year: null,
-      deposit_end_year: null
+      withdrawal_start_year: null,
+      withdrawal_end_year: null
     }
   },
   validations: {
-    deposit_type: {
+    withdrawal_type: {
       required
     },
-    deposit_amount: {
+    withdrawal_amount: {
       required
     },
-    deposit_recurrence: {
+    withdrawal_period: {
       required
     },
-    deposit_start_year: {
+    withdrawal_start_year: {
       required
     },
-    deposit_end_year: {
+    withdrawal_end_year: {
       required
     },
-    form: ['deposit_type', 'deposit_amount', 'deposit_recurrence', 'deposit_start_year', 'deposit_end_year']
+    form: ['withdrawal_type', 'withdrawal_amount', 'withdrawal_period', 'withdrawal_start_year', 'withdrawal_end_year']
   },
   methods: {
     validate () {
@@ -128,11 +127,11 @@ export default {
       let isValid = !this.$v.form.$invalid
       if (isValid) {
         let data = {
-          deposit_type: this.deposit_type,
-          deposit_amount: this.deposit_amount,
-          deposit_recurrence: this.deposit_recurrence,
-          deposit_start_year: this.deposit_start_year.getFullYear(),
-          deposit_end_year: this.deposit_end_year.getFullYear()
+          withdrawal_type: this.withdrawal_type,
+          withdrawal_amount: this.withdrawal_amount,
+          withdrawal_period: this.withdrawal_period,
+          withdrawal_start_year: this.withdrawal_start_year.getFullYear(),
+          withdrawal_end_year: this.withdrawal_end_year.getFullYear()
         }
         this.$emit('validate-success', data)
       }
@@ -140,29 +139,29 @@ export default {
     }
   },
   computed: {
-    invalidDepositTypeFeedback () {
-      if (this.$v.deposit_type.$error) {
+    invalidwithdrawalTypeFeedback () {
+      if (this.$v.withdrawal_type.$error) {
         return 'Deposit Type is required'
       } else {
         return ''
       }
     },
-    invalidRecurrenceFeedback () {
-      if (this.$v.deposit_recurrence.$error) {
-        return 'Deposit Recurrence is required'
+    invalidPeriodFeedback () {
+      if (this.$v.withdrawal_period.$error) {
+        return 'Withdrawal Period is required'
       } else {
         return ''
       }
     },
     invalidStartYearFeedback () {
-      if (this.$v.deposit_start_year.$error) {
+      if (this.$v.withdrawal_start_year.$error) {
         return 'Start year is required'
       } else {
         return ''
       }
     },
     invalidEndYearFeedback () {
-      if (this.$v.deposit_end_year.$error) {
+      if (this.$v.withdrawal_end_year.$error) {
         return 'End year is required'
       } else {
         return ''
@@ -173,7 +172,7 @@ export default {
 </script>
 
 <style lang="scss">
-  .step3 {
+  .step4 {
 
     .detail-text {
       margin-top: 164px;

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="asset-table">
     <b-table show-empty
             stacked="md"
             :items="assets"
@@ -269,27 +269,27 @@ export default {
 
             &[aria-colindex="1"] {
               &.sorting::before, &.sorting::after {
-                left: 174px;
+                left: 144px;
               }
             }
             &[aria-colindex="2"] {
               &.sorting::before, &.sorting::after {
-                left: 62px;
+                left: 60px;
               }
             }
             &[aria-colindex="3"] {
               &.sorting::before, &.sorting::after {
-                left: 70px;
+                left: 68px;
               }
             }
             &[aria-colindex="4"] {
               &.sorting::before, &.sorting::after {
-                left: 100px;
+                left: 154px;
               }
             }
             &[aria-colindex="5"] {
               &.sorting::before, &.sorting::after {
-                left: 62px;
+                left: 64px;
               }
             }
 

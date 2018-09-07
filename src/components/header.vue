@@ -27,7 +27,7 @@
           ASSUMPTIONS
         </div>
         <ul class="main-nav my-auto" v-bind:class="{ 'is-expand': isNavExpanded }" v-if="isAuthenticated">
-          <li>
+          <li v-bind:class="{ active: isOverviewActive }">
             <a href="/overview"><span>overview</span></a>
           </li>
           <b-nav-item-dropdown :text="$t('header.header_menu.assumptions')" right v-bind:class="{ active: isAssumptionActive }" class="left-link">
@@ -112,6 +112,7 @@ export default {
       plans: [],
       selectedPlan: null,
       isAssumptionActive: this.$router.history.current.path.indexOf('/assumptions/') === 0,
+      isOverviewActive: this.$router.history.current.path.indexOf('/overview') === 0,
       isNavExpanded: false
     }
   },
@@ -142,6 +143,7 @@ export default {
   watch: {
     $route (to, from) {
       this.isAssumptionActive = this.$router.history.current.path.indexOf('/assumptions/') === 0
+      this.isOverviewActive = this.$router.history.current.path.indexOf('/overview') === 0
     }
   },
   methods: {
@@ -337,6 +339,12 @@ export default {
       line-height: 24px;
       margin-left: 24px;
       margin-right: 24px;
+    }
+
+    .main-nav > li.active > a {
+      border-bottom: 4px solid #36b37e;
+      padding: 6px 12px;
+      color: white;
     }
 
     .main-nav > li:hover > a {

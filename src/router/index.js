@@ -14,6 +14,7 @@ import assets from '@/components/assumptions/assets/index.vue'
 import addAsset from '@/components/assumptions/assets/wizard/index.vue'
 import debts from '@/components/assumptions/debts/index.vue'
 import addDebt from '@/components/assumptions/debts/wizard/index.vue'
+import overview from '@/components/overview/index.vue'
 
 Vue.use(Router)
 
@@ -38,6 +39,11 @@ export default new Router({
       path: '/coming-soon',
       name: 'comingSoon',
       component: comingSoon
+    },
+    {
+      path: '/overview',
+      name: 'overview',
+      component: overview
     },
     {
       path: '/assumptions',

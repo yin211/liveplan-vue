@@ -11,6 +11,7 @@
             :sort-direction="sortDirection"
             :filter="filter"
             @filtered="onFiltered"
+            class="depth-1"
     >
     <template slot="top-row" slot-scope="data">
       <td colspan="7">

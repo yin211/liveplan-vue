@@ -33,7 +33,7 @@
       <span>{{row.item.start_year}} - {{row.item.end_year}}</span>
     </template>
       <template slot="amortization_amount" slot-scope="row">
-      <span>{{row.item.amortization_amount.toLocaleString('sv-SE')}} SEK </span>
+      <span v-if="row.item.amortization_amount">{{row.item.amortization_amount.toLocaleString('sv-SE')}} SEK </span>
     </template>
     <template slot="actions" slot-scope="row">
       <button class='btn plain-btn text-regular mr-3' @click.stop="gotoDetail(row.item.id)">

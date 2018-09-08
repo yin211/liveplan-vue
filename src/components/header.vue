@@ -211,19 +211,19 @@ export default {
             border-bottom: .5em solid !important;
           }
 
+          .nav-link::after {
+            margin-left: 0.5em;
+            vertical-align: 0.1em;
+            border-top: 0.5em solid;
+            border-right: 0.5em solid transparent;
+            border-bottom: 0;
+            border-left: 0.5em solid transparent;
+          }
+
           &.active .nav-link {
             border-bottom: 4px solid #36b37e;
             padding-bottom: 3px;
             color: white;
-
-            &::after {
-              margin-left: 0.5em;
-              vertical-align: 0.1em;
-              border-top: 0.5em solid;
-              border-right: 0.5em solid transparent;
-              border-bottom: 0;
-              border-left: 0.5em solid transparent;
-            }
           }
 
           .dropdown-menu {

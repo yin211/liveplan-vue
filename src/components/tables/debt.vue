@@ -119,7 +119,7 @@ export default {
       this.debts = response.data.data
       this.totalRows = this.debts.length
       response = await axios.get(`${process.env.ROOT_API}/persons`)
-      this.personOptions = response.data.data
+      this.personOptions = response.data
     } catch (error) {
       console.error(error)
     }

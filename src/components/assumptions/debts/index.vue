@@ -63,8 +63,8 @@ export default {
       let timelineData = await axios.get(`${process.env.ROOT_API}/debts/?with_amounts=1`)
       this.timelineData = timelineData.data
       let plansResponse = await axios.get(`${process.env.ROOT_API}/plans/1`)
-      this.planStartYear = plansResponse.data.data.start_year
-      this.planEndYear = plansResponse.data.data.end_year
+      this.planStartYear = plansResponse.data.start_year
+      this.planEndYear = plansResponse.data.end_year
     } catch (error) {
       console.error(error)
     }

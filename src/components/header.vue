@@ -119,7 +119,7 @@ export default {
   async mounted () {
     try {
       let response = await axios.get(`${process.env.ROOT_API}/plans`)
-      this.plans = response.data.data
+      this.plans = response.data
       EventBus.$on('select-plan', async params => {
         response = this.plans.filter(plan => plan.id === params.plan_id)
         this.selectedPlan = response[0]

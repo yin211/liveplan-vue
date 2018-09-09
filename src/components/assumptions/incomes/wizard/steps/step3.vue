@@ -49,7 +49,7 @@ export default {
   async mounted () {
     try {
       let response = await axios.get(`${process.env.ROOT_API}/currencies`)
-      this.currencyOptions = response.data.data
+      this.currencyOptions = response.data
     } catch (err) {
       console.log(err)
     }

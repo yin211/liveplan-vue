@@ -102,9 +102,9 @@ export default {
       let response = await axios.get(`${process.env.ROOT_API}/assets/subtypes`)
       this.subtypeOptions = response.data
       response = await axios.get(`${process.env.ROOT_API}/categories`)
-      this.categoryOptions = [...this.categoryOptions, ...response.data.data]
+      this.categoryOptions = [...this.categoryOptions, ...response.data]
       response = await axios.get(`${process.env.ROOT_API}/persons`)
-      this.personOptions = [...this.personOptions, ...response.data.data]
+      this.personOptions = [...this.personOptions, ...response.data]
     } catch (err) {
       console.log(err)
     }

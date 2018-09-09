@@ -356,11 +356,11 @@ export default {
   async mounted () {
     try {
       let response = await axios.get(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`)
-      this.expense = response.data.data
+      this.expense = response.data
       this.plan = this.expense
       response = await axios.get(`${process.env.ROOT_API}/plans/${this.expense.plan_id}`)
-      this.planStartYear = response.data.data.start_year
-      this.planEndYear = response.data.data.end_year
+      this.planStartYear = response.data.start_year
+      this.planEndYear = response.data.end_year
       if (this.expense.calculation_mode === 'auto') {
         this.customDisabled = true
         this.tabIndex = 0
@@ -369,13 +369,13 @@ export default {
         this.tabIndex = 1
       }
       response = await axios.get(`${process.env.ROOT_API}/categories`)
-      this.categoryOptions = response.data.data
+      this.categoryOptions = response.data
       response = await axios.get(`${process.env.ROOT_API}/persons`)
-      this.personOptions = response.data.data
+      this.personOptions = response.data
       response = await axios.get(`${process.env.ROOT_API}/expenses/subtypes`)
       this.subtypeOptions = response.data
       response = await axios.get(`${process.env.ROOT_API}/currencies`)
-      this.currencyOptions = response.data.data
+      this.currencyOptions = response.data
       EventBus.$emit('select-plan', {
         plan_id: this.expense.plan_id
       })
@@ -552,7 +552,7 @@ export default {
             annual_increase_percentage: this.expense.annual_increase_percentage
           }
           let response = await axios.put(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`, data)
-          this.expense.expense_amounts = this.convertToArray(response.data.data.expense_amounts)
+          this.expense.expense_amounts = this.convertToArray(response.data.expense_amounts)
           this.isSaving = false
           EventBus.$emit('notify-me', {
             title: 'Success!',
@@ -601,7 +601,7 @@ export default {
           })
           this.editInfoModalShow = false
           let response = await axios.get(`${process.env.ROOT_API}/expenses/${this.$route.params.id}`)
-          this.expense = response.data.data
+          this.expense = response.data
         } catch (err) {
           console.log(err)
           EventBus.$emit('notify-me', {
@@ -628,11 +628,11 @@ export default {
             amount: this.newRow.amount ? this.newRow.amount : 0
           }
           let response = await axios.post(`${process.env.ROOT_API}/expenses/${this.$route.params.id}/amounts`, data)
-          let found = this.expense.expense_amounts.find(element => parseInt(element.year) === parseInt(response.data.data.year))
+          let found = this.expense.expense_amounts.find(element => parseInt(element.year) === parseInt(response.data.year))
           if (found) {
-            found.amount = response.data.data.amount
+            found.amount = response.data.amount
           } else {
-            this.expense.expense_amounts.unshift(response.data.data)
+            this.expense.expense_amounts.unshift(response.data)
           }
           this.addRowModalShow = false
           this.plan = this.expense
@@ -720,8 +720,8 @@ export default {
                   inflation_rate: this.expense.inflation_rate
                 }
                 let response = await axios.post(`${process.env.ROOT_API}/expenses/amounts/calculate`, data)
-                response.data.data.expense_amounts = this.convertToArray(response.data.data.expense_amounts)
-                this.plan = response.data.data
+                response.data.expense_amounts = this.convertToArray(response.data.expense_amounts)
+                this.plan = response.data
               }
             }
           }

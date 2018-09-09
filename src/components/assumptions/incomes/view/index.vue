@@ -354,11 +354,11 @@ export default {
   async mounted () {
     try {
       let response = await axios.get(`${process.env.ROOT_API}/incomes/${this.$route.params.id}`)
-      this.income = response.data.data
+      this.income = response.data
       this.plan = this.income
       response = await axios.get(`${process.env.ROOT_API}/plans/${this.income.plan_id}`)
-      this.planStartYear = response.data.data.start_year
-      this.planEndYear = response.data.data.end_year
+      this.planStartYear = response.data.start_year
+      this.planEndYear = response.data.end_year
       if (this.income.calculation_mode === 'auto') {
         this.customDisabled = true
         this.tabIndex = 0
@@ -367,13 +367,13 @@ export default {
         this.tabIndex = 1
       }
       response = await axios.get(`${process.env.ROOT_API}/categories`)
-      this.categoryOptions = response.data.data
+      this.categoryOptions = response.data
       response = await axios.get(`${process.env.ROOT_API}/persons`)
-      this.personOptions = response.data.data
+      this.personOptions = response.data
       response = await axios.get(`${process.env.ROOT_API}/incomes/subtypes`)
       this.subtypeOptions = response.data
       response = await axios.get(`${process.env.ROOT_API}/currencies`)
-      this.currencyOptions = response.data.data
+      this.currencyOptions = response.data
       EventBus.$emit('select-plan', {
         plan_id: this.income.plan_id
       })
@@ -564,7 +564,7 @@ export default {
             annual_growth_rate: this.income.annual_growth_rate
           }
           let response = await axios.put(`${process.env.ROOT_API}/incomes/${this.$route.params.id}`, data)
-          this.income.income_amounts = this.convertToArray(response.data.data.income_amounts)
+          this.income.income_amounts = this.convertToArray(response.data.income_amounts)
           this.isSaving = false
           EventBus.$emit('notify-me', {
             title: 'Success!',
@@ -613,7 +613,7 @@ export default {
           })
           this.editInfoModalShow = false
           let response = await axios.get(`${process.env.ROOT_API}/incomes/${this.$route.params.id}`)
-          this.income = response.data.data
+          this.income = response.data
         } catch (err) {
           console.log(err)
           EventBus.$emit('notify-me', {
@@ -641,12 +641,12 @@ export default {
             taxes_paid: this.newRow.taxes_paid ? this.newRow.taxes_paid : 0
           }
           let response = await axios.post(`${process.env.ROOT_API}/incomes/${this.$route.params.id}/amounts`, data)
-          let found = this.income.income_amounts.find(element => parseInt(element.year) === parseInt(response.data.data.year))
+          let found = this.income.income_amounts.find(element => parseInt(element.year) === parseInt(response.data.year))
           if (found) {
-            found.amount = response.data.data.amount
-            found.taxes_paid = response.data.data.taxes_paid
+            found.amount = response.data.amount
+            found.taxes_paid = response.data.taxes_paid
           } else {
-            this.income.income_amounts.unshift(response.data.data)
+            this.income.income_amounts.unshift(response.data)
           }
           this.addRowModalShow = false
           this.plan = this.income
@@ -739,8 +739,8 @@ export default {
                   amount_recurrence: this.income.amount_recurrence
                 }
                 let response = await axios.post(`${process.env.ROOT_API}/incomes/amounts/calculate`, data)
-                response.data.data.income_amounts = this.convertToArray(response.data.data.income_amounts)
-                this.plan = response.data.data
+                response.data.income_amounts = this.convertToArray(response.data.income_amounts)
+                this.plan = response.data
               }
             }
           }

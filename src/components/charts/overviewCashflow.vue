@@ -99,7 +99,7 @@ export default {
       const max = this.$d3.max(this.dataArray, d => d.value)
       const min = this.$d3.min(this.dataArray, d => d.value)
       return this.$d3.scaleLinear()
-              .domain([min, max + 10000])
+              .domain([min, max])
               .range([this.chartHeight, 0])
     },
     bars () {
@@ -229,11 +229,24 @@ export default {
         data: this.bars
       })
       .attr('x', d => this.xScale(d.year))
-      .attr('y', d => this.yScale(d.value))
+      .attr('y', d => {
+        if (d.name === 'surplus') {
+          return this.yScale(d.value)
+        } else {
+          return this.yScale(0)
+        }
+      })
       .attr('width', d => this.xScale.bandwidth())
-      .attr('height', d => this.chartHeight - this.yScale(d.value))
+      .attr('height', d => {
+        if (d.name === 'surplus') {
+          return Math.abs(this.yScale(d.value) - this.yScale(0))
+        } else if (d.name === 'shortfall') {
+          return Math.abs(this.yScale(0) - this.yScale(d.value))
+        }
+        return 0
+      })
       .attr('data-year', d => d.year)
-      .attr('fill', d => this.colors[d.name])
+      .attr('fill', d => d.name.length ? this.colors[d.name] : null)
       .attr('opacity', (d, i) => this.calcOpacity(d, i))
 
       // hidden rectangles
@@ -319,11 +332,20 @@ export default {
         })
         .attr('x2', (d, i) => {
           if (i) {
+            if (d === 0) {
+              return this.chartWidth
+            }
             return 4
           }
           return 0
         })
-        .attr('stroke-width', 2)
+        .attr('stroke', d => {
+          if (d === 0) {
+            return '#ffffff'
+          }
+          return '#A5ADBA'
+        })
+        .attr('stroke-width', 1.5)
 
       yTicks.select('text')
         .attr('x', -24)
@@ -642,9 +664,6 @@ export default {
             }
             .yAxis text {
               fill: #fff;
-            }
-            .yAxis line {
-              stroke: #A5ADBA;
             }
             .secondaryAxisText {
               fill: #fff;

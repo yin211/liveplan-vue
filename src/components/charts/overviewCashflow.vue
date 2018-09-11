@@ -132,10 +132,6 @@ export default {
       let x = this.xScale(d.year) + this.xScale.bandwidth() / 2 + this.padding.left
       let y = this.padding.top * 1.5
 
-      if (x + 340 > this.width) {
-        x -= 340
-      }
-
       this.tooltipObj = {
         x: x,
         y: y,
@@ -689,39 +685,39 @@ export default {
             #tooltipForeignObj {
               pointer-events: none;
             }
-            .toolTip {
-              background-color: #fff;
-              padding: 20px;
-              text-align: left;
-              font-family: Roboto;
-              .income-span {
-                width: 30px;
-                height: 8px;
-                display: inline-block;
-                background-color: #FAC604;
-                border-radius: 4px;
-              }
-              .year {
-                color: #737373;
-                font-size: 16px;
-                line-height: 24px;
-              }
-              .label-span {
-                	color: #84888F;
-                  font-size: 14px;
-                  line-height: 20px;
-              }
-              .amount-span {
-                color: #232B36;
-                font-family: Roboto;
-                font-size: 14px;
-                font-weight: 500;
-                line-height: 20px;
-              }
-              .tooltip-right {
-                float: right;
-              }
-            }
         }
+    }
+    .toolTip {
+      background-color: #fff;
+      padding: 20px;
+      text-align: left;
+      font-family: Roboto;
+      .income-span {
+        width: 30px;
+        height: 8px;
+        display: inline-block;
+        background-color: #FAC604;
+        border-radius: 4px;
+      }
+      .year {
+        color: #737373;
+        font-size: 16px;
+        line-height: 24px;
+      }
+      .label-span {
+          color: #84888F;
+          font-size: 14px;
+          line-height: 20px;
+      }
+      .amount-span {
+        color: #232B36;
+        font-family: Roboto;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 20px;
+      }
+      .tooltip-right {
+        float: right;
+      }
     }
 </style>

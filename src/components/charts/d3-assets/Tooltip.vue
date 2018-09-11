@@ -49,11 +49,12 @@ export default {
       el = el.enter()
               .append('div')
               .attr('class', 'hiddentooltip')
-              .style('display', 'none')
+              .style('visibility', 'hidden')
               .style('position', 'absolute')
               .merge(el)
 
       el.html(this.obj.html)
+
       let bound = el.select('div.toolTip').node().getBoundingClientRect()
       let width = bound.width
       let height = bound.height

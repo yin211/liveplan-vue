@@ -864,7 +864,9 @@ export default {
               padding: 20px;
               text-align: left;
               font-family: Roboto;
-
+              a {
+                color: #000;
+              }
               .tooltip-hr {
                 margin-bottom: 8px;
                 margin-top:  4px;

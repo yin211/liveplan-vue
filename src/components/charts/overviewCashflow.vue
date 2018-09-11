@@ -37,11 +37,10 @@ export default {
       padding: {
         left: 110,
         right: 15,
-        top: 100,
+        top: 35,
         bottom: 15
       },
       sliderHeight: 180,
-      hoverrectMehrYTop: 25,
       hoverrectMehrYBottom: 60,
       mehrHeight: 60,
       axisCircleSize: 4,
@@ -99,7 +98,7 @@ export default {
       const max = this.$d3.max(this.dataArray, d => d.value)
       const min = this.$d3.min(this.dataArray, d => d.value)
       return this.$d3.scaleLinear()
-              .domain([min, max])
+              .domain([min - 10000, max + 100000])
               .range([this.chartHeight, 0])
     },
     bars () {
@@ -122,7 +121,7 @@ export default {
                     </div>
                     <div class="d-flex mt-4">
                       <div class="mr-3">
-                        <span class="income-span"></span><span class="ml-2 label-span">${this.label}</span>
+                        <span class="income-span" style="background-color: ${d.name.length ? this.colors[d.name] : 'inherit'}"></span><span class="ml-2 label-span">${d.name}</span>
                       </div>
                       <div class="ml-4">
                         <strong><span id="amount-span">${this.thousandsFormat(d.value)}</span> SEK</strong>
@@ -172,8 +171,7 @@ export default {
                   .attr('r', 4)
 
       // hide hover rect
-      let hoverrect = this.$d3.select('#hoverrect')
-      hoverrect.style('display', 'none')
+      this.$d3.select('#hoverrect').style('display', 'none')
 
       // make texts smaller
       xTick.selectAll('text').attr('fill', this.darkColor).attr('font-weight', 400)
@@ -264,6 +262,20 @@ export default {
       .attr('opacity', (d, i) => this.calcOpacity(d, i))
       .on('mouseover', (d, i) => this.rectmouseover(d, i))
       .on('mouseout', (d, i) => this.rectmouseout(d, i))
+
+      // hover rectangle
+      patternify({
+        tag: 'rect',
+        selector: 'hoverrect',
+        container: this.chart
+      })
+      .attr('id', 'hoverrect')
+      .attr('opacity', 0.35)
+      .attr('fill', 'black')
+      .attr('x', 0)
+      .attr('y', -this.padding.top)
+      .attr('width', d => this.xScale.bandwidth())
+      .attr('height', d => this.chartHeight + this.padding.top + this.hoverrectMehrYBottom)
     },
     adjustAxis () {
       let self = this

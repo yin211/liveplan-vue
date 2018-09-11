@@ -14,10 +14,8 @@
                 breakpoint="md"
                 label="Type"
                 label-for="withdrawalTypeSelect"
-                label-class="d-flex align-items-center justify-content-end pr-4"
-                :invalid-feedback="invalidwithdrawalTypeFeedback"
-                :state="!$v.withdrawal_type.$error">
-        <b-form-select :options="withdrawalTypeOptions" v-model="withdrawal_type" id="withdrawalTypeSelect" :state="!$v.withdrawal_type.$error" @input="$v.withdrawal_type.$touch()"/>
+                label-class="d-flex align-items-center justify-content-end pr-4">
+        <b-form-select :options="withdrawalTypeOptions" v-model="withdrawal_type" id="withdrawalTypeSelect" />
       </b-form-group>
       <b-form-group id="withdrawalAmountHorizontal"
                 horizontal
@@ -32,25 +30,21 @@
           <b-form-input v-else v-model="withdrawal_amount" min="0" max="25" class="slider" type="range"></b-form-input>
         </div>
       </b-form-group>
-       <b-form-group id="periodHorizontal"
-                horizontal
-                breakpoint="md"
-                label="Period"
-                label-for="periodSelect"
-                label-class="d-flex align-items-center justify-content-end pr-4"
-                :invalid-feedback="invalidPeriodFeedback"
-                :state="!$v.withdrawal_period.$error">
-        <b-form-select :options="withdrawal_period_options" v-model="withdrawal_period" id="periodSelect" :state="!$v.withdrawal_period.$error" @input="$v.withdrawal_period.$touch()"/>
+      <b-form-group id="periodHorizontal"
+              horizontal
+              breakpoint="md"
+              label="Period"
+              label-for="periodSelect"
+              label-class="d-flex align-items-center justify-content-end pr-4">
+        <b-form-select :options="withdrawal_period_options" v-model="withdrawal_period" id="periodSelect" />
       </b-form-group>
       <b-form-group id="startYearHorizontal"
                 horizontal
                 breakpoint="md"
                 label="Start Year"
                 label-for="start_year"
-                label-class="d-flex align-items-center justify-content-end pr-4"
-                :invalid-feedback="invalidStartYearFeedback"
-                :state="!$v.withdrawal_start_year.$error">
-          <date-picker id="start_year" v-model="withdrawal_start_year" :not-before="new Date(new Date().getFullYear(), 0, 1)" lang="en" type="year" format="YYYY" :clearable="false" :state="!$v.withdrawal_start_year.$error" @input="$v.withdrawal_start_year.$touch()">
+                label-class="d-flex align-items-center justify-content-end pr-4">
+          <date-picker id="start_year" v-model="withdrawal_start_year" :not-before="new Date(new Date().getFullYear(), 0, 1)" lang="en" type="year" format="YYYY" :clearable="false">
             <template slot="calendar-icon">
               <i class="flaticon stroke calendar-2 text-primary"></i>
             </template>
@@ -61,10 +55,8 @@
                 breakpoint="md"
                 label="End Year"
                 label-for="end_year"
-                label-class="d-flex align-items-center justify-content-end pr-4"
-                :invalid-feedback="invalidEndYearFeedback"
-                :state="!$v.withdrawal_end_year.$error">
-          <date-picker id="end_year" v-model="withdrawal_end_year" :not-before="new Date(new Date().getFullYear(), 0, 1)" lang="en" type="year" format="YYYY" :clearable="false" :state="!$v.withdrawal_end_year.$error" @input="$v.withdrawal_end_year.$touch()">
+                label-class="d-flex align-items-center justify-content-end pr-4">
+          <date-picker id="end_year" v-model="withdrawal_end_year" :not-before="new Date(new Date().getFullYear(), 0, 1)" lang="en" type="year" format="YYYY" :clearable="false">
             <template slot="calendar-icon">
               <i class="flaticon stroke calendar-2 text-primary"></i>
             </template>
@@ -76,7 +68,6 @@
 </template>
 
 <script>
-import { required } from 'vuelidate/lib/validators'
 import DatePicker from 'vue2-datepicker'
 
 export default {
@@ -103,69 +94,22 @@ export default {
       withdrawal_end_year: null
     }
   },
-  validations: {
-    withdrawal_type: {
-      required
-    },
-    withdrawal_amount: {
-      required
-    },
-    withdrawal_period: {
-      required
-    },
-    withdrawal_start_year: {
-      required
-    },
-    withdrawal_end_year: {
-      required
-    },
-    form: ['withdrawal_type', 'withdrawal_amount', 'withdrawal_period', 'withdrawal_start_year', 'withdrawal_end_year']
-  },
   methods: {
     validate () {
-      this.$v.form.$touch()
-      let isValid = !this.$v.form.$invalid
-      if (isValid) {
-        let data = {
-          withdrawal_type: this.withdrawal_type,
-          withdrawal_amount: this.withdrawal_amount,
-          withdrawal_period: this.withdrawal_period,
-          withdrawal_start_year: this.withdrawal_start_year.getFullYear(),
-          withdrawal_end_year: this.withdrawal_end_year.getFullYear()
+      let data = {
+        withdrawal_type: this.withdrawal_type,
+        withdrawal_amount: this.withdrawal_amount,
+        withdrawal_period: this.withdrawal_period,
+        withdrawal_start_year: this.withdrawal_start_year ? this.withdrawal_start_year.getFullYear() : null,
+        withdrawal_end_year: this.withdrawal_end_year ? this.withdrawal_end_year.getFullYear() : null
+      }
+      for (let key in data) {
+        if (data[key] == null) {
+          delete data[key]
         }
-        this.$emit('validate-success', data)
       }
-      return isValid
-    }
-  },
-  computed: {
-    invalidwithdrawalTypeFeedback () {
-      if (this.$v.withdrawal_type.$error) {
-        return 'Deposit Type is required'
-      } else {
-        return ''
-      }
-    },
-    invalidPeriodFeedback () {
-      if (this.$v.withdrawal_period.$error) {
-        return 'Withdrawal Period is required'
-      } else {
-        return ''
-      }
-    },
-    invalidStartYearFeedback () {
-      if (this.$v.withdrawal_start_year.$error) {
-        return 'Start year is required'
-      } else {
-        return ''
-      }
-    },
-    invalidEndYearFeedback () {
-      if (this.$v.withdrawal_end_year.$error) {
-        return 'End year is required'
-      } else {
-        return ''
-      }
+      this.$emit('validate-success', data)
+      return true
     }
   }
 }
@@ -188,20 +132,13 @@ export default {
       margin-right: 130px;
     }
 
+    #withdrawalTypeSelect, #periodSelect {
+      border: none;
+    }
+
     #startYearHorizontal, #endYearHorizontal {
       .col-md-9 {
         text-align: left;
-      }
-
-      &.is-invalid {
-        .mx-datepicker {
-          border: 1px solid #EF5350;
-
-          .mx-input {
-            border-radius: 0;
-            border-right: 1px solid #EF5350;
-          }
-        }
       }
     }
   }

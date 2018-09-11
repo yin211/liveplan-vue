@@ -14,10 +14,8 @@
                 breakpoint="md"
                 label="Type"
                 label-for="depositTypeSelect"
-                label-class="d-flex align-items-center justify-content-end pr-4"
-                :invalid-feedback="invalidDepositTypeFeedback"
-                :state="!$v.deposit_type.$error">
-        <b-form-select :options="depositTypeOptions" v-model="deposit_type" id="depositTypeSelect" :state="!$v.deposit_type.$error" @input="$v.deposit_type.$touch()"/>
+                label-class="d-flex align-items-center justify-content-end pr-4">
+        <b-form-select :options="depositTypeOptions" v-model="deposit_type" id="depositTypeSelect" />
       </b-form-group>
       <b-form-group id="depositAmountHorizontal"
                 horizontal
@@ -35,20 +33,16 @@
                 breakpoint="md"
                 label="Recurrence"
                 label-for="recurrenceSelect"
-                label-class="d-flex align-items-center justify-content-end pr-4"
-                :invalid-feedback="invalidRecurrenceFeedback"
-                :state="!$v.deposit_recurrence.$error">
-        <b-form-select :options="deposit_recurrence_options" v-model="deposit_recurrence" id="recurrenceSelect" :state="!$v.deposit_recurrence.$error" @input="$v.deposit_recurrence.$touch()"/>
+                label-class="d-flex align-items-center justify-content-end pr-4">
+        <b-form-select :options="deposit_recurrence_options" v-model="deposit_recurrence" id="recurrenceSelect" />
       </b-form-group>
       <b-form-group id="startYearHorizontal"
                 horizontal
                 breakpoint="md"
                 label="Start Year"
                 label-for="start_year"
-                label-class="d-flex align-items-center justify-content-end pr-4"
-                :invalid-feedback="invalidStartYearFeedback"
-                :state="!$v.deposit_start_year.$error">
-          <date-picker id="start_year" v-model="deposit_start_year" :not-before="new Date(new Date().getFullYear(), 0, 1)" lang="en" type="year" format="YYYY" :clearable="false" :state="!$v.deposit_start_year.$error" @input="$v.deposit_start_year.$touch()">
+                label-class="d-flex align-items-center justify-content-end pr-4">
+          <date-picker id="start_year" v-model="deposit_start_year" :not-before="new Date(new Date().getFullYear(), 0, 1)" lang="en" type="year" format="YYYY" :clearable="false">
             <template slot="calendar-icon">
               <i class="flaticon stroke calendar-2 text-primary"></i>
             </template>
@@ -59,10 +53,8 @@
                 breakpoint="md"
                 label="End Year"
                 label-for="end_year"
-                label-class="d-flex align-items-center justify-content-end pr-4"
-                :invalid-feedback="invalidEndYearFeedback"
-                :state="!$v.deposit_end_year.$error">
-          <date-picker id="end_year" v-model="deposit_end_year" :not-before="new Date(new Date().getFullYear(), 0, 1)" lang="en" type="year" format="YYYY" :clearable="false" :state="!$v.deposit_end_year.$error" @input="$v.deposit_end_year.$touch()">
+                label-class="d-flex align-items-center justify-content-end pr-4">
+          <date-picker id="end_year" v-model="deposit_end_year" :not-before="new Date(new Date().getFullYear(), 0, 1)" lang="en" type="year" format="YYYY" :clearable="false">
             <template slot="calendar-icon">
               <i class="flaticon stroke calendar-2 text-primary"></i>
             </template>
@@ -74,7 +66,6 @@
 </template>
 
 <script>
-import { required } from 'vuelidate/lib/validators'
 import DatePicker from 'vue2-datepicker'
 
 export default {
@@ -104,69 +95,22 @@ export default {
       deposit_end_year: null
     }
   },
-  validations: {
-    deposit_type: {
-      required
-    },
-    deposit_amount: {
-      required
-    },
-    deposit_recurrence: {
-      required
-    },
-    deposit_start_year: {
-      required
-    },
-    deposit_end_year: {
-      required
-    },
-    form: ['deposit_type', 'deposit_amount', 'deposit_recurrence', 'deposit_start_year', 'deposit_end_year']
-  },
   methods: {
     validate () {
-      this.$v.form.$touch()
-      let isValid = !this.$v.form.$invalid
-      if (isValid) {
-        let data = {
-          deposit_type: this.deposit_type,
-          deposit_amount: this.deposit_amount,
-          deposit_recurrence: this.deposit_recurrence,
-          deposit_start_year: this.deposit_start_year.getFullYear(),
-          deposit_end_year: this.deposit_end_year.getFullYear()
+      let data = {
+        deposit_type: this.deposit_type,
+        deposit_amount: this.deposit_amount,
+        deposit_recurrence: this.deposit_recurrence,
+        deposit_start_year: this.deposit_start_year ? this.deposit_start_year.getFullYear() : null,
+        deposit_end_year: this.deposit_end_year ? this.deposit_end_year.getFullYear() : null
+      }
+      for (let key in data) {
+        if (data[key] == null) {
+          delete data[key]
         }
-        this.$emit('validate-success', data)
       }
-      return isValid
-    }
-  },
-  computed: {
-    invalidDepositTypeFeedback () {
-      if (this.$v.deposit_type.$error) {
-        return 'Deposit Type is required'
-      } else {
-        return ''
-      }
-    },
-    invalidRecurrenceFeedback () {
-      if (this.$v.deposit_recurrence.$error) {
-        return 'Deposit Recurrence is required'
-      } else {
-        return ''
-      }
-    },
-    invalidStartYearFeedback () {
-      if (this.$v.deposit_start_year.$error) {
-        return 'Start year is required'
-      } else {
-        return ''
-      }
-    },
-    invalidEndYearFeedback () {
-      if (this.$v.deposit_end_year.$error) {
-        return 'End year is required'
-      } else {
-        return ''
-      }
+      this.$emit('validate-success', data)
+      return true
     }
   }
 }
@@ -189,20 +133,13 @@ export default {
       margin-right: 130px;
     }
 
+    #depositTypeSelect, #recurrenceSelect {
+      border: none
+    }
+
     #startYearHorizontal, #endYearHorizontal {
       .col-md-9 {
         text-align: left;
-      }
-
-      &.is-invalid {
-        .mx-datepicker {
-          border: 1px solid #EF5350;
-
-          .mx-input {
-            border-radius: 0;
-            border-right: 1px solid #EF5350;
-          }
-        }
       }
     }
   }

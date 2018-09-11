@@ -37,11 +37,10 @@ export default {
       padding: {
         left: 110,
         right: 15,
-        top: 100,
+        top: 35,
         bottom: 15
       },
       sliderHeight: 180,
-      hoverrectMehrYTop: 25,
       hoverrectMehrYBottom: 60,
       mehrHeight: 60,
       axisCircleSize: 4,
@@ -99,7 +98,7 @@ export default {
       const max = this.$d3.max(this.dataArray, d => d.value)
       const min = this.$d3.min(this.dataArray, d => d.value)
       return this.$d3.scaleLinear()
-              .domain([min - 10000, max + 10000])
+              .domain([min - 10000, max + 100000])
               .range([this.chartHeight, 0])
     },
     bars () {
@@ -274,9 +273,9 @@ export default {
       .attr('opacity', 0.35)
       .attr('fill', 'black')
       .attr('x', 0)
-      .attr('y', -this.hoverrectMehrYTop)
+      .attr('y', -this.padding.top)
       .attr('width', d => this.xScale.bandwidth())
-      .attr('height', d => this.chartHeight + this.hoverrectMehrYTop + this.hoverrectMehrYBottom)
+      .attr('height', d => this.chartHeight + this.padding.top + this.hoverrectMehrYBottom)
     },
     adjustAxis () {
       let self = this

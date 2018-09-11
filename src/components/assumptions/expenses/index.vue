@@ -7,11 +7,15 @@
         <b-link to="/assumptions/debts">Debts</b-link>
         <b-link to="/assumptions/assets">Assets</b-link>
       </div>
-      <div class="chart-switcher" v-if="planStartYear && planEndYear">
-        <div class="d-flex align-items-center">
+      <div class="chart-switcher d-flex flex-column flex-sm-row" v-if="planStartYear && planEndYear">
+        <div class="d-flex align-items-center mr-4">
           <span class="mr-3" :class="{ 'selected': !isStackedBarChart }">Timeline</span>
           <switches v-model="isStackedBarChart" theme="chart" type-bold="false" color="black"></switches>
           <span class="ml-3" :class="{ 'selected': isStackedBarChart }">Barchart</span>
+        </div>
+        <div class="d-flex align-items-center">
+          <span class="mr-3" :class="{ 'selected': !isDerived }">Derived expenses:</span>
+          <switches v-model="isDerived" theme="chart" type-bold="false" color="black"></switches>
         </div>
       </div>
       <!-- chart Wrapper -->
@@ -53,7 +57,8 @@ export default {
       timelineData: null,
       planStartYear: null,
       planEndYear: null,
-      isStackedBarChart: true
+      isStackedBarChart: true,
+      isDerived: true
     }
   },
   async mounted () {

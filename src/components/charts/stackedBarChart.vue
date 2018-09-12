@@ -216,10 +216,6 @@ export default {
       let x = this.xScale(d.data.year) + this.xScale.bandwidth() / 2 + this.margin.left
       let y = this.margin.top / 2
 
-      if (x + 340 > this.width) {
-        x -= 340
-      }
-
       this.tooltipObj = {
         x: x,
         y: y,
@@ -859,60 +855,62 @@ export default {
             #tooltipForeignObj {
               pointer-events: none;
             }
-            .toolTip {
-              background-color: #fff;
-              padding: 20px;
-              text-align: left;
-              font-family: Roboto;
-              a {
-                color: #000;
-              }
-              .tooltip-hr {
-                margin-bottom: 8px;
-                margin-top:  4px;
-              }
-
-              .tooltip-title {
-                margin-bottom: 20px;
-              }
-              .d-flex {
-                margin-bottom: 8px;
-              }
-              .tooltip-amount-span {
-                width: 30px;
-                height:  8px;
-                display: inline-block;
-                border-radius: 4px;
-              }
-              .income-span {
-                width: 30px;
-                height: 8px;
-                display: inline-block;
-                background-color: #FAC604;
-                border-radius: 4px;
-              }
-              .year {
-                color: #737373;
-                font-size: 16px;
-                line-height: 24px;
-              }
-              .label-span {
-                	color: #84888F;
-                  font-size: 14px;
-                  line-height: 20px;
-              }
-              .amount-span {
-                color: #232B36;
-                font-family: Roboto;
-                font-size: 14px;
-                font-weight: 500;
-                line-height: 20px;
-              }
-              .tooltip-right {
-                float: right;
-              }
-            }
         }
+    }
+    .toolTip {
+      background-color: #fff;
+      padding: 20px;
+      text-align: left;
+      font-family: Roboto;
+      a {
+        color: #000;
+      }
+      a:hover {
+        text-decoration: none;
+      }
+      .tooltip-hr {
+        margin-bottom: 8px;
+        margin-top:  4px;
+      }
+      .tooltip-title {
+        margin-bottom: 20px;
+      }
+      .d-flex {
+        margin-bottom: 8px;
+      }
+      .tooltip-amount-span {
+        width: 30px;
+        height:  8px;
+        display: inline-block;
+        border-radius: 4px;
+      }
+      .income-span {
+        width: 30px;
+        height: 8px;
+        display: inline-block;
+        background-color: #FAC604;
+        border-radius: 4px;
+      }
+      .year {
+        color: #737373;
+        font-size: 16px;
+        line-height: 24px;
+      }
+      .label-span {
+          color: #84888F;
+          font-size: 14px;
+          line-height: 20px;
+      }
+      .amount-span {
+        color: #232B36;
+        font-family: Roboto;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 20px;
+      }
+      .tooltip-right {
+        float: right;
+      }
     }
 
 </style>

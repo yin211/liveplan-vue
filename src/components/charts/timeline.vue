@@ -753,6 +753,7 @@ export default {
     this.setDomain()
     this.onResize()
     this.$d3.select(window).on('resize', this.onResize)
+    console.log(this.bars)
   },
   components: {
     Tooltip

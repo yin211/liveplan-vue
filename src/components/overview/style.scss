@@ -78,6 +78,15 @@
     }
   }
 
+  .whatIf-container {
+    position: relative;
+    .what-if {
+      position: absolute;
+      top: -64px;
+      right: 150px;
+    }
+  }
+
   .table-container {
     background: #d9dae7;
     > div {

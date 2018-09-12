@@ -17,6 +17,9 @@
         <b-link>Timeline</b-link>
         <b-link>Portfolio</b-link>
       </div>
+      <div class="whatIf-container">
+        <what-if></what-if>
+      </div>
       <!-- chart Wrapper -->
       <div class="chart-container">
         <overviewCashflow
@@ -44,6 +47,7 @@ import expenseTable from '@/components/tables/expense'
 import assetTable from '@/components/tables/asset'
 import debtTable from '@/components/tables/debt'
 import overviewCashflow from '@/components/charts/overviewCashflow'
+import whatIf from '@/components/overview/whatIf/index'
 
 export default {
   name: 'overview',
@@ -101,7 +105,8 @@ export default {
     expenseTable,
     assetTable,
     debtTable,
-    overviewCashflow
+    overviewCashflow,
+    whatIf
   }
 }
 </script>

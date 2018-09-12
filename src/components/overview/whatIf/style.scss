@@ -1,0 +1,36 @@
+.what-if {
+  color: white;
+  .header {
+    background-color: #525670;
+    padding: 20px;
+
+    span {
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 24px;
+    }
+  }
+
+  .main {
+    background-color: #525670;
+    padding: 28px 18px;
+    border-top: 1px solid #404A65;
+
+    span {
+      font-size: 14px;
+      font-weight: bold;
+      line-height: 20px;
+    }
+  }
+
+  .footer {
+    padding: 20px;
+    background-color: #404A65;
+
+    span {
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 24px;
+    }
+  }
+}

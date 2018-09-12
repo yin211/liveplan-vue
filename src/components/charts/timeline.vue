@@ -440,7 +440,7 @@ export default {
         return this.xScale(this.domain[this.domain.length - 1]) - this.xScale(this.domain[0]) + this.xScale.bandwidth()
       })
       .attr('height', this.yScale.bandwidth())
-      .attr('fill', d => `url(#opacity-gradient-${d.name.replace(/ /g, '-').toLowerCase()})`)
+      .attr('fill', d => `url(#opacity-gradient-${d.name.replace(/ /g, '-').replace(/#/g, '-').toLowerCase()})`)
 
       patternify({
         tag: 'rect',

@@ -60,6 +60,9 @@ export default {
       let height = bound.height
       this.width = width > 100 ? width : 100
       this.height = height > 50 ? height : 50
+
+      el.style('left', `-${width + 100}px`)
+
       if (this.handleOverflow) {
         if (x + width > this.svgWidth) {
           x -= width

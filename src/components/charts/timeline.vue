@@ -320,7 +320,7 @@ export default {
       let svg = this.$d3.select(this.$el).select('svg')
 
       this.dataArray.forEach(function (d) {
-        let name = d.name.replace(/ /g, '-').toLowerCase()
+        let name = d.name.replace(/ /g, '-').replace(/#/g, '-').toLowerCase()
         let rectWidth
         let rectX = d.start_year < this.domain[0] ? 0 : this.xScale(d.start_year)
         if (d.end_year < this.domain[0]) {
@@ -358,9 +358,6 @@ export default {
           }
         } else {
           stops = [0, 100]
-        }
-        if (isNaN(rectWidth)) {
-          debugger
         }
         let linearGradient = patternify({
           tag: 'linearGradient',
@@ -756,7 +753,6 @@ export default {
     this.setDomain()
     this.onResize()
     this.$d3.select(window).on('resize', this.onResize)
-    console.log(this.bars)
   },
   components: {
     Tooltip

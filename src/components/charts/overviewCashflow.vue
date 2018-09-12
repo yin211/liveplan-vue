@@ -642,6 +642,12 @@ export default {
       this.drawSlider(this.$d3.select('g.slider-wrapper'), this.sliderWidth)
     }
   },
+  watch: {
+    bars () {
+      this.setDomain()
+      this.draw()
+    }
+  },
   mounted () {
     this.svg = this.$d3.select(this.$el).select('svg')
     this.chart = this.svg.select('g.chart')

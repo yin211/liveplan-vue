@@ -1,8 +1,18 @@
 <template>
   <div class="overview bg-light">
     <div class="main-gradient">
-      <div class="title-container mx-auto">
-        <b-link>Cashflow</b-link>
+      <div class="title-container mx-auto d-flex justify-content-center">
+        <div class="d-flex flex-column">
+          <b-link disabled>Cashflow</b-link>
+          <b-dropdown id="menu" text="Dropdown Button" class="mt-md-2" size="sm">
+            <template slot="button-content">
+              <span class="font-weight-bold">{{ selectedLevel.text }}</span>
+            </template>
+            <b-dropdown-item-button v-for="level in levels" :key="level.id" @click="selectLevel(level)" class="d-flex align-items-center pl-3 py-1">
+              {{ level.text }}
+            </b-dropdown-item-button>
+          </b-dropdown>
+        </div>
         <b-link>Equity</b-link>
         <b-link>Timeline</b-link>
         <b-link>Portfolio</b-link>
@@ -39,7 +49,13 @@ export default {
   name: 'overview',
   data () {
     return {
-      cashflow: null
+      cashflow: null,
+      selectedLevel: {id: 'level0', text: 'level 0 - Basic'},
+      levels: [
+        {id: 'level0', text: 'level 0 - Basic'},
+        {id: 'level1', text: 'level 1 - Aggregate'},
+        {id: 'level2', text: 'level 2 - Detailed'}
+      ]
     }
   },
   async mounted () {
@@ -75,6 +91,9 @@ export default {
         }
       }
       return cashflow
+    },
+    selectLevel (level) {
+      this.selectedLevel = level
     }
   },
   components: {

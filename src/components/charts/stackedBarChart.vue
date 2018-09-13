@@ -525,14 +525,11 @@ export default {
         container: stacks,
         data: d => d
       })
-      .attr('height', function (d) {
-        return this.yScale(Math.min(d[0], d[1])) - this.yScale(Math.max(d[0], d[1]))
-      }.bind(this))
+      .attr('height', d => this.yScale(Math.min(d[0], d[1])) - this.yScale(Math.max(d[0], d[1])))
       .attr('width', this.xScale.bandwidth())
       .attr('x', d => this.xScale(d.data.year))
-      .attr('y', function (d) {
-        return this.yScale(Math.max(d[0], d[1]))
-      }.bind(this))
+      .attr('y', d => this.yScale(Math.max(d[0], d[1])))
+      .attr('opacity', (d, i) => this.calcOpacity(d, i))
     },
     drawSlider (selection, width) {
       var padding = 60

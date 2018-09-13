@@ -1,5 +1,9 @@
 .what-if {
   color: white;
+  .clickable {
+    cursor: pointer;
+  }
+
   .header {
     background-color: #525670;
     padding: 20px;
@@ -20,6 +24,31 @@
       font-size: 14px;
       font-weight: bold;
       line-height: 20px;
+    }
+
+    .type-label {
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 24px;
+    }
+
+    .change-item {
+      span {
+        font-weight: 400 !important;
+      }
+
+      .slider {
+        margin-top: 30px;
+        margin-right: 8px;
+      }
+
+      .white-label {
+        background: #FAFBFC;
+        color: #2C343F;
+        border-radius: 4px;
+        padding: 10px;
+        min-width: 88px;
+      }
     }
   }
 

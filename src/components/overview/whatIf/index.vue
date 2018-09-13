@@ -8,11 +8,11 @@
     <div class="main">
       <div class="step1" :class="{ 'd-none': currentStep !== 'step1' }">
         <div class="d-flex justify-content-between mb-3">
-          <span>Change incomes</span>
+          <span class="font-weight-bold">Change incomes</span>
           <i class="flaticon solid right-circle-2 clickable" @click="goToStep2('incomes')"></i>
         </div>
         <div class="d-flex justify-content-between">
-          <span class="mr-5">Change expenses</span>
+          <span class="mr-5 font-weight-bold">Change expenses</span>
           <i class="flaticon solid right-circle-2 ml-5 clickable" @click="goToStep2('expenses')"></i>
         </div>
       </div>
@@ -23,7 +23,7 @@
           <span class="type-label">Change {{selectedType}}</span>
         </div>
         <div v-for="item in selectedItems" :key="item.id" class="d-flex justify-content-between mb-2">
-          <span class="mr-5">{{item.name}}</span>
+          <span class="mr-5 font-weight-bold">{{item.name}}</span>
           <i class="flaticon solid right-circle-2 ml-5 clickable" @click="goToDetail(item)"></i>
         </div>
       </div>

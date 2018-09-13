@@ -22,11 +22,16 @@
       </div>
       <!-- chart Wrapper -->
       <div class="chart-container">
-        <overviewCashflow
-          v-if="cashflow"
+        <basicCashflow
+          v-if="selectedLevel.id == 'level0' && cashflow"
           :dataArray="cashflow"
           :birthYear="1981">
-        </overviewCashflow>
+        </basicCashflow>
+        <aggregatedCashflow
+          v-if="selectedLevel.id == 'level1' && aggregated"
+          :dataObject="aggregated"
+          :birthYear="1981">
+        </aggregatedCashflow>
       </div>
     </div>
     <div class="table-container">
@@ -46,7 +51,8 @@ import incomeTable from '@/components/tables/income'
 import expenseTable from '@/components/tables/expense'
 import assetTable from '@/components/tables/asset'
 import debtTable from '@/components/tables/debt'
-import overviewCashflow from '@/components/charts/overviewCashflow'
+import basicCashflow from '@/components/charts/basicCashflow'
+import aggregatedCashflow from '@/components/charts/aggregatedCashflow'
 import whatIf from '@/components/overview/whatIf/index'
 
 export default {
@@ -54,6 +60,7 @@ export default {
   data () {
     return {
       cashflow: null,
+      aggregated: null,
       selectedLevel: {id: 'level0', text: 'level 0 - Basic'},
       levels: [
         {id: 'level0', text: 'level 0 - Basic'},
@@ -65,6 +72,8 @@ export default {
   async mounted () {
     let cashflowRawData = await axios.get(`${process.env.ROOT_API}/cashflow/graph?plan_id=1&aggregated=1&shortfall_negative=1`)
     this.cashflow = this.processCashflow(cashflowRawData.data)
+    let aggregated = await axios.get(`${process.env.ROOT_API}/cashflow/graph/detailed/income`)
+    this.aggregated = this.processAggregatedCashflow(aggregated.data)
   },
   methods: {
     processCashflow (cashflowRawData) {
@@ -96,6 +105,30 @@ export default {
       }
       return cashflow
     },
+    processAggregatedCashflow (cashflowRawData) {
+      if (!cashflowRawData.length) {
+        return {
+          income: [],
+          expense: []
+        }
+      }
+      let nested = this.$d3.nest().key(d => d.object_class).entries(cashflowRawData)
+      return {
+        income: nested.filter(x => x.key === 'income')[0].values.map(d => this.convertToObjectArray(d)),
+        expense: nested.filter(x => x.key === 'expense')[0].values.map(d => this.convertToObjectArray(d))
+      }
+    },
+    convertToObjectArray (obj) {
+      let keys = this.$d3.keys(obj).filter(x => x !== 'plan_id' && !x.includes('object'))
+      let values = keys.map(year => {
+        return {
+          year: +year,
+          value: +obj[year]
+        }
+      })
+      values.object_class = obj.object_class
+      return values
+    },
     selectLevel (level) {
       this.selectedLevel = level
     }
@@ -105,7 +138,8 @@ export default {
     expenseTable,
     assetTable,
     debtTable,
-    overviewCashflow,
+    basicCashflow,
+    aggregatedCashflow,
     whatIf
   }
 }

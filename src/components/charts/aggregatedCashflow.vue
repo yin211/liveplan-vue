@@ -92,14 +92,14 @@ export default {
         }
         this.dataObject.income.forEach(d => {
           let y = d.filter(x => x.year === i)
-          dt[d.object_type] = y.length ? y[0].value : 0
+          dt[d.object_subtype] = y.length ? y[0].value : 0
         })
         cont.push(dt)
       }
       return cont
     },
     bars () {
-      return this.$d3.stack().keys(this.dataObject.income.map(x => x.object_type))(this.computedData)
+      return this.$d3.stack().keys(this.dataObject.income.map(x => x.object_subtype))(this.computedData)
     },
     chartHeight () {
       return this.height - this.padding.top - this.padding.bottom - this.sliderHeight

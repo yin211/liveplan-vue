@@ -1,8 +1,16 @@
 .what-if {
   color: white;
+  .clickable {
+    cursor: pointer;
+  }
+
   .header {
     background-color: #525670;
     padding: 20px;
+
+    &.menu {
+      background-color: #404A65;
+    }
 
     span {
       font-size: 18px;
@@ -18,8 +26,28 @@
 
     span {
       font-size: 14px;
-      font-weight: bold;
       line-height: 20px;
+    }
+
+    .type-label {
+      font-size: 16px;
+      line-height: 24px;
+    }
+
+    .change-item {
+
+      .slider {
+        margin-top: 30px;
+        margin-right: 8px;
+      }
+
+      .white-label {
+        background: #FAFBFC;
+        color: #2C343F;
+        border-radius: 4px;
+        padding: 10px;
+        min-width: 88px;
+      }
     }
   }
 
@@ -27,10 +55,60 @@
     padding: 20px;
     background-color: #404A65;
 
+    &.menu {
+      background-color: #525670;
+    }
+
+
     span {
       font-size: 18px;
       font-weight: 500;
       line-height: 24px;
+    }
+  }
+
+  .footer-expand {
+    padding: 32px 20px;
+    background-color: #525670;
+    border-top: 1px solid #404A65;
+
+    span {
+      font-size: 14px;
+      line-height: 20px;
+    }
+
+    .yello-mask {
+      height: 8px;
+      width: 30px;
+      border-radius: 4px;
+      background-color: #FAC604;
+    }
+
+    .pink-mask {
+      height: 8px;
+      width: 30px;
+      border-radius: 4px;
+      background-color: #EE00F7;
+    }
+
+    .red-mask {
+      height: 8px;
+      width: 30px;
+      border-radius: 4px;
+      background-color: #F2006B;
+    }
+
+    .blue-mask {
+      height: 8px;
+      width: 30px;
+      border-radius: 4px;
+      background-color: #00DEFB
+    }
+
+    button {
+      border-radius: 30px;
+      padding-left: 60px;
+      padding-right: 60px;
     }
   }
 }

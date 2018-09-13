@@ -127,6 +127,8 @@ export default {
         }
       })
       values.object_class = obj.object_class
+      values.object_type = obj.object_type
+      values.object_subtype = obj.object_subtype
       return values
     },
     selectLevel (level) {

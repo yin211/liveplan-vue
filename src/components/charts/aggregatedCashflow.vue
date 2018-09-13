@@ -2,6 +2,15 @@
   <div class="chart-wrapper">
     <svg :width="width"
          :height="height">
+            <defs>
+                <linearGradient id="lineGradient" gradientUnits="userSpaceOnUse" 
+                    x1="0%" y1="0%" x2="100%" y2="0%" gradientTransform="rotate(270)">
+                    <stop offset="0%"  stop-color="rgba(87,91,122,0)"/>
+                    <stop offset="100%" stop-color="#525B7B"/>
+                </linearGradient>
+            </defs>
+            <g :transform="`translate(${padding.left}, ${padding.top})`" class="chart-stack">
+            </g>
             <g :transform="`translate(${padding.left}, ${padding.top})`" class="chart">
             </g>
             <line :x1="0"
@@ -49,6 +58,15 @@ export default {
         surplus: '#FEC600',
         shortfall: '#D90060'
       },
+      barColors: [
+        '#FEC600',
+        '#EE00F7',
+        '#00DEFB',
+        '#F2006B',
+        '#FFF0B2',
+        '#FFBDAD',
+        '#A5ADBA'
+      ],
       sliderBackColor: '#636e7f',
       circleColor: '#0065FF',
       darkColor: '#A5ADBA',
@@ -67,6 +85,24 @@ export default {
   computed: {
     dataArray () {
       return this.dataObject.income[0]
+    },
+    computedData () {
+      let cont = []
+
+      for (let i = this.domain[0]; i <= this.domain[this.domain.length - 1]; i++) {
+        let dt = {
+          year: i
+        }
+        this.dataObject.income.forEach(d => {
+          let y = d.filter(x => x.year === i)
+          dt[d.object_type] = y.length ? y[0].value : 0
+        })
+        cont.push(dt)
+      }
+      return cont
+    },
+    bars () {
+      return this.$d3.stack().keys(this.dataObject.income.map(x => x.object_type))(this.computedData)
     },
     chartHeight () {
       return this.height - this.padding.top - this.padding.bottom - this.sliderHeight
@@ -97,26 +133,27 @@ export default {
                   .paddingInner([0.02])
                   .paddingOuter([0.1])
     },
-    minValue () {
-      return Math.min(this.$d3.min(this.dataObject.income, d => this.$d3.min(d, d => d.value)),
-                      this.$d3.min(this.dataObject.expense, d => this.$d3.min(d, d => d.value)))
-    },
-    maxValue () {
-      return Math.max(this.$d3.max(this.dataObject.income, d => this.$d3.max(d, d => d.value)),
-                      this.$d3.max(this.dataObject.expense, d => this.$d3.max(d, d => d.value)))
-    },
     yScale () {
+      const min = this.$d3.min(this.bars[0], d => (Array.isArray(d) && d.length === 2) ? d[0] : 0)
+      const max = this.$d3.max(this.bars[this.bars.length - 1], d => (Array.isArray(d) && d.length === 2) ? d[1] : 0)
+
       return this.$d3.scaleLinear()
-              .domain([this.minValue - 10000, this.maxValue + 100000])
+              .domain([min, max])
               .range([this.chartHeight, 0])
     },
     lineGenerator () {
       return this.$d3.line()
               .x(d => this.xScale(d.year))
               .y(d => this.yScale(d.value))
+    },
+    lines () {
+      return this.dataObject.expense.map(d => d.filter(x => this.domain.indexOf(x.year) > -1))
     }
   },
   methods: {
+    colorScale (i) {
+      return this.barColors[i % this.barColors.length]
+    },
     thousandsFormat (value) {
       let locale = this.$d3.formatLocale({
         decimal: ',',
@@ -227,14 +264,39 @@ export default {
     },
     drawChart () {
       // bars
+      let stacks = patternify({
+        tag: 'g',
+        selector: 'stack-group',
+        container: this.chartStack,
+        data: this.bars
+      })
+      .attr('fill', (d, i) => {
+        return this.colorScale(i)
+      })
+
+      patternify({
+        tag: 'rect',
+        selector: 'stack-rect',
+        container: stacks,
+        data: d => d
+      })
+      .attr('height', d => this.yScale(Math.min(d[0], d[1])) - this.yScale(Math.max(d[0], d[1])))
+      .attr('width', this.xScale.bandwidth())
+      .attr('x', d => this.xScale(d.data.year))
+      .attr('y', d => this.yScale(Math.max(d[0], d[1])))
+      .attr('opacity', (d, i) => this.calcOpacity(d, i))
+
+      // draw line
       patternify({
         tag: 'path',
         selector: 'line',
         container: this.chart,
-        data: this.dataObject.expense
+        data: this.lines
       })
-      .attr('d', this.lineGenerator)
-      .attr('fill', 'none')
+      .attr('d', d => {
+        return this.lineGenerator(d)
+      })
+      .attr('fill', 'url(#lineGradient)')
       .attr('stroke', '#fff')
       .attr('stroke-width', 2)
 
@@ -646,6 +708,7 @@ export default {
   mounted () {
     this.svg = this.$d3.select(this.$el).select('svg')
     this.chart = this.svg.select('g.chart')
+    this.chartStack = this.svg.select('g.chart-stack')
     this.$d3.select(window).on('resize', this.onResize)
     this.onResize()
   }

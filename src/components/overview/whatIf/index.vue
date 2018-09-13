@@ -1,11 +1,11 @@
 <template>
   <div class="what-if depth-2">
-    <div class="header d-flex justify-content-between">
+    <div class="header d-flex justify-content-between" :class="[ isMenuShow ? 'menu' : '' ]">
       <span>What If ?</span>
-      <i class="flaticon stroke up-2"></i>
+      <i class="flaticon stroke up-2" :class="[ isMenuShow ? 'down-2' : 'up-2' ]"></i>
     </div>
 
-    <div class="main">
+    <div class="main" :class="{ 'd-none': isMenuShow }">
       <div class="step1" :class="{ 'd-none': currentStep !== 'step1' }">
         <div class="d-flex justify-content-between mb-3">
           <span class="font-weight-bold">Change incomes</span>
@@ -60,9 +60,43 @@
 
     </div>
 
-    <div class="footer d-flex justify-content-between">
+    <div class="footer d-flex justify-content-between" :class="[ isMenuShow ? 'menu' : '' ]">
       <span>Show on graph</span>
-      <i class="flaticon stroke down-2 clickable"></i>
+      <i class="flaticon stroke clickable" :class="[ isMenuShow ? 'up-2' : 'down-2' ]" @click="toggleMenuVisible"></i>
+    </div>
+
+    <div class="footer-expand" :class="{ 'd-none': !isMenuShow }">
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <input type="checkbox" class="mr-3">
+        <div class="d-flex align-items-center justify-content-between w-100">
+          <span>Income salary</span>
+          <div class="yello-mask"></div>
+        </div>
+      </div>
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <input type="checkbox" class="mr-3">
+        <div class="d-flex align-items-center justify-content-between w-100">
+          <span>Income from assets</span>
+          <div class="pink-mask"></div>
+        </div>
+      </div>
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <input type="checkbox" class="mr-3">
+        <div class="d-flex align-items-center justify-content-between w-100">
+          <span>Retirement</span>
+          <div class="red-mask"></div>
+        </div>
+      </div>
+      <div class="d-flex align-items-center justify-content-between mb-3">
+        <input type="checkbox" class="mr-3">
+        <div class="d-flex align-items-center justify-content-between w-100">
+          <span>Income allowance</span>
+          <div class="blue-mask"></div>
+        </div>
+      </div>
+      <button class='btn btn-sm btn-primary font-weight-bold mt-3'>
+        Add more data
+      </button>
     </div>
   </div>
 </template>
@@ -79,7 +113,8 @@ export default {
       selectedType: null,
       selectedItems: [],
       selectedItem: null,
-      currentStep: 'step1'
+      currentStep: 'step1',
+      isMenuShow: false
     }
   },
   async created () {
@@ -104,6 +139,9 @@ export default {
     goToDetail (item) {
       this.currentStep = 'step3'
       this.selectedItem = {...item}
+    },
+    toggleMenuVisible () {
+      this.isMenuShow = !this.isMenuShow
     }
   }
 }

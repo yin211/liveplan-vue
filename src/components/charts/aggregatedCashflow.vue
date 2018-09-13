@@ -2,13 +2,10 @@
   <div class="chart-wrapper">
     <svg :width="width"
          :height="height">
-            <defs>
-                <linearGradient id="lineGradient" gradientUnits="userSpaceOnUse" 
-                    x1="0%" y1="0%" x2="100%" y2="0%" gradientTransform="rotate(270)">
-                    <stop offset="0%"  stop-color="rgba(87,91,122,0)"/>
-                    <stop offset="100%" stop-color="#525B7B"/>
-                </linearGradient>
-            </defs>
+            <linearGradient id="lineGradient" gradientUnits="objectBoundingBox" gradientTransform="rotate(270)">
+                <stop offset="0%"  stop-color="rgba(87,91,122,0)"/>
+                <stop offset="100%" stop-color="#525B7B"/>
+            </linearGradient>
             <g :transform="`translate(${padding.left}, ${padding.top})`" class="chart-stack">
             </g>
             <g :transform="`translate(${padding.left}, ${padding.top})`" class="chart">
@@ -145,6 +142,12 @@ export default {
       return this.$d3.line()
               .x(d => this.xScale(d.year))
               .y(d => this.yScale(d.value))
+    },
+    areaGenerator () {
+      return this.$d3.area()
+              .x(d => this.xScale(d.year))
+              .y0(this.yScale(this.yScale.domain()[0]))
+              .y1(d => this.yScale(d.value))
     },
     lines () {
       return this.dataObject.expense.map(d => d.filter(x => this.domain.indexOf(x.year) > -1))
@@ -286,6 +289,16 @@ export default {
       .attr('y', d => this.yScale(Math.max(d[0], d[1])))
       .attr('opacity', (d, i) => this.calcOpacity(d, i))
 
+      // draw area
+      patternify({
+        tag: 'path',
+        selector: 'area',
+        container: this.chart,
+        data: this.lines
+      })
+      .attr('d', this.areaGenerator)
+      .attr('fill', 'url(#lineGradient)')
+
       // draw line
       patternify({
         tag: 'path',
@@ -293,10 +306,8 @@ export default {
         container: this.chart,
         data: this.lines
       })
-      .attr('d', d => {
-        return this.lineGenerator(d)
-      })
-      .attr('fill', 'url(#lineGradient)')
+      .attr('d', this.lineGenerator)
+      .attr('fill', 'none')
       .attr('stroke', '#fff')
       .attr('stroke-width', 2)
 

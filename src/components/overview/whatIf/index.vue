@@ -67,32 +67,32 @@
 
     <div class="footer-expand" :class="{ 'd-none': !isMenuShow }">
       <div class="d-flex align-items-center justify-content-between mb-3">
-        <input type="checkbox" class="mr-3">
-        <div class="d-flex align-items-center justify-content-between w-100">
-          <span>Income salary</span>
-          <div class="yello-mask"></div>
+        <div class="checkbox">
+            <input type="checkbox" id="checkbox_1">
+            <label for="checkbox_1">Income salary</label>
         </div>
+        <div class="yello-mask"></div>
       </div>
       <div class="d-flex align-items-center justify-content-between mb-3">
-        <input type="checkbox" class="mr-3">
-        <div class="d-flex align-items-center justify-content-between w-100">
-          <span>Income from assets</span>
-          <div class="pink-mask"></div>
+        <div class="checkbox">
+            <input type="checkbox" id="checkbox_2">
+            <label for="checkbox_2">Income from assets</label>
         </div>
+        <div class="pink-mask"></div>
       </div>
       <div class="d-flex align-items-center justify-content-between mb-3">
-        <input type="checkbox" class="mr-3">
-        <div class="d-flex align-items-center justify-content-between w-100">
-          <span>Retirement</span>
-          <div class="red-mask"></div>
+        <div class="checkbox">
+            <input type="checkbox" id="checkbox_3">
+            <label for="checkbox_3">Retirement</label>
         </div>
+        <div class="red-mask"></div>
       </div>
       <div class="d-flex align-items-center justify-content-between mb-3">
-        <input type="checkbox" class="mr-3">
-        <div class="d-flex align-items-center justify-content-between w-100">
-          <span>Income allowance</span>
-          <div class="blue-mask"></div>
+        <div class="checkbox">
+            <input type="checkbox" id="checkbox_4">
+            <label for="checkbox_4">Income allowance</label>
         </div>
+        <div class="blue-mask"></div>
       </div>
       <button class='btn btn-sm btn-primary font-weight-bold mt-3'>
         Add more data

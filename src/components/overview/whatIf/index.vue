@@ -43,13 +43,13 @@
             <span style="position: absolute; left: 18px;">Annual Growth</span>
             <b-form-input v-if="selectedType === 'incomes'" v-model="selectedItem.annual_growth_rate" min="0" max="10"  class="slider" type="range"></b-form-input>
             <b-form-input v-if="selectedType === 'expenses'" v-model="selectedItem.annual_increase_percentage" min="0" max="10"  class="slider" type="range"></b-form-input>
-            <span class="white-label" v-if="selectedType === 'incomes'">{{selectedItem.annual_growth_rate}}%</span>
-            <span class="white-label" v-if="selectedType === 'expenses'">{{selectedItem.annual_increase_percentage}}%</span>
+            <span class="white-label" v-if="selectedType === 'incomes'">{{selectedItem.annual_growth_rate ? Math.floor(selectedItem.annual_growth_rate) + ' %' : ''}}</span>
+            <span class="white-label" v-if="selectedType === 'expenses'">{{selectedItem.annual_increase_percentage ? Math.floor(selectedItem.annual_increase_percentage) + ' %' : ''}}</span>
           </div>
           <div v-if="selectedType === 'expenses'" class="d-flex justify-content-center mb-4 change-item">
             <span style="position: absolute; left: 18px;">Inflation</span>
             <b-form-input v-model="selectedItem.inflation_rate" min="0" max="10" class="slider" type="range"></b-form-input>
-            <span class="white-label">{{selectedItem.inflation_rate}}%</span>
+            <span class="white-label">{{selectedItem.inflation_rate ? Math.floor(selectedItem.inflation_rate) + ' %' : ''}}</span>
           </div>
         </div>
         <div class="d-flex pt-2">

@@ -154,8 +154,8 @@ export default {
                   .paddingOuter([0.1])
     },
     yScale () {
-      const min = this.$d3.min(this.bars[0], d => (Array.isArray(d) && d.length === 2) ? d[0] : 0)
-      const max = this.$d3.max(this.bars[this.bars.length - 1], d => (Array.isArray(d) && d.length === 2) ? d[1] : 0)
+      const min = this.$d3.min(this.bars, d => this.$d3.min(d, d => Math.min(d[0], d[1])))
+      const max = this.$d3.max(this.bars, d => this.$d3.max(d, d => Math.max(d[0], d[1])))
 
       return this.$d3.scaleLinear()
               .domain([min, max])

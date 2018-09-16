@@ -2,15 +2,13 @@
   <div class="chart-wrapper">
     <svg :width="width"
          :height="height">
-            <linearGradient id="lineGradient" gradientUnits="userSpaceOnUse" gradientTransform="270deg"
+            <linearGradient id="lineGradient" gradientUnits="userSpaceOnUse"
                 x1="0%" y1="0%" x2="0%" y2="100%">
                 <stop offset="0%"  stop-color="rgba(0, 101, 255, 0.8)" />
                 <stop offset="100%" stop-color="rgba(87, 91, 122, 0)" />
             </linearGradient>
-            <g :transform="`translate(${padding.left}, ${padding.top})`" class="chart-stack">
-            </g>
-            <g :transform="`translate(${padding.left}, ${padding.top})`" class="chart">
-            </g>
+            <g :transform="`translate(${padding.left}, ${padding.top})`" class="chart-stack"></g>
+            <g :transform="`translate(${padding.left}, ${padding.top})`" class="chart"></g>
             <line :x1="0"
                     :x2="width"
                     :y1="padding.top + chartHeight + hoverrectMehrYBottom"
@@ -18,8 +16,7 @@
                     :stroke="divisionLineColor"
                     stroke-width="0.5">
             </line>
-            <g :transform="`translate(${sliderMarginLeft}, ${padding.top + chartHeight + hoverrectMehrYBottom + 35})`" class="slider-wrapper">
-            </g>
+            <g :transform="`translate(${sliderMarginLeft}, ${padding.top + chartHeight + hoverrectMehrYBottom + 35})`" class="slider-wrapper"></g>
             <Tooltip :svgWidth="width"
                      :svgHeight="height"
                      :obj="tooltipObj"
@@ -123,7 +120,9 @@ export default {
       return cont
     },
     bars () {
-      return this.$d3.stack().keys(this.dataObject.income.map(x => x.object_subtype))(this.computedData)
+      return this.$d3.stack()
+        .order(this.$d3.stackOrderDescending)
+        .keys(this.dataObject.income.map(x => x.object_subtype))(this.computedData)
     },
     chartHeight () {
       return this.height - this.padding.top - this.padding.bottom - this.sliderHeight
@@ -305,9 +304,7 @@ export default {
         container: this.chartStack,
         data: this.bars
       })
-      .attr('fill', (d, i) => {
-        return this.colorScale(i)
-      })
+      .attr('fill', d => this.colorScale(d.index))
 
       patternify({
         tag: 'rect',

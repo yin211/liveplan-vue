@@ -2,9 +2,10 @@
   <div class="chart-wrapper">
     <svg :width="width"
          :height="height">
-            <linearGradient id="lineGradient" gradientUnits="objectBoundingBox" gradientTransform="rotate(270)">
-                <stop offset="0%"  stop-color="rgba(87,91,122,0)"/>
-                <stop offset="100%" stop-color="#525B7B"/>
+            <linearGradient id="lineGradient" gradientUnits="userSpaceOnUse" gradientTransform="270deg"
+                x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%"  stop-color="rgba(0, 101, 255, 1)"/>
+                <stop offset="100%" stop-color="rgba(87,91,122,0)"/>
             </linearGradient>
             <g :transform="`translate(${padding.left}, ${padding.top})`" class="chart-stack">
             </g>
@@ -82,6 +83,29 @@ export default {
   computed: {
     dataArray () {
       return this.dataObject.income[0]
+    },
+    tooltipData () {
+      return this.domain.map(year => {
+        let sum = 0
+        this.dataObject.income.forEach(d => {
+          let yearIncome = d.filter(x => x.year === year)
+          if (yearIncome.length) {
+            sum += yearIncome[0].value
+          }
+        })
+        let expense = 0
+        this.dataObject.expense.forEach(d => {
+          let yearExpense = d.filter(x => x.year === year)
+          if (yearExpense.length) {
+            expense += yearExpense[0].value
+          }
+        })
+        return {
+          year: year,
+          incomes: sum,
+          expenses: expense
+        }
+      })
     },
     computedData () {
       let cont = []
@@ -170,12 +194,20 @@ export default {
                     <div class="mt-2 year">
                       <strong><span>${d.year}</span></strong> ( age of <strong><span>${d.year - this.birthYear}</span></strong> )
                     </div>
-                    <div class="d-flex mt-4">
+                    <div class="d-flex justify-content-between mt-2">
                       <div class="mr-3">
-                        <span class="income-span" style="background-color: ${d.name.length ? this.colors[d.name] : 'inherit'}"></span><span class="ml-2 label-span">${d.name}</span>
+                        <span class="tooltip-amount-span" style="background-color: #FAC604;"></span><span class="ml-2 label-span">Total income:</span>
                       </div>
                       <div class="ml-4">
-                        <strong><span id="amount-span">${this.thousandsFormat(d.value)}</span> SEK</strong>
+                        <strong><span id="amount-span">${this.thousandsFormat(d.incomes)}</span> SEK</strong>
+                      </div>
+                    </div>
+                    <div class="d-flex justify-content-between mt-2">
+                      <div class="mr-3">
+                        <span class="tooltip-expense-span"></span><span class="ml-2 label-span">Expenses:</span>
+                      </div>
+                      <div class="ml-4">
+                        <strong><span id="amount-span">${this.thousandsFormat(d.expenses)}</span> SEK</strong>
                       </div>
                     </div>
                   </div>`
@@ -316,7 +348,7 @@ export default {
         tag: 'rect',
         selector: 'hiddenrect',
         container: this.chart,
-        data: this.bars
+        data: this.tooltipData
       })
       .attr('x', d => this.xScale(d.year))
       .attr('y', 0)
@@ -767,13 +799,6 @@ export default {
       padding: 20px;
       text-align: left;
       font-family: Roboto;
-      .income-span {
-        width: 30px;
-        height: 8px;
-        display: inline-block;
-        background-color: #FAC604;
-        border-radius: 4px;
-      }
       .year {
         color: #737373;
         font-size: 16px;
@@ -790,6 +815,18 @@ export default {
         font-size: 14px;
         font-weight: 500;
         line-height: 20px;
+      }
+      .tooltip-amount-span {
+        width: 30px;
+        height:  8px;
+        display: inline-block;
+        border-radius: 4px;
+      }
+      .tooltip-expense-span{
+        width: 30px;
+        display: inline-block;
+        border-bottom: 2px dashed #0065FF;
+        margin-bottom: 0.20rem;
       }
       .tooltip-right {
         float: right;

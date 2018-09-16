@@ -194,13 +194,13 @@ export default {
                     </div>
                     ${amounts.map((d, i) => {
                       return `<div class="d-flex justify-content-between">
-                              <div class="mr-3">
-                                <span class="tooltip-amount-span" style="background-color:${d.color};"></span><span class="ml-1"><a href="${linkHref}" target="_blank">${d.name}</a></span>
-                              </div>
-                              <div>
-                                <strong><span>${this.thousandsFormat(d.amount)}</span> SEK</strong>
-                              </div>
-                            </div>`
+                                <div class="mr-3">
+                                  <span class="tooltip-amount-span" style="background-color:${d.color};"></span><span class="ml-1"><a href="${linkHref}" target="_blank">${d.name}</a></span>
+                                </div>
+                                <div>
+                                  <strong><span>${this.thousandsFormat(d.amount)}</span> SEK</strong>
+                                </div>
+                              </div>`
                     }).toString().replace(/,/g, '')}
                     <hr class="tooltip-hr">
                     <div class="d-flex justify-content-between">

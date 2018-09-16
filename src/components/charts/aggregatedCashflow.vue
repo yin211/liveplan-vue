@@ -4,8 +4,8 @@
          :height="height">
             <linearGradient id="lineGradient" gradientUnits="userSpaceOnUse" gradientTransform="270deg"
                 x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%"  stop-color="rgba(0, 101, 255, 1)"/>
-                <stop offset="100%" stop-color="rgba(87,91,122,0)"/>
+                <stop offset="0%"  stop-color="rgba(0, 101, 255, 0.8)" />
+                <stop offset="100%" stop-color="rgba(87, 91, 122, 0)" />
             </linearGradient>
             <g :transform="`translate(${padding.left}, ${padding.top})`" class="chart-stack">
             </g>

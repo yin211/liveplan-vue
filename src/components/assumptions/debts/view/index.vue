@@ -68,9 +68,9 @@
                     <b-col md="6" xl="3">
                       <span class="text-regular">Interest rate</span>
                       <div class="d-flex mb-3">
-                        <vue-numeric currency="%" currency-symbol-position="suffix" v-model="debt.interest_rate"  class="form-control form-control-sm element-spacer text-regular annual-growth-rate" :min="0" :max="10" :disabled="!customDisabled"></vue-numeric>
+                        <vue-numeric currency="%" currency-symbol-position="suffix" v-model="debt.interest_rate"  class="form-control form-control-sm element-spacer text-regular annual-growth-rate" :min="0" :max="25" :disabled="!customDisabled"></vue-numeric>
                         <b-input-group size="sm" class="element-spacer">
-                          <b-form-input v-model="debt.interest_rate" min="0" max="10" class="slider" type="range" :disabled="!customDisabled"></b-form-input>
+                          <b-form-input v-model="debt.interest_rate" min="0" max="25" class="slider" type="range" :disabled="!customDisabled"></b-form-input>
                         </b-input-group>
                       </div>
                     </b-col>
@@ -195,6 +195,11 @@
                   <b-col cols="6" md="4" xl="2" class="d-flex flex-column justify-content-center py-xl-0 py-2">
                     <span class="text-gray">Name</span>
                     <span class="text-regular font-weight-medium">{{debt.name}}</span>
+                  </b-col>
+
+                  <b-col cols="6" md="4" xl="2" class="d-flex flex-column justify-content-center py-xl-0 py-2">
+                    <span class="text-gray">Amortization Period</span>
+                    <span class="text-regular font-weight-medium">{{debt.amortization_period}}</span>
                   </b-col>
 
                   <b-col cols="6" md="4" xl="2" class="d-flex flex-column justify-content-center py-xl-0 py-2">

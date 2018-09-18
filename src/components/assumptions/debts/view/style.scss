@@ -1,4 +1,4 @@
-.viewExpense {
+.viewDebt {
 
   // customize card
   .card {
@@ -8,7 +8,7 @@
       font-size: 14px;
       line-height: 20px;
     }
-    &.expense-tabs-card {
+    &.debt-tabs-card {
       top: -52px;
 
       .card-header {
@@ -44,7 +44,7 @@
             }
           }
 
-          .expense-tab {
+          .debt-tab {
             font-size: 24px;
             line-height: 32px;
             color: #84888F;
@@ -86,7 +86,8 @@
             {
               text-align:center;
             }
-            .amount-per-month {
+
+            .amount {
               width: 130px;
               margin-right: 20px;
               text-align:right;
@@ -256,6 +257,18 @@
             left: 74px;
           }
         }
+
+        &[aria-colindex="3"] {
+          &.sorting::before, &.sorting::after {
+            left: 164px;
+          }
+        }
+
+        &[aria-colindex="4"] {
+          &.sorting::before, &.sorting::after {
+            left: 130px;
+          }
+        }
       }
 
       tbody {
@@ -286,7 +299,7 @@
             padding-bottom: 6px;
             border-top: 1px dashed #CACACA;
 
-            .amount-per-month {
+            .amount {
               width: 130px;
               margin-right: 20px;
               text-align:right;

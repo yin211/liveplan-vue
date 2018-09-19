@@ -61,7 +61,7 @@
                       <div class="d-flex mb-3">
                         <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-model="debt.amortization_amount" class="form-control form-control-sm element-spacer text-regular amount" :min="0" :disabled="!customDisabled"></vue-numeric>
                         <b-input-group size="sm" class="element-spacer">
-                          <b-form-input v-model="debt.amortization_amount" min="0" max="10000000" step="50000" class="slider" type="range" :disabled="!customDisabled"></b-form-input>
+                          <b-form-input v-model="debt.amortization_amount" min="0" max="50000" step="1000" class="slider" type="range" :disabled="!customDisabled"></b-form-input>
                         </b-input-group>
                       </div>
                     </b-col>

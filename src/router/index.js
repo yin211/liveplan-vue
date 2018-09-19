@@ -12,6 +12,7 @@ import viewIncome from '@/components/assumptions/incomes/view/index.vue'
 import addIncome from '@/components/assumptions/incomes/wizard/index.vue'
 import assets from '@/components/assumptions/assets/index.vue'
 import addAsset from '@/components/assumptions/assets/wizard/index.vue'
+import viewAsset from '@/components/assumptions/assets/view/index.vue'
 import debts from '@/components/assumptions/debts/index.vue'
 import addDebt from '@/components/assumptions/debts/wizard/index.vue'
 import viewDebt from '@/components/assumptions/debts/view/index.vue'
@@ -90,6 +91,11 @@ export default new Router({
           path: 'assets/add-asset',
           name: 'addAsset',
           component: addAsset
+        },
+        {
+          path: 'assets/:id',
+          name: 'viewAsset',
+          component: viewAsset
         },
         {
           path: 'debts',

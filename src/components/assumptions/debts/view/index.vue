@@ -248,6 +248,18 @@
             </b-col>
           </b-row>
           <b-row>
+            <b-col sm="3" class="d-flex justify-content-end"><label :for="'amortization-amount-input'">Amorization Amount</label></b-col>
+            <b-col sm="9">
+              <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-model="newRow.amortization_amount" class="form-control text-regular mb-3" :minus="true"></vue-numeric>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col sm="3" class="d-flex justify-content-end"><label :for="'interest-amount-input'">Interest Amount</label></b-col>
+            <b-col sm="9">
+              <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-model="newRow.interest_amount" class="form-control text-regular mb-3" :minus="true"></vue-numeric>
+            </b-col>
+          </b-row>
+          <b-row>
             <b-col sm="3" class="d-flex justify-content-end mt-3"><label :for="'amount-input'">Amount</label></b-col>
             <b-col sm="9">
               <vue-numeric currency="SEK" currency-symbol-position="suffix" thousand-separator=" " v-model="newRow.amount" class="form-control text-regular mb-3" :minus="true"></vue-numeric>
@@ -617,12 +629,16 @@ export default {
           let data = {
             debt_id: this.debt.id,
             year: this.newRow.year,
-            amount: this.newRow.amount ? this.newRow.amount : 0
+            amount: this.newRow.amount ? this.newRow.amount : 0,
+            amortization_amount: this.newRow.amortization_amount ? this.newRow.amortization_amount : 0,
+            interest_amount: this.newRow.interest_amount ? this.newRow.interest_amount : 0
           }
           let response = await axios.post(`${process.env.ROOT_API}/debts/${this.$route.params.id}/amounts`, data)
           let found = this.debt.debt_amounts.find(element => parseInt(element.year) === parseInt(response.data.year))
           if (found) {
             found.amount = response.data.amount
+            found.amortization_amount = response.data.amortization_amount
+            found.interest_amount = response.data.interest_amount
           } else {
             this.debt.debt_amounts.unshift(response.data)
           }

@@ -125,15 +125,15 @@
                   </template>
                   <template slot="amount" slot-scope="row">
                     <vue-numeric v-show="row.item.is_edit"  @keyup.native.enter.stop.prevent="saveRow(row.item)" currency="SEK" currency-symbol-position="suffix" thousand-separator=" "  v-model="row.item.edit_amount" class="form-control form-control-sm text-regular amount" :minus="true"></vue-numeric>
-                    <span v-show="!row.item.is_edit"  @dblclick="editRow(row.item)">{{row.item.amount.toLocaleString('sv-SE')}} SEK </span>
+                    <span v-show="!row.item.is_edit"  @dblclick="editRow(row.item)">{{row.item.amount ? row.item.amount.toLocaleString('sv-SE') : 0}} SEK </span>
                   </template>
                   <template slot="interest_amount" slot-scope="row">
                     <vue-numeric v-show="row.item.is_edit"  @keyup.native.enter.stop.prevent="saveRow(row.item)" currency="SEK" currency-symbol-position="suffix" thousand-separator=" "  v-model="row.item.edit_interest_amount" class="form-control form-control-sm text-regular amount" :minus="true"></vue-numeric>
-                    <span v-show="!row.item.is_edit"  @dblclick="editRow(row.item)">{{row.item.interest_amount.toLocaleString('sv-SE')}} SEK </span>
+                    <span v-show="!row.item.is_edit"  @dblclick="editRow(row.item)">{{row.item.interest_amount ? row.item.interest_amount.toLocaleString('sv-SE') : 0}} SEK </span>
                   </template>
                   <template slot="amortization_amount" slot-scope="row">
                     <vue-numeric v-show="row.item.is_edit"  @keyup.native.enter.stop.prevent="saveRow(row.item)" currency="SEK" currency-symbol-position="suffix" thousand-separator=" "  v-model="row.item.edit_amortization_amount" class="form-control form-control-sm text-regular amount" :minus="true"></vue-numeric>
-                    <span v-show="!row.item.is_edit"  @dblclick="editRow(row.item)">{{row.item.amortization_amount.toLocaleString('sv-SE')}} SEK </span>
+                    <span v-show="!row.item.is_edit"  @dblclick="editRow(row.item)">{{row.item.amortization_amount? row.item.amortization_amount.toLocaleString('sv-SE') : 0}} SEK </span>
                   </template>
                   <template slot="actions" slot-scope="row">
                     <div class="d-flex flex-column flex-md-row align-items-start">
@@ -707,7 +707,7 @@ export default {
         if (this.debt.start_year && +this.debt.start_year >= +this.planStartYear) {
           if (this.debt.end_year && +this.debt.end_year <= +this.planEndYear) {
             if (+this.debt.end_year > +this.debt.start_year) {
-              if (this.debt.amount && this.debt.amortization_amount && this.debt.interest_rate) {
+              if (this.debt.amount != null && this.debt.amortization_amount != null && this.debt.interest_rate != null) {
                 let data = {
                   start_year: this.debt.start_year,
                   end_year: this.debt.end_year,

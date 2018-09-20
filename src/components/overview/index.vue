@@ -14,7 +14,6 @@
           </b-dropdown>
         </div>
         <b-link>Equity</b-link>
-        <b-link>Timeline</b-link>
         <b-link>Portfolio</b-link>
       </div>
       <div class="whatIf-container">
@@ -38,8 +37,6 @@
       <div class="mx-auto bg-light text-regular text-left">
         <income-table class="mb-5"></income-table>
         <expense-table class="mb-5"></expense-table>
-        <asset-table class="mb-5"></asset-table>
-        <debt-table></debt-table>
       </div>
     </div>
   </div>
@@ -49,8 +46,6 @@
 import axios from 'axios'
 import incomeTable from '@/components/tables/income'
 import expenseTable from '@/components/tables/expense'
-import assetTable from '@/components/tables/asset'
-import debtTable from '@/components/tables/debt'
 import basicCashflow from '@/components/charts/basicCashflow'
 import aggregatedCashflow from '@/components/charts/aggregatedCashflow'
 import whatIf from '@/components/overview/whatIf/index'
@@ -138,8 +133,6 @@ export default {
   components: {
     incomeTable,
     expenseTable,
-    assetTable,
-    debtTable,
     basicCashflow,
     aggregatedCashflow,
     whatIf

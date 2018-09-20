@@ -45,16 +45,9 @@
               <li><a href="/assumptions/debts">debts</a></li>
             </ul>
           </li>
-          <li>
-            <a href="/timeline"><span>timeline</span></a>
-          </li>
-          <li>
-            <a href="/whatif"><span>what if ?</span></a>
-          </li>
           <li class="tools-insights-link">
             <a href="/tools-and-insights"><span>tools / insights</span></a>
           </li>
-
           <li class="ml-auto plan-selector right-link">
             <b-dropdown id="ddown1" right size="sm">
               <template slot="button-content">

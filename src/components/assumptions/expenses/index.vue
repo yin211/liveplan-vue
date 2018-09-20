@@ -14,8 +14,8 @@
           <span class="ml-3" :class="{ 'selected': isStackedBarChart }">Barchart</span>
         </div>
         <div class="d-flex align-items-center">
-          <span class="mr-3" :class="{ 'selected': !isDerived }">Derived expenses:</span>
-          <switches v-model="isDerived" theme="chart" type-bold="false" color="black"></switches>
+          <span class="mr-3" :class="{ 'selected': !is_not_derived }">Derived expenses:</span>
+          <switches v-model="is_not_derived" theme="chart" type-bold="false" color="black"></switches>
         </div>
       </div>
       <!-- chart Wrapper -->
@@ -58,7 +58,7 @@ export default {
       planStartYear: null,
       planEndYear: null,
       isStackedBarChart: true,
-      isDerived: true
+      is_not_derived: true
     }
   },
   async mounted () {
@@ -72,6 +72,17 @@ export default {
       this.planEndYear = plansResponse.data.end_year
     } catch (error) {
       console.error(error)
+    }
+  },
+  watch: {
+    is_not_derived: async function (val) {
+      if (val) {
+        let stackedData = await axios.get(`${process.env.ROOT_API}/cashflow/sums?plan_id=1&object_class=expense&aggregated=0&with_derived_objects=0`)
+        this.stackedData = stackedData.data
+      } else {
+        let stackedData = await axios.get(`${process.env.ROOT_API}/cashflow/sums?plan_id=1&object_class=expense&aggregated=0&with_derived_objects=1`)
+        this.stackedData = stackedData.data
+      }
     }
   },
   components: {

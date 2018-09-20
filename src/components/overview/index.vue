@@ -1,10 +1,10 @@
 <template>
   <div class="overview bg-light">
     <div class="main-gradient">
-      <div class="title-container mx-auto d-flex justify-content-center">
+      <div class="title-container mx-auto d-flex justify-content-center px-3">
         <div class="d-flex flex-column">
           <b-link disabled>Cashflow</b-link>
-          <b-dropdown id="menu" text="Dropdown Button" class="mt-md-2" size="sm">
+          <b-dropdown id="menu" text="Dropdown Button" class="mt-2" size="sm">
             <template slot="button-content">
               <span class="font-weight-bold">{{ selectedLevel.text }}</span>
             </template>
@@ -16,9 +16,9 @@
         <b-link>Equity</b-link>
         <b-link>Portfolio</b-link>
       </div>
-      <div class="whatIf-container">
+      <!-- <div class="whatIf-container">
         <what-if></what-if>
-      </div>
+      </div> -->
       <!-- chart Wrapper -->
       <div class="chart-container">
         <basicCashflow
@@ -48,7 +48,7 @@ import incomeTable from '@/components/tables/income'
 import expenseTable from '@/components/tables/expense'
 import basicCashflow from '@/components/charts/basicCashflow'
 import aggregatedCashflow from '@/components/charts/aggregatedCashflow'
-import whatIf from '@/components/overview/whatIf/index'
+// import whatIf from '@/components/overview/whatIf/index'
 
 export default {
   name: 'overview',
@@ -134,8 +134,7 @@ export default {
     incomeTable,
     expenseTable,
     basicCashflow,
-    aggregatedCashflow,
-    whatIf
+    aggregatedCashflow
   }
 }
 </script>

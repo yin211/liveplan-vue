@@ -799,6 +799,9 @@ export default {
       this.drawAxes()
       this.adjustAxes()
       this.drawSlider(this.$d3.select('g.slider-wrapper'), this.sliderWidth)
+    },
+    bars () {
+      this.onResize()
     }
   },
   mounted () {

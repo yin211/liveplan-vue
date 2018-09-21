@@ -171,21 +171,7 @@
                     </button>
                   </template>
                 </b-table>
-                <div class="d-flex  flex-column flex-md-row justify-content-between">
-                  <div class="d-flex flex-column flex-md-row mb-3 mb-md-0">
-                    <div v-if="totalRows > 0" class="d-flex align-items-center justify-content-center">
-                      <span class="text-gray">Showing {{(currentPage - 1) * perPage + 1}} to {{endRecord}} of {{totalRows}}</span>
-                    </div>
-                    <div v-if="totalRows > 0" class="space-divider"></div>
-                    <div class="d-flex align-items-center justify-content-center">
-                      <span> show per page: </span>
-                      <b-form-select :options="pageOptions" v-model="perPage" class="selectPerPage" />
-                    </div>
-                  </div>
-                  <div class="d-flex align-items-center justify-content-center">
-                    <b-pagination :total-rows="totalRows" :per-page="perPage" :prev-text="'Prev'" :next-text="'Next'" v-model="currentPage" class="my-0"/>
-                  </div>
-                </div>
+                <pagination :totalRows="totalRows" :currentPage.sync="currentPage" :perPage.sync="perPage"></pagination>
               </div>
             </b-tab>
             <template slot="tabs">
@@ -362,6 +348,7 @@ import axios from 'axios'
 import Switches from 'vue-switches'
 import barchart from '@/components/charts/barchart'
 import EventBus from '@/event-bus.js'
+import pagination from '@/components/common/pagination'
 
 export default {
   name: 'viewasset',
@@ -413,12 +400,11 @@ export default {
         { key: 'actions', 'class': 'd-lg-flex justify-content-lg-end align-items-center' }
       ],
       currentPage: 1,
-      perPage: 10,
+      perPage: this.$store.getters.perPage ? this.$store.getters.perPage : 10,
       filter: null,
       sortBy: null,
       sortDesc: false,
       sortDirection: 'asc',
-      pageOptions: [ 5, 10, 15, 25 ],
       totalRows: 0,
       editInfoModalShow: false,
       addRowModalShow: false,
@@ -446,13 +432,6 @@ export default {
         text: this.asset.name,
         active: true
       }]
-    },
-    endRecord () {
-      if (this.perPage * this.currentPage < this.totalRows) {
-        return this.perPage * this.currentPage
-      } else {
-        return this.totalRows
-      }
     },
     startYearState () {
       return !this.autoCalcValidated || +this.asset.start_year >= +this.planStartYear && +this.asset.start_year < +this.asset.end_year
@@ -799,7 +778,8 @@ export default {
   },
   components: {
     barchart,
-    Switches
+    Switches,
+    pagination
   }
 }
 </script>

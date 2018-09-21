@@ -58,26 +58,13 @@
       </button>
     </template>
     </b-table>
-    <div class="d-flex  flex-column flex-md-row justify-content-between">
-      <div class="d-flex flex-column flex-md-row mb-3 mb-md-0">
-        <div v-if="totalRows > 0" class="d-flex align-items-center justify-content-center">
-          <span class="text-gray">Showing {{(currentPage - 1) * perPage + 1}} to {{endRecord}} of {{totalRows}}</span>
-        </div>
-        <div v-if="totalRows > 0" class="space-divider"></div>
-        <div class="d-flex align-items-center justify-content-center">
-          <span> show per page: </span>
-          <b-form-select :options="pageOptions" v-model="perPage" class="selectPerPage" />
-        </div>
-      </div>
-      <div class="d-flex align-items-center justify-content-center">
-        <b-pagination :total-rows="totalRows" :per-page="perPage" :prev-text="'Prev'" :next-text="'Next'" v-model="currentPage" class="my-0"/>
-      </div>
-    </div>
+    <pagination :totalRows="totalRows" :currentPage.sync="currentPage" :perPage.sync="perPage"></pagination>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
+import pagination from '@/components/common/pagination'
 
 export default {
   name: 'debtTable',
@@ -103,7 +90,7 @@ export default {
         { key: 'actions', 'class': 'd-lg-flex justify-content-lg-end align-items-center' }
       ],
       currentPage: 1,
-      perPage: 10,
+      perPage: this.$store.getters.perPage ? this.$store.getters.perPage : 10,
       sortBy: null,
       sortDesc: false,
       sortDirection: 'asc',
@@ -124,15 +111,6 @@ export default {
       console.error(error)
     }
   },
-  computed: {
-    endRecord () {
-      if (this.perPage * this.currentPage < this.totalRows) {
-        return this.perPage * this.currentPage
-      } else {
-        return this.totalRows
-      }
-    }
-  },
   methods: {
     gotoDetail (id) {
       this.$router.push(`/assumptions/debts/${id}`)
@@ -142,6 +120,9 @@ export default {
       this.totalRows = filteredItems.length
       this.currentPage = 1
     }
+  },
+  components: {
+    pagination
   }
 }
 </script>

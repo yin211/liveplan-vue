@@ -45,8 +45,8 @@
               <li><a href="/assumptions/debts">debts</a></li>
             </ul>
           </li>
-          <li class="tools-insights-link">
-            <a href="/tools-and-insights"><span>tools / insights</span></a>
+          <li class="tools-insights-link" v-bind:class="{ active: isToolsInsightsActive }">
+            <a href="/tools-insights"><span>tools / insights</span></a>
           </li>
           <li class="ml-auto plan-selector right-link">
             <b-dropdown id="ddown1" right size="sm">
@@ -106,6 +106,7 @@ export default {
       selectedPlan: null,
       isAssumptionActive: this.$router.history.current.path.indexOf('/assumptions/') === 0,
       isOverviewActive: this.$router.history.current.path.indexOf('/overview') === 0,
+      isToolsInsightsActive: this.$router.history.current.path.indexOf('/tools-insights') === 0,
       isNavExpanded: false
     }
   },
@@ -137,6 +138,7 @@ export default {
     $route (to, from) {
       this.isAssumptionActive = this.$router.history.current.path.indexOf('/assumptions/') === 0
       this.isOverviewActive = this.$router.history.current.path.indexOf('/overview') === 0
+      this.isToolsInsightsActive = this.$router.history.current.path.indexOf('/tools-insights') === 0
     }
   },
   methods: {

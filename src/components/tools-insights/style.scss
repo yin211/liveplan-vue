@@ -1,0 +1,51 @@
+.tools-insights {
+  > div {
+    max-width: 1440px;
+    padding: 110px 20px 240px;
+
+    @media (max-width: 575.98px) {
+      margin: auto 14px !important;
+      padding: 80px 12px 200px !important;
+    }
+
+    @media (min-width: 576px) and (max-width: 1440px) {
+      margin: auto 20px !important;
+      padding: 80px 20px 200px !important;
+    }
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+
+  .box {
+    background-color: white;
+    padding: 28px 20px 34px;
+    text-align: left;
+
+    .box-label {
+      color: #2E2E2E;
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 27px;
+    }
+
+    .box-content {
+      color: #84888F;
+      font-size: 14px;
+      line-height: 20px;
+      margin-bottom: 40px;
+    }
+
+    .simulate-btn {
+      padding-left: 12px;
+      padding-right: 12px;
+      border-radius: 30px;
+
+      i {
+        margin-left: .5rem;
+      }
+    }
+  }
+}

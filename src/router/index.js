@@ -17,6 +17,7 @@ import debts from '@/components/assumptions/debts/index.vue'
 import addDebt from '@/components/assumptions/debts/wizard/index.vue'
 import viewDebt from '@/components/assumptions/debts/view/index.vue'
 import overview from '@/components/overview/index.vue'
+import toolsInsights from '@/components/tools-insights/index.vue'
 
 Vue.use(Router)
 
@@ -46,6 +47,11 @@ export default new Router({
       path: '/overview',
       name: 'overview',
       component: overview
+    },
+    {
+      path: '/tools-insights',
+      name: 'toolsInsights',
+      component: toolsInsights
     },
     {
       path: '/assumptions',

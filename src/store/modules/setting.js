@@ -2,7 +2,7 @@
 import { SET_PERPAGE } from '../actions/setting'
 
 const state = {
-  perPage: 10
+  perPage: localStorage.getItem('per-page') || 25
 }
 
 const getters = {
@@ -17,6 +17,7 @@ const mutations = {
 
 const actions = {
   [SET_PERPAGE]: ({commit}, payload) => {
+    localStorage.setItem('per-page', payload)
     commit(SET_PERPAGE, payload)
   }
 }
